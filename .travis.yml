@@ -1,0 +1,11 @@
+language: csharp
+solution: ./GladNetV2.sln
+sudo: required
+
+install:
+  - sudo apt-get install nunit-console
+  - nuget restore ./GladNetV2.sln
+
+script:
+  - xbuild ./GladNetV2.sln
+  - nunit-console ./Tests/GladNet.Common.Tests/bin/Debug/GladNet.Common.Tests.dll
