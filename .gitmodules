@@ -3,5 +3,5 @@
 	url = git://github.com/HelloKitty/.NetLoggingServices.git
 [submodule "lib/Lidgren"]
 	path = lib/Lidgren
-	url = git://GitHub.com/HelloKitty/lidgren-network-gen3.git
+	url = git://github.com/HelloKitty/lidgren-network-gen3.git
 	branch = Unity
