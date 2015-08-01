@@ -25,6 +25,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren", "src\GladNet.Lidgren\GladNet.Lidgren.csproj", "{87C9AD17-33F8-4BFD-B353-D0E22FA1D455}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Tests", "tests\GladNet.Lidgren.Tests\GladNet.Lidgren.Tests.csproj", "{C347D10D-790F-4030-833B-633CFBF4218C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{87C9AD17-33F8-4BFD-B353-D0E22FA1D455} = {87C9AD17-33F8-4BFD-B353-D0E22FA1D455}
+		{9603BBAF-5F68-4176-A032-3E8BEAF8F9E2} = {9603BBAF-5F68-4176-A032-3E8BEAF8F9E2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

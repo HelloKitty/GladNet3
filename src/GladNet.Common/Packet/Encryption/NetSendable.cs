@@ -26,14 +26,17 @@ namespace GladNet.Common
 	/// Represents a wire-ready version of the TData that provides functionality to serialize, encrypt and decrypt the TData
 	/// </summary>
 	/// <typeparam name="TData">The Type of encryptable and serializable data becoming wire-ready.</typeparam>
-	public class NetSendable<TData> : IEncryptable, ISerializable
+	public class NetSendable<TData> : IEncryptable, ISerializable, IShallowCloneable<NetSendable<TData>>
 		where TData : class
 	{
+		/// <summary>
+		/// Indicates the state the object is currently in.
+		/// </summary>
 		public State DataState { get; private set; }
 
 		//This should never be serialized over the network.
 		/// <summary>
-		/// The TData to be manipulated or the resulting deserialized TData.
+		/// The TData to be manipulated or the resulting deserialized TData. Can be null depending on state.
 		/// </summary>
 		public TData Data { get; private set; }
 
@@ -165,6 +168,9 @@ namespace GladNet.Common
 
 			//If successful the data should be in a serialized state
 			DataState = State.Serialized;
+
+			//We don't need Data anymore and it can be recreated from the current state now.
+			Data = null;
 			return true;
 		}
 
@@ -197,6 +203,17 @@ namespace GladNet.Common
 
 			if (checkData && byteData == null)
 				throw new InvalidOperationException(GetType() + " was in an invalid state for " + expectedState + ". Must have a non-null byteData representation.");
+		}
+
+		public NetSendable<TData> ShallowClone()
+		{
+			//As of Oct. 8th 2015 it is valid to MemberwiseClone for valid ShallowCopy.
+			return MemberwiseClone() as NetSendable<TData>; //it never shouldn't be of this type
+		}
+
+		object IShallowCloneable.ShallowClone()
+		{
+			return this.ShallowClone();
 		}
 	}
 }

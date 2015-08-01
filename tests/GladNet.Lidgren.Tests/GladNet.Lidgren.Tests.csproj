@@ -58,13 +58,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GladNet.Lidgren\GladNet.Lidgren.csproj">
-      <Project>{87c9ad17-33f8-4bfd-b353-d0e22fa1d455}</Project>
-      <Name>GladNet.Lidgren</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\GladNet.Common\GladNet.Common.csproj">
       <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
       <Name>GladNet.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\GladNet.Lidgren\GladNet.Lidgren.csproj">
+      <Project>{87c9ad17-33f8-4bfd-b353-d0e22fa1d455}</Project>
+      <Name>GladNet.Lidgren</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
