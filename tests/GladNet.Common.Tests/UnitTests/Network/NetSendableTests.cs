@@ -55,7 +55,7 @@ namespace GladNet.Common.UnitTests
 				//This will throw a reflection exception so we get the innerexception.
 				netSendable.GetType().GetMethod(methodName).Invoke(netSendable, new object[1] { null });
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				//Translates the reflection exception to the actual exception
 				throw e.InnerException;
@@ -248,6 +248,29 @@ namespace GladNet.Common.UnitTests
 			where T : class
 		{
 			netSendable.GetType().GetProperty("DataState").SetValue(netSendable, state);
+		}
+
+		[Test]
+		public static void Test_ShallowCopy()
+		{
+			//arrange
+			PacketPayload payload = Mock.Of<PacketPayload>();
+			NetSendable<PacketPayload> sendable = new NetSendable<PacketPayload>(payload);
+
+			//act
+			NetSendable<PacketPayload> copiedSendableBeforeSerialization = sendable.ShallowClone();
+
+			//A quick assert that the references on the payload are the same.
+			Assert.AreEqual(copiedSendableBeforeSerialization.Data, sendable.Data);
+
+			sendable.Serialize(Mock.Of<ISerializer>()); //We call this to change state
+			NetSendable<PacketPayload> copiedSendable = sendable.ShallowClone();
+			
+
+			//assert
+			Assert.AreEqual(copiedSendable.Data, sendable.Data);
+			Assert.AreEqual(copiedSendable.DataState, sendable.DataState);
+			Assert.AreNotEqual(copiedSendable.DataState, copiedSendableBeforeSerialization.DataState);
 		}
 	}
 }
