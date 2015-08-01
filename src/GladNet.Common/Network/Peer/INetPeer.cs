@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GladNet.Common
 {
-	public interface INetPeer : INetworkMessageReceiver
+	public interface INetPeer : INetworkMessageReceiver, INetworkMessageSender
 	{
 
 	}
