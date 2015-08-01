@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace GladNet.Common
 {
-	public abstract class NetworkMessage
+	/// <summary>
+	/// Abstract type of all networked messages. Expects inheritors to implement dispatch functionality.
+	/// Contains various network message related Enums.
+	/// </summary>
+	public abstract class NetworkMessage : INetworkMessage
 	{
 		/// <summary>
 		/// Represents valid operation types for networked messages.
@@ -86,8 +90,10 @@ namespace GladNet.Common
 
 		/// <summary>
 		/// Method dispatches a substype of <see cref="NetworkMessage"/> to the proper method on an <see cref="INetworkMessageReceiver"/>
+		/// Inheriting classes must implement this and target the proper method of to dispatch.
 		/// </summary>
 		/// <param name="receiver">The target for the subtype <see cref="NetworkMessage"/>.</param>
+		/// <param name="mParams">The parameters with which the message was sent.</param>
 		public abstract void Dispatch(INetworkMessageReceiver receiver, IMessageParameters mParams);
 	}
 }
