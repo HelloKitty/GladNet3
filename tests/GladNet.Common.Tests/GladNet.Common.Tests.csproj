@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lidgren.Network">
+      <HintPath>..\..\lib\Dependency Builds\Lidgren\DLLs\Lidgren.Network.dll</HintPath>
+    </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.2.1507.0118\lib\net40\Moq.dll</HintPath>
     </Reference>
@@ -46,12 +49,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTests\ExtensionMethods\NetworkMessageExtTests.cs" />
+    <Compile Include="UnitTests\Messages\RequestMessageTests.cs" />
+    <Compile Include="UnitTests\Messages\EventMessageTests.cs" />
+    <Compile Include="UnitTests\Messages\ResponseMessageTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="UnitTests\" />
+    <ProjectReference Include="..\..\src\GladNet.Common\GladNet.Common.csproj">
+      <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
+      <Name>GladNet.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

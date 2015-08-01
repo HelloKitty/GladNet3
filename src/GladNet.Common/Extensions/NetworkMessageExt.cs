@@ -50,10 +50,9 @@ namespace GladNet.Common.Extensions
 					return NetworkMessage.DeliveryMethod.UnreliableDiscardStale;
 				
 				//This could occur if for some reason a value is passed that is an invalid delivery method.
-				//It is unlikely to occur.
+				//It is unlikely to occur. Could be done maliciously. Consult lidgren documentation in the event that this occurs in live servers.
 				default:
-					throw new ArgumentException("LidgrenDeliveryMethod invalid in " + typeof(NetworkMessageExt) + " unable to translate to GladNet type. Invalid code was: "
-						+ lidgrenDeliveryMethod.ToString(), "lidgrenDeliveryMethod");
+					return NetworkMessage.DeliveryMethod.Unknown;
 			}
 		}
 	}

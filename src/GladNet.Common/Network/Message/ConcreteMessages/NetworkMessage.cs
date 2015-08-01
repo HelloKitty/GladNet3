@@ -34,7 +34,10 @@ namespace GladNet.Common
 		{
 			//Following comments are based on https://code.google.com/p/lidgren-network-gen3/wiki/Basics and https://github.com/lidgren/lidgren-network-gen3/blob/master/Lidgren.Network/NetDeliveryMethod.cs
 
-			//his is just UDP. Messages can be lost or received more than once. Messages may not be received in the same order as they were sent.
+			//Represents an unknown delivery method.
+			Unknown,
+
+			//This is just UDP. Messages can be lost or received more than once. Messages may not be received in the same order as they were sent.
 			UnreliableAcceptDuplicate,
 
 
