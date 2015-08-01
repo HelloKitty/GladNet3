@@ -10,7 +10,7 @@ namespace GladNet.Common
 	/// Abstract type of all networked messages. Expects inheritors to implement dispatch functionality.
 	/// Contains various network message related Enums.
 	/// </summary>
-	public abstract class NetworkMessage : INetworkMessage
+	public abstract class NetworkMessage : INetworkMessage, IShallowCloneable<NetworkMessage>
 	{
 		/// <summary>
 		/// Represents valid operation types for networked messages.
@@ -102,5 +102,16 @@ namespace GladNet.Common
 		/// <param name="receiver">The target for the subtype <see cref="NetworkMessage"/>.</param>
 		/// <param name="parameters">The parameters with which the message was sent.</param>
 		public abstract void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters);
+
+		public virtual NetworkMessage ShallowClone()
+		{
+			//As of Oct. 8th it is valid to call a MemberwiseCLone to generate a shallow copy.
+			return MemberwiseClone() as NetworkMessage;
+		}
+
+		object IShallowCloneable.ShallowClone()
+		{
+			return this.ShallowClone();
+		}
 	}
 }

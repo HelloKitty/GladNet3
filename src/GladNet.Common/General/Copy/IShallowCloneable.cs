@@ -19,8 +19,9 @@ namespace GladNet.Common
 	/// For information about shallow vs deep copying see: http://stackoverflow.com/questions/184710/what-is-the-difference-between-a-deep-copy-and-a-shallow-copy
 	/// </summary>
 	/// <typeparam name="TObjectType">Type copying.</typeparam>
-	public interface IShallowCloneable<TObjectType> : IShallowCloneable
+	public interface IShallowCloneable<out TObjectType> : IShallowCloneable
 	{
-		TObjectType ShallowClone();
+		//Hiding is intended
+		new TObjectType ShallowClone();
 	}
 }
