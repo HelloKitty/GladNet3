@@ -8,4 +8,4 @@ install:
 
 script:
   - xbuild ./GladNetV2.sln
-  - nunit-console ./Tests/GladNet.Common.Tests/bin/Debug/GladNet.Common.Tests.dll
+  - nunit-console ./tests/GladNet.Common.Tests/bin/Debug/GladNet.Common.Tests.dll
