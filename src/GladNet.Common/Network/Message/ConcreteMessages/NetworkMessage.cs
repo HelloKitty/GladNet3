@@ -15,7 +15,7 @@ namespace GladNet.Common
 		/// <summary>
 		/// Represents valid operation types for networked messages.
 		/// </summary>
-		public enum OperationType : byte
+		public enum OperationType
 		{
 			//Indicates an operation from the result of a peer sending an unsoliticted message.
 			Event = 0,
@@ -61,7 +61,7 @@ namespace GladNet.Common
 		/// <summary>
 		/// Represents the result of trying to send a networked message.
 		/// </summary>
-		public enum SendResult : byte
+		public enum SendResult
 		{
 			//Indicates the the peer is not connected to the network and failed to send.
 			FailedNotConnected = 0,
@@ -83,10 +83,10 @@ namespace GladNet.Common
 		/// </summary>
 		/// <exception cref="ArgumentNullException">Throws if <see cref="PacketPayload"/> instance supplied is null.</exception>
 		/// <param name="payload">The <see cref="PacketPayload"/> of the message.</param>
-		public NetworkMessage(PacketPayload payload)
+		protected NetworkMessage(PacketPayload payload)
 		{
 			if (payload == null)
-				throw new ArgumentNullException("packetForMessage", "A null Packet cannot be sent accross the network. Please supply at least default.");
+				throw new ArgumentNullException("payload", "A null Packet cannot be sent accross the network. Please supply at least default.");
 				
 			Payload = payload;
 		}
@@ -96,7 +96,7 @@ namespace GladNet.Common
 		/// Inheriting classes must implement this and target the proper method of to dispatch.
 		/// </summary>
 		/// <param name="receiver">The target for the subtype <see cref="NetworkMessage"/>.</param>
-		/// <param name="mParams">The parameters with which the message was sent.</param>
-		public abstract void Dispatch(INetworkMessageReceiver receiver, IMessageParameters mParams);
+		/// <param name="parameters">The parameters with which the message was sent.</param>
+		public abstract void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters);
 	}
 }

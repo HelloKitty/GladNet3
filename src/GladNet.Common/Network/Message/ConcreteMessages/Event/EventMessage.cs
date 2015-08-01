@@ -28,18 +28,18 @@ namespace GladNet.Common
 		/// </summary>
 		/// <param name="receiver">The target <see cref="INetworkMessageReceiver"/>.</param>
 		/// <exception cref="ArgumentNullException">Throws if either parameters are null.</exception>
-		/// <param name="mParams">The <see cref="IMessageParameters"/> of the <see cref="EventMessage"/>.</param>
-		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters mParams)
+		/// <param name="parameters">The <see cref="IMessageParameters"/> of the <see cref="EventMessage"/>.</param>
+		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters)
 		{
 #if DEBUG || DEBUGBUILD
 			if(receiver == null)
 				throw new ArgumentNullException("receiver", typeof(INetworkMessageReceiver).ToString() + " parameter is null in " + GetType().ToString());
 
-			if(mParams == null)
-				throw new ArgumentNullException("mParams", typeof(IMessageParameters).ToString() + " parameter is null in " + GetType().ToString());
+			if(parameters == null)
+				throw new ArgumentNullException("parameters", typeof(IMessageParameters).ToString() + " parameter is null in " + GetType().ToString());
 #endif
 
-			receiver.OnNetworkMessageRecieve(this, mParams);
+			receiver.OnNetworkMessageReceive(this, parameters);
 		}
 	}
 }

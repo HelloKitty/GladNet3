@@ -19,7 +19,7 @@ namespace GladNet.Common
 		/// <summary>
 		/// Indicates the <see cref="NetworkMessage.OperationType"/> of a message.
 		/// </summary>
-		NetworkMessage.OperationType opType { get; }
+		NetworkMessage.OperationType OpType { get; }
 
 		/// <summary>
 		/// Indicates the <see cref="NetworkMessage.DeliveryMethod"/> method of the message. Can be used to verify correct channel usage.

@@ -60,13 +60,13 @@ namespace GladNet.Common.UnitTests
 
 			//Sets up the method that should be called so it doesn't throw.
 			//Also rigs it up so that the two mocks above should be the values provided.
-			receiever.Setup((actual) => actual.OnNetworkMessageRecieve(message, parameters.Object));
+			receiever.Setup((actual) => actual.OnNetworkMessageReceive(message, parameters.Object));
 
 			//act
 			message.Dispatch(receiever.Object, parameters.Object);
 
 			//asset
-			receiever.Verify((actual) => actual.OnNetworkMessageRecieve(message, parameters.Object));
+			receiever.Verify((actual) => actual.OnNetworkMessageReceive(message, parameters.Object));
 		}
 
 		[Test]
@@ -96,7 +96,7 @@ namespace GladNet.Common.UnitTests
 
 			//Sets up the method that should be called so it doesn't throw.
 			//Also rigs it up so that the two mocks above should be the values provided.
-			receiever.Setup((actual) => actual.OnNetworkMessageRecieve(message, null));
+			receiever.Setup((actual) => actual.OnNetworkMessageReceive(message, null));
 
 			//act
 			message.Dispatch(receiever.Object, null);

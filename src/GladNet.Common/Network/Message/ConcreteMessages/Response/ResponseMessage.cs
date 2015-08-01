@@ -24,11 +24,11 @@ namespace GladNet.Common
 		/// Constructor for <see cref="ResponseMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>
 		/// <param name="payload"><see cref="PacketPayload"/> of the <see cref="NetworkMessage"/>.</param>
-		/// <param name="rCode">Reponse code</param>
-		public ResponseMessage(PacketPayload payload, byte rCode)
+		/// <param name="responseCode">Reponse code</param>
+		public ResponseMessage(PacketPayload payload, byte responseCode)
 			: base(payload)
 		{
-			ResponseCode = rCode;
+			ResponseCode = responseCode;
 		}
 
 		/// <summary>
@@ -36,18 +36,18 @@ namespace GladNet.Common
 		/// </summary>
 		/// <param name="receiver">The target <see cref="INetworkMessageReceiver"/>.</param>
 		/// <exception cref="ArgumentNullException">Throws if either parameters are null.</exception>
-		/// <param name="mParams">The <see cref="IMessageParameters"/> of the <see cref="ResponseMessage"/>.</param>
-		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters mParams)
+		/// <param name="parameters">The <see cref="IMessageParameters"/> of the <see cref="ResponseMessage"/>.</param>
+		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters)
 		{
 #if DEBUG || DEBUGBUILD
 			if(receiver == null)
 				throw new ArgumentNullException("receiver", typeof(INetworkMessageReceiver).ToString() + " parameter is null in " + GetType().ToString());
 
-			if(mParams == null)
-				throw new ArgumentNullException("mParams", typeof(IMessageParameters).ToString() + " parameter is null in " + GetType().ToString());
+			if(parameters == null)
+				throw new ArgumentNullException("parameters", typeof(IMessageParameters).ToString() + " parameter is null in " + GetType().ToString());
 #endif
 
-			receiver.OnNetworkMessageRecieve(this, mParams);
+			receiver.OnNetworkMessageReceive(this, parameters);
 		}
 	}
 }

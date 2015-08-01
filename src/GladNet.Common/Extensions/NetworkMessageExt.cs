@@ -16,12 +16,12 @@ namespace GladNet.Common.Extensions
 		/// This translates <see cref="NetDeliveryMethod"/> to GladNet <see cref="PacketPayload.DeliveryMethod"/>
 		/// Information related to this translation can be found here https://code.google.com/p/lidgren-network-gen3/wiki/Basics
 		/// </summary>
-		/// <param name="lidgrenDeliveryMethod">The instance to be used for translation.</param>
+		/// <param name="deliveryMethod">The instance to be used for translation.</param>
 		/// <exception cref="ArgumentException">Throws an exception if the <see cref="NetDeliveryMethod"/> is undefined.</exception>
 		/// <returns>The equivalent <see cref="NetworkMessageExt.DeliveryMethod"/> for the given <see cref="NetDeliveryMethod"/></returns>
-		public static NetworkMessage.DeliveryMethod LidgrenDeliveryTypeToGladNetType(this NetDeliveryMethod lidgrenDeliveryMethod)
+		public static NetworkMessage.DeliveryMethod NetDeliveryMethodTypeToGladNetDeliveryType(this NetDeliveryMethod deliveryMethod)
 		{
-			switch (lidgrenDeliveryMethod)
+			switch (deliveryMethod)
 			{
 				//Following comments are based on https://code.google.com/p/lidgren-network-gen3/wiki/Basics and https://github.com/lidgren/lidgren-network-gen3/blob/master/Lidgren.Network/NetDeliveryMethod.cs
 
