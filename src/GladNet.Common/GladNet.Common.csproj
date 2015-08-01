@@ -43,8 +43,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\PacketExt.cs" />
+    <Compile Include="Network\Message\Concrete Messages\Response\IResponseMessage.cs" />
+    <Compile Include="Network\Message\Concrete Messages\Response\ResponseMessage.cs" />
+    <Compile Include="Network\Message\Concrete Messages\Request\IRequestMessage.cs" />
+    <Compile Include="Network\Message\Concrete Messages\Request\RequestMessage.cs" />
+    <Compile Include="Network\Message\Concrete Messages\Event\IEventMessage.cs" />
+    <Compile Include="Network\Message\Concrete Messages\Event\EventMessage.cs" />
+    <Compile Include="Network\Message\IMessageParameters.cs" />
+    <Compile Include="Network\Message\INetworkMessageReceiver.cs" />
+    <Compile Include="Network\Message\Concrete Messages\NetworkMessage.cs" />
     <Compile Include="Packet\Packet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Network\Peer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

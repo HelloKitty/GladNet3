@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace GladNet.Common
 {
-	/// <summary>
-	/// Represents the GladNet smallest unit of transmittable networked information.
-	/// </summary>
-	public abstract class PacketPayload
+	public interface IResponseMessage
 	{
 
 	}
