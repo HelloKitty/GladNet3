@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace GladNet.Common
 {
-	interface INetworkMessage
+	public interface INetworkMessage
 	{
-
+		PacketPayload Payload { get; }
 	}
 }

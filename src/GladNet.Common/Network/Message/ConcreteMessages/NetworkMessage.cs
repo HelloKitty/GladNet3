@@ -69,19 +69,19 @@ namespace GladNet.Common
 		/// <summary>
 		/// A <see cref="PacketPayload"/> instance that contains the high level payload of the <see cref="NetworkMessage"/>
 		/// </summary>
-		public PacketPayload PacketData { get; private set; }
+		public PacketPayload Payload { get; private set; }
 
 		/// <summary>
 		/// Main constructor for <see cref="NetworkMessage"/> that requires a <see cref="PacketPayload"/> payload.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">Throws if <see cref="PacketPayload"/> instance supplied is null.</exception>
-		/// <param name="p"></param>
-		public NetworkMessage(PacketPayload packetForMessage)
+		/// <param name="payload">The <see cref="PacketPayload"/> of the message.</param>
+		public NetworkMessage(PacketPayload payload)
 		{
-			if (packetForMessage == null)
+			if (payload == null)
 				throw new ArgumentNullException("packetForMessage", "A null Packet cannot be sent accross the network. Please supply at least default.");
 				
-			PacketData = packetForMessage;
+			Payload = payload;
 		}
 
 		/// <summary>

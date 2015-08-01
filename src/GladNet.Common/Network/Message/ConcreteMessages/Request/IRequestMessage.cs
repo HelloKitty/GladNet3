@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GladNet.Common
 {
-	public interface IRequestMessage
+	public interface IRequestMessage : INetworkMessage
 	{
 
 	}
