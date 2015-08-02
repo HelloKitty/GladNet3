@@ -8,17 +8,17 @@ namespace GladNet.Common
 {
 	public class NetworkMessageFactory
 	{
-		public NetworkMessage Create(PacketPayload payload, PacketPayload.IResponse responseParameters)
+		public NetworkMessage Create(PacketPayload payload, IResponsePayload responseParameters)
 		{
 			return new ResponseMessage(payload, responseParameters.ResponseCode);
 		}
 
-		public NetworkMessage Create(PacketPayload payload, PacketPayload.IRequest responseParameters)
+		public NetworkMessage Create(PacketPayload payload, IRequestPayload responseParameters)
 		{
 			return new RequestMessage(payload);
 		}
 
-		public NetworkMessage Create(PacketPayload payload, PacketPayload.IEvent responseParameters)
+		public NetworkMessage Create(PacketPayload payload, IEventPayload responseParameters)
 		{
 			return new EventMessage(payload);
 		}

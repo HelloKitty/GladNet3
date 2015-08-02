@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 
 namespace GladNet.Common
 {
-	public class AdditionalParams
+	public class AdditionalParameters
 	{
-		public readonly byte ByteCode;
-
-		public readonly string Message;
-
-		public AdditionalParams(byte code, string message)
+		private readonly byte _ByteCode;
+		public byte ByteCode
 		{
-			ByteCode = code;
-			Message = message;
+			get { return _ByteCode; }
+		}
+
+		private readonly string _Message;
+		public string Message
+		{
+			get { return _Message; }
+		}
+
+		public AdditionalParameters(byte code, string message)
+		{
+			_ByteCode = code;
+			_Message = message;
 		}
 	}
 }

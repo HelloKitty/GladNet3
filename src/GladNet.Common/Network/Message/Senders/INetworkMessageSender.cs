@@ -10,12 +10,12 @@ namespace GladNet.Common
 	public interface INetworkMessageSender
 	{
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		NetworkMessage.SendResult SendMessage(PacketPayload payload, PacketPayload.IRequest requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		NetworkMessage.SendResult SendMessage(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		NetworkMessage.SendResult SendMessage(PacketPayload payload, PacketPayload.IEvent eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		NetworkMessage.SendResult SendMessage(PacketPayload payload, IEventPayload eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		NetworkMessage.SendResult SendMessage(PacketPayload payload, PacketPayload.IResponse responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		NetworkMessage.SendResult SendMessage(PacketPayload payload, IResponsePayload responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 	}
 }

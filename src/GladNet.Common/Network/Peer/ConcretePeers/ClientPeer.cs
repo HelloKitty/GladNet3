@@ -10,15 +10,15 @@ namespace GladNet.Common
 	public abstract class ClientPeer : Peer, IClientMessageSender
 	{
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public NetworkMessage.SendResult SendRequest<RequestPacketType>(RequestPacketType payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-			where RequestPacketType : PacketPayload, PacketPayload.IRequest
+		public NetworkMessage.SendResult SendRequest<TRequestPacketType>(TRequestPacketType payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+			where TRequestPacketType : PacketPayload, IRequestPayload
 		{
 			//return ((IClientMessageSender)(this)).SendMessage(NetworkMessage.OperationType.Request, payload, deliveryMethod, encrypt, channel);
 			throw new NotImplementedException();
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public NetworkMessage.SendResult SendRequest(PacketPayload payload, PacketPayload.IRequest requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public NetworkMessage.SendResult SendRequest(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			//return ((IClientMessageSender)(this)).SendMessage(NetworkMessage.OperationType.Request, payload, deliveryMethod, encrypt, channel);
 			throw new NotImplementedException();

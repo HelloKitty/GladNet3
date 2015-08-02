@@ -8,7 +8,7 @@ namespace GladNet.Common
 {
 	public interface IClientMessageSender : INetworkMessageSender
 	{
-		NetworkMessage.SendResult SendRequest<RequestPacketType>(RequestPacketType payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-			where RequestPacketType : PacketPayload, PacketPayload.IRequest;
+		NetworkMessage.SendResult SendRequest<TRequestPacket>(TRequestPacket payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+			where TRequestPacket : PacketPayload, IRequestPayload;
 	}
 }

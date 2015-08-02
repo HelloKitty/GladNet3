@@ -11,7 +11,7 @@ namespace GladNet.Common
 	/// Generally these are messages that are the result of other-client/server state changes that require 'unexpected' network messages
 	/// to sync.
 	/// </summary>
-	public interface IEventMessage : INetworkMessage
+	public interface IEventMessage : INetworkMessage, IEventPayload
 	{
 
 	}
