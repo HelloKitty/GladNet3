@@ -9,17 +9,17 @@ namespace GladNet.Common
 	public abstract class Peer : INetPeer, INetworkMessageReceiver
 	{
 		#region Message Senders
-		NetworkMessage.SendResult INetworkMessageSender.SendMessage(PacketPayload payload, PacketPayload.IRequest requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
+		public virtual NetworkMessage.SendResult SendMessage(PacketPayload payload, PacketPayload.IRequest requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
 		{
 			throw new NotImplementedException();
 		}
 
-		NetworkMessage.SendResult INetworkMessageSender.SendMessage(PacketPayload payload, PacketPayload.IEvent eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
+		public virtual NetworkMessage.SendResult SendMessage(PacketPayload payload, PacketPayload.IEvent eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
 		{
 			throw new NotImplementedException();
 		}
 
-		NetworkMessage.SendResult INetworkMessageSender.SendMessage(PacketPayload payload, PacketPayload.IResponse responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
+		public virtual NetworkMessage.SendResult SendMessage(PacketPayload payload, PacketPayload.IResponse responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
 		{
 			throw new NotImplementedException();
 		}

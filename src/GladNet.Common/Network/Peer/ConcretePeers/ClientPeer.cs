@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace GladNet.Common
 {
 	public abstract class ClientPeer : Peer, IClientMessageSender
 	{
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public NetworkMessage.SendResult SendRequest<RequestPacketType>(RequestPacketType payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 			where RequestPacketType : PacketPayload, PacketPayload.IRequest
 		{
@@ -15,6 +17,7 @@ namespace GladNet.Common
 			throw new NotImplementedException();
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public NetworkMessage.SendResult SendRequest(PacketPayload payload, PacketPayload.IRequest requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			//return ((IClientMessageSender)(this)).SendMessage(NetworkMessage.OperationType.Request, payload, deliveryMethod, encrypt, channel);
@@ -35,6 +38,7 @@ namespace GladNet.Common
 		protected override abstract void OnReceiveEvent(IEventMessage message, IMessageParameters parameters);
 		#endregion
 
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public NetworkMessage.SendResult SendMessage(NetworkMessage.OperationType opType, PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			throw new NotImplementedException();
