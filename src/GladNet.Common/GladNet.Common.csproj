@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\NetworkMessageExt.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\AdditionalParams.cs" />
     <Compile Include="Network\Message\ConcreteMessages\INetworkMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\IResponseMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\ResponseMessage.cs" />
@@ -54,7 +55,13 @@
     <Compile Include="Network\Message\IMessageParameters.cs" />
     <Compile Include="Network\Message\INetworkMessageReceiver.cs" />
     <Compile Include="Network\Message\ConcreteMessages\NetworkMessage.cs" />
+    <Compile Include="Network\Message\NetworkMessageFactory.cs" />
+    <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
+    <Compile Include="Network\Message\Senders\IServerMessageSender.cs" />
+    <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
+    <Compile Include="Network\Peer\ConcretePeers\ClientPeer.cs" />
     <Compile Include="Network\Peer\INetPeer.cs" />
+    <Compile Include="Network\Peer\Peer.cs" />
     <Compile Include="Packet\PacketPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

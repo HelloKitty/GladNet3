@@ -11,6 +11,19 @@ namespace GladNet.Common
 	/// </summary>
 	public abstract class PacketPayload
 	{
+		public interface IResponse
+		{
+			byte ResponseCode { get; }
+		}
 
+		public interface IRequest
+		{
+			//To be filled out in the future.
+		}
+
+		public interface IEvent
+		{
+			//To be filled out in the future.
+		}
 	}
 }
