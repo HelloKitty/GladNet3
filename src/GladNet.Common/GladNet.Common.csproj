@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\NetworkMessageExt.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\AdditionalParams.cs" />
     <Compile Include="Network\Message\ConcreteMessages\INetworkMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\IResponseMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\ResponseMessage.cs" />
