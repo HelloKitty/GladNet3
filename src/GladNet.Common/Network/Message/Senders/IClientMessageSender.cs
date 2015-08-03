@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GladNet.Common
 {
-	public interface IClientMessageSender : INetworkMessageSender
+	public interface IClientMessageSender
 	{
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		NetworkMessage.SendResult SendRequest<TRequestPacket>(TRequestPacket payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)

@@ -202,7 +202,7 @@ namespace GladNet.Common.UnitTests
 			//act
 			peer.Object.TrySendMessage(packet.Object, (IResponsePayload)null, NetworkMessage.DeliveryMethod.Unknown);
 			peer.Object.TrySendMessage(packet.Object, (IRequestPayload)null, NetworkMessage.DeliveryMethod.Unknown);
-			peer.Object.TrySendMessage(packet.Object, (IRequestPayload)null, NetworkMessage.DeliveryMethod.Unknown);
+			peer.Object.TrySendMessage(packet.Object, (IEventPayload)null, NetworkMessage.DeliveryMethod.Unknown);
 
 			//Just assert that no exceptions occured.
 		}
