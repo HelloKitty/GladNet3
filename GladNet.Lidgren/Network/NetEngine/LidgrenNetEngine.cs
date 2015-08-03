@@ -8,18 +8,13 @@ namespace GladNet.Common
 {
 	public sealed class LidgrenNetEngine : INetEngine
 	{
-		private readonly NetConnection lidgrenConnection;
-
 		private readonly INetworkMessageFactory messageFactory;
 
-		public IConnectionDetails Details
-		{
-			get { throw new NotImplementedException(); }
-		}
+		public IConnectionDetails Details { get; private set; }
 
-		public LidgrenNetEngine(NetConnection netConnection, INetworkMessageFactory netMessageFactory)
+		public LidgrenNetEngine(IConnectionDetails netConnectionDetails, INetworkMessageFactory netMessageFactory)
 		{
-			lidgrenConnection = netConnection;
+			Details = netConnectionDetails;
 			messageFactory = netMessageFactory;
 		}
 
