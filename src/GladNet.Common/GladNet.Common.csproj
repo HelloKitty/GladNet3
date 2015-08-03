@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GladNet.Common</RootNamespace>
     <AssemblyName>GladNet.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,19 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lidgren.Network">
-      <HintPath>..\..\lib\Dependency Builds\Lidgren\DLLs\Lidgren.Network.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\NetworkMessageExt.cs" />
     <Compile Include="Network\Message\ConcreteMessages\INetworkMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\IResponseMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\ResponseMessage.cs" />
@@ -60,8 +56,7 @@
     <Compile Include="Network\Message\NetworkMessageFactory.cs" />
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
-    <Compile Include="Network\NetEngines\INetEngine.cs" />
-    <Compile Include="Network\NetEngines\LidgrenNetEngine.cs" />
+    <Compile Include="Network\NetEngine\INetEngine.cs" />
     <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />
     <Compile Include="Network\Peer\INetPeer.cs" />
     <Compile Include="Network\Peer\Peer.cs" />

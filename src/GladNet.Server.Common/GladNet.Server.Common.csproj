@@ -43,7 +43,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\GladNet.Common\GladNet.Common.csproj">
+    <ProjectReference Include="..\GladNet.Common\GladNet.Common.csproj">
       <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
       <Name>GladNet.Common</Name>
     </ProjectReference>
