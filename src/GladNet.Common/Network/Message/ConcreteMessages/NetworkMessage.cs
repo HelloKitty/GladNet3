@@ -63,14 +63,17 @@ namespace GladNet.Common
 		/// </summary>
 		public enum SendResult
 		{
+			//Indicates an invalid send
+			Invalid = 0,
+
 			//Indicates the the peer is not connected to the network and failed to send.
-			FailedNotConnected = 0,
+			FailedNotConnected = 1,
 
 			//Indicates a successful send
-			Sent = 1,
+			Sent = 2,
 
 			//Indicates that the message was enqueued.
-			Queued = 2,
+			Queued = 3,
 		}
 
 		/// <summary>

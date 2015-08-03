@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,18 +10,52 @@ namespace GladNet.Common
 	public abstract class Peer : INetPeer, INetworkMessageReceiver
 	{
 		#region Message Senders
-		public virtual NetworkMessage.SendResult SendMessage(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
+		//The idea here is we return invalids because sometimes a Peer can't send a certain message type.
+		//In most cases external classes shouldn't be interfacing with this class in this fashion.
+		//They should instead used more explict send methods. However, this exists to allow for
+		//users to loosely couple their senders as best they can though they really shouldn't since
+		//it can't be known if the runetime Peer type offers that functionality.
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		public virtual NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
+			//TODO: Implement logging.
+			if (!CanSend(NetworkMessage.OperationType.Request))
+				return NetworkMessage.SendResult.Invalid;
+
+			//TODO: Implement sending
 			throw new NotImplementedException();
 		}
 
-		public virtual NetworkMessage.SendResult SendMessage(PacketPayload payload, IEventPayload eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		public virtual NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IEventPayload eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
+			//TODO: Implement logging.
+			if (!CanSend(NetworkMessage.OperationType.Event))
+				return NetworkMessage.SendResult.Invalid;
+
+			//TODO: Implement sending
 			throw new NotImplementedException();
 		}
 
-		public virtual NetworkMessage.SendResult SendMessage(PacketPayload payload, IResponsePayload responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		public virtual NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IResponsePayload responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
+			//TODO: Implement logging.
+			if (!CanSend(NetworkMessage.OperationType.Response))
+				return NetworkMessage.SendResult.Invalid;
+
+			//TODO: Implement sending
+			throw new NotImplementedException();
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		public virtual NetworkMessage.SendResult TrySendMessage(NetworkMessage.OperationType opType, PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		{
+			//TODO: Implement logging.
+			if (!CanSend(opType))
+				return NetworkMessage.SendResult.Invalid;
+
+			//TODO: Implement sending
 			throw new NotImplementedException();
 		}
 		#endregion
@@ -45,5 +80,10 @@ namespace GladNet.Common
 		protected abstract void OnReceiveResponse(IResponseMessage message, IMessageParameters parameters);
 		protected abstract void OnReceiveEvent(IEventMessage message, IMessageParameters parameters);
 		#endregion
+
+		public virtual bool CanSend(NetworkMessage.OperationType opType)
+		{
+			return false;
+		}
 	}
 }

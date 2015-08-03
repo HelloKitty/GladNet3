@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Common
+namespace GladNet.Common.Network.NetEngines
 {
-	public interface INetPeer : INetworkMessageSender
+	public interface INetEngine
 	{
-		bool CanSend(NetworkMessage.OperationType opType);
+
 	}
 }

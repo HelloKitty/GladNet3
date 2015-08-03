@@ -58,6 +58,7 @@
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\IServerMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
+    <Compile Include="Network\NetEngines\INetEngine.cs" />
     <Compile Include="Network\Peer\ConcretePeers\ClientPeer.cs" />
     <Compile Include="Network\Peer\INetPeer.cs" />
     <Compile Include="Network\Peer\Peer.cs" />

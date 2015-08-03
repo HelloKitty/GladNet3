@@ -85,5 +85,40 @@ namespace GladNet.Common.UnitTests
 			//peer.As<INetworkMessageReceiver>().Verify(p => p.OnNetworkMessageReceive(eventMessage.Object, parameters.Object), Times.Once());
 			peer.Protected().Verify("OnReceiveResponse", Times.Once(), responseMessage.Object, parameters.Object);
 		}
+
+		[Test]
+		public static void Test_Peer_TrySendMessage_Methods()
+		{
+			//arrange
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			//Enable calling implemented methods
+			peer.CallBase = true;
+
+			//We build a dictionary of mocks to test specific methods.
+			//We are going to use .Net 4.5 dynamic feature to test.
+			Dictionary<NetworkMessage.OperationType, dynamic> dictOfParams = new Dictionary<NetworkMessage.OperationType, dynamic>()
+			{
+				{ NetworkMessage.OperationType.Request, new Mock<IRequestPayload>().Object },
+				{ NetworkMessage.OperationType.Response, new Mock<IResponsePayload>().Object },
+				{ NetworkMessage.OperationType.Event, new Mock<IEventPayload>().Object }
+			};
+
+			//act
+			foreach(NetworkMessage.OperationType op in Enum.GetValues(typeof(NetworkMessage.OperationType)))
+			{
+				//Asserts
+				if (peer.Object.CanSend(op))
+				{
+					Assert.AreNotEqual(peer.Object.TrySendMessage(op, null, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+					Assert.AreNotEqual(peer.Object.TrySendMessage(null, dictOfParams[op], NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+				}
+				else
+				{
+					//This uses DLR/dynamic a .Net 4.5 feature to call the proper overload. This is only for easy testing.
+					Assert.AreEqual(peer.Object.TrySendMessage(null, dictOfParams[op], NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+					Assert.AreEqual(peer.Object.TrySendMessage(op, null, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+				}
+			}
+		}
 	}
 }
