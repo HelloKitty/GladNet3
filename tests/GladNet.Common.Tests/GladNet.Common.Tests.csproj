@@ -56,6 +56,7 @@
     <Compile Include="UnitTests\Messages\RequestMessageTests.cs" />
     <Compile Include="UnitTests\Messages\EventMessageTests.cs" />
     <Compile Include="UnitTests\Messages\ResponseMessageTests.cs" />
+    <Compile Include="UnitTests\Peers\ClientPeerTests.cs" />
     <Compile Include="UnitTests\Peers\PeerTests.cs" />
   </ItemGroup>
   <ItemGroup>

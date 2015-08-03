@@ -91,6 +91,7 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
 			//Enable calling implemented methods
 			peer.CallBase = true;
 
@@ -109,16 +110,101 @@ namespace GladNet.Common.UnitTests
 				//Asserts
 				if (peer.Object.CanSend(op))
 				{
-					Assert.AreNotEqual(peer.Object.TrySendMessage(op, null, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
-					Assert.AreNotEqual(peer.Object.TrySendMessage(null, dictOfParams[op], NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+					Assert.AreNotEqual(peer.Object.TrySendMessage(op, packet.Object, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+					Assert.AreNotEqual(peer.Object.TrySendMessage(packet.Object, dictOfParams[op], NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
 				}
 				else
 				{
 					//This uses DLR/dynamic a .Net 4.5 feature to call the proper overload. This is only for easy testing.
-					Assert.AreEqual(peer.Object.TrySendMessage(null, dictOfParams[op], NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
-					Assert.AreEqual(peer.Object.TrySendMessage(op, null, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+					Assert.AreEqual(peer.Object.TrySendMessage(packet.Object, dictOfParams[op], NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+					Assert.AreEqual(peer.Object.TrySendMessage(op, packet.Object, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
 				}
 			}
+		}
+
+		[Test]
+		[ExpectedException]
+		public static void Test_Peer_TrySendMessage_Response_WithNullPacket()
+		{
+			//arrange
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			//Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			Mock<IResponsePayload> parameters = new Mock<IResponsePayload>(MockBehavior.Strict);
+			//Enable calling implemented methods
+			peer.CallBase = true;
+
+			//act
+			peer.Object.TrySendMessage(null, parameters.Object, NetworkMessage.DeliveryMethod.Unknown);
+
+			//expect exception
+		}
+
+		[Test]
+		[ExpectedException]
+		public static void Test_Peer_TrySendMessage_Event_WithNullPacket()
+		{
+			//arrange
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			//Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			Mock<IEventPayload> parameters = new Mock<IEventPayload>(MockBehavior.Strict);
+			//Enable calling implemented methods
+			peer.CallBase = true;
+
+			//act
+			peer.Object.TrySendMessage(null, parameters.Object, NetworkMessage.DeliveryMethod.Unknown);
+
+			//expect exception
+		}
+
+		[Test]
+		[ExpectedException]
+		public static void Test_Peer_TrySendMessage_Request_WithNullPacket()
+		{
+			//arrange
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			//Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			Mock<IRequestPayload> parameters = new Mock<IRequestPayload>(MockBehavior.Strict);
+			//Enable calling implemented methods
+			peer.CallBase = true;
+
+			//act
+			peer.Object.TrySendMessage(null, parameters.Object, NetworkMessage.DeliveryMethod.Unknown);
+
+			//expect exception
+		}
+
+		[Test]
+		[ExpectedException]
+		public static void Test_Peer_TrySendMessage_NoParams_WithNullPacket()
+		{
+			//arrange
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			//Enable calling implemented methods
+			peer.CallBase = true;
+
+			//act
+			peer.Object.TrySendMessage(NetworkMessage.OperationType.Request, null, NetworkMessage.DeliveryMethod.Unknown);
+
+			//expect exception
+		}
+
+		[Test]
+		public static void Test_Peer_TrySendMessage_Response_WithNullParameters()
+		{
+			//arrange
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			//Mock<IResponsePayload> parameters = new Mock<IResponsePayload>(MockBehavior.Strict);
+			//Enable calling implemented methods
+			peer.CallBase = true;
+
+			//We expect this to suceed and be handled. Potentially it should be logged I guess.
+			//act
+			peer.Object.TrySendMessage(packet.Object, (IResponsePayload)null, NetworkMessage.DeliveryMethod.Unknown);
+			peer.Object.TrySendMessage(packet.Object, (IRequestPayload)null, NetworkMessage.DeliveryMethod.Unknown);
+			peer.Object.TrySendMessage(packet.Object, (IRequestPayload)null, NetworkMessage.DeliveryMethod.Unknown);
+
+			//Just assert that no exceptions occured.
 		}
 	}
 }

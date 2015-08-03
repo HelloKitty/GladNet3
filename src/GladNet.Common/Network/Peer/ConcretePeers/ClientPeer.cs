@@ -34,6 +34,13 @@ namespace GladNet.Common
 			//If this is occuring in live production it is the result of likely packet forging.
 
 			//TODO: Logging.
+			//We call a virtual to let users do additional things if they'd like to override
+			OnInvalidOperationRecieved(message.GetType(), parameters, message as PacketPayload);
+		}
+
+		protected virtual void OnInvalidOperationRecieved(Type packetType, IMessageParameters parameters, PacketPayload payload)
+		{
+
 		}
 
 		//We can override because we no this is invalid.
