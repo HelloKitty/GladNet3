@@ -189,7 +189,7 @@ namespace GladNet.Common.UnitTests
 		}
 
 		[Test]
-		public static void Test_Peer_TrySendMessage_Response_WithNullParameters()
+		public static void Test_Peer_TrySendMessage_WithNullParameters()
 		{
 			//arrange
 			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
