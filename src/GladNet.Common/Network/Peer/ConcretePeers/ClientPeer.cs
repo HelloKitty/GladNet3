@@ -9,26 +9,26 @@ namespace GladNet.Common
 {
 	public abstract class ClientPeer : Peer, IClientMessageSender
 	{
-		public sealed override bool CanSend(NetworkMessage.OperationType opType)
+		public override bool CanSend(NetworkMessage.OperationType opType)
 		{
 			return opType == NetworkMessage.OperationType.Request;
 		}
 
 		#region Message Senders
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public NetworkMessage.SendResult SendRequest<TRequestPacketType>(TRequestPacketType payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-			where TRequestPacketType : PacketPayload, IRequestPayload
+		public NetworkMessage.SendResult SendRequest<TRequestPacket>(TRequestPacket payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+			where TRequestPacket : PacketPayload, IRequestPayload
 		{
 			throw new NotImplementedException();
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		/*[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public NetworkMessage.SendResult SendRequest(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			throw new NotImplementedException();
-		}
+		}*/
 
-		protected sealed override void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters)
+		protected override void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters)
 		{
 			//ClientPeers don't handle requests. They send them.
 			//If this is occuring in live production it is the result of likely packet forging.
@@ -45,14 +45,14 @@ namespace GladNet.Common
 
 		//We can override because we no this is invalid.
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public sealed override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IEventPayload eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IEventPayload eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			//TODO: Logging.
 			return NetworkMessage.SendResult.Invalid;
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public sealed override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IResponsePayload responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IResponsePayload responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			//TODO: Logging.
 			return NetworkMessage.SendResult.Invalid;
@@ -60,7 +60,7 @@ namespace GladNet.Common
 
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		//We can skip checks for efficiency and send directly.
-		public sealed override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			//TODO: Implement sending.
 			throw new NotImplementedException();

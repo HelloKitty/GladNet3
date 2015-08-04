@@ -17,9 +17,10 @@ namespace GladNet.Common.UnitTests.Peers
 			//arrange
 			Mock<ClientPeer> peer = new Mock<ClientPeer>();
 			peer.CallBase = true;
+			//peer.Setup
 
 			//act
-			bool result = peer.Object.CanSend(NetworkMessage.OperationType.Request); //peer.As<INetPeer>().Object.CanSend(NetworkMessage.OperationType.Request);
+			bool result = peer.Object.CanSend(NetworkMessage.OperationType.Request);
 
 			//assert
 			Assert.IsTrue(result);
