@@ -11,16 +11,17 @@ namespace GladNet.Common.UnitTests
 	[TestFixture]
 	public static class ResponseMessageTests
 	{
-		private static readonly Random random = new Random();
+		//private static readonly Random random = new Random();
 
 		[Test]
 		public static void Test_Construction()
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			Mock<IResponsePayload> responseParameters = new Mock<IResponsePayload>(MockBehavior.Strict);
 
 			//act
-			ResponseMessage message = new ResponseMessage(packet.Object, TestByte());
+			ResponseMessage message = new ResponseMessage(packet.Object, responseParameters.Object);
 
 			//assert
 			//Just that it doesn't throw.
@@ -31,14 +32,14 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			byte testByte = TestByte();
+			Mock<IResponsePayload> responseParameters = new Mock<IResponsePayload>(MockBehavior.Strict);
+			//byte testByte = TestByte();
 
 			//act
-			ResponseMessage message = new ResponseMessage(packet.Object, testByte);
+			ResponseMessage message = new ResponseMessage(packet.Object, responseParameters.Object);
 
 			//assert
 			Assert.AreSame(packet.Object, message.Payload);
-			Assert.AreEqual(testByte, message.ResponseCode);
 		}
 
 
@@ -46,8 +47,11 @@ namespace GladNet.Common.UnitTests
 		[ExpectedException]
 		public static void Test_Construction_Null_Packet()
 		{
+			//arrange
+			Mock<IResponsePayload> responseParameters = new Mock<IResponsePayload>(MockBehavior.Strict);
+
 			//act
-			new ResponseMessage(null, TestByte());
+			new ResponseMessage(null, responseParameters.Object);
 
 			//assert
 			//Exception should be thrown for null.
@@ -58,7 +62,8 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			ResponseMessage message = new ResponseMessage(packet.Object, TestByte());
+			Mock<IResponsePayload> responseParameters = new Mock<IResponsePayload>(MockBehavior.Strict);
+			ResponseMessage message = new ResponseMessage(packet.Object, responseParameters.Object);
 			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
 			Mock<INetworkMessageReceiver> receiever = new Mock<INetworkMessageReceiver>(MockBehavior.Strict);
 
@@ -79,7 +84,8 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			ResponseMessage message = new ResponseMessage(packet.Object, TestByte());
+			Mock<IResponsePayload> responseParameters = new Mock<IResponsePayload>(MockBehavior.Strict);
+			ResponseMessage message = new ResponseMessage(packet.Object, responseParameters.Object);
 			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
 
 			//act
@@ -95,7 +101,8 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			ResponseMessage message = new ResponseMessage(packet.Object, TestByte());
+			Mock<IResponsePayload> responseParameters = new Mock<IResponsePayload>(MockBehavior.Strict);
+			ResponseMessage message = new ResponseMessage(packet.Object, responseParameters.Object);
 			Mock<INetworkMessageReceiver> receiever = new Mock<INetworkMessageReceiver>(MockBehavior.Strict);
 
 			//Sets up the method that should be called so it doesn't throw.
@@ -109,9 +116,9 @@ namespace GladNet.Common.UnitTests
 			//Exception should be thrown for null.
 		}
 
-		private static byte TestByte()
+		/*private static byte TestByte()
 		{
 			return (byte)(random.Next() % (byte.MaxValue + 1));
-		}
+		}*/
 	}
 }

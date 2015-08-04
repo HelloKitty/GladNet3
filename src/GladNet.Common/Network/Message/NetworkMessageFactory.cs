@@ -16,7 +16,7 @@ namespace GladNet.Common
 			if(responseParameters == null)
 				throw new ArgumentNullException("responseParameters", "ResponseParameters is null in Response NetworkMessage factory method.");
 
-			return new ResponseMessage(payload, responseParameters.ResponseCode);
+			return new ResponseMessage(payload, responseParameters);
 		}
 
 		public NetworkMessage Create(PacketPayload payload, IRequestPayload requestParameters)
@@ -25,9 +25,9 @@ namespace GladNet.Common
 				throw new ArgumentNullException("payload", "Payload is null in Response NetworkMessage factory method.");
 
 			if (requestParameters == null)
-				throw new ArgumentNullException("responseParameters", "ResponseParameters is null in Response NetworkMessage factory method.");
+				throw new ArgumentNullException("requestParameters", "ResponseParameters is null in Response NetworkMessage factory method.");
 
-			return new RequestMessage(payload);
+			return new RequestMessage(payload, requestParameters);
 		}
 
 		public NetworkMessage Create(PacketPayload payload, IEventPayload eventParameters)
@@ -36,9 +36,9 @@ namespace GladNet.Common
 				throw new ArgumentNullException("payload", "Payload is null in Response NetworkMessage factory method.");
 
 			if (eventParameters == null)
-				throw new ArgumentNullException("responseParameters", "ResponseParameters is null in Response NetworkMessage factory method.");
+				throw new ArgumentNullException("eventParameters", "ResponseParameters is null in Response NetworkMessage factory method.");
 
-			return new EventMessage(payload);
+			return new EventMessage(payload, eventParameters);
 		}
 	}
 }

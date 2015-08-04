@@ -24,11 +24,14 @@ namespace GladNet.Common
 		/// Constructor for <see cref="ResponseMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>
 		/// <param name="payload"><see cref="PacketPayload"/> of the <see cref="NetworkMessage"/>.</param>
-		/// <param name="responseCode">Reponse code</param>
-		public ResponseMessage(PacketPayload payload, byte responseCode)
+		public ResponseMessage(PacketPayload payload, IResponsePayload parameters)
 			: base(payload)
 		{
-			ResponseCode = responseCode;
+			if (payload == null)
+				throw new ArgumentNullException("payload", "Payload of " + this.GetType() + " cannot be null in construction.");
+
+			if (parameters == null)
+				throw new ArgumentNullException("parameters", typeof(IResponsePayload) + " object of " + this.GetType() + " cannot be null in construction.");
 		}
 
 		/// <summary>

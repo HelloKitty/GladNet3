@@ -16,9 +16,10 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			Mock<IRequestPayload> requestParams = new Mock<IRequestPayload>(MockBehavior.Strict);
 
 			//act
-			RequestMessage message = new RequestMessage(packet.Object);
+			RequestMessage message = new RequestMessage(packet.Object, requestParams.Object);
 
 			//assert
 			//Just that it doesn't throw
@@ -29,9 +30,10 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			Mock<IRequestPayload> requestParams = new Mock<IRequestPayload>(MockBehavior.Strict);
 
 			//act
-			RequestMessage message = new RequestMessage(packet.Object);
+			RequestMessage message = new RequestMessage(packet.Object, requestParams.Object);
 
 			//assert
 			Assert.AreSame(packet.Object, message.Payload);
@@ -42,8 +44,11 @@ namespace GladNet.Common.UnitTests
 		[ExpectedException]
 		public static void Test_Construction_Null_Packet()
 		{
+			//arrange
+			Mock<IRequestPayload> requestParams = new Mock<IRequestPayload>(MockBehavior.Strict);
+
 			//act
-			new RequestMessage(null);
+			new RequestMessage(null, requestParams.Object);
 
 			//assert
 			//Exception should be thrown for null.
@@ -54,7 +59,8 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			RequestMessage message = new RequestMessage(packet.Object);
+			Mock<IRequestPayload> requestParams = new Mock<IRequestPayload>(MockBehavior.Strict);
+			RequestMessage message = new RequestMessage(packet.Object, requestParams.Object);
 			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
 			Mock<INetworkMessageReceiver> receiever = new Mock<INetworkMessageReceiver>(MockBehavior.Strict);
 
@@ -75,7 +81,8 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			RequestMessage message = new RequestMessage(packet.Object);
+			Mock<IRequestPayload> requestParams = new Mock<IRequestPayload>(MockBehavior.Strict);
+			RequestMessage message = new RequestMessage(packet.Object, requestParams.Object);
 			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
 
 			//act
@@ -91,7 +98,8 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			RequestMessage message = new RequestMessage(packet.Object);
+			Mock<IRequestPayload> requestParams = new Mock<IRequestPayload>(MockBehavior.Strict);
+			RequestMessage message = new RequestMessage(packet.Object, requestParams.Object);
 			Mock<INetworkMessageReceiver> receiever = new Mock<INetworkMessageReceiver>(MockBehavior.Strict);
 
 			//Sets up the method that should be called so it doesn't throw.
