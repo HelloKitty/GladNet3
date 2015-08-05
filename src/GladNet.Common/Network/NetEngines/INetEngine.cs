@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Common.Network.NetEngines
+namespace GladNet.Common
 {
-	public interface INetEngine
+	public interface INetEngine : INetworkMessageSender
 	{
 
 	}

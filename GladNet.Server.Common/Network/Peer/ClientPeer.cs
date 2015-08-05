@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Common
+namespace GladNet.Server.Common
 {
 	public abstract class ClientPeer : Peer, IClientMessageSender
 	{
