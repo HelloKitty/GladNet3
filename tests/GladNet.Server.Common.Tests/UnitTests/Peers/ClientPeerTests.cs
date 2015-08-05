@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using GladNet.Common;
+using GladNet.Server.Common;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Common.UnitTests.Peers
+namespace GladNet.Server.Common.UnitTests
 {
 	[TestFixture]
 	public static class ClientPeerTests
