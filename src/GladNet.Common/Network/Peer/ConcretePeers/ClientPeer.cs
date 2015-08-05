@@ -11,26 +11,34 @@ namespace GladNet.Common
 	{
 		public override bool CanSend(NetworkMessage.OperationType opType)
 		{
-			return opType == NetworkMessage.OperationType.Request;
+			return opType == NetworkMessage.OperationType.Event || opType == NetworkMessage.OperationType.Response;
 		}
 
 		#region Message Senders
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public NetworkMessage.SendResult SendRequest<TRequestPacket>(TRequestPacket payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-			where TRequestPacket : PacketPayload, IRequestPayload
+		public NetworkMessage.SendResult SendResponse<TResponsePacket>(TResponsePacket payload, NetworkMessage.DeliveryMethod deliveryMethod, byte responseCode, bool encrypt = false, byte channel = 0) where TResponsePacket : PacketPayload, IResponsePayload
 		{
 			throw new NotImplementedException();
 		}
 
-		/*[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public NetworkMessage.SendResult SendRequest(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public NetworkMessage.SendResult SendEvent<TEventPacket>(TEventPacket payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0) where TEventPacket : PacketPayload, IEventPayload
 		{
 			throw new NotImplementedException();
-		}*/
+		}
+		#endregion
 
-		protected override void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters)
+		protected sealed override void OnReceiveResponse(IResponseMessage message, IMessageParameters parameters)
 		{
-			//ClientPeers don't handle requests. They send them.
+			//ClientPeers don't handle events. They send them.
+			//If this is occuring in live production it is the result of likely packet forging.
+
+			//TODO: Logging.
+			//We call a virtual to let users do additional things if they'd like to override
+			OnInvalidOperationRecieved(message.GetType(), parameters, message as PacketPayload);
+		}
+
+		protected sealed override void OnReceiveEvent(IEventMessage message, IMessageParameters parameters)
+		{
+			//ClientPeers don't handle events. They send them.
 			//If this is occuring in live production it is the result of likely packet forging.
 
 			//TODO: Logging.
@@ -45,33 +53,29 @@ namespace GladNet.Common
 
 		//We can override because we no this is invalid.
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IEventPayload eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			//TODO: Logging.
-			return NetworkMessage.SendResult.Invalid;
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IResponsePayload responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			//TODO: Logging.
-			return NetworkMessage.SendResult.Invalid;
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		//We can skip checks for efficiency and send directly.
-		public override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public sealed override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IEventPayload eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			//TODO: Implement sending.
 			throw new NotImplementedException();
 		}
-		#endregion
 
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		public sealed override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IResponsePayload responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		{
+			//TODO: Implement sending.
+			throw new NotImplementedException();
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		//We can skip checks for efficiency and send directly.
+		public sealed override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		{
+			//TODO: Logging.
+			return NetworkMessage.SendResult.Invalid;
+		}
 
 		#region Message Receivers
-		protected override abstract void OnReceiveResponse(IResponseMessage message, IMessageParameters parameters);
-
-		protected override abstract void OnReceiveEvent(IEventMessage message, IMessageParameters parameters);
+		protected abstract override void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
 		#endregion
 	}
 }

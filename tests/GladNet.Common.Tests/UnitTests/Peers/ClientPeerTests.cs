@@ -12,9 +12,9 @@ namespace GladNet.Common.UnitTests.Peers
 	public static class ClientPeerTests
 	{
 		[Test]
-		[TestCase(NetworkMessage.OperationType.Request, true)]
-		[TestCase(NetworkMessage.OperationType.Event, false)]
-		[TestCase(NetworkMessage.OperationType.Response, false)]
+		[TestCase(NetworkMessage.OperationType.Request, false)]
+		[TestCase(NetworkMessage.OperationType.Event, true)]
+		[TestCase(NetworkMessage.OperationType.Response, true)]
 		public static void Test_CanSend_IsRequest(NetworkMessage.OperationType opType, bool expectedResult)
 		{
 			//arrange
