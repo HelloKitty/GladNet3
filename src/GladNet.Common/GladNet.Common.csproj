@@ -60,7 +60,6 @@
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
     <Compile Include="Network\NetEngines\INetEngine.cs" />
-    <Compile Include="Network\Peer\ConcretePeers\ClientPeer.cs" />
     <Compile Include="Network\Peer\INetPeer.cs" />
     <Compile Include="Network\Peer\Peer.cs" />
     <Compile Include="Packet\IResponsePayload.cs" />
@@ -68,6 +67,9 @@
     <Compile Include="Packet\IEventPayload.cs" />
     <Compile Include="Packet\PacketPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Network\Peer\ConcretePeers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
