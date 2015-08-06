@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace GladNet.Common
 {
-	public interface INetPeer : INetworkMessageSender
+	public interface IConnectionDetails
 	{
-		IConnectionDetails PeerDetails { get; }
 
-		bool CanSend(NetworkMessage.OperationType opType);
 	}
 }

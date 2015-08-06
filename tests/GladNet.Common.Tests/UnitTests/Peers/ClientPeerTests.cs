@@ -1,6 +1,4 @@
-﻿using GladNet.Common;
-using GladNet.Server.Common;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -8,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Server.Common.UnitTests
+namespace GladNet.Common.UnitTests.Peers
 {
 	[TestFixture]
 	public static class ClientPeerTests
@@ -20,7 +18,7 @@ namespace GladNet.Server.Common.UnitTests
 		public static void Test_CanSend_IsRequest(NetworkMessage.OperationType opType, bool expectedResult)
 		{
 			//arrange
-			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<INetEngine>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>();
 			peer.CallBase = true;
 
 			//act

@@ -22,7 +22,7 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Request_Receive_Method()
 		{
 			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
 			//This sets it up so that the implementation of concrete methods are available.
 			peer.CallBase = true;
 
@@ -44,7 +44,7 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Event_Receive_Method()
 		{
 			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
 			//This sets it up so that the implementation of concrete methods are available.
 			peer.CallBase = true;
 
@@ -67,7 +67,7 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Response_Receive_Method()
 		{
 			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
 			//This sets it up so that the implementation of concrete methods are available.
 			peer.CallBase = true;
 
@@ -90,7 +90,7 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Peer_TrySendMessage_Methods()
 		{
 			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
 			//Enable calling implemented methods
 			peer.CallBase = true;
@@ -127,7 +127,7 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Peer_TrySendMessage_Response_WithNullPacket()
 		{
 			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
 			//Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
 			Mock<IResponsePayload> parameters = new Mock<IResponsePayload>(MockBehavior.Strict);
 			//Enable calling implemented methods
@@ -144,7 +144,7 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Peer_TrySendMessage_Event_WithNullPacket()
 		{
 			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
 			//Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
 			Mock<IEventPayload> parameters = new Mock<IEventPayload>(MockBehavior.Strict);
 			//Enable calling implemented methods
@@ -161,7 +161,7 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Peer_TrySendMessage_Request_WithNullPacket()
 		{
 			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
 			//Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
 			Mock<IRequestPayload> parameters = new Mock<IRequestPayload>(MockBehavior.Strict);
 			//Enable calling implemented methods
@@ -178,7 +178,7 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Peer_TrySendMessage_NoParams_WithNullPacket()
 		{
 			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
 			//Enable calling implemented methods
 			peer.CallBase = true;
 
@@ -192,7 +192,7 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Peer_TrySendMessage_WithNullParameters()
 		{
 			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose);
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
 			//Mock<IResponsePayload> parameters = new Mock<IResponsePayload>(MockBehavior.Strict);
 			//Enable calling implemented methods

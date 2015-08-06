@@ -56,10 +56,13 @@
     <Compile Include="Network\Message\IMessageParameters.cs" />
     <Compile Include="Network\Message\INetworkMessageReceiver.cs" />
     <Compile Include="Network\Message\ConcreteMessages\NetworkMessage.cs" />
+    <Compile Include="Network\Message\INetworkMessageFactory.cs" />
     <Compile Include="Network\Message\NetworkMessageFactory.cs" />
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
     <Compile Include="Network\NetEngines\INetEngine.cs" />
+    <Compile Include="Network\NetEngines\LidgrenNetEngine.cs" />
+    <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />
     <Compile Include="Network\Peer\INetPeer.cs" />
     <Compile Include="Network\Peer\Peer.cs" />
     <Compile Include="Packet\IResponsePayload.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GladNet.Common
 {
-	public class NetworkMessageFactory
+	public class NetworkMessageFactory : INetworkMessageFactory
 	{
 		public NetworkMessage Create(PacketPayload payload, IResponsePayload responseParameters)
 		{
@@ -39,6 +39,14 @@ namespace GladNet.Common
 				throw new ArgumentNullException("eventParameters", "ResponseParameters is null in Response NetworkMessage factory method.");
 
 			return new EventMessage(payload, eventParameters);
+		}
+
+		public NetworkMessage Create(NetworkMessage.OperationType opType, PacketPayload payload)
+		{
+			if (payload == null)
+				throw new ArgumentNullException("payload", "Payload is null in Response NetworkMessage factory method.");
+
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -8,6 +8,6 @@ namespace GladNet.Common
 {
 	public interface INetEngine : INetworkMessageSender
 	{
-
+		IConnectionDetails Details { get; }
 	}
 }

@@ -9,6 +9,18 @@ namespace GladNet.Common
 {
 	public abstract class Peer : INetPeer, INetworkMessageReceiver
 	{
+		protected readonly INetEngine NetEngine;
+
+		public IConnectionDetails PeerDetails
+		{
+			get { return NetEngine.Details; }
+		}
+
+		protected Peer(INetEngine engine)
+		{
+			NetEngine = engine;
+		}
+
 		#region Message Senders
 		//The idea here is we return invalids because sometimes a Peer can't send a certain message type.
 		//In most cases external classes shouldn't be interfacing with this class in this fashion.

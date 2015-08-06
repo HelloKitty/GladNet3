@@ -10,6 +10,12 @@ namespace GladNet.Server.Common
 {
 	public abstract class ClientPeer : Peer, IClientMessageSender
 	{
+		public ClientPeer(INetEngine engine)
+			: base(engine)
+		{
+
+		}
+
 		public override bool CanSend(NetworkMessage.OperationType opType)
 		{
 			return opType == NetworkMessage.OperationType.Event || opType == NetworkMessage.OperationType.Response;
