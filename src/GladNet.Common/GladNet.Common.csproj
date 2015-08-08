@@ -65,6 +65,10 @@
     <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />
     <Compile Include="Network\Peer\INetPeer.cs" />
     <Compile Include="Network\Peer\Peer.cs" />
+    <Compile Include="Packet\Encryption\IDecryptor.cs" />
+    <Compile Include="Packet\Encryption\IEncryptable.cs" />
+    <Compile Include="Packet\Encryption\IEncryptor.cs" />
+    <Compile Include="Packet\IPayloadContainer.cs" />
     <Compile Include="Packet\IResponsePayload.cs" />
     <Compile Include="Packet\IRequestPayload.cs" />
     <Compile Include="Packet\IEventPayload.cs" />
@@ -73,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Network\Peer\ConcretePeers\" />
+    <Folder Include="Packet\Serialization\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

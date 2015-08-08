@@ -20,9 +20,6 @@ namespace GladNet.Common
 		public RequestMessage(PacketPayload payload, IRequestPayload parameters)
 			: base(payload)
 		{
-			if (payload == null)
-				throw new ArgumentNullException("payload", "Payload of " + this.GetType() + " cannot be null in construction.");
-
 			if (parameters == null)
 				throw new ArgumentNullException("parameters", typeof(IRequestPayload) + " object of " + this.GetType() + " cannot be null in construction.");
 		}
