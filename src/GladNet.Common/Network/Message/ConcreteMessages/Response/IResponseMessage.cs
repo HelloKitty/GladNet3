@@ -10,7 +10,7 @@ namespace GladNet.Common
 	/// <see cref="IResponseMessage"/>s are <see cref="INetworkMessage"/>s in response to <see cref="IRequestMessage"/> from remote peers.
 	/// It contains additional fields/properties compared to <see cref="INetworkMessage"/> that provide information on the response.
 	/// </summary>
-	public interface IResponseMessage : INetworkMessage, IResponsePayload
+	public interface IResponseMessage : INetworkMessage
 	{
 
 	}

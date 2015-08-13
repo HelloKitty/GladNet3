@@ -12,26 +12,16 @@ namespace GladNet.Common
 	/// </summary>
 	public class ResponseMessage : NetworkMessage, IResponseMessage
 	{
-		/// <summary>
-		/// Indicates the response state of the <see cref="ResponseMessage"/>.
-		/// 0 - Generally Failure
-		/// 1 - Generally Sucess
-		/// 2+ - User-Defined
-		/// </summary>
-		public byte ResponseCode { get; private set; }
 
 		/// <summary>
 		/// Constructor for <see cref="ResponseMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>
 		/// <param name="payload"><see cref="PacketPayload"/> of the <see cref="NetworkMessage"/>.</param>
-		public ResponseMessage(PacketPayload payload, IResponsePayload parameters)
+		public ResponseMessage(PacketPayload payload)
 			: base(payload)
 		{
 			if (payload == null)
 				throw new ArgumentNullException("payload", "Payload of " + this.GetType() + " cannot be null in construction.");
-
-			if (parameters == null)
-				throw new ArgumentNullException("parameters", typeof(IResponsePayload) + " object of " + this.GetType() + " cannot be null in construction.");
 		}
 
 		/// <summary>

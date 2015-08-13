@@ -9,7 +9,7 @@ namespace GladNet.Common
 {
 	public abstract class Peer : INetPeer, INetworkMessageReceiver
 	{
-		protected readonly INetEngine NetEngine;
+		private readonly INetEngine NetEngine;
 
 		public IConnectionDetails PeerDetails
 		{
@@ -28,57 +28,6 @@ namespace GladNet.Common
 		//users to loosely couple their senders as best they can though they really shouldn't since
 		//it can't be known if the runetime Peer type offers that functionality.
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public virtual NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			if (payload == null)
-				throw new ArgumentException("Payload found null in: " + this.GetType() + " in TrySendMessage for params " + requestParameters.GetType(), "payload");
-
-			//TODO: Implement logging.
-			if (!CanSend(NetworkMessage.OperationType.Request))
-				return NetworkMessage.SendResult.Invalid;
-
-			if (requestParameters == null)
-				TrySendMessage(NetworkMessage.OperationType.Request, payload, deliveryMethod, encrypt, channel);
-
-			//TODO: Implement sending
-			throw new NotImplementedException();
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public virtual NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IEventPayload eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			if (payload == null)
-				throw new ArgumentException("Payload found null in: " + this.GetType() + " in TrySendMessage for params " + eventParameters.GetType(), "payload");
-
-			//TODO: Implement logging.
-			if (!CanSend(NetworkMessage.OperationType.Event))
-				return NetworkMessage.SendResult.Invalid;
-
-			if (eventParameters == null)
-				TrySendMessage(NetworkMessage.OperationType.Event, payload, deliveryMethod, encrypt, channel);
-
-			//TODO: Implement sending
-			throw new NotImplementedException();
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public virtual NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IResponsePayload responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			if (payload == null)
-				throw new ArgumentException("Payload found null in: " + this.GetType() + " in TrySendMessage for params " + responseParameters.GetType(), "payload");
-
-			//TODO: Implement logging.
-			if (!CanSend(NetworkMessage.OperationType.Response))
-				return NetworkMessage.SendResult.Invalid;
-
-			if (responseParameters == null)
-				TrySendMessage(NetworkMessage.OperationType.Response, payload, deliveryMethod, encrypt, channel);
-
-			//TODO: Implement sending
-			throw new NotImplementedException();
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public virtual NetworkMessage.SendResult TrySendMessage(NetworkMessage.OperationType opType, PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			if (payload == null)
@@ -88,8 +37,7 @@ namespace GladNet.Common
 			if (!CanSend(opType))
 				return NetworkMessage.SendResult.Invalid;
 
-			//TODO: Implement sending
-			throw new NotImplementedException();
+			return NetEngine.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel);
 		}
 		#endregion
 

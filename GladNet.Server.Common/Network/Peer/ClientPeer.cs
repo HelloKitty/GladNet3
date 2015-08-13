@@ -22,14 +22,16 @@ namespace GladNet.Server.Common
 		}
 
 		#region Message Senders
-		public NetworkMessage.SendResult SendResponse<TResponsePacket>(TResponsePacket payload, NetworkMessage.DeliveryMethod deliveryMethod, byte responseCode, bool encrypt = false, byte channel = 0) where TResponsePacket : PacketPayload, IResponsePayload
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		public NetworkMessage.SendResult SendResponse(PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, byte responseCode, bool encrypt = false, byte channel = 0)
 		{
-			throw new NotImplementedException();
+			return TrySendMessage(NetworkMessage.OperationType.Response, payload, deliveryMethod, encrypt, channel);
 		}
 
-		public NetworkMessage.SendResult SendEvent<TEventPacket>(TEventPacket payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0) where TEventPacket : PacketPayload, IEventPayload
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		public NetworkMessage.SendResult SendEvent(PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			throw new NotImplementedException();
+			return TrySendMessage(NetworkMessage.OperationType.Event, payload, deliveryMethod, encrypt, channel);
 		}
 		#endregion
 
@@ -58,27 +60,9 @@ namespace GladNet.Server.Common
 
 		}
 
-		//We can override because we no this is invalid.
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public sealed override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IEventPayload eventParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public override NetworkMessage.SendResult TrySendMessage(NetworkMessage.OperationType opType, PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			//TODO: Implement sending.
-			throw new NotImplementedException();
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public sealed override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IResponsePayload responseParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			//TODO: Implement sending.
-			throw new NotImplementedException();
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		//We can skip checks for efficiency and send directly.
-		public sealed override NetworkMessage.SendResult TrySendMessage(PacketPayload payload, IRequestPayload requestParameters, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			//TODO: Logging.
-			return NetworkMessage.SendResult.Invalid;
+			return base.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel);
 		}
 
 		#region Message Receivers

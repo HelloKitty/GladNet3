@@ -69,10 +69,7 @@
     <Compile Include="Packet\Encryption\IEncryptable.cs" />
     <Compile Include="Packet\Encryption\IEncryptor.cs" />
     <Compile Include="Packet\IPayloadContainer.cs" />
-    <Compile Include="Packet\IResponsePayload.cs" />
-    <Compile Include="Packet\IRequestPayload.cs" />
-    <Compile Include="Packet\IEventPayload.cs" />
-    <Compile Include="Packet\PacketPayload.cs" />
+    <Compile Include="Packet\Payload\PacketPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

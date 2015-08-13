@@ -8,12 +8,6 @@ namespace GladNet.Common
 {
 	public interface INetworkMessageFactory
 	{
-		NetworkMessage Create(PacketPayload payload, IResponsePayload responseParameters);
-
-		NetworkMessage Create(PacketPayload payload, IRequestPayload requestParameters);
-
-		NetworkMessage Create(PacketPayload payload, IEventPayload eventParameters);
-
 		NetworkMessage Create(NetworkMessage.OperationType opType, PacketPayload payload);
 	}
 }

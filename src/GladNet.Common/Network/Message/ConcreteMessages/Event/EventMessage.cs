@@ -17,11 +17,10 @@ namespace GladNet.Common
 		/// Constructor for <see cref="EventMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>
 		/// <param name="payload"><see cref="PacketPayload"/> of the <see cref="NetworkMessage"/>.</param>
-		public EventMessage(PacketPayload payload, IEventPayload eventParameters)
+		public EventMessage(PacketPayload payload)
 			: base(payload)
 		{
-			if (eventParameters == null)
-				throw new ArgumentNullException("eventParameters", typeof(IEventPayload) + " object of " + this.GetType() + " cannot be null in construction.");
+			//TODO: Add exception for null packet.
 		}
 
 		/// <summary>

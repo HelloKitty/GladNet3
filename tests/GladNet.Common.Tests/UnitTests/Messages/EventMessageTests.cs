@@ -16,10 +16,9 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			Mock<IEventPayload> parameters = new Mock<IEventPayload>();
 
 			//act
-			EventMessage message = new EventMessage(packet.Object, parameters.Object);
+			EventMessage message = new EventMessage(packet.Object);
 
 			//assert
 			//Just that it doesn't throw
@@ -30,10 +29,9 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			Mock<IEventPayload> parameters = new Mock<IEventPayload>();
 
 			//act
-			EventMessage message = new EventMessage(packet.Object, parameters.Object);
+			EventMessage message = new EventMessage(packet.Object);
 
 			//assert
 			Assert.AreSame(packet.Object, message.Payload);
@@ -44,12 +42,8 @@ namespace GladNet.Common.UnitTests
 		[ExpectedException]
 		public static void Test_Construction_Null_Packet()
 		{
-			//arrange
-			Mock<IEventPayload> parameters = new Mock<IEventPayload>(MockBehavior.Loose);
-
-
 			//act
-			new EventMessage(null, parameters.Object);
+			new EventMessage(null);
 
 			//assert
 			//Exception should be thrown for null.
@@ -60,8 +54,7 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			Mock<IEventPayload> eventParams = new Mock<IEventPayload>(MockBehavior.Loose);
-			EventMessage message = new EventMessage(packet.Object, eventParams.Object);
+			EventMessage message = new EventMessage(packet.Object);
 			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
 			Mock<INetworkMessageReceiver> receiever = new Mock<INetworkMessageReceiver>(MockBehavior.Strict);
 
@@ -82,8 +75,7 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			Mock<IEventPayload> eventParams = new Mock<IEventPayload>(MockBehavior.Loose);
-			EventMessage message = new EventMessage(packet.Object, eventParams.Object);
+			EventMessage message = new EventMessage(packet.Object);
 			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
 
 			//act
@@ -99,8 +91,7 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			Mock<IEventPayload> eventParams = new Mock<IEventPayload>(MockBehavior.Loose);
-			EventMessage message = new EventMessage(packet.Object, eventParams.Object);
+			EventMessage message = new EventMessage(packet.Object);
 			Mock<INetworkMessageReceiver> receiever = new Mock<INetworkMessageReceiver>(MockBehavior.Strict);
 
 			//Sets up the method that should be called so it doesn't throw.

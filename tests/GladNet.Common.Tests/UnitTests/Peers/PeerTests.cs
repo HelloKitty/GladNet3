@@ -95,116 +95,33 @@ namespace GladNet.Common.UnitTests
 			//Enable calling implemented methods
 			peer.CallBase = true;
 
-			//We build a dictionary of mocks to test specific methods.
-			//We are going to use .Net 4.5 dynamic feature to test.
-			Dictionary<NetworkMessage.OperationType, dynamic> dictOfParams = new Dictionary<NetworkMessage.OperationType, dynamic>()
-			{
-				{ NetworkMessage.OperationType.Request, new Mock<IRequestPayload>().Object },
-				{ NetworkMessage.OperationType.Response, new Mock<IResponsePayload>().Object },
-				{ NetworkMessage.OperationType.Event, new Mock<IEventPayload>().Object }
-			};
-
 			//act
-			foreach(NetworkMessage.OperationType op in Enum.GetValues(typeof(NetworkMessage.OperationType)))
+			foreach (NetworkMessage.OperationType op in Enum.GetValues(typeof(NetworkMessage.OperationType)))
 			{
-				//Asserts
-				if (peer.Object.CanSend(op))
-				{
+				if(peer.Object.CanSend(op))
 					Assert.AreNotEqual(peer.Object.TrySendMessage(op, packet.Object, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
-					Assert.AreNotEqual(peer.Object.TrySendMessage(packet.Object, dictOfParams[op], NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
-				}
 				else
-				{
-					//This uses DLR/dynamic a .Net 4.5 feature to call the proper overload. This is only for easy testing.
-					Assert.AreEqual(peer.Object.TrySendMessage(packet.Object, dictOfParams[op], NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
 					Assert.AreEqual(peer.Object.TrySendMessage(op, packet.Object, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
-				}
 			}
 		}
 
 		[Test]
 		[ExpectedException]
-		public static void Test_Peer_TrySendMessage_Response_WithNullPacket()
+		[TestCase(NetworkMessage.OperationType.Event)]
+		[TestCase(NetworkMessage.OperationType.Response)]
+		[TestCase(NetworkMessage.OperationType.Request)]
+		public static void Test_Peer_TrySendMessage_WithNullPacket(NetworkMessage.OperationType opToTest)
 		{
 			//arrange
 			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
-			//Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			Mock<IResponsePayload> parameters = new Mock<IResponsePayload>(MockBehavior.Strict);
+
 			//Enable calling implemented methods
 			peer.CallBase = true;
 
 			//act
-			peer.Object.TrySendMessage(null, parameters.Object, NetworkMessage.DeliveryMethod.Unknown);
+			peer.Object.TrySendMessage(opToTest, null, NetworkMessage.DeliveryMethod.Unknown);
 
 			//expect exception
-		}
-
-		[Test]
-		[ExpectedException]
-		public static void Test_Peer_TrySendMessage_Event_WithNullPacket()
-		{
-			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
-			//Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			Mock<IEventPayload> parameters = new Mock<IEventPayload>(MockBehavior.Strict);
-			//Enable calling implemented methods
-			peer.CallBase = true;
-
-			//act
-			peer.Object.TrySendMessage(null, parameters.Object, NetworkMessage.DeliveryMethod.Unknown);
-
-			//expect exception
-		}
-
-		[Test]
-		[ExpectedException]
-		public static void Test_Peer_TrySendMessage_Request_WithNullPacket()
-		{
-			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
-			//Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			Mock<IRequestPayload> parameters = new Mock<IRequestPayload>(MockBehavior.Strict);
-			//Enable calling implemented methods
-			peer.CallBase = true;
-
-			//act
-			peer.Object.TrySendMessage(null, parameters.Object, NetworkMessage.DeliveryMethod.Unknown);
-
-			//expect exception
-		}
-
-		[Test]
-		[ExpectedException]
-		public static void Test_Peer_TrySendMessage_NoParams_WithNullPacket()
-		{
-			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
-			//Enable calling implemented methods
-			peer.CallBase = true;
-
-			//act
-			peer.Object.TrySendMessage(NetworkMessage.OperationType.Request, null, NetworkMessage.DeliveryMethod.Unknown);
-
-			//expect exception
-		}
-
-		[Test]
-		public static void Test_Peer_TrySendMessage_WithNullParameters()
-		{
-			//arrange
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
-			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
-			//Mock<IResponsePayload> parameters = new Mock<IResponsePayload>(MockBehavior.Strict);
-			//Enable calling implemented methods
-			peer.CallBase = true;
-
-			//We expect this to suceed and be handled. Potentially it should be logged I guess.
-			//act
-			peer.Object.TrySendMessage(packet.Object, (IResponsePayload)null, NetworkMessage.DeliveryMethod.Unknown);
-			peer.Object.TrySendMessage(packet.Object, (IRequestPayload)null, NetworkMessage.DeliveryMethod.Unknown);
-			peer.Object.TrySendMessage(packet.Object, (IEventPayload)null, NetworkMessage.DeliveryMethod.Unknown);
-
-			//Just assert that no exceptions occured.
 		}
 	}
 }
