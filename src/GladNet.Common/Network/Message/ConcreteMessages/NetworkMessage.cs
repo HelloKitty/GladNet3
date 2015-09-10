@@ -10,7 +10,7 @@ namespace GladNet.Common
 	/// Abstract type of all networked messages. Expects inheritors to implement dispatch functionality.
 	/// Contains various network message related Enums.
 	/// </summary>
-	public abstract class NetworkMessage : INetworkMessage, IEncryptable
+	public abstract class NetworkMessage : INetworkMessage
 	{
 		/// <summary>
 		/// Represents valid operation types for networked messages.
@@ -76,15 +76,10 @@ namespace GladNet.Common
 			Queued = 3,
 		}
 
-
-		//As a note, for preformance reasons we don't try to abstract away the PacketPayload and where or not it is encrypted.
-		
-		private byte[] encryptedPayload;
-
 		/// <summary>
 		/// A <see cref="PacketPayload"/> instance that contains the high level payload of the <see cref="NetworkMessage"/>
 		/// </summary>
-		public PacketPayload Payload { get; private set; }
+		public NetSendable<PacketPayload> Payload { get; private set; }
 
 		/// <summary>
 		/// Indicates if the <see cref="PacketPayload"/> of this message was encrypted.
@@ -101,13 +96,7 @@ namespace GladNet.Common
 			if (payload == null)
 				throw new ArgumentNullException("payload", "A null Packet cannot be sent accross the network. Please supply at least default.");
 
-			//Set this to null by default.
-			//If it is used it will be populated.
-			encryptedPayload = null;
-
-			isEncrypted = false;
-				
-			Payload = payload;
+			Payload = new NetSendable<PacketPayload>(payload);
 		}
 
 		/// <summary>
@@ -117,15 +106,5 @@ namespace GladNet.Common
 		/// <param name="receiver">The target for the subtype <see cref="NetworkMessage"/>.</param>
 		/// <param name="parameters">The parameters with which the message was sent.</param>
 		public abstract void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters);
-
-		public bool Encrypt(IEncryptor encryptor)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool Decrypt(IDecryptor decryptor)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

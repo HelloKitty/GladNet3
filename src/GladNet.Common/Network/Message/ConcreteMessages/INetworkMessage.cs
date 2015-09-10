@@ -15,6 +15,6 @@ namespace GladNet.Common
 		/// <summary>
 		/// Represents the <see cref="PacketPayload"/> of the message.
 		/// </summary>
-		PacketPayload Payload { get; }
+		NetSendable<PacketPayload> Payload { get; }
 	}
 }

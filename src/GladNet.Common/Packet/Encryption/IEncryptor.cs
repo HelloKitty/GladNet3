@@ -8,6 +8,6 @@ namespace GladNet.Common
 {
 	public interface IEncryptor
 	{
-		byte[] Encrypt(PacketPayload payload);
+		byte[] Encrypt(byte[] payload);
 	}
 }

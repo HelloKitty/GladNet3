@@ -7,6 +7,6 @@ namespace GladNet.Common
 {
 	public interface ISerializer
 	{
-
+		byte[] Serialize<TData>(TData data);
 	}
 }

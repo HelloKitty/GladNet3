@@ -13,8 +13,8 @@ namespace GladNet.Common
 			{
 				//This isn't great but we just check the Type and if it's valid we as cast.
 				//The original design didn't anticipate NetStatus messages which could have been just a byte instead of a whole PacketPayload
-				if (Payload is StatusChangePayload)
-					return (Payload as StatusChangePayload).Status;
+				if (Payload.Data is StatusChangePayload)
+					return (Payload.Data as StatusChangePayload).Status;
 				else
 					return null;
 			}
