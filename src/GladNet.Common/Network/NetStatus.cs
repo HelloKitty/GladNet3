@@ -5,6 +5,9 @@ using System.Text;
 
 namespace GladNet.Common
 {
+
+	//We suppress this because this is going over the wire. 1 byte is far better.
+	[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
 	/// <summary>
 	/// Represents the network status of a connection.
 	/// </summary>

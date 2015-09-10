@@ -8,6 +8,6 @@ namespace GladNet.Common
 {
 	public interface IDecryptor
 	{
-		byte[] Decrypt(byte[] bytes);
+		byte[] Decrypt(byte[] value);
 	}
 }

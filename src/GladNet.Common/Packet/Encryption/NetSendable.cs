@@ -4,11 +4,14 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using GladNet.Common.NetSendable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GladNet.Common
 {
 	namespace NetSendable
 	{
+		//We suppress this because this is going over the wire. 1 byte is far better.
+		[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
 		public enum State : byte
 		{
 			Default,
