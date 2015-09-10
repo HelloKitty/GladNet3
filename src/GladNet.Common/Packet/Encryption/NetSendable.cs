@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using GladNet.Common.NetSendable;
 
 namespace GladNet.Common
 {
-	/// <summary>
-	/// Represents a wire-ready version of the TData that provides functionality to serialize, encrypt and decrypt the TData
-	/// </summary>
-	/// <typeparam name="TData">The Type of encryptable and serializable data becoming wire-ready.</typeparam>
-	public class NetSendable<TData> : IEncryptable, ISerializable
-		where TData : class
+	namespace NetSendable
 	{
 		public enum State : byte
 		{
@@ -19,7 +15,15 @@ namespace GladNet.Common
 			Serialized,
 			Encrypted,
 		}
+	}
 
+	/// <summary>
+	/// Represents a wire-ready version of the TData that provides functionality to serialize, encrypt and decrypt the TData
+	/// </summary>
+	/// <typeparam name="TData">The Type of encryptable and serializable data becoming wire-ready.</typeparam>
+	public class NetSendable<TData> : IEncryptable, ISerializable
+		where TData : class
+	{
 		public State DataState { get; private set; }
 
 		//This should never be serialized over the network.
@@ -64,6 +68,9 @@ namespace GladNet.Common
 		/// <returns></returns>
 		public bool Encrypt(IEncryptor encryptor)
 		{
+			if (encryptor == null)
+				throw new ArgumentNullException("encryptor", "The encryptor cannot be null.");
+
 			if (DataState != State.Serialized)
 				throw new InvalidOperationException(GetType() + " was not in a valid state for encryption. Must be serialized first.");
 
@@ -100,6 +107,10 @@ namespace GladNet.Common
 		/// <returns></returns>
 		public bool Decrypt(IDecryptor decryptor)
 		{
+
+			if (decryptor == null)
+				throw new ArgumentNullException("decryptor", "The decryptor cannot be null.");
+
 			if(DataState != State.Encrypted)
 				throw new InvalidOperationException(GetType() + " was not in a valid state for decryption. Must be encrypted first.");
 
@@ -127,7 +138,7 @@ namespace GladNet.Common
 
 			//If successful the data should be in a serialized state.
 			DataState = State.Serialized;
-			return false;
+			return true;
 		}
 
 		/// <summary>
@@ -138,6 +149,9 @@ namespace GladNet.Common
 		/// <returns></returns>
 		public bool Serialize(ISerializer serializer)
 		{
+			if (serializer == null)
+				throw new ArgumentNullException("serializer", "The serializer cannot be null.");
+
 			if (DataState != State.Default)
 				throw new InvalidOperationException(GetType() + " was not in a valid state for serialization. Must be in default state.");
 
@@ -160,6 +174,9 @@ namespace GladNet.Common
 		/// <returns></returns>
 		public bool Deserialize(IDeserializer deserializer)
 		{
+			if (deserializer == null)
+				throw new ArgumentNullException("deserializer", "The derserializer cannot be null.");
+
 			if (DataState != State.Serialized)
 				throw new InvalidOperationException(GetType() + " was not in a valid state for deserialization. Must be in a serialized state.");
 
