@@ -33,5 +33,11 @@ namespace GladNet.Common
 		/// <param name="message">The event recieved from the remote peer.</param>
 		/// <param name="parameters">The message parameters the message was sent with.</param>
 		void OnNetworkMessageReceive(IEventMessage message, IMessageParameters parameters);
+
+		/// <summary>
+		/// Dispatchable method that handles <see cref="NetStatus"/> changes.
+		/// </summary>
+		/// <param name="status"></param>
+		void OnStatusChanged(NetStatus status);
 	}
 }

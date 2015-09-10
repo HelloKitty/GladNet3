@@ -49,6 +49,8 @@
     <Compile Include="Network\Message\ConcreteMessages\Request\RequestMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Event\IEventMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Event\EventMessage.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\StatusChange\IStatusMessage.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
     <Compile Include="Network\Message\IMessageParameters.cs" />
     <Compile Include="Network\Message\INetworkMessageReceiver.cs" />
     <Compile Include="Network\Message\ConcreteMessages\NetworkMessage.cs" />
@@ -57,6 +59,8 @@
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
     <Compile Include="Network\NetEngine\INetEngine.cs" />
+    <Compile Include="Network\NetStatus.cs" />
+    <Compile Include="Network\Payloads\StatusChangePayload.cs" />
     <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />
     <Compile Include="Network\Peer\INetPeer.cs" />
     <Compile Include="Network\Peer\Peer.cs" />

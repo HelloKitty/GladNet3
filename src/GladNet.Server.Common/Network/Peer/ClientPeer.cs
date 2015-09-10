@@ -68,5 +68,10 @@ namespace GladNet.Server.Common
 		#region Message Receivers
 		protected abstract override void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
 		#endregion
+
+		protected override void OnStatusChanged(NetStatus status)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

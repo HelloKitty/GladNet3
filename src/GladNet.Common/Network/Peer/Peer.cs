@@ -57,9 +57,15 @@ namespace GladNet.Common
 			OnReceiveEvent(message, parameters);
 		}
 
+		void INetworkMessageReceiver.OnStatusChanged(NetStatus status)
+		{
+			OnStatusChanged(status);
+		}
+
 		protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
 		protected abstract void OnReceiveResponse(IResponseMessage message, IMessageParameters parameters);
 		protected abstract void OnReceiveEvent(IEventMessage message, IMessageParameters parameters);
+		protected abstract void OnStatusChanged(NetStatus status);
 		#endregion
 
 		public virtual bool CanSend(NetworkMessage.OperationType opType)

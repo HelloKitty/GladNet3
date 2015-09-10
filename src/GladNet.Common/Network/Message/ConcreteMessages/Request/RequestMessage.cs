@@ -22,7 +22,6 @@ namespace GladNet.Common
 			: base(payload)
 		{
 			//TODO: Exception for null packet
-
 		}
 
 		/// <summary>
