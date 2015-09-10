@@ -14,9 +14,15 @@ namespace GladNet.Common
 			Status = status;
 		}
 
+		//Protobuf-net constructors should be marked with ncrunch no coverage to suppress it from coverage metrics
+		//ncrunch: no coverage start
+		/// <summary>
+		/// Empty protobuf-net constuctor
+		/// </summary>
 		protected StatusChangePayload()
 		{
 
 		}
+		//ncrunch: no coverage end
 	}
 }

@@ -87,6 +87,23 @@ namespace GladNet.Common.UnitTests
 		}
 
 		[Test]
+		public static void Test_OnStatusChange_Method()
+		{
+			//arrange
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
+			//This sets it up so that the implementation of concrete methods are available.
+			peer.CallBase = true;
+
+			INetworkMessageReceiver receiver = peer.Object;
+
+			//act
+			receiver.OnStatusChanged(NetStatus.Disconnected);
+
+			//assert
+			peer.Protected().Verify("OnStatusChanged", Times.Once(), NetStatus.Disconnected);
+		}
+
+		[Test]
 		public static void Test_Peer_TrySendMessage_Methods()
 		{
 			//arrange

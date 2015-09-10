@@ -15,12 +15,13 @@ namespace GladNet.Common.UnitTests
 		public static void Test_Construction()
 		{
 			//arrange
-			Mock<StatusChangePayload> payload = new Mock<StatusChangePayload>(MockBehavior.Strict);
+			StatusChangePayload payload = new StatusChangePayload(NetStatus.Disconnected);
 
 			//act
-			StatusMessage message = new StatusMessage(payload.Object);
+			StatusMessage message = new StatusMessage(payload);
 
-			//Check doesn't throw
+			//assert
+			Assert.AreEqual((message.Payload.Data as StatusChangePayload).Status, NetStatus.Disconnected);
 		}
 
 		[Test]

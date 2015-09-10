@@ -52,6 +52,8 @@ namespace GladNet.Common
 		}
 
 
+		//Protobuf-net constructors should be marked with ncrunch no coverage to suppress it from coverage metrics
+		//ncrunch: no coverage start
 		/// <summary>
 		/// Empty protobuf-net constuctor
 		/// </summary>
@@ -59,6 +61,7 @@ namespace GladNet.Common
 		{
 
 		}
+		//ncrunch: no coverage end
 
 		/// <summary>
 		/// Encrypts the TData contained within this <see cref="NetSendable"/>.
