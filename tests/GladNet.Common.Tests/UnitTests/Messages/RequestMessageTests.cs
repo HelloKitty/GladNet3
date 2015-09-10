@@ -34,7 +34,7 @@ namespace GladNet.Common.UnitTests
 			RequestMessage message = new RequestMessage(packet.Object);
 
 			//assert
-			Assert.AreSame(packet.Object, message.Payload);
+			Assert.AreSame(packet.Object, message.Payload.Data);
 		}
 
 
