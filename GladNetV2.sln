@@ -22,9 +22,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B973C665
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0955E7B1-0BFB-4058-9469-29FF5FF4AA28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren", "GladNet.Lidgren\GladNet.Lidgren.csproj", "{87C9AD17-33F8-4BFD-B353-D0E22FA1D455}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren", "src\GladNet.Lidgren\GladNet.Lidgren.csproj", "{87C9AD17-33F8-4BFD-B353-D0E22FA1D455}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Tests", "GladNet.Lidgren.Tests\GladNet.Lidgren.Tests.csproj", "{C347D10D-790F-4030-833B-633CFBF4218C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Tests", "tests\GladNet.Lidgren.Tests\GladNet.Lidgren.Tests.csproj", "{C347D10D-790F-4030-833B-633CFBF4218C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

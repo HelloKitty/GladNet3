@@ -11,6 +11,6 @@ namespace GladNet.Common
 	/// </summary>
 	public abstract class PacketPayload
 	{
-
+		
 	}
 }
