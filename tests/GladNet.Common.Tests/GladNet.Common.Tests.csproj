@@ -57,6 +57,7 @@
     <Compile Include="UnitTests\Messages\EventMessageTests.cs" />
     <Compile Include="UnitTests\Messages\ResponseMessageTests.cs" />
     <Compile Include="UnitTests\Messages\StatusChangeMessageTests.cs" />
+    <Compile Include="UnitTests\Network\DispatchMessageTests.cs" />
     <Compile Include="UnitTests\Network\NetSendableTests.cs" />
     <Compile Include="UnitTests\Peers\PeerTests.cs" />
   </ItemGroup>

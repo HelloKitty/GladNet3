@@ -7,22 +7,24 @@ using System.Text;
 namespace GladNet.Common
 {
 	/// <summary>
-	/// Contract providing details about the parameters with which a message is sent or recieved with.
+	/// Contract providing details about message parameters which are requested for processing
 	/// </summary>
 	public interface IMessageParameters
 	{
 		/// <summary>
-		/// Indicates packet encryption.
+		/// Indicates if the messge is/was encrypted depending on context.
 		/// </summary>
 		bool Encrypted { get; }
 
 		/// <summary>
-		/// Indicates the <see cref="NetworkMessage.OperationType"/> of a message.
+		/// Indicates the channel of the message.
 		/// </summary>
-		NetworkMessage.OperationType OpType { get; }
+		byte Channel { get; }
+
+		//OP-Type removed. It is not needed and if it were there are other roundabount ways of computing it.
 
 		/// <summary>
-		/// Indicates the <see cref="NetworkMessage.DeliveryMethod"/> method of the message. Can be used to verify correct channel usage.
+		/// Indicates the <see cref="NetworkMessage.DeliveryMethod"/> method of the message. Can/should be used to verify correct channel usage.
 		/// </summary>
 		NetworkMessage.DeliveryMethod DeliveryMethod { get; }
 	}

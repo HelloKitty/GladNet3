@@ -6,7 +6,7 @@ using System.Text;
 
 namespace GladNet.Common
 {
-	public sealed class LidgrenNetEngine : INetEngine
+	public sealed class LidgrenNetEngine : INetEngine, INetworkMessageSender
 	{
 		private readonly INetworkMessageFactory messageFactory;
 
@@ -20,6 +20,8 @@ namespace GladNet.Common
 
 		public NetworkMessage.SendResult TrySendMessage(NetworkMessage.OperationType opType, PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
+			//TODO: Handling of NetResults depending on certain connection states
+
 			NetworkMessage message = messageFactory.Create(opType, payload);
 
 			if (message == null)

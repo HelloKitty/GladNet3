@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GladNet.Server.Common
 {
-	public abstract class ClientPeer : Peer, IClientMessageSender
+	public abstract class ClientPeer : Peer, IClientNetworkMessageSender
 	{
 		public ClientPeer(INetEngine engine)
 			: base(engine)
@@ -23,7 +23,7 @@ namespace GladNet.Server.Common
 
 		#region Message Senders
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public NetworkMessage.SendResult SendResponse(PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, byte responseCode, bool encrypt = false, byte channel = 0)
+		public NetworkMessage.SendResult SendResponse(PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			return TrySendMessage(NetworkMessage.OperationType.Response, payload, deliveryMethod, encrypt, channel);
 		}
@@ -57,7 +57,7 @@ namespace GladNet.Server.Common
 
 		protected virtual void OnInvalidOperationRecieved(Type packetType, IMessageParameters parameters, PacketPayload payload)
 		{
-
+			//Don't do anything here. We'll let inheritors do something extra by overriding this
 		}
 
 		public override NetworkMessage.SendResult TrySendMessage(NetworkMessage.OperationType opType, PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
@@ -71,7 +71,9 @@ namespace GladNet.Server.Common
 
 		protected override void OnStatusChanged(NetStatus status)
 		{
-			throw new NotImplementedException();
+			//TODO: Logging if debug
+
+			//TODO: Do internal handling for status change events that are ClientPeer specific.
 		}
 	}
 }

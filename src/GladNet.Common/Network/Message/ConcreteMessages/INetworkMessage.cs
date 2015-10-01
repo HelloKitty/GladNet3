@@ -7,13 +7,14 @@ using System.Text;
 namespace GladNet.Common
 {
 	/// <summary>
-	/// Contract for a networked message. Provides the barest of function which exposes the <see cref="PacketPayload"/>
+	/// Contract for a networked message. Provides the barest of function which exposes the <see cref="NetSendable"/> <see cref="PacketPayload"/>
 	/// of the message.
 	/// </summary>
 	public interface INetworkMessage
 	{
 		/// <summary>
-		/// Represents the <see cref="PacketPayload"/> of the message.
+		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
+		/// <see cref="NetSendable"/> enforces its wire readyness.
 		/// </summary>
 		NetSendable<PacketPayload> Payload { get; }
 	}

@@ -24,7 +24,7 @@ namespace GladNet.Common
 			Request = 1,
 
 			//Indicates a peer is responding to another peer about a request.
-			Response = 2
+			Response = 2,
 		}
 
 		/// <summary>
@@ -77,14 +77,10 @@ namespace GladNet.Common
 		}
 
 		/// <summary>
-		/// A <see cref="PacketPayload"/> instance that contains the high level payload of the <see cref="NetworkMessage"/>
+		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
+		/// <see cref="NetSendable"/> enforces its wire readyness.
 		/// </summary>
 		public NetSendable<PacketPayload> Payload { get; private set; }
-
-		/// <summary>
-		/// Indicates if the <see cref="PacketPayload"/> of this message was encrypted.
-		/// </summary>
-		public bool isEncrypted { get; private set; }
 
 		/// <summary>
 		/// Main constructor for <see cref="NetworkMessage"/> that requires a <see cref="PacketPayload"/> payload.

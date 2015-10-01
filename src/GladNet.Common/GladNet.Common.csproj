@@ -55,6 +55,8 @@
     <Compile Include="Network\Message\INetworkMessageReceiver.cs" />
     <Compile Include="Network\Message\ConcreteMessages\NetworkMessage.cs" />
     <Compile Include="Network\Message\INetworkMessageFactory.cs" />
+    <Compile Include="Network\Message\Network Senders\DispatchMessage.cs" />
+    <Compile Include="Network\Message\Network Senders\INetworkDispatcher.cs" />
     <Compile Include="Network\Message\NetworkMessageFactory.cs" />
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />

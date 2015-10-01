@@ -10,8 +10,11 @@ namespace GladNet.Common
 {
 	namespace NetSendable
 	{
-		//We suppress this because this is going over the wire. 1 byte is far better.
-		[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
+		
+		/// <summary>
+		/// Finite valid states a <see cref="NetSendable"/> can be in.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")] //We suppress this because this is going over the wire. 1 byte is far better.
 		public enum State : byte
 		{
 			Default,
@@ -71,7 +74,7 @@ namespace GladNet.Common
 		/// </summary>
 		/// <param name="encryptor">Object responsible for the encryption.</param>
 		/// <exception cref="InvalidOperationException">Throws when the <see cref="NetSendable"/> is not in a Serialized <see cref="NetSendable.State"/></exception>
-		/// <returns></returns>
+		/// <returns>Indicates if encryption was successful</returns>
 		public bool Encrypt(IEncryptor encryptor)
 		{
 			if (encryptor == null)
@@ -110,7 +113,7 @@ namespace GladNet.Common
 		/// <param name="decryptor"></param>
 		/// <exception cref="InvalidOperationException">Throws when the <see cref="NetSendable"/> is not in a Encrypted <see cref="NetSendable.State"/>
 		/// or if the internal byte representation is null..</exception>
-		/// <returns></returns>
+		/// <returns>Indicates if decryption was successful.</returns>
 		public bool Decrypt(IDecryptor decryptor)
 		{
 
@@ -152,7 +155,7 @@ namespace GladNet.Common
 		/// </summary>
 		/// <param name="serializer">Serializer object for the serialization process.</param>
 		/// <exception cref="InvalidOperationException">Throws if the data is not in Default <see cref="State"/></exception>
-		/// <returns></returns>
+		/// <returns>Inidicates if serialization was successful</returns>
 		public bool Serialize(ISerializer serializer)
 		{
 			if (serializer == null)
@@ -177,7 +180,7 @@ namespace GladNet.Common
 		/// </summary>
 		/// <param name="deserializer">Deserializer object for the deserialization process.</param>
 		/// <exception cref="InvalidOperationException">Throws if the <see cref="State"/> isn't Serialized.</exception>
-		/// <returns></returns>
+		/// <returns>Indicates if deserialization was successful</returns>
 		public bool Deserialize(IDeserializer deserializer)
 		{
 			if (deserializer == null)
