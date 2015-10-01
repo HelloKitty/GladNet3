@@ -25,7 +25,7 @@ namespace GladNet.Common
 			NetworkMessage message = messageFactory.Create(opType, payload);
 
 			if (message == null)
-				throw new NullReferenceException("Mesage factory failed to generate " + typeof(NetworkMessage) + " as it is null.");
+				throw new InvalidOperationException("Mesage factory failed to generate " + typeof(NetworkMessage) + " or generated an invalid message..");
 
 			return SendMessage(message, deliveryMethod, encrypt, channel);
 		}

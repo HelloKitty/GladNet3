@@ -7,7 +7,7 @@ using System.Text;
 namespace GladNet.Common
 {
 	/// <summary>
-	/// Represents the GladNet smallest unit of transmittable networked information.
+	/// Base-class for user-created wire-type data units.
 	/// </summary>
 	public abstract class PacketPayload
 	{

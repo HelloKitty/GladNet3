@@ -5,10 +5,20 @@ using System.Text;
 
 namespace GladNet.Common
 {
+	/// <summary>
+	/// A wire-type payload that contains information about a <see cref="NetStauts"/> change.
+	/// </summary>
 	public class StatusChangePayload : PacketPayload
 	{
+		/// <summary>
+		/// Indicates the <see cref="NetStats"/> of the change.
+		/// </summary>
 		public NetStatus Status { get; private set; }
 
+		/// <summary>
+		/// Generates a <see cref="StatusChangePayload"/> instance with the given <see cref="NetStatus"/>
+		/// </summary>
+		/// <param name="status">NetStatus of the change.</param>
 		public StatusChangePayload(NetStatus status)
 		{
 			Status = status;
