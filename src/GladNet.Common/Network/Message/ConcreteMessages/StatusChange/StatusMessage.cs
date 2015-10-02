@@ -30,12 +30,14 @@ namespace GladNet.Common
 		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters = null)
 		{
 			//We don't need IMessageParameters for this type of message.
+			if (receiver == null)
+				throw new ArgumentNullException("receiver", "INetworkMessageReciever must not be null.");
 
 			if (Status.HasValue)
 				receiver.OnStatusChanged(Status.Value);
 #if DEBUG || DEBUGBUILD
 			else
-				throw new Exception("Recieved status message with non-StatusChangePayload payload Type.");
+				throw new InvalidOperationException("Recieved status message with non-StatusChangePayload payload Type.");
 #endif
 		}
 	}

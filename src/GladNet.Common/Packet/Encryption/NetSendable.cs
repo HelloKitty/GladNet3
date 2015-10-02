@@ -80,8 +80,7 @@ namespace GladNet.Common
 			if (encryptor == null)
 				throw new ArgumentNullException("encryptor", "The encryptor cannot be null.");
 
-			if (DataState != State.Serialized)
-				throw new InvalidOperationException(GetType() + " was not in a valid state for encryption. Must be serialized first.");
+			ThrowIfInvalidState(State.Serialized, false);
 
 			try
 			{
@@ -117,14 +116,10 @@ namespace GladNet.Common
 		public bool Decrypt(IDecryptor decryptor)
 		{
 
-			if (decryptor == null)
-				throw new ArgumentNullException("decryptor", "The decryptor cannot be null.");
+			//if (decryptor == null)
+			//	throw new ArgumentNullException("decryptor", "The decryptor cannot be null.");
 
-			if(DataState != State.Encrypted)
-				throw new InvalidOperationException(GetType() + " was not in a valid state for decryption. Must be encrypted first.");
-
-			if (byteData == null)
-				throw new InvalidOperationException(GetType() + " was in an invalid state for decryption. Must have a non-null byteData representation.");
+			ThrowIfInvalidState(State.Encrypted, true);
 
 			try
 			{
@@ -161,8 +156,7 @@ namespace GladNet.Common
 			if (serializer == null)
 				throw new ArgumentNullException("serializer", "The serializer cannot be null.");
 
-			if (DataState != State.Default)
-				throw new InvalidOperationException(GetType() + " was not in a valid state for serialization. Must be in default state.");
+			ThrowIfInvalidState(State.Default, false);
 
 			byteData = serializer.Serialize(Data);
 
@@ -186,8 +180,7 @@ namespace GladNet.Common
 			if (deserializer == null)
 				throw new ArgumentNullException("deserializer", "The derserializer cannot be null.");
 
-			if (DataState != State.Serialized)
-				throw new InvalidOperationException(GetType() + " was not in a valid state for deserialization. Must be in a serialized state.");
+			ThrowIfInvalidState(State.Serialized, false);
 
 			Data = deserializer.Deserialize<TData>(byteData);
 
@@ -196,6 +189,15 @@ namespace GladNet.Common
 
 			DataState = State.Default;
 			return true;
+		}
+
+		private void ThrowIfInvalidState(State expectedState, bool checkData)
+		{
+			if(DataState != expectedState)
+				throw new InvalidOperationException(GetType() + " was not in required state " + expectedState + " was in " + DataState);
+
+			if (checkData && byteData == null)
+				throw new InvalidOperationException(GetType() + " was in an invalid state for " + expectedState + ". Must have a non-null byteData representation.");
 		}
 	}
 }
