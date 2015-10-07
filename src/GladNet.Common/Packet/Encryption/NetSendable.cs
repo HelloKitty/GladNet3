@@ -9,8 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace GladNet.Common
 {
 	namespace NetSendable
-	{
-		
+	{		
 		/// <summary>
 		/// Finite valid states a <see cref="NetSendable"/> can be in.
 		/// </summary>
@@ -116,8 +115,8 @@ namespace GladNet.Common
 		public bool Decrypt(IDecryptor decryptor)
 		{
 
-			//if (decryptor == null)
-			//	throw new ArgumentNullException("decryptor", "The decryptor cannot be null.");
+			if (decryptor == null)
+				throw new ArgumentNullException("decryptor", "The decryptor cannot be null.");
 
 			ThrowIfInvalidState(State.Encrypted, true);
 
