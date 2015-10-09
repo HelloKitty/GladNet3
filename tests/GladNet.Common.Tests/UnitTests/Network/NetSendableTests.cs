@@ -266,7 +266,6 @@ namespace GladNet.Common.UnitTests
 			sendable.Serialize(Mock.Of<ISerializer>()); //We call this to change state
 			NetSendable<PacketPayload> copiedSendable = sendable.ShallowClone();
 			
-
 			//assert
 			Assert.AreEqual(copiedSendable.Data, sendable.Data);
 			Assert.AreEqual(copiedSendable.DataState, sendable.DataState);
