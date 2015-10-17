@@ -93,12 +93,12 @@ namespace GladNet.Common
 			//NetSendable should verify non-null payload.
 		}
 
-		protected NetworkMessage(NetSendable<PacketPayload> netSendablePacket)
+		protected NetworkMessage(NetSendable<PacketPayload> sendPayload)
 		{
-			if (netSendablePacket == null)
+			if (sendPayload == null)
 				throw new ArgumentNullException("netSendablePacket", "A null Netsendable<PacketPayload> was passed for NetworkMessage creation.");
 
-			Payload = netSendablePacket;
+			Payload = sendPayload;
 		}
 
 		/// <summary>

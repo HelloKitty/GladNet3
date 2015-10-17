@@ -140,5 +140,56 @@ namespace GladNet.Common.UnitTests
 
 			//expect exception
 		}
+
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException))]
+		public static void Test_Peer_Recieve_Emulation_Methods_WithFalse()
+		{
+			//arrange
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
+
+			peer.CallBase = true;
+
+			//This chain try catch will not throw if one of them doesn't throw. If they all fail it throws so the test passes.
+			try
+			{
+				peer.Object.EmulateOnStatusChanged(NetStatus.Connected);
+			}
+			catch(InvalidOperationException)
+			{
+				try
+				{
+					peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>());
+				}
+				catch(InvalidOperationException)
+				{
+					try
+					{
+						peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>());
+					}
+					catch(InvalidOperationException)
+					{
+						peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>());
+					}
+				}
+			}
+		}
+
+		[Test]
+		public static void Test_Peer_Recieve_Emulation_Methods_WithTrue()
+		{
+			//arrange
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetEngine>());
+
+			peer.CallBase = true;
+			peer.Object.AllowReceiverEmulation = true;
+
+
+			//assert (shouldn't throw)
+			peer.Object.EmulateOnStatusChanged(NetStatus.Connected);
+			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>());
+			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>());
+			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>());
+		}
 	}
 }

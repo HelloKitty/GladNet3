@@ -3,23 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using GladNet.Common.NetSendable;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GladNet.Common
-{
-	namespace NetSendable
-	{		
-		/// <summary>
-		/// Finite valid states a <see cref="NetSendable"/> can be in.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")] //We suppress this because this is going over the wire. 1 byte is far better.
-		public enum State : byte
-		{
-			Default,
-			Serialized,
-			Encrypted,
-		}
+{	
+	/// <summary>
+	/// Finite valid states a <see cref="NetSendable"/> can be in.
+	/// </summary>
+	[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")] //We suppress this because this is going over the wire. 1 byte is far better.
+	public enum NetSendableState : byte
+	{
+		Default,
+		Serialized,
+		Encrypted,
 	}
 
 	/// <summary>
@@ -32,7 +28,7 @@ namespace GladNet.Common
 		/// <summary>
 		/// Indicates the state the object is currently in.
 		/// </summary>
-		public State DataState { get; private set; }
+		public NetSendableState DataState { get; private set; }
 
 		//This should never be serialized over the network.
 		/// <summary>
@@ -56,7 +52,7 @@ namespace GladNet.Common
 				throw new ArgumentNullException("data", "TData data cannot be null in construction.");
 
 			Data = data;
-			DataState = State.Default;
+			DataState = NetSendableState.Default;
 		}
 
 
@@ -75,15 +71,15 @@ namespace GladNet.Common
 		/// Encrypts the TData contained within this <see cref="NetSendable"/>.
 		/// </summary>
 		/// <param name="encryptor">Object responsible for the encryption.</param>
-		/// <exception cref="InvalidOperationException">Throws when the <see cref="NetSendable"/> is not in a Serialized <see cref="NetSendable.State"/></exception>
+		/// <exception cref="InvalidOperationException">Throws when the <see cref="NetSendable"/> is not in a Serialized <see cref="NetSendableState"/></exception>
 		/// <returns>Indicates if encryption was successful</returns>
 		public bool Encrypt(IEncryptor encryptor)
 		{
 			if (encryptor == null)
 				throw new ArgumentNullException("encryptor", "The encryptor cannot be null.");
 
-			ThrowIfInvalidState(State.Serialized, false);
-
+			ThrowIfInvalidState(NetSendableState.Serialized, false);
+			
 			try
 			{
 				byteData = encryptor.Encrypt(byteData);
@@ -104,7 +100,7 @@ namespace GladNet.Common
 				return false;
 
 			//If sucessful the data should be in an encrypted state.
-			DataState = State.Encrypted;
+			DataState = NetSendableState.Encrypted;
 			return true;
 		}
 
@@ -112,7 +108,7 @@ namespace GladNet.Common
 		/// Decrypts the TData contained within this <see cref="NetSendable"/>
 		/// </summary>
 		/// <param name="decryptor"></param>
-		/// <exception cref="InvalidOperationException">Throws when the <see cref="NetSendable"/> is not in a Encrypted <see cref="NetSendable.State"/>
+		/// <exception cref="InvalidOperationException">Throws when the <see cref="NetSendable"/> is not in a Encrypted <see cref="NetSendableState"/>
 		/// or if the internal byte representation is null..</exception>
 		/// <returns>Indicates if decryption was successful.</returns>
 		public bool Decrypt(IDecryptor decryptor)
@@ -121,7 +117,7 @@ namespace GladNet.Common
 			if (decryptor == null)
 				throw new ArgumentNullException("decryptor", "The decryptor cannot be null.");
 
-			ThrowIfInvalidState(State.Encrypted, true);
+			ThrowIfInvalidState(NetSendableState.Encrypted, true);
 
 			try
 			{
@@ -143,7 +139,7 @@ namespace GladNet.Common
 				return false;
 
 			//If successful the data should be in a serialized state.
-			DataState = State.Serialized;
+			DataState = NetSendableState.Serialized;
 			return true;
 		}
 
@@ -158,7 +154,7 @@ namespace GladNet.Common
 			if (serializer == null)
 				throw new ArgumentNullException("serializer", "The serializer cannot be null.");
 
-			ThrowIfInvalidState(State.Default, false);
+			ThrowIfInvalidState(NetSendableState.Default, false);
 
 			byteData = serializer.Serialize(Data);
 
@@ -167,7 +163,7 @@ namespace GladNet.Common
 				return false;
 
 			//If successful the data should be in a serialized state
-			DataState = State.Serialized;
+			DataState = NetSendableState.Serialized;
 
 			//We don't need Data anymore and it can be recreated from the current state now.
 			Data = null;
@@ -185,18 +181,18 @@ namespace GladNet.Common
 			if (deserializer == null)
 				throw new ArgumentNullException("deserializer", "The derserializer cannot be null.");
 
-			ThrowIfInvalidState(State.Serialized, false);
+			ThrowIfInvalidState(NetSendableState.Serialized, false);
 
 			Data = deserializer.Deserialize<TData>(byteData);
 
 			if (Data == null)
 				return false;
 
-			DataState = State.Default;
+			DataState = NetSendableState.Default;
 			return true;
 		}
 
-		private void ThrowIfInvalidState(State expectedState, bool checkData)
+		private void ThrowIfInvalidState(NetSendableState expectedState, bool checkData)
 		{
 			if(DataState != expectedState)
 				throw new InvalidOperationException(GetType() + " was not in required state " + expectedState + " was in " + DataState);

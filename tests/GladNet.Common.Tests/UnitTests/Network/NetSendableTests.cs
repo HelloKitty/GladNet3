@@ -84,7 +84,7 @@ namespace GladNet.Common.UnitTests
 			//assert
 			Assert.AreEqual(result, true);
 			serializer.Verify(x => x.Serialize(payload.Object), Times.Once());
-			Assert.AreEqual(netSendable.DataState, NetSendable.State.Serialized);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Serialized);
 		}
 
 
@@ -96,7 +96,7 @@ namespace GladNet.Common.UnitTests
 			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(payload.Object);
 			Mock<IDeserializer> deserializer = new Mock<IDeserializer>(MockBehavior.Strict);
 
-			ChangeDataStateProperty(netSendable, NetSendable.State.Serialized);
+			ChangeDataStateProperty(netSendable, NetSendableState.Serialized);
 
 			//We setup the serializer so it returns an empty non-null array.
 			deserializer.Setup(x => x.Deserialize<PacketPayload>(It.IsAny<byte[]>()))
@@ -108,7 +108,7 @@ namespace GladNet.Common.UnitTests
 			//assert
 			Assert.AreEqual(result, true);
 			deserializer.Verify(x => x.Deserialize<PacketPayload>(It.IsAny<byte[]>()), Times.Once());
-			Assert.AreEqual(netSendable.DataState, NetSendable.State.Default);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Default);
 		}
 
 		[Test]
@@ -119,7 +119,7 @@ namespace GladNet.Common.UnitTests
 			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(payload.Object);
 			Mock<IEncryptor> encryptor = new Mock<IEncryptor>(MockBehavior.Strict);
 
-			ChangeDataStateProperty(netSendable, NetSendable.State.Serialized);
+			ChangeDataStateProperty(netSendable, NetSendableState.Serialized);
 
 			//We setup the serializer so it returns an empty non-null array.
 			encryptor.Setup(x => x.Encrypt(It.IsAny<byte[]>()))
@@ -131,7 +131,7 @@ namespace GladNet.Common.UnitTests
 			//assert
 			Assert.AreEqual(result, true);
 			encryptor.Verify(x => x.Encrypt(It.IsAny<byte[]>()), Times.Once());
-			Assert.AreEqual(netSendable.DataState, NetSendable.State.Encrypted);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Encrypted);
 		}
 
 		[Test]
@@ -142,7 +142,7 @@ namespace GladNet.Common.UnitTests
 			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(payload.Object);
 			Mock<IDecryptor> decryptor = new Mock<IDecryptor>(MockBehavior.Strict);
 
-			ChangeDataStateProperty(netSendable, NetSendable.State.Encrypted);
+			ChangeDataStateProperty(netSendable, NetSendableState.Encrypted);
 
 			//We use reflection to set the byte[]
 			netSendable.GetType().GetField("byteData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(netSendable, new byte[0]);
@@ -157,16 +157,16 @@ namespace GladNet.Common.UnitTests
 			//assert
 			Assert.AreEqual(result, true);
 			decryptor.Verify(x => x.Decrypt(It.IsAny<byte[]>()), Times.Once());
-			Assert.AreEqual(netSendable.DataState, NetSendable.State.Serialized);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Serialized);
 		}
 		#endregion
 
 		#region State Invalid Operation Tests
 		[Test]
 		[ExpectedException(typeof(InvalidOperationException))]
-		[TestCase(NetSendable.State.Default)]
-		[TestCase(NetSendable.State.Encrypted)]
-		public static void Test_Cant_Deserialize_In_States(NetSendable.State state)
+		[TestCase(NetSendableState.Default)]
+		[TestCase(NetSendableState.Encrypted)]
+		public static void Test_Cant_Deserialize_In_States(NetSendableState state)
 		{
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
@@ -184,9 +184,9 @@ namespace GladNet.Common.UnitTests
 
 		[Test]
 		[ExpectedException(typeof(InvalidOperationException))]
-		[TestCase(NetSendable.State.Serialized)]
-		[TestCase(NetSendable.State.Encrypted)]
-		public static void Test_Cant_Serialize_In_States(NetSendable.State state)
+		[TestCase(NetSendableState.Serialized)]
+		[TestCase(NetSendableState.Encrypted)]
+		public static void Test_Cant_Serialize_In_States(NetSendableState state)
 		{
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
@@ -204,9 +204,9 @@ namespace GladNet.Common.UnitTests
 
 		[Test]
 		[ExpectedException(typeof(InvalidOperationException))]
-		[TestCase(NetSendable.State.Serialized)]
-		[TestCase(NetSendable.State.Default)]
-		public static void Test_Cant_Decrypt_In_States(NetSendable.State state)
+		[TestCase(NetSendableState.Serialized)]
+		[TestCase(NetSendableState.Default)]
+		public static void Test_Cant_Decrypt_In_States(NetSendableState state)
 		{
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
@@ -224,9 +224,9 @@ namespace GladNet.Common.UnitTests
 
 		[Test]
 		[ExpectedException(typeof(InvalidOperationException))]
-		[TestCase(NetSendable.State.Encrypted)]
-		[TestCase(NetSendable.State.Default)]
-		public static void Test_Cant_Encrypt_In_States(NetSendable.State state)
+		[TestCase(NetSendableState.Encrypted)]
+		[TestCase(NetSendableState.Default)]
+		public static void Test_Cant_Encrypt_In_States(NetSendableState state)
 		{
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
@@ -244,7 +244,7 @@ namespace GladNet.Common.UnitTests
 		#endregion
 
 
-		private static void ChangeDataStateProperty<T>(NetSendable<T> netSendable, NetSendable.State state)
+		private static void ChangeDataStateProperty<T>(NetSendable<T> netSendable, NetSendableState state)
 			where T : class
 		{
 			netSendable.GetType().GetProperty("DataState").SetValue(netSendable, state);
