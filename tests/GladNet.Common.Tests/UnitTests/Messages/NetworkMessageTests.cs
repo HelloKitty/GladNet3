@@ -12,19 +12,20 @@ namespace GladNet.Common.UnitTests
 	public static class NetworkMessageTests
 	{
 		[Test]
-		public static void Test_ShallowCopy_With_Children()
+		public static void Test_DeepCopy_With_Children()
 		{
 			//Call and check all ShallowCopy methods on NetworkMessages.
-			Test_ShallowCopy(p => new EventMessage(p));
-			Test_ShallowCopy(p => new ResponseMessage(p));
-			Test_ShallowCopy(p => new RequestMessage(p));
+			Test_DeepCopy((PacketPayload p) => new EventMessage(p));
+			Test_DeepCopy((PacketPayload p) => new ResponseMessage(p));
+			Test_DeepCopy((PacketPayload p) => new RequestMessage(p));
+			Test_DeepCopy((StatusChangePayload p) => new StatusMessage(p));
 		}
 
-		public static void Test_ShallowCopy<TMessageType>(Func<PacketPayload,TMessageType> creator)
-			where TMessageType : NetworkMessage, IDeepCloneable<NetworkMessage>
+		public static void Test_DeepCopy<TPayloadType, TMessageType>(Func<TPayloadType, TMessageType> creator)
+			where TMessageType : NetworkMessage, IDeepCloneable<NetworkMessage> where TPayloadType : PacketPayload
 		{
 			//arrange
-			TMessageType message = creator(Mock.Of<PacketPayload>());
+			TMessageType message = creator(Mock.Of<TPayloadType>());
 
 			//act
 			INetworkMessage copiedMessage = message.DeepClone();

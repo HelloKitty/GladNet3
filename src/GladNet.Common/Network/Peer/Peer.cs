@@ -73,7 +73,7 @@ namespace GladNet.Common
 		public void EmulateOnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
 		{
 			if (!AllowReceiverEmulation)
-				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explictly enabled.");
+				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
 
 			OnReceiveRequest(message, parameters);
 		}
@@ -81,7 +81,7 @@ namespace GladNet.Common
 		public void EmulateOnNetworkMessageReceive(IResponseMessage message, IMessageParameters parameters)
 		{
 			if (!AllowReceiverEmulation)
-				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explictly enabled.");
+				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
 
 			OnReceiveResponse(message, parameters);
 		}
@@ -89,7 +89,7 @@ namespace GladNet.Common
 		public void EmulateOnNetworkMessageReceive(IEventMessage message, IMessageParameters parameters)
 		{
 			if (!AllowReceiverEmulation)
-				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explictly enabled.");
+				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
 
 			OnReceiveEvent(message, parameters);
 		}
@@ -97,7 +97,7 @@ namespace GladNet.Common
 		public void EmulateOnStatusChanged(NetStatus status)
 		{
 			if (!AllowReceiverEmulation)
-				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explictly enabled.");
+				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
 
 			OnStatusChanged(status);
 		}

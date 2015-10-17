@@ -192,6 +192,7 @@ namespace GladNet.Common
 			return true;
 		}
 
+		[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "byteData")]
 		private void ThrowIfInvalidState(NetSendableState expectedState, bool checkData)
 		{
 			if(DataState != expectedState)
