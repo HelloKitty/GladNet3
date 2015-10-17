@@ -21,16 +21,20 @@ namespace GladNet.Common.UnitTests
 		}
 
 		public static void Test_ShallowCopy<TMessageType>(Func<PacketPayload,TMessageType> creator)
-			where TMessageType : NetworkMessage, IShallowCloneable<NetworkMessage>
+			where TMessageType : NetworkMessage, IDeepCloneable<NetworkMessage>
 		{
 			//arrange
 			TMessageType message = creator(Mock.Of<PacketPayload>());
 
 			//act
-			INetworkMessage copiedMessage = message.ShallowClone();
+			INetworkMessage copiedMessage = message.DeepClone();
 
 			//Assert
-			Assert.AreEqual(message.Payload, copiedMessage.Payload);
+			Assert.AreEqual(message.Payload.Data, copiedMessage.Payload.Data);
+			Assert.AreEqual(message.Payload.DataState, copiedMessage.Payload.DataState);
+
+			//We should also check that the Cloned type is the type expected
+			Assert.AreEqual(copiedMessage.GetType(), typeof(TMessageType));
 		}
 	}
 }

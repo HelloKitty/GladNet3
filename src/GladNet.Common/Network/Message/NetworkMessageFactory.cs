@@ -8,7 +8,6 @@ namespace GladNet.Common
 {
 	public class NetworkMessageFactory : INetworkMessageFactory
 	{
-
 		public NetworkMessage Create(NetworkMessage.OperationType opType, PacketPayload payload)
 		{
 			if (payload == null)

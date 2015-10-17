@@ -12,7 +12,6 @@ namespace GladNet.Common
 	/// </summary>
 	public class ResponseMessage : NetworkMessage, IResponseMessage
 	{
-
 		/// <summary>
 		/// Constructor for <see cref="ResponseMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>
@@ -22,6 +21,16 @@ namespace GladNet.Common
 		{
 			if (payload == null)
 				throw new ArgumentNullException("payload", "Payload of " + this.GetType() + " cannot be null in construction.");
+		}
+
+		/// <summary>
+		/// Protected instructor used for deep cloning the NetworkMessage.
+		/// </summary>
+		/// <param name="netSendablePayload">Shallow copy of the PacketPayload for copying.</param>
+		protected ResponseMessage(NetSendable<PacketPayload> netSendablePayload)
+			: base(netSendablePayload)
+		{
+			//Used for deep cloning
 		}
 
 		/// <summary>
@@ -41,6 +50,11 @@ namespace GladNet.Common
 #endif
 
 			receiver.OnNetworkMessageReceive(this, parameters);
+		}
+
+		public override NetworkMessage DeepClone()
+		{
+			return new ResponseMessage(Payload.ShallowClone());
 		}
 	}
 }

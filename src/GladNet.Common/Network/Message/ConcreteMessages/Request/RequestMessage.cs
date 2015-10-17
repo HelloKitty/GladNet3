@@ -25,6 +25,16 @@ namespace GladNet.Common
 		}
 
 		/// <summary>
+		/// Protected instructor used for deep cloning the NetworkMessage.
+		/// </summary>
+		/// <param name="netSendablePayload">Shallow copy of the PacketPayload for copying.</param>
+		protected RequestMessage(NetSendable<PacketPayload> netSendablePayload)
+			: base(netSendablePayload)
+		{
+			//Used for deep cloning
+		}
+
+		/// <summary>
 		/// Dispatches the <see cref="RequestMessage"/> (this) to the supplied <see cref="INetworkMessageReceiver"/>.
 		/// </summary>
 		/// <param name="receiver">The target <see cref="INetworkMessageReceiver"/>.</param>
@@ -42,6 +52,11 @@ namespace GladNet.Common
 #endif
 
 			receiver.OnNetworkMessageReceive(this, parameters);
+		}
+
+		public override NetworkMessage DeepClone()
+		{
+			return new RequestMessage(Payload.ShallowClone());
 		}
 	}
 }

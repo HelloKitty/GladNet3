@@ -10,7 +10,7 @@ namespace GladNet.Common
 	/// Abstract type of all networked messages. Expects inheritors to implement dispatch functionality.
 	/// Contains various network message related Enums.
 	/// </summary>
-	public abstract class NetworkMessage : INetworkMessage, IShallowCloneable<NetworkMessage>
+	public abstract class NetworkMessage : INetworkMessage, IDeepCloneable<NetworkMessage>
 	{
 		/// <summary>
 		/// Represents valid operation types for networked messages.
@@ -88,11 +88,17 @@ namespace GladNet.Common
 		/// <exception cref="ArgumentNullException">Throws if <see cref="PacketPayload"/> instance supplied is null.</exception>
 		/// <param name="payload">The <see cref="PacketPayload"/> of the message.</param>
 		protected NetworkMessage(PacketPayload payload)
+			: this(new NetSendable<PacketPayload>(payload))
 		{
-			if (payload == null)
-				throw new ArgumentNullException("payload", "A null Packet cannot be sent accross the network. Please supply at least default.");
+			//NetSendable should verify non-null payload.
+		}
 
-			Payload = new NetSendable<PacketPayload>(payload);
+		protected NetworkMessage(NetSendable<PacketPayload> netSendablePacket)
+		{
+			if (netSendablePacket == null)
+				throw new ArgumentNullException("netSendablePacket", "A null Netsendable<PacketPayload> was passed for NetworkMessage creation.");
+
+			Payload = netSendablePacket;
 		}
 
 		/// <summary>
@@ -103,15 +109,11 @@ namespace GladNet.Common
 		/// <param name="parameters">The parameters with which the message was sent.</param>
 		public abstract void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters);
 
-		public virtual NetworkMessage ShallowClone()
-		{
-			//As of Oct. 8th it is valid to call a MemberwiseCLone to generate a shallow copy.
-			return MemberwiseClone() as NetworkMessage;
-		}
+		public abstract NetworkMessage DeepClone();
 
-		object IShallowCloneable.ShallowClone()
+		object IDeepCloneable.DeepClone()
 		{
-			return this.ShallowClone();
+			return this.DeepClone();
 		}
 	}
 }

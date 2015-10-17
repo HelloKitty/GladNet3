@@ -104,18 +104,5 @@ namespace GladNet.Common.UnitTests
 			//assert
 			//Exception should be thrown for null.
 		}
-
-		[Test]
-		public static void Test_ShallowCopy()
-		{
-			//arrange
-			EventMessage message = new EventMessage(Mock.Of<PacketPayload>());
-
-			//act
-			INetworkMessage copiedMessage = message.ShallowClone();
-
-			//Assert
-			Assert.AreEqual(message.Payload, copiedMessage.Payload);
-		}
 	}
 }
