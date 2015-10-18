@@ -181,6 +181,13 @@ namespace GladNet.Common
 			return true;
 		}
 
+		/// <summary>
+		/// Throws if the state differs from the state passes as a parameter.
+		/// Optionally checks, and will throw, if the internal byte[] is invalid.
+		/// </summary>
+		/// <param name="expectedState">The <see cref="NetSendableState"/> we expect this instance to be in.</param>
+		/// <param name="checkData">Inidicates if we should validate the byte[]</param>
+		/// <exception cref="InvalidOperationException">Throws if expectedState differs from current state. Optionally throws if checkData is true and the byte[] is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "byteData")]
 		private void ThrowIfInvalidState(NetSendableState expectedState, bool checkData)
 		{
@@ -191,11 +198,19 @@ namespace GladNet.Common
 				throw new InvalidOperationException(GetType() + " was in an invalid state for " + expectedState + ". Must have a non-null byteData representation.");
 		}
 
+		/// <summary>
+		/// Produces a shallow copy of this <see cref="NetSendable"/> instance.
+		/// </summary>
+		/// <returns>A shallow copied instance of this NetSendable. Preserves reference to byte[] for efficient multiplexing.</returns>
 		public NetSendable<TData> ShallowClone()
 		{
 			return ((IShallowCloneable)this).ShallowClone() as NetSendable<TData>;
 		}
 
+		/// <summary>
+		/// Produces a shallow copy of this <see cref="NetSendable"/> instance.
+		/// </summary>
+		/// <returns>A shallow copied instance of this NetSendable. Preserves reference to byte[] for efficient multiplexing.</returns>
 		object IShallowCloneable.ShallowClone()
 		{
 			//As of Oct. 8th 2015 it is valid to MemberwiseClone for valid ShallowCopy.

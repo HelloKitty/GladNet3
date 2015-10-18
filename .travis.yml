@@ -7,6 +7,7 @@ install:
   - nuget restore ./GladNetV2.sln
 
 script:
+  - ./lib/BuildDependencies.sh
   - xbuild ./GladNetV2.sln
   - nunit-console ./tests/GladNet.Common.Tests/bin/Debug/GladNet.Common.Tests.dll
   - nunit-console ./tests/GladNet.Server.Common.Tests/bin/Debug/GladNet.Server.Common.Tests.dll
