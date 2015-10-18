@@ -6,6 +6,9 @@ install:
   - sudo apt-get install nunit-console
   - nuget restore ./GladNetV2.sln
 
+before_script:
+  - chmod +x /lib/BuildDependencies.sh
+
 script:
   - ./lib/BuildDependencies.sh
   - xbuild ./GladNetV2.sln
