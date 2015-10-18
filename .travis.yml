@@ -13,7 +13,7 @@ script:
   - pwd
   - cd "$TRAVIS_BUILD_DIR/lib"
   - ./BuildDependencies.sh
-  - cd $TRAVIS_BUILD_DIR
+  - cd "$TRAVIS_BUILD_DIR"
   - xbuild ./GladNetV2.sln
   - nunit-console ./tests/GladNet.Common.Tests/bin/Debug/GladNet.Common.Tests.dll
   - nunit-console ./tests/GladNet.Server.Common.Tests/bin/Debug/GladNet.Server.Common.Tests.dll
