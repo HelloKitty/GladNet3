@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq.Protected;
+using Logging.Services;
 
 namespace GladNet.Common.UnitTests
 {
@@ -193,7 +194,7 @@ namespace GladNet.Common.UnitTests
 		}
 		private static Mock<Peer> CreatePeerMock()
 		{
-			return new Mock<Peer>(MockBehavior.Loose, Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>());
+			return new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>());
 		}
 	}
 }

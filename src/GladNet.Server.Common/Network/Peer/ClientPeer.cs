@@ -1,4 +1,5 @@
 ﻿using GladNet.Common;
+using Logging.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -10,8 +11,8 @@ namespace GladNet.Server.Common
 {
 	public abstract class ClientPeer : Peer, IClientNetworkMessageSender
 	{
-		public ClientPeer(INetworkMessageSender sender, IConnectionDetails details)
-			: base(sender, details)
+		public ClientPeer(ILogger logger, INetworkMessageSender sender, IConnectionDetails details)
+			: base(logger, sender, details)
 		{
 
 		}

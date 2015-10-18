@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Logging.Services">
+      <HintPath>..\..\lib\Dependency Builds\LoggingServices\DLLs\Logging.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Net35Essentials">
+      <HintPath>..\..\lib\Dependency Builds\Net35Essentials\DLLs\Net35Essentials.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

@@ -18,7 +18,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -35,7 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Logging.Services">
-      <HintPath>..\..\lib\LoggingServices\LoggingServices\bin\Release\Logging.Services.dll</HintPath>
+      <HintPath>..\..\lib\Dependency Builds\LoggingServices\DLLs\Logging.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Net35Essentials">
+      <HintPath>..\..\lib\Dependency Builds\Net35Essentials\DLLs\Net35Essentials.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
