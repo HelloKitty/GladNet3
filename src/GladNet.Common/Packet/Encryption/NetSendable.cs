@@ -86,13 +86,7 @@ namespace GladNet.Common
 			}
 			catch (CryptographicException e)
 			{
-#if DEBUG || DEBUGBUILD
-				//TODO: Logging.
-				//We rethrow in debug builds
-				throw;
-#else
 				return false;
-#endif
 			}
 
 			//Check the state of the bytes
@@ -117,7 +111,8 @@ namespace GladNet.Common
 			if (decryptor == null)
 				throw new ArgumentNullException("decryptor", "The decryptor cannot be null.");
 
-			ThrowIfInvalidState(NetSendableState.Encrypted, true);
+			//We don't want to throw. Remote peers could send invalid packets that DOS us with exception generation.
+			ThrowIfInvalidState(NetSendableState.Encrypted, false);
 
 			try
 			{
@@ -125,13 +120,7 @@ namespace GladNet.Common
 			}
 			catch(CryptographicException e)
 			{
-#if DEBUG || DEBUGBUILD
-				//TODO: Logging.
-				//We rethrow in debug builds
-				throw;
-#else
 				return false;
-#endif
 			}
 
 			//Check the state of the bytes

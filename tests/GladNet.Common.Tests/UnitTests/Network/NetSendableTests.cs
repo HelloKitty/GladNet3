@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -243,6 +244,44 @@ namespace GladNet.Common.UnitTests
 		}
 		#endregion
 
+		[Test]
+		public static void Test_Decryption_With_Crypto_Throw()
+		{
+			//arrange
+			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(Mock.Of<PacketPayload>());
+			//We need a throwing decryptor
+			Mock<IDecryptor> decryptor = SetupThrowingDecryptor();
+			//Change it to a serialized state so decryption is valid.
+			ChangeDataStateProperty(netSendable, NetSendableState.Encrypted);
+			bool result;
+
+			//act
+			result = netSendable.Decrypt(decryptor.Object);
+
+			//assert
+			//It should have failed so it should be false.
+			Assert.IsFalse(result);
+		}
+
+		[Test]
+		public static void Test_Encryption_With_Crypto_Throw()
+		{
+			//arrange
+			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(Mock.Of<PacketPayload>());
+			//We need a throwing decryptor
+			Mock<IEncryptor> encryptor = SetupThrowingIEncryptor();
+			//Change it to a serialized state so decryption is valid.
+			ChangeDataStateProperty(netSendable, NetSendableState.Serialized);
+			bool result;
+
+			//act
+			result = netSendable.Encrypt(encryptor.Object);
+
+			//assert
+			//It should have failed so it should be false.
+			Assert.IsFalse(result);
+		}
+
 
 		private static void ChangeDataStateProperty<T>(NetSendable<T> netSendable, NetSendableState state)
 			where T : class
@@ -270,6 +309,20 @@ namespace GladNet.Common.UnitTests
 			Assert.AreEqual(copiedSendable.Data, sendable.Data);
 			Assert.AreEqual(copiedSendable.DataState, sendable.DataState);
 			Assert.AreNotEqual(copiedSendable.DataState, copiedSendableBeforeSerialization.DataState);
+		}
+
+		private static Mock<IDecryptor> SetupThrowingDecryptor()
+		{
+			Mock<IDecryptor> decryptor = new Mock<IDecryptor>(MockBehavior.Strict);
+			decryptor.Setup(d => d.Decrypt(It.IsAny<byte[]>())).Throws<CryptographicException>();
+			return decryptor;
+		}
+
+		private static Mock<IEncryptor> SetupThrowingIEncryptor()
+		{
+			Mock<IEncryptor> encryptor = new Mock<IEncryptor>(MockBehavior.Strict);
+			encryptor.Setup(d => d.Encrypt(It.IsAny<byte[]>())).Throws<CryptographicException>();
+			return encryptor;
 		}
 	}
 }
