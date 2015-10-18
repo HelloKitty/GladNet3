@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logging.Services;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace GladNet.Common
 {
-	public abstract class Peer : INetPeer, INetworkMessageReceiver
+	public abstract class Peer : INetPeer, INetworkMessageReceiver, IClassLogger
 	{
 		private readonly INetworkMessageSender netMessageSender;
 
@@ -21,10 +22,13 @@ namespace GladNet.Common
 		/// </summary>
 		public bool AllowReceiverEmulation { get; set; }
 
-		protected Peer(INetworkMessageSender messageSender, IConnectionDetails details)
+		public ILogger Logger { get; private set; }
+
+		protected Peer(ILogger logger, INetworkMessageSender messageSender, IConnectionDetails details)
 		{
 			PeerDetails = details;
 			netMessageSender = messageSender;
+			Logger = logger;
 		}
 
 		#region Message Senders

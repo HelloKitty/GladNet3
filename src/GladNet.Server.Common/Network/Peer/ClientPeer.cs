@@ -18,7 +18,7 @@ namespace GladNet.Server.Common
 
 		public override bool CanSend(NetworkMessage.OperationType opType)
 		{
-			return opType == NetworkMessage.OperationType.Event || opType == NetworkMessage.OperationType.Response;
+			return opType == NetworkMessage.OperationType.Response || opType == NetworkMessage.OperationType.Event;
 		}
 
 		#region Message Senders

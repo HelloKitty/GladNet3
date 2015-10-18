@@ -1,6 +1,3 @@
-[submodule "lib/LoggingServices"]
-	path = lib/LoggingServices
-	url = git://github.com/HelloKitty/.NetLoggingServices.git
 [submodule "lib/Lidgren"]
 	path = lib/Lidgren
 	url = git://github.com/HelloKitty/lidgren-network-gen3.git

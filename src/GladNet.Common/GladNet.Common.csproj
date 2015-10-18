@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Logging.Services">
+      <HintPath>..\..\lib\LoggingServices\LoggingServices\bin\Release\Logging.Services.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,6 +47,7 @@
   <ItemGroup>
     <Compile Include="General\Copy\IDeepCloneable.cs" />
     <Compile Include="General\Copy\IShallowCloneable.cs" />
+    <Compile Include="General\Logging\IClassLogger.cs" />
     <Compile Include="Network\Message\ConcreteMessages\INetworkMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\IResponseMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\ResponseMessage.cs" />
