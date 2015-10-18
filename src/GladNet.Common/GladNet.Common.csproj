@@ -62,7 +62,6 @@
     <Compile Include="Network\Message\NetworkMessageFactory.cs" />
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
-    <Compile Include="Network\NetEngine\INetEngine.cs" />
     <Compile Include="Network\NetStatus.cs" />
     <Compile Include="Network\Payloads\StatusChangePayload.cs" />
     <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />

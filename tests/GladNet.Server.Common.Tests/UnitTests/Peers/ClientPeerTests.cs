@@ -20,7 +20,7 @@ namespace GladNet.Server.Common.UnitTests
 		public static void Test_CanSend_IsRequest(NetworkMessage.OperationType opType, bool expectedResult)
 		{
 			//arrange
-			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<INetEngine>());
+			Mock<ClientPeer> peer = CreateClientPeerMock();
 			peer.CallBase = true;
 
 			//act
@@ -28,6 +28,11 @@ namespace GladNet.Server.Common.UnitTests
 
 			//assert
 			Assert.AreEqual(result, expectedResult);
+		}
+
+		private static Mock<ClientPeer> CreateClientPeerMock()
+		{
+			return new Mock<ClientPeer>(Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>());
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace GladNet.Common.UnitTests
 			Test_DeepCopy((StatusChangePayload p) => new StatusMessage(p));
 		}
 
-		public static void Test_DeepCopy<TPayloadType, TMessageType>(Func<TPayloadType, TMessageType> creator)
+		private static void Test_DeepCopy<TPayloadType, TMessageType>(Func<TPayloadType, TMessageType> creator)
 			where TMessageType : NetworkMessage, IDeepCloneable<NetworkMessage> where TPayloadType : PacketPayload
 		{
 			//arrange
@@ -29,13 +29,20 @@ namespace GladNet.Common.UnitTests
 
 			//act
 			INetworkMessage copiedMessage = message.DeepClone();
+			INetworkMessage copiedMessageViaExplict = ((IDeepCloneable)message).DeepClone() as INetworkMessage;
 
-			//Assert
-			Assert.AreEqual(message.Payload.Data, copiedMessage.Payload.Data);
-			Assert.AreEqual(message.Payload.DataState, copiedMessage.Payload.DataState);
+			List<INetworkMessage> messageToTest = new List<INetworkMessage>() { copiedMessage, copiedMessageViaExplict };
 
-			//We should also check that the Cloned type is the type expected
-			Assert.AreEqual(copiedMessage.GetType(), typeof(TMessageType));
+			//Assert for each message (both from IDeepCloneable<NetworkMessage> and IDeepCloneable)
+			foreach(INetworkMessage m in messageToTest)
+			{
+				//Check data
+				Assert.AreEqual(message.Payload.Data, m.Payload.Data);
+				Assert.AreEqual(message.Payload.DataState, m.Payload.DataState);
+
+				//We should also check that the Cloned type is the type expected
+				Assert.AreEqual(m.GetType(), typeof(TMessageType));
+			}
 		}
 	}
 }

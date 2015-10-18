@@ -9,18 +9,22 @@ namespace GladNet.Common
 {
 	public abstract class Peer : INetPeer, INetworkMessageReceiver
 	{
-		private readonly INetEngine NetEngine;
+		private readonly INetworkMessageSender netMessageSender;
 
-		public IConnectionDetails PeerDetails
-		{
-			get { return NetEngine.Details; }
-		}
+		/// <summary>
+		/// Provides access to various connection related details for a this given Pee's connection.
+		/// </summary>
+		public IConnectionDetails PeerDetails { get; private set; }
 
+		/// <summary>
+		/// Enables or disables emulation methods for recieving.
+		/// </summary>
 		public bool AllowReceiverEmulation { get; set; }
 
-		protected Peer(INetEngine engine)
+		protected Peer(INetworkMessageSender messageSender, IConnectionDetails details)
 		{
-			NetEngine = engine;
+			PeerDetails = details;
+			netMessageSender = messageSender;
 		}
 
 		#region Message Senders
@@ -39,7 +43,7 @@ namespace GladNet.Common
 			if (!CanSend(opType))
 				return NetworkMessage.SendResult.Invalid;
 
-			return NetEngine.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel);
+			return netMessageSender.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel);
 		}
 		#endregion
 

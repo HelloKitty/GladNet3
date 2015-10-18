@@ -10,8 +10,8 @@ namespace GladNet.Server.Common
 {
 	public abstract class ClientPeer : Peer, IClientNetworkMessageSender
 	{
-		public ClientPeer(INetEngine engine)
-			: base(engine)
+		public ClientPeer(INetworkMessageSender sender, IConnectionDetails details)
+			: base(sender, details)
 		{
 
 		}

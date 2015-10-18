@@ -204,13 +204,13 @@ namespace GladNet.Common
 
 		public NetSendable<TData> ShallowClone()
 		{
-			//As of Oct. 8th 2015 it is valid to MemberwiseClone for valid ShallowCopy.
-			return MemberwiseClone() as NetSendable<TData>; //it never shouldn't be of this type
+			return ((IShallowCloneable)this).ShallowClone() as NetSendable<TData>;
 		}
 
 		object IShallowCloneable.ShallowClone()
 		{
-			return this.ShallowClone();
+			//As of Oct. 8th 2015 it is valid to MemberwiseClone for valid ShallowCopy.
+			return MemberwiseClone(); //it never shouldn't be of this type
 		}
 	}
 }
