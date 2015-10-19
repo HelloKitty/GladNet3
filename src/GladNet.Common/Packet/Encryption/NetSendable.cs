@@ -78,7 +78,7 @@ namespace GladNet.Common
 			if (encryptor == null)
 				throw new ArgumentNullException("encryptor", "The encryptor cannot be null.");
 
-			ThrowIfInvalidState(NetSendableState.Serialized, false);
+			ThrowIfInvalidState(NetSendableState.Serialized);
 			
 			try
 			{
@@ -112,7 +112,7 @@ namespace GladNet.Common
 				throw new ArgumentNullException("decryptor", "The decryptor cannot be null.");
 
 			//We don't want to throw. Remote peers could send invalid packets that DOS us with exception generation.
-			ThrowIfInvalidState(NetSendableState.Encrypted, false);
+			ThrowIfInvalidState(NetSendableState.Encrypted);
 
 			try
 			{
@@ -143,7 +143,7 @@ namespace GladNet.Common
 			if (serializer == null)
 				throw new ArgumentNullException("serializer", "The serializer cannot be null.");
 
-			ThrowIfInvalidState(NetSendableState.Default, false);
+			ThrowIfInvalidState(NetSendableState.Default);
 
 			byteData = serializer.Serialize(Data);
 
@@ -170,7 +170,7 @@ namespace GladNet.Common
 			if (deserializer == null)
 				throw new ArgumentNullException("deserializer", "The derserializer cannot be null.");
 
-			ThrowIfInvalidState(NetSendableState.Serialized, false);
+			ThrowIfInvalidState(NetSendableState.Serialized);
 
 			Data = deserializer.Deserialize<TData>(byteData);
 
@@ -189,13 +189,10 @@ namespace GladNet.Common
 		/// <param name="checkData">Inidicates if we should validate the byte[]</param>
 		/// <exception cref="InvalidOperationException">Throws if expectedState differs from current state. Optionally throws if checkData is true and the byte[] is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "byteData")]
-		private void ThrowIfInvalidState(NetSendableState expectedState, bool checkData)
+		private void ThrowIfInvalidState(NetSendableState expectedState)
 		{
 			if(DataState != expectedState)
 				throw new InvalidOperationException(GetType() + " was not in required state " + expectedState + " was in " + DataState);
-
-			if (checkData && byteData == null)
-				throw new InvalidOperationException(GetType() + " was in an invalid state for " + expectedState + ". Must have a non-null byteData representation.");
 		}
 
 		/// <summary>

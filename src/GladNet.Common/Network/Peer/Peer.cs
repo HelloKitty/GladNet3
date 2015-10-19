@@ -47,7 +47,7 @@ namespace GladNet.Common
 			if (!CanSend(opType))
 				return NetworkMessage.SendResult.Invalid;
 
-			return netMessageSender.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel);
+			return netMessageSender.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel); //ncrunch: no coverage Reason: The line doesn't have to be tested. This is abstract and can be overidden.
 		}
 		#endregion
 

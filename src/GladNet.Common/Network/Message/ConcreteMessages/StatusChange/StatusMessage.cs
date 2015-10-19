@@ -7,16 +7,12 @@ namespace GladNet.Common
 {
 	public class StatusMessage : NetworkMessage, IStatusMessage
 	{
-		public NetStatus? Status
+		public NetStatus Status
 		{
 			get
 			{
-				//This isn't great but we just check the Type and if it's valid we as cast.
-				//The original design didn't anticipate NetStatus messages which could have been just a byte instead of a whole PacketPayload
-				if (Payload.Data is StatusChangePayload)
-					return (Payload.Data as StatusChangePayload).Status;
-				else
-					return null;
+				//Constructor enforces the Type. Casting is safe.
+				return (Payload.Data as StatusChangePayload).Status;
 			}
 		}
 
@@ -42,12 +38,7 @@ namespace GladNet.Common
 			if (receiver == null)
 				throw new ArgumentNullException("receiver", "INetworkMessageReciever must not be null.");
 
-			if (Status.HasValue)
-				receiver.OnStatusChanged(Status.Value);
-#if DEBUG || DEBUGBUILD
-			else
-				throw new InvalidOperationException("Recieved status message with non-StatusChangePayload payload Type.");
-#endif
+			receiver.OnStatusChanged(Status);
 		}
 
 		public override NetworkMessage DeepClone()

@@ -39,5 +39,17 @@ namespace GladNet.Common.UnitTests
 			//We check that the proper method was called.
 			reciever.Verify(x => x.OnStatusChanged(payload.Object.Status), Times.Once());
 		}
+
+		[Test]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public static void Test_Null_Reciever()
+		{
+			//arrange
+			Mock<StatusChangePayload> payload = new Mock<StatusChangePayload>(MockBehavior.Strict);
+			StatusMessage message = new StatusMessage(payload.Object);
+
+			//act
+			message.Dispatch(null, null); //expect an exception
+		}
 	}
 }

@@ -261,6 +261,7 @@ namespace GladNet.Common.UnitTests
 			//assert
 			//It should have failed so it should be false.
 			Assert.IsFalse(result);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Encrypted);
 		}
 
 		[Test]
@@ -280,6 +281,80 @@ namespace GladNet.Common.UnitTests
 			//assert
 			//It should have failed so it should be false.
 			Assert.IsFalse(result);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Serialized);
+		}
+
+		[Test]
+		public static void Test_Encryption_With_NullReturning_Encryptor()
+		{
+			//arrange
+			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(Mock.Of<PacketPayload>());
+			//We need a throwing decryptor
+			Mock<IEncryptor> encryptor = SetupNullReturningIEncryptor();
+			//Change it to a serialized state so decryption is valid.
+			ChangeDataStateProperty(netSendable, NetSendableState.Serialized);
+			bool result;
+
+			//act
+			result = netSendable.Encrypt(encryptor.Object);
+
+			//assert
+			//It should have failed so it should be false.
+			Assert.IsFalse(result);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Serialized);
+		}
+
+		[Test]
+		public static void Test_Decryption_With_NullReturning_Dencryptor()
+		{
+			//arrange
+			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(Mock.Of<PacketPayload>());
+			//We need a throwing decryptor
+			Mock<IDecryptor> decryptor = SetupNullReturningDecryptor();
+			//Change it to a serialized state so decryption is valid.
+			ChangeDataStateProperty(netSendable, NetSendableState.Encrypted);
+			bool result;
+
+			//act
+			result = netSendable.Decrypt(decryptor.Object);
+
+			//assert
+			//It should have failed so it should be false.
+			Assert.IsFalse(result);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Encrypted);
+		}
+
+		[Test]
+		public static void Test_Serialization_With_NullReturning_Serializer()
+		{
+			//arrange
+			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(Mock.Of<PacketPayload>());
+			ISerializer serializer = SetupNullReturningSerializer().Object;
+			bool result;
+
+			//act
+			result = netSendable.Serialize(serializer);
+
+			//assert
+			Assert.IsFalse(result);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Default);
+		}
+
+		[Test]
+		public static void Test_Deserialization_With_NullReturning_Deserializer()
+		{
+			//arrange
+			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(Mock.Of<PacketPayload>());
+			IDeserializer deserializer = SetupNullReturningDeserializer().Object;
+			bool result;
+			ChangeDataStateProperty(netSendable, NetSendableState.Serialized);
+
+			//act
+			result = netSendable.Deserialize(deserializer);
+
+			//assert
+			Assert.IsFalse(result);
+			Assert.AreEqual(netSendable.DataState, NetSendableState.Serialized);
 		}
 
 
@@ -323,6 +398,34 @@ namespace GladNet.Common.UnitTests
 			Mock<IEncryptor> encryptor = new Mock<IEncryptor>(MockBehavior.Strict);
 			encryptor.Setup(d => d.Encrypt(It.IsAny<byte[]>())).Throws<CryptographicException>();
 			return encryptor;
+		}
+
+		private static Mock<IDecryptor> SetupNullReturningDecryptor()
+		{
+			Mock<IDecryptor> decryptor = new Mock<IDecryptor>(MockBehavior.Strict);
+			decryptor.Setup(d => d.Decrypt(It.IsAny<byte[]>())).Returns(default(byte[]));
+			return decryptor;
+		}
+
+		private static Mock<IEncryptor> SetupNullReturningIEncryptor()
+		{
+			Mock<IEncryptor> encryptor = new Mock<IEncryptor>(MockBehavior.Strict);
+			encryptor.Setup(d => d.Encrypt(It.IsAny<byte[]>())).Returns(default(byte[]));
+			return encryptor;
+		}
+
+		private static Mock<ISerializer> SetupNullReturningSerializer()
+		{
+			Mock<ISerializer> serializer = new Mock<ISerializer>(MockBehavior.Strict);
+			serializer.Setup(d => d.Serialize<PacketPayload>(It.IsAny<PacketPayload>())).Returns(default(byte[]));
+			return serializer;
+		}
+
+		private static Mock<IDeserializer> SetupNullReturningDeserializer()
+		{
+			Mock<IDeserializer> deserializer = new Mock<IDeserializer>(MockBehavior.Strict);
+			deserializer.Setup(d => d.Deserialize<PacketPayload>(It.IsAny<byte[]>())).Returns(default(PacketPayload));
+			return deserializer;
 		}
 	}
 }

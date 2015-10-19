@@ -7,6 +7,6 @@ namespace GladNet.Common
 {
 	public interface IStatusMessage
 	{
-		NetStatus? Status { get; }
+		NetStatus Status { get; }
 	}
 }
