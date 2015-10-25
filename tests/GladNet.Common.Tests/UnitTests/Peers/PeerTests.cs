@@ -238,10 +238,11 @@ namespace GladNet.Common.Tests
 
 
 			//assert (shouldn't throw)
-			Assert.That(() => peer.Object.EmulateOnStatusChanged(NetStatus.Connected), Throws.Nothing);
-			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>()), Throws.Nothing);
-			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>()), Throws.Nothing);
-			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>()), Throws.Nothing);
+			//Don't remove the asserts. It's best practice to Assert throwing nothing so that potential
+			peer.Object.EmulateOnStatusChanged(NetStatus.Connected);
+			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>());
+			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>());
+			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>());
 
 			Assert.Pass("Enumation methods didn't throw when emulation was enabled. Passes specification.");
 		}
