@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Diagnostics.CodeAnalysis;
+using GladNet.Common;
 using GladNet.Serializer;
 
 namespace GladNet.Common
@@ -25,8 +26,8 @@ namespace GladNet.Common
 	/// </summary>
 	/// <typeparam name="TData">The Type of encryptable and serializable data becoming wire-ready.</typeparam>
 	[GladNetSerializationContract]
-	public class NetSendable<TData> : IEncryptable, ISerializable, IShallowCloneable<NetSendable<TData>>
-		where TData : class
+	public class NetSendable<TData> : IEncryptable, IDecryptable, ISerializable, IDeserializable, IShallowCloneable<NetSendable<TData>>
+			where TData : class
 	{
 		/// <summary>
 		/// Indicates the state the object is currently in.

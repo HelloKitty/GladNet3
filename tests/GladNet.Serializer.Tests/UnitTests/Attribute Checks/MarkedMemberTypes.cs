@@ -1,4 +1,5 @@
 ﻿using GladNet.Common;
+using GladNet.Serializer;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Serializer.Tests
+namespace GladNet.Common.Tests
 {
 	[TestFixture]
 	public static class MarkedMemberTypes

@@ -50,7 +50,12 @@
   <ItemGroup>
     <Compile Include="General\Copy\IDeepCloneable.cs" />
     <Compile Include="General\Copy\IShallowCloneable.cs" />
+    <Compile Include="General\Extensions\OperationTypeExtensions.cs" />
     <Compile Include="General\Logging\IClassLogger.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\Construction\Factory\GeneralNetworkMessageFactory.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\Construction\Factory\INetworkMessageFactory.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\Construction\Factory\StatusMessageFactory.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\Construction\INetworkMessageFactoryProviderRegister.cs" />
     <Compile Include="Network\Message\INetworkMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\IResponseMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\ResponseMessage.cs" />
@@ -60,35 +65,38 @@
     <Compile Include="Network\Message\ConcreteMessages\Event\EventMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\IStatusMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
-    <Compile Include="Network\Message\Parameters\DeliveryMethod.cs" />
-    <Compile Include="Network\Message\Parameters\IMessageParameters.cs" />
+    <Compile Include="Network\Parameters\DeliveryMethod.cs" />
+    <Compile Include="Network\Parameters\IMessageParameters.cs" />
     <Compile Include="Network\Message\INetworkMessageReceiver.cs" />
     <Compile Include="Network\Message\ConcreteMessages\NetworkMessage.cs" />
-    <Compile Include="Network\Message\INetworkMessageFactory.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\Construction\INetworkMessageFactoryProvider.cs" />
     <Compile Include="Network\Message\Network Senders\DispatchMessage.cs" />
     <Compile Include="Network\Message\Network Senders\INetworkDispatcher.cs" />
-    <Compile Include="Network\Message\NetworkMessageFactory.cs" />
-    <Compile Include="Network\Message\Parameters\IStaticPayloadParameters.cs" />
-    <Compile Include="Network\Message\Parameters\OperationType.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\Construction\NetworkMessageFactoryProvider.cs" />
+    <Compile Include="Network\Parameters\IStaticPayloadParameters.cs" />
+    <Compile Include="Network\Parameters\OperationType.cs" />
     <Compile Include="Network\Message\SendResult.cs" />
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
     <Compile Include="Network\NetStatus.cs" />
-    <Compile Include="Network\Payloads\StatusChangePayload.cs" />
+    <Compile Include="Payload\Concrete Payloads\StatusChangePayload.cs" />
     <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />
     <Compile Include="Network\Peer\INetPeer.cs" />
     <Compile Include="Network\Peer\Peer.cs" />
-    <Compile Include="Packet\Encryption\IDecryptor.cs" />
-    <Compile Include="Packet\Encryption\IEncryptable.cs" />
-    <Compile Include="Packet\Encryption\IEncryptor.cs" />
-    <Compile Include="Packet\Encryption\NetSendable.cs" />
-    <Compile Include="Packet\Payload\PacketPayload.cs" />
-    <Compile Include="Packet\Serialization\IDeserializer.cs" />
-    <Compile Include="Packet\Serialization\ISerializable.cs" />
-    <Compile Include="Packet\Serialization\ISerializer.cs" />
+    <Compile Include="General\Encryption\IDecryptable.cs" />
+    <Compile Include="General\Encryption\IDecryptor.cs" />
+    <Compile Include="General\Encryption\IEncryptable.cs" />
+    <Compile Include="General\Encryption\IEncryptor.cs" />
+    <Compile Include="General\Encryption\NetSendable.cs" />
+    <Compile Include="General\Fluents API\Encryption\IDecryptableChainer.cs" />
+    <Compile Include="General\Fluents API\Encryption\IEncryptableChainer.cs" />
+    <Compile Include="General\Fluents API\Serialization\IDeserializableChainer.cs" />
+    <Compile Include="General\Fluents API\Serialization\ISerializableChainer.cs" />
+    <Compile Include="Payload\PacketPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="General\Fluents API\Message\" />
     <Folder Include="Network\Peer\ConcretePeers\" />
   </ItemGroup>
   <ItemGroup>

@@ -54,14 +54,16 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Range Generators\EnumRangeAttribute.cs" />
-    <Compile Include="UnitTests\Messages\DispatchMessageTests.cs" />
-    <Compile Include="UnitTests\Messages\IMessageParametersTests.cs" />
-    <Compile Include="UnitTests\Messages\NetworkMessageTests.cs" />
-    <Compile Include="UnitTests\Messages\RequestMessageTests.cs" />
-    <Compile Include="UnitTests\Messages\EventMessageTests.cs" />
-    <Compile Include="UnitTests\Messages\ResponseMessageTests.cs" />
-    <Compile Include="UnitTests\Messages\StatusChangeMessageTests.cs" />
     <Compile Include="UnitTests\Network\DispatchMessageTests.cs" />
+    <Compile Include="UnitTests\Network\Message\Construction\GeneraNetworkMessageFactoryTests.cs" />
+    <Compile Include="UnitTests\Network\Message\Construction\NetworkMessageFactoryProviderTests.cs" />
+    <Compile Include="UnitTests\Network\Message\Construction\StatusMessageFactoryTests.cs" />
+    <Compile Include="UnitTests\Network\Parameters\IMessageParametersTests.cs" />
+    <Compile Include="UnitTests\Network\Message\NetworkMessageTests.cs" />
+    <Compile Include="UnitTests\Network\Message\RequestMessageTests.cs" />
+    <Compile Include="UnitTests\Network\Message\EventMessageTests.cs" />
+    <Compile Include="UnitTests\Network\Message\ResponseMessageTests.cs" />
+    <Compile Include="UnitTests\Network\Message\StatusChangeMessageTests.cs" />
     <Compile Include="UnitTests\Network\NetSendableTests.cs" />
     <Compile Include="UnitTests\Peers\PeerTests.cs" />
   </ItemGroup>
@@ -75,6 +77,10 @@
     <ProjectReference Include="..\..\src\GladNet.Common\GladNet.Common.csproj">
       <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
       <Name>GladNet.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\GladNet.Serializer\GladNet.Serializer.csproj">
+      <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
+      <Name>GladNet.Serializer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

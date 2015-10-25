@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using GladNet.Serializer;
 
-namespace GladNet.Serializer.Tests
+namespace GladNet.Common.Tests
 {
 	[TestFixture]
 	public static class MarkedContractTypes

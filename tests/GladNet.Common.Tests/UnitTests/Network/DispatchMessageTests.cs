@@ -6,16 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Common
+namespace GladNet.Common.UnitTests
 {
 	[TestFixture]
 	public static class DispatchMessageTests
 	{
 		[Test]
-		public static void Test_Constructor_Set()
+		public static void Test_Constructor_Properties()
 		{
-			//act
-			//DispatchMessage message = new DispatchMessage(, DeliveryMethod.ReliableUnordered, true, 5);
+			//arrange
+			NetworkMessage nMessage = new ResponseMessage(Mock.Of<PacketPayload>()); //just need a message to test with
+			DispatchMessage message = new DispatchMessage(nMessage, DeliveryMethod.ReliableOrdered, true, 50);
+
+			//assert
+			Assert.AreEqual(message.Channel, 50);
+			Assert.AreEqual(message.Encrypted, true);
+			Assert.AreEqual(message.DeliveryMethod, DeliveryMethod.ReliableOrdered);
+			Assert.AreEqual(message.Message, nMessage);
 		}
 	}
 }

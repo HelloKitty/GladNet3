@@ -18,13 +18,5 @@ namespace GladNet.Common
 		/// <exception cref="CryptographicException">Throws if encryption fails.</exception>
 		/// <returns>Indicates if encryption was successful.</returns>
 		bool Encrypt(IEncryptor encryptor);
-
-		/// <summary>
-		/// Attempts to decrypt the raw data within the implementing type.
-		/// </summary>
-		/// <param name="decryptor">The decryptor object that handles the specifics of encryption.</param>
-		/// <exception cref="CryptographicException">Throws if decryption fails.</exception>
-		/// <returns>Indicates if decryption was successful.</returns>
-		bool Decrypt(IDecryptor decryptor);
 	}
 }

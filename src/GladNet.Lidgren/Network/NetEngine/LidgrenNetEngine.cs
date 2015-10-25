@@ -8,9 +8,9 @@ namespace GladNet.Common
 {
 	public sealed class LidgrenNetEngine : INetworkMessageSender
 	{
-		private readonly INetworkMessageFactory messageFactory;
+		private readonly INetworkMessageFactoryProvider messageFactory;
 
-		public LidgrenNetEngine(INetworkMessageFactory netMessageFactory)
+		public LidgrenNetEngine(INetworkMessageFactoryProvider netMessageFactory)
 		{
 			messageFactory = netMessageFactory;
 		}
@@ -19,7 +19,7 @@ namespace GladNet.Common
 		{
 			//TODO: Handling of NetResults depending on certain connection states
 
-			NetworkMessage message = messageFactory.Create(opType, payload);
+			NetworkMessage message = null; //messageFactory.Create(opType, payload);
 
 			if (message == null)
 				throw new InvalidOperationException("Mesage factory failed to generate " + typeof(NetworkMessage) + " or generated an invalid message..");

@@ -1,4 +1,5 @@
-﻿using GladNet.Serializer;
+﻿using GladNet.Common;
+using GladNet.Serializer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,15 @@ namespace GladNet.Common
 			}
 		}
 
+		/// <summary>
+		/// Constructor for <see cref="StatusMessage"/> that requires a <see cref="StatusChangePayload"/> payload.
+		/// </summary>
+		/// <exception cref="ArgumentNullException">Throws if <see cref="StatusChangePayload"/> instance supplied is null.</exception>
+		/// <param name="payload">The <see cref="StatusChangePayload"/> of the message.</param>
 		public StatusMessage(StatusChangePayload payload)
 			: base(payload)
 		{
+
 			//This ensures a non-malicious sender sends a StatusChangePayload but it must still be checked.
 		}
 
