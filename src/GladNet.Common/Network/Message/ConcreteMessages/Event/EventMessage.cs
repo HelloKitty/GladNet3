@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GladNet.Serializer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace GladNet.Common
 	/// Generally these are messages that are the result of other-client/server state changes that require 'unexpected' network messages
 	/// to sync.
 	/// </summary>
+	[GladNetSerializationContract]
 	public class EventMessage : NetworkMessage, IEventMessage
 	{
 		/// <summary>

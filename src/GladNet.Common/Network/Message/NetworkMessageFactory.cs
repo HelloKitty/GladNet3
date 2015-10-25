@@ -8,7 +8,7 @@ namespace GladNet.Common
 {
 	public class NetworkMessageFactory : INetworkMessageFactory
 	{
-		public NetworkMessage Create(NetworkMessage.OperationType opType, PacketPayload payload)
+		public NetworkMessage Create(OperationType opType, PacketPayload payload)
 		{
 			if (payload == null)
 				throw new ArgumentNullException("payload", "Payload is null in Response NetworkMessage factory method.");

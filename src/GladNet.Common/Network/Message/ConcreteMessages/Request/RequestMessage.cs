@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GladNet.Serializer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace GladNet.Common
 	/// Generally these ellict <see cref="ResponseMessage"/> but there is no implict mechanism in either <see cref="NetworkMessage"/>
 	/// Subtypes for such a thing.
 	/// </summary>
+	[GladNetSerializationContract]
 	public class RequestMessage : NetworkMessage, IRequestMessage
 	{
 

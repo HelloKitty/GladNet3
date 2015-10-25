@@ -1,10 +1,12 @@
-﻿using System;
+﻿using GladNet.Serializer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace GladNet.Common
 {
+	[GladNetSerializationContract]
 	public class StatusMessage : NetworkMessage, IStatusMessage
 	{
 		public NetStatus Status

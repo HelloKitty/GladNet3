@@ -24,8 +24,8 @@ namespace GladNet.Common
 		//OP-Type removed. It is not needed and if it were there are other roundabount ways of computing it.
 
 		/// <summary>
-		/// Indicates the <see cref="NetworkMessage.DeliveryMethod"/> method of the message. Can/should be used to verify correct channel usage.
+		/// Indicates the <see cref="DeliveryMethod"/> method of the message. Can/should be used to verify correct channel usage.
 		/// </summary>
-		NetworkMessage.DeliveryMethod DeliveryMethod { get; }
+		DeliveryMethod DeliveryMethod { get; }
 	}
 }

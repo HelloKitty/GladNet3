@@ -114,21 +114,21 @@ namespace GladNet.Common.UnitTests
 			peer.CallBase = true;
 
 			//act
-			foreach (NetworkMessage.OperationType op in Enum.GetValues(typeof(NetworkMessage.OperationType)))
+			foreach (OperationType op in Enum.GetValues(typeof(OperationType)))
 			{
 				if(peer.Object.CanSend(op))
-					Assert.AreNotEqual(peer.Object.TrySendMessage(op, packet.Object, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+					Assert.AreNotEqual(peer.Object.TrySendMessage(op, packet.Object, DeliveryMethod.Unknown), SendResult.Invalid);
 				else
-					Assert.AreEqual(peer.Object.TrySendMessage(op, packet.Object, NetworkMessage.DeliveryMethod.Unknown), NetworkMessage.SendResult.Invalid);
+					Assert.AreEqual(peer.Object.TrySendMessage(op, packet.Object, DeliveryMethod.Unknown), SendResult.Invalid);
 			}
 		}
 
 		[Test]
 		[ExpectedException]
-		[TestCase(NetworkMessage.OperationType.Event)]
-		[TestCase(NetworkMessage.OperationType.Response)]
-		[TestCase(NetworkMessage.OperationType.Request)]
-		public static void Test_Peer_TrySendMessage_WithNullPacket(NetworkMessage.OperationType opToTest)
+		[TestCase(OperationType.Event)]
+		[TestCase(OperationType.Response)]
+		[TestCase(OperationType.Request)]
+		public static void Test_Peer_TrySendMessage_WithNullPacket(OperationType opToTest)
 		{
 			//arrange
 			Mock<Peer> peer = CreatePeerMock();
@@ -137,7 +137,7 @@ namespace GladNet.Common.UnitTests
 			peer.CallBase = true;
 
 			//act
-			peer.Object.TrySendMessage(opToTest, null, NetworkMessage.DeliveryMethod.Unknown);
+			peer.Object.TrySendMessage(opToTest, null, DeliveryMethod.Unknown);
 
 			//expect exception
 		}

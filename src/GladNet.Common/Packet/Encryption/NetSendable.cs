@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Diagnostics.CodeAnalysis;
+using GladNet.Serializer;
 
 namespace GladNet.Common
 {	
@@ -11,6 +12,7 @@ namespace GladNet.Common
 	/// Finite valid states a <see cref="NetSendable"/> can be in.
 	/// </summary>
 	[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")] //We suppress this because this is going over the wire. 1 byte is far better.
+	[GladNetSerializationContract]
 	public enum NetSendableState : byte
 	{
 		Default,
@@ -22,6 +24,7 @@ namespace GladNet.Common
 	/// Represents a wire-ready version of the TData that provides functionality to serialize, encrypt and decrypt the TData
 	/// </summary>
 	/// <typeparam name="TData">The Type of encryptable and serializable data becoming wire-ready.</typeparam>
+	[GladNetSerializationContract]
 	public class NetSendable<TData> : IEncryptable, ISerializable, IShallowCloneable<NetSendable<TData>>
 		where TData : class
 	{
@@ -84,7 +87,7 @@ namespace GladNet.Common
 			{
 				byteData = encryptor.Encrypt(byteData);
 			}
-			catch (CryptographicException e)
+			catch (CryptographicException)
 			{
 				return false;
 			}
@@ -118,7 +121,7 @@ namespace GladNet.Common
 			{
 				byteData = decryptor.Decrypt(byteData);
 			}
-			catch(CryptographicException e)
+			catch(CryptographicException)
 			{
 				return false;
 			}

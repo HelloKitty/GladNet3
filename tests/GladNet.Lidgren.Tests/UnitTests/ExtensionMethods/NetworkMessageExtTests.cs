@@ -23,11 +23,11 @@ namespace GladNet.Common.UnitTests
 			NetDeliveryMethod UnreliableSequenced = NetDeliveryMethod.UnreliableSequenced;
 
 			//assert
-			Assert.AreEqual(ReliableOrdered.NetDeliveryMethodTypeToGladNetDeliveryType(), NetworkMessage.DeliveryMethod.ReliableOrdered);
-			Assert.AreEqual(ReliableSequenced.NetDeliveryMethodTypeToGladNetDeliveryType(), NetworkMessage.DeliveryMethod.ReliableDiscardStale);
-			Assert.AreEqual(ReliableUnordered.NetDeliveryMethodTypeToGladNetDeliveryType(), NetworkMessage.DeliveryMethod.ReliableUnordered);
-			Assert.AreEqual(Unreliable.NetDeliveryMethodTypeToGladNetDeliveryType(), NetworkMessage.DeliveryMethod.UnreliableAcceptDuplicate);
-			Assert.AreEqual(UnreliableSequenced.NetDeliveryMethodTypeToGladNetDeliveryType(), NetworkMessage.DeliveryMethod.UnreliableDiscardStale);
+			Assert.AreEqual(ReliableOrdered.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.ReliableOrdered);
+			Assert.AreEqual(ReliableSequenced.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.ReliableDiscardStale);
+			Assert.AreEqual(ReliableUnordered.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.ReliableUnordered);
+			Assert.AreEqual(Unreliable.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.UnreliableAcceptDuplicate);
+			Assert.AreEqual(UnreliableSequenced.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.UnreliableDiscardStale);
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace GladNet.Common.UnitTests
 			NetDeliveryMethod test = NetDeliveryMethod.UnreliableSequenced + 5;
 
 			//assert
-			Assert.AreEqual(test.NetDeliveryMethodTypeToGladNetDeliveryType(), NetworkMessage.DeliveryMethod.Unknown);
+			Assert.AreEqual(test.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.Unknown);
 		}
 	}
 }

@@ -10,6 +10,6 @@ namespace GladNet.Common
 	{
 		IConnectionDetails PeerDetails { get; }
 
-		bool CanSend(NetworkMessage.OperationType opType);
+		bool CanSend(OperationType opType);
 	}
 }

@@ -15,7 +15,7 @@ namespace GladNet.Common
 			messageFactory = netMessageFactory;
 		}
 
-		public NetworkMessage.SendResult TrySendMessage(NetworkMessage.OperationType opType, PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			//TODO: Handling of NetResults depending on certain connection states
 
@@ -27,7 +27,13 @@ namespace GladNet.Common
 			return SendMessage(message, deliveryMethod, encrypt, channel);
 		}
 
-		private NetworkMessage.SendResult SendMessage(NetworkMessage message, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
+		//Should just pass to the non-generic version.
+		public SendResult TrySendMessage<TPacketType>(OperationType opType, TPacketType payload) where TPacketType : PacketPayload, IStaticPayloadParameters
+		{
+			return TrySendMessage(opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel);
+		}
+
+		private SendResult SendMessage(NetworkMessage message, DeliveryMethod deliveryMethod, bool encrypt, byte channel)
 		{
 			throw new NotImplementedException();
 		}

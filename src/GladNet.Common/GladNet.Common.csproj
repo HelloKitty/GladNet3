@@ -51,7 +51,7 @@
     <Compile Include="General\Copy\IDeepCloneable.cs" />
     <Compile Include="General\Copy\IShallowCloneable.cs" />
     <Compile Include="General\Logging\IClassLogger.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\INetworkMessage.cs" />
+    <Compile Include="Network\Message\INetworkMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\IResponseMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Response\ResponseMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Request\IRequestMessage.cs" />
@@ -60,13 +60,17 @@
     <Compile Include="Network\Message\ConcreteMessages\Event\EventMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\IStatusMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
-    <Compile Include="Network\Message\IMessageParameters.cs" />
+    <Compile Include="Network\Message\Parameters\DeliveryMethod.cs" />
+    <Compile Include="Network\Message\Parameters\IMessageParameters.cs" />
     <Compile Include="Network\Message\INetworkMessageReceiver.cs" />
     <Compile Include="Network\Message\ConcreteMessages\NetworkMessage.cs" />
     <Compile Include="Network\Message\INetworkMessageFactory.cs" />
     <Compile Include="Network\Message\Network Senders\DispatchMessage.cs" />
     <Compile Include="Network\Message\Network Senders\INetworkDispatcher.cs" />
     <Compile Include="Network\Message\NetworkMessageFactory.cs" />
+    <Compile Include="Network\Message\Parameters\IStaticPayloadParameters.cs" />
+    <Compile Include="Network\Message\Parameters\OperationType.cs" />
+    <Compile Include="Network\Message\SendResult.cs" />
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
     <Compile Include="Network\NetStatus.cs" />
@@ -86,6 +90,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Network\Peer\ConcretePeers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GladNet.Serializer\GladNet.Serializer.csproj">
+      <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
+      <Name>GladNet.Serializer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

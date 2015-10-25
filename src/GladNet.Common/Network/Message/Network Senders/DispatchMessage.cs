@@ -14,7 +14,7 @@ namespace GladNet.Common
 			get { return _Message; }
 		}
 
-		public NetworkMessage.DeliveryMethod DeliveryMethod { get; private set; }
+		public DeliveryMethod DeliveryMethod { get; private set; }
 
 		/// <summary>
 		/// True indicates is/was encrypted on the wire.
@@ -23,7 +23,7 @@ namespace GladNet.Common
 
 		public byte Channel { get; private set; }
 
-		public DispatchMessage(NetworkMessage mess, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt, byte channel)
+		public DispatchMessage(NetworkMessage mess, DeliveryMethod deliveryMethod, bool encrypt, byte channel)
 		{
 			_Message = mess;
 			DeliveryMethod = deliveryMethod;

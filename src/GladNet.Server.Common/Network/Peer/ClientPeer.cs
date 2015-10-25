@@ -17,22 +17,22 @@ namespace GladNet.Server.Common
 
 		}
 
-		public override bool CanSend(NetworkMessage.OperationType opType)
+		public override bool CanSend(OperationType opType)
 		{
-			return opType == NetworkMessage.OperationType.Response || opType == NetworkMessage.OperationType.Event;
+			return opType == OperationType.Response || opType == OperationType.Event;
 		}
 
 		#region Message Senders
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public NetworkMessage.SendResult SendResponse(PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public SendResult SendResponse(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			return TrySendMessage(NetworkMessage.OperationType.Response, payload, deliveryMethod, encrypt, channel);
+			return TrySendMessage(OperationType.Response, payload, deliveryMethod, encrypt, channel);
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public NetworkMessage.SendResult SendEvent(PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public SendResult SendEvent(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			return TrySendMessage(NetworkMessage.OperationType.Event, payload, deliveryMethod, encrypt, channel);
+			return TrySendMessage(OperationType.Event, payload, deliveryMethod, encrypt, channel);
 		}
 		#endregion
 
@@ -61,7 +61,7 @@ namespace GladNet.Server.Common
 			//Don't do anything here. We'll let inheritors do something extra by overriding this
 		}
 
-		public override NetworkMessage.SendResult TrySendMessage(NetworkMessage.OperationType opType, PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public override SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			return base.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel);
 		}

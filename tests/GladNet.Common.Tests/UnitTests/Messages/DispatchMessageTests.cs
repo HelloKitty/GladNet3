@@ -16,12 +16,12 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			NetworkMessage nMessage = new ResponseMessage(Mock.Of<PacketPayload>()); //just need a message to test with
-			DispatchMessage message = new DispatchMessage(nMessage, NetworkMessage.DeliveryMethod.ReliableOrdered, true, 50);
+			DispatchMessage message = new DispatchMessage(nMessage, DeliveryMethod.ReliableOrdered, true, 50);
 
 			//assert
 			Assert.AreEqual(message.Channel, 50);
 			Assert.AreEqual(message.Encrypted, true);
-			Assert.AreEqual(message.DeliveryMethod, NetworkMessage.DeliveryMethod.ReliableOrdered);
+			Assert.AreEqual(message.DeliveryMethod, DeliveryMethod.ReliableOrdered);
 			Assert.AreEqual(message.Message, nMessage);
 		}
 	}

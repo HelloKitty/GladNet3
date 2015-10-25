@@ -15,7 +15,7 @@ namespace GladNet.Common
 		public static void Test_Constructor_Set()
 		{
 			//act
-			//DispatchMessage message = new DispatchMessage(, NetworkMessage.DeliveryMethod.ReliableUnordered, true, 5);
+			//DispatchMessage message = new DispatchMessage(, DeliveryMethod.ReliableUnordered, true, 5);
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GladNet.Serializer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace GladNet.Common
 	/// <see cref="ResponseMessage"/>s are <see cref="NetworkMessage"/>s in response to <see cref="RequestMessage"/> from remote peers.
 	/// It contains additional fields/properties compared to <see cref="NetworkMessage"/> that provide information on the response.
 	/// </summary>
+	[GladNetSerializationContract]
 	public class ResponseMessage : NetworkMessage, IResponseMessage
 	{
 		/// <summary>

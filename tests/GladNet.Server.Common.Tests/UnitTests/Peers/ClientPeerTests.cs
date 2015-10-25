@@ -15,10 +15,10 @@ namespace GladNet.Server.Common.UnitTests
 	public static class ClientPeerTests
 	{
 		[Test]
-		[TestCase(NetworkMessage.OperationType.Request, false)]
-		[TestCase(NetworkMessage.OperationType.Event, true)]
-		[TestCase(NetworkMessage.OperationType.Response, true)]
-		public static void Test_CanSend_IsRequest(NetworkMessage.OperationType opType, bool expectedResult)
+		[TestCase(OperationType.Request, false)]
+		[TestCase(OperationType.Event, true)]
+		[TestCase(OperationType.Response, true)]
+		public static void Test_CanSend_IsRequest(OperationType opType, bool expectedResult)
 		{
 			//arrange
 			Mock<ClientPeer> peer = CreateClientPeerMock();

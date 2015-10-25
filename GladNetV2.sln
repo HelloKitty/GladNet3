@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Common", "src\GladNet.Common\GladNet.Common.csproj", "{9603BBAF-5F68-4176-A032-3E8BEAF8F9E2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DDEB13BB-C96D-4192-B2FD-2D0CA467075C} = {DDEB13BB-C96D-4192-B2FD-2D0CA467075C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Common.Tests", "tests\GladNet.Common.Tests\GladNet.Common.Tests.csproj", "{EF9106DE-CE6A-4519-9FE9-D52F1557D068}"
 EndProject
@@ -29,6 +32,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Tests", "te
 		{87C9AD17-33F8-4BFD-B353-D0E22FA1D455} = {87C9AD17-33F8-4BFD-B353-D0E22FA1D455}
 		{9603BBAF-5F68-4176-A032-3E8BEAF8F9E2} = {9603BBAF-5F68-4176-A032-3E8BEAF8F9E2}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Serializer", "src\GladNet.Serializer\GladNet.Serializer.csproj", "{DDEB13BB-C96D-4192-B2FD-2D0CA467075C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Serializer.Tests", "tests\GladNet.Serializer.Tests\GladNet.Serializer.Tests.csproj", "{AD2D7595-3068-495C-942C-CE9F18AB789B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +67,14 @@ Global
 		{C347D10D-790F-4030-833B-633CFBF4218C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C347D10D-790F-4030-833B-633CFBF4218C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C347D10D-790F-4030-833B-633CFBF4218C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDEB13BB-C96D-4192-B2FD-2D0CA467075C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDEB13BB-C96D-4192-B2FD-2D0CA467075C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDEB13BB-C96D-4192-B2FD-2D0CA467075C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDEB13BB-C96D-4192-B2FD-2D0CA467075C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD2D7595-3068-495C-942C-CE9F18AB789B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD2D7595-3068-495C-942C-CE9F18AB789B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD2D7595-3068-495C-942C-CE9F18AB789B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD2D7595-3068-495C-942C-CE9F18AB789B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,5 +86,7 @@ Global
 		{8B05F085-D102-4D2F-A643-8E3734AD6F97} = {0955E7B1-0BFB-4058-9469-29FF5FF4AA28}
 		{87C9AD17-33F8-4BFD-B353-D0E22FA1D455} = {0955E7B1-0BFB-4058-9469-29FF5FF4AA28}
 		{C347D10D-790F-4030-833B-633CFBF4218C} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
+		{DDEB13BB-C96D-4192-B2FD-2D0CA467075C} = {0955E7B1-0BFB-4058-9469-29FF5FF4AA28}
+		{AD2D7595-3068-495C-942C-CE9F18AB789B} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 	EndGlobalSection
 EndGlobal

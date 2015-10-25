@@ -12,12 +12,12 @@ namespace GladNet.Common
 	public interface INetworkMessageFactory
 	{
 		/// <summary>
-		/// Creates an instance of a <see cref="NetworkMessage"/> type that corresponds to the <see cref="NetworkMessage.OperationType"/>
+		/// Creates an instance of a <see cref="NetworkMessage"/> type that corresponds to the <see cref="OperationType"/>
 		/// and contains the <see cref="PacketPayload"/>/
 		/// </summary>
 		/// <param name="opType">Operation type of the <see cref="NetworkMessage"/>.</param>
 		/// <param name="payload">Payload of the desired <see cref="NetworkMessage"/>.</param>
-		/// <returns>Returns a unique <see cref="NetworkMessage"/> of the specificed <see cref="NetworkMessage.OperationType"/> containing the given <see cref="PacketPayload"/>.</returns>
-		NetworkMessage Create(NetworkMessage.OperationType opType, PacketPayload payload);
+		/// <returns>Returns a unique <see cref="NetworkMessage"/> of the specificed <see cref="OperationType"/> containing the given <see cref="PacketPayload"/>.</returns>
+		NetworkMessage Create(OperationType opType, PacketPayload payload);
 	}
 }

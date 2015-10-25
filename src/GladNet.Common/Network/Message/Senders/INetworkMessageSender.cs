@@ -10,6 +10,9 @@ namespace GladNet.Common
 	public interface INetworkMessageSender
 	{
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		NetworkMessage.SendResult TrySendMessage(NetworkMessage.OperationType opType, PacketPayload payload, NetworkMessage.DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+
+		SendResult TrySendMessage<TPacketType>(OperationType opType, TPacketType payload)
+			where TPacketType : PacketPayload, IStaticPayloadParameters;
 	}
 }
