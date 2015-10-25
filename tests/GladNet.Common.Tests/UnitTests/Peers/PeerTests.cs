@@ -8,11 +8,40 @@ using System.Threading.Tasks;
 using Moq.Protected;
 using Logging.Services;
 
-namespace GladNet.Common.UnitTests
+namespace GladNet.Common.Tests
 {
 	[TestFixture]
 	public static class PeerTests
 	{
+		public class TestPayloadWithStaticParams : PacketPayload, IStaticPayloadParameters
+		{
+			public bool VerifyAgainst(IMessageParameters parameters)
+			{
+				return true;
+			}
+
+			public bool VerifyAgainst(bool encrypt, byte channel, DeliveryMethod method)
+			{
+				return true;
+			}
+
+			public bool Encrypted
+			{
+				get { return true; }
+			}
+
+			public byte Channel
+			{
+				get { return 5; }
+			}
+
+			public DeliveryMethod DeliveryMethod
+			{
+				get { return Common.DeliveryMethod.ReliableUnordered; }
+			}
+		}
+
+
 		[Test]
 		public static void Test_Constructor()
 		{
@@ -88,7 +117,7 @@ namespace GladNet.Common.UnitTests
 		}
 
 		[Test]
-		public static void Test_OnStatusChange_Method()
+		public static void Test_OnStatusChange_Method([EnumRange(typeof(NetStatus))] NetStatus status)
 		{
 			//arrange
 			Mock<Peer> peer = CreatePeerMock();
@@ -98,37 +127,55 @@ namespace GladNet.Common.UnitTests
 			INetworkMessageReceiver receiver = peer.Object;
 
 			//act
-			receiver.OnStatusChanged(NetStatus.Disconnected);
+			receiver.OnStatusChanged(status);
 
 			//assert
-			peer.Protected().Verify("OnStatusChanged", Times.Once(), NetStatus.Disconnected);
+			peer.Protected().Verify("OnStatusChanged", Times.Once(), status);
 		}
 
 		[Test]
-		public static void Test_Peer_TrySendMessage_Methods()
+		public static void Test_Peer_TrySendMessage_Methods([EnumRangeAttribute(typeof(OperationType))] OperationType opType)
 		{
 			//arrange
 			Mock<Peer> peer = CreatePeerMock();
-			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
 			//Enable calling implemented methods
 			peer.CallBase = true;
 
 			//act
-			foreach (OperationType op in Enum.GetValues(typeof(OperationType)))
-			{
-				if(peer.Object.CanSend(op))
-					Assert.AreNotEqual(peer.Object.TrySendMessage(op, packet.Object, DeliveryMethod.Unknown), SendResult.Invalid);
-				else
-					Assert.AreEqual(peer.Object.TrySendMessage(op, packet.Object, DeliveryMethod.Unknown), SendResult.Invalid);
-			}
+			if(peer.Object.CanSend(opType))
+				Assert.AreNotEqual(peer.Object.TrySendMessage(opType, payload.Object, DeliveryMethod.Unknown), SendResult.Invalid);
+			else
+				Assert.AreEqual(peer.Object.TrySendMessage(opType, payload.Object, DeliveryMethod.Unknown), SendResult.Invalid);
+
+			//Assert
+			//Check that the generic method called the non-generic
+			peer.Verify(m => m.TrySendMessage(opType, payload.Object, DeliveryMethod.Unknown, false, 0), Times.Once());
 		}
 
 		[Test]
-		[ExpectedException]
-		[TestCase(OperationType.Event)]
-		[TestCase(OperationType.Response)]
-		[TestCase(OperationType.Request)]
-		public static void Test_Peer_TrySendMessage_WithNullPacket(OperationType opToTest)
+		public static void Test_Peer_TrySendMessageGeneric_Methods([EnumRangeAttribute(typeof(OperationType))] OperationType opType)
+		{
+			//arrange
+			Mock<Peer> peer = CreatePeerMock();
+			TestPayloadWithStaticParams payload = new TestPayloadWithStaticParams();
+			//Enable calling implemented methods
+			peer.CallBase = true;
+
+			//act
+			if (peer.Object.CanSend(opType))
+				Assert.AreNotEqual(peer.Object.TrySendMessage(opType, payload), SendResult.Invalid);
+			else
+				Assert.AreEqual(peer.Object.TrySendMessage(opType, payload), SendResult.Invalid);
+
+			//Assert
+			//Check that the generic method called the non-generic
+			peer.Verify(m => m.TrySendMessage(opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel), Times.Once());
+		}
+
+		[Test]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public static void Test_Peer_TrySendMessage_WithNullPacket([EnumRangeAttribute(typeof(OperationType))] OperationType opToTest)
 		{
 			//arrange
 			Mock<Peer> peer = CreatePeerMock();
@@ -139,41 +186,45 @@ namespace GladNet.Common.UnitTests
 			//act
 			peer.Object.TrySendMessage(opToTest, null, DeliveryMethod.Unknown);
 
-			//expect exception
+			Assert.Fail("This test should fail with Exception of Type: ArguementNullException.");
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
-		public static void Test_Peer_Recieve_Emulation_Methods_WithFalse()
+		[ExpectedException(typeof(ArgumentNullException))]
+		public static void Test_Peer_TrySendMessageGeneric_WithNullPacket([EnumRangeAttribute(typeof(OperationType))] OperationType opToTest)
 		{
 			//arrange
 			Mock<Peer> peer = CreatePeerMock();
 
+			//Enable calling implemented methods
 			peer.CallBase = true;
 
-			//This chain try catch will not throw if one of them doesn't throw. If they all fail it throws so the test passes.
-			try
-			{
-				peer.Object.EmulateOnStatusChanged(NetStatus.Connected);
-			}
-			catch(InvalidOperationException)
-			{
-				try
-				{
-					peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>());
-				}
-				catch(InvalidOperationException)
-				{
-					try
-					{
-						peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>());
-					}
-					catch(InvalidOperationException)
-					{
-						peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>());
-					}
-				}
-			}
+			//act
+			peer.Object.TrySendMessage<TestPayloadWithStaticParams>(opToTest, null); //Call with dynamic as the mocked type fits the generic constraints but we can't compile time prove it.
+
+			Assert.Fail("This test should fail with Exception of Type: ArguementNullException.");
+		}
+
+		[Test]
+		public static void Test_Peer_Recieve_Emulation_Methods_WithFalse()
+		{
+			//arrange
+			Mock<Peer> peer = CreatePeerMock();
+			peer.CallBase = true;
+
+
+			//assert
+			//All emulation methods should throw.
+			Assert.That(() => peer.Object.EmulateOnStatusChanged(NetStatus.Connected), Throws.TypeOf<InvalidOperationException>());
+
+			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>()), 
+				Throws.TypeOf<InvalidOperationException>());
+
+			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>()), 
+				Throws.TypeOf<InvalidOperationException>());
+
+			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>()), 
+				Throws.TypeOf<InvalidOperationException>());
 		}
 
 		[Test]
@@ -187,10 +238,12 @@ namespace GladNet.Common.UnitTests
 
 
 			//assert (shouldn't throw)
-			peer.Object.EmulateOnStatusChanged(NetStatus.Connected);
-			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>());
-			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>());
-			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>());
+			Assert.That(() => peer.Object.EmulateOnStatusChanged(NetStatus.Connected), Throws.Nothing);
+			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>()), Throws.Nothing);
+			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>()), Throws.Nothing);
+			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>()), Throws.Nothing);
+
+			Assert.Pass("Enumation methods didn't throw when emulation was enabled. Passes specification.");
 		}
 		private static Mock<Peer> CreatePeerMock()
 		{

@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Common.UnitTests
+namespace GladNet.Common.Tests
 {
 	[TestFixture]
 	public static class NetSendableTests
@@ -39,7 +39,6 @@ namespace GladNet.Common.UnitTests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		[TestCase("Serialize")]
 		[TestCase("Deserialize")]
 		[TestCase("Decrypt")]
@@ -50,20 +49,11 @@ namespace GladNet.Common.UnitTests
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
 			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(payload.Object);
 
-			//act
-			try
-			{
-				//This will throw a reflection exception so we get the innerexception.
-				netSendable.GetType().GetMethod(methodName).Invoke(netSendable, new object[1] { null });
-			}
-			catch (Exception e)
-			{
-				//Translates the reflection exception to the actual exception
-				throw e.InnerException;
-			}
-
 			//assert
 			//Should throw an exception.
+			//We check inner exception because it gets consumed by a reflection exception.
+			Assert.That(() => netSendable.GetType().GetMethod(methodName).Invoke(netSendable, new object[1] { null }),
+				Throws.InnerException.TypeOf<ArgumentNullException>());
 		}
 
 		#region State Valid Operation Tests
@@ -165,9 +155,7 @@ namespace GladNet.Common.UnitTests
 		#region State Invalid Operation Tests
 		[Test]
 		[ExpectedException(typeof(InvalidOperationException))]
-		[TestCase(NetSendableState.Default)]
-		[TestCase(NetSendableState.Encrypted)]
-		public static void Test_Cant_Deserialize_In_States(NetSendableState state)
+		public static void Test_Cant_Deserialize_In_States([EnumRange(typeof(NetSendableState), NetSendableState.Serialized)] NetSendableState state)
 		{
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
@@ -185,9 +173,7 @@ namespace GladNet.Common.UnitTests
 
 		[Test]
 		[ExpectedException(typeof(InvalidOperationException))]
-		[TestCase(NetSendableState.Serialized)]
-		[TestCase(NetSendableState.Encrypted)]
-		public static void Test_Cant_Serialize_In_States(NetSendableState state)
+		public static void Test_Cant_Serialize_In_States([EnumRange(typeof(NetSendableState), NetSendableState.Default)] NetSendableState state)
 		{
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
@@ -205,9 +191,7 @@ namespace GladNet.Common.UnitTests
 
 		[Test]
 		[ExpectedException(typeof(InvalidOperationException))]
-		[TestCase(NetSendableState.Serialized)]
-		[TestCase(NetSendableState.Default)]
-		public static void Test_Cant_Decrypt_In_States(NetSendableState state)
+		public static void Test_Cant_Decrypt_In_States([EnumRange(typeof(NetSendableState), NetSendableState.Encrypted)] NetSendableState state)
 		{
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
@@ -225,9 +209,7 @@ namespace GladNet.Common.UnitTests
 
 		[Test]
 		[ExpectedException(typeof(InvalidOperationException))]
-		[TestCase(NetSendableState.Encrypted)]
-		[TestCase(NetSendableState.Default)]
-		public static void Test_Cant_Encrypt_In_States(NetSendableState state)
+		public static void Test_Cant_Encrypt_In_States([EnumRange(typeof(NetSendableState), NetSendableState.Serialized)] NetSendableState state)
 		{
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);

@@ -13,21 +13,15 @@ namespace GladNet.Common.UnitTests
 	public static class NetworkMessageExtTests
 	{
 		[Test]
-		public static void Test_LidgrenDelivery_to_GladNetDelivery()
+		//Test the mapping process. We DO NOT compile-time enforce mapping because we don't reference Lidgren dll where our DeliveryMethod is defined.
+		[TestCase(NetDeliveryMethod.ReliableOrdered, DeliveryMethod.ReliableOrdered)]
+		[TestCase(NetDeliveryMethod.ReliableSequenced, DeliveryMethod.ReliableDiscardStale)]
+		[TestCase(NetDeliveryMethod.ReliableUnordered, DeliveryMethod.ReliableUnordered)]
+		[TestCase(NetDeliveryMethod.Unreliable, DeliveryMethod.UnreliableAcceptDuplicate)]
+		[TestCase(NetDeliveryMethod.UnreliableSequenced, DeliveryMethod.UnreliableDiscardStale)]
+		public static void Test_LidgrenDelivery_to_GladNetDelivery(NetDeliveryMethod lidgrenNetDeliveryMethod, DeliveryMethod gladnetDeliveryMethod)
 		{
-			//arrange
-			NetDeliveryMethod ReliableOrdered = NetDeliveryMethod.ReliableOrdered;
-			NetDeliveryMethod ReliableSequenced = NetDeliveryMethod.ReliableSequenced;
-			NetDeliveryMethod ReliableUnordered = NetDeliveryMethod.ReliableUnordered;
-			NetDeliveryMethod Unreliable = NetDeliveryMethod.Unreliable;
-			NetDeliveryMethod UnreliableSequenced = NetDeliveryMethod.UnreliableSequenced;
-
-			//assert
-			Assert.AreEqual(ReliableOrdered.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.ReliableOrdered);
-			Assert.AreEqual(ReliableSequenced.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.ReliableDiscardStale);
-			Assert.AreEqual(ReliableUnordered.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.ReliableUnordered);
-			Assert.AreEqual(Unreliable.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.UnreliableAcceptDuplicate);
-			Assert.AreEqual(UnreliableSequenced.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.UnreliableDiscardStale);
+			Assert.AreEqual(lidgrenNetDeliveryMethod.NetDeliveryMethodTypeToGladNetDeliveryType(), gladnetDeliveryMethod);
 		}
 
 		[Test]
@@ -35,6 +29,8 @@ namespace GladNet.Common.UnitTests
 		{
 			//arrange
 			NetDeliveryMethod test = NetDeliveryMethod.UnreliableSequenced + 5;
+
+			Assert.False(Enum.IsDefined(typeof(NetDeliveryMethod), test), "Can't use this constant for this test. Please change it.");
 
 			//assert
 			Assert.AreEqual(test.NetDeliveryMethodTypeToGladNetDeliveryType(), DeliveryMethod.Unknown);

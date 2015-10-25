@@ -6,22 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Common.UnitTests
+namespace GladNet.Common.Tests
 {
 	[TestFixture]
 	public static class StatusChangeMessageTests
 	{
 		[Test]
-		public static void Test_Construction()
+		public static void Test_Construction([EnumRange(typeof(NetStatus))] NetStatus status)
 		{
 			//arrange
-			StatusChangePayload payload = new StatusChangePayload(NetStatus.Disconnected);
+			StatusChangePayload payload = new StatusChangePayload(status);
 
 			//act
 			StatusMessage message = new StatusMessage(payload);
 
 			//assert
-			Assert.AreEqual((message.Payload.Data as StatusChangePayload).Status, NetStatus.Disconnected);
+			Assert.AreEqual((message.Payload.Data as StatusChangePayload).Status, status);
 		}
 
 		[Test]

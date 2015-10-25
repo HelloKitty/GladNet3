@@ -14,11 +14,17 @@ namespace GladNet.Serializer.Tests
 	{
 
 		[Test]
-		[TestCase(typeof(NetworkMessage), MemberTypes.Property, typeof(NetSendable<PacketPayload>))]
-		public static void Check_Expected_Member_Marked_Attributes(Type typeToCheckOn, MemberTypes memberType, Type typeToLookFor)
+		//NetworkMessage
+		[TestCase(typeof(NetworkMessage), MemberTypes.Property, typeof(NetSendable<PacketPayload>), BindingFlags.Instance | BindingFlags.Public)]
+		//NetSendable
+		[TestCase(typeof(NetSendable<>), MemberTypes.Property, typeof(NetSendableState), BindingFlags.Instance | BindingFlags.Public)]
+		[TestCase(typeof(NetSendable<>), MemberTypes.Field, typeof(byte[]), BindingFlags.Instance | BindingFlags.NonPublic)]
+		//Payloads
+		[TestCase(typeof(StatusChangePayload), MemberTypes.Property, typeof(NetStatus), BindingFlags.Instance | BindingFlags.Public)]
+		public static void Check_Expected_Member_Marked_Attributes(Type typeToCheckOn, MemberTypes memberType, Type typeToLookFor, BindingFlags flags)
 		{
 			//arrange
-			MemberInfo potentialMethodInfoOfMarked = typeToCheckOn.GetMembers(BindingFlags.Public | BindingFlags.Instance)
+			MemberInfo potentialMethodInfoOfMarked = typeToCheckOn.GetMembers(flags)
 				.Where(mi => mi.MemberType == memberType)
 				.Where(mi => mi.GetUnderlyingType() == typeToLookFor)
 				.FirstOrDefault();

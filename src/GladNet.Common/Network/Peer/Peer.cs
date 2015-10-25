@@ -41,7 +41,7 @@ namespace GladNet.Common
 		public virtual SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			if (payload == null)
-				throw new ArgumentException("Payload found null in: " + this.GetType() + " in TrySendMessage no params", "payload");
+				throw new ArgumentNullException("payload", "Payload found null in: " + this.GetType() + " in TrySendMessage no params");
 
 			//TODO: Implement logging.
 			if (!CanSend(opType))
@@ -53,6 +53,9 @@ namespace GladNet.Common
 		//This is non-virtual because it should mirror non-generic methods functionality. It makes no sense to change them individually.
 		public SendResult TrySendMessage<TPacketType>(OperationType opType, TPacketType payload) where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
+			if (payload == null)
+				throw new ArgumentNullException("payload", "Payload found null in: " + this.GetType() + " in TrySendMessage no params");
+
 			return TrySendMessage(opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel);
 		}
 		#endregion

@@ -11,6 +11,9 @@ namespace GladNet.Common.UnitTests
 	[TestFixture]
 	public static class NetworkMessageTests
 	{
+		//This is complicated. Before you go changing it consult me.
+		//It could be done differently, without generic, and with different NUnit and Moq methods
+		//but this works for now.
 		[Test]
 		public static void Test_DeepCopy_With_Children()
 		{
