@@ -18,13 +18,22 @@ namespace GladNet.Common
 
 	public static class IStaticPayloadParametersExt
 	{
-		public static bool VerifyExt(this IStaticPayloadParameters parameters)
+		public static bool VerifyExt(this IStaticPayloadParameters actualParameters, IMessageParameters expectedParameters)
 		{
-			return VerifyExt(parameters, parameters.Encrypted, parameters.Channel, parameters.DeliveryMethod);
+			if (actualParameters == null)
+				throw new ArgumentNullException("actualParameters", "actualParameters cannot be null for an extension method.");
+
+			if (expectedParameters == null)
+				throw new ArgumentNullException("expectedParameters", "expectedParameters cannot be null for an extension method.");
+
+			return VerifyExt(actualParameters, expectedParameters.Encrypted, expectedParameters.Channel, expectedParameters.DeliveryMethod);
 		}
 
 		public static bool VerifyExt(this IStaticPayloadParameters parameters, bool encrypt, byte channel, DeliveryMethod method)
 		{
+			if (parameters == null)
+				throw new ArgumentNullException("parameters", "Parameters cannot be null for an extension method.");
+
 			//Checks if the parameters match the expectation.
 			return parameters.Channel == channel && parameters.Encrypted == encrypt && parameters.DeliveryMethod == method;
 		}

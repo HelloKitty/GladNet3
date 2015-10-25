@@ -134,7 +134,9 @@ namespace GladNet.Common.Tests
 		}
 
 		[Test]
-		public static void Test_Peer_TrySendMessage_Methods([EnumRangeAttribute(typeof(OperationType))] OperationType opType)
+		public static void Test_Peer_TrySendMessage_Methods(
+			[EnumRange(typeof(OperationType))] OperationType opType,
+			[EnumRange(typeof(DeliveryMethod))] DeliveryMethod deliveryMethod)
 		{
 			//arrange
 			Mock<Peer> peer = CreatePeerMock();
@@ -144,13 +146,13 @@ namespace GladNet.Common.Tests
 
 			//act
 			if(peer.Object.CanSend(opType))
-				Assert.AreNotEqual(peer.Object.TrySendMessage(opType, payload.Object, DeliveryMethod.Unknown), SendResult.Invalid);
+				Assert.AreNotEqual(peer.Object.TrySendMessage(opType, payload.Object, deliveryMethod), SendResult.Invalid);
 			else
-				Assert.AreEqual(peer.Object.TrySendMessage(opType, payload.Object, DeliveryMethod.Unknown), SendResult.Invalid);
+				Assert.AreEqual(peer.Object.TrySendMessage(opType, payload.Object, deliveryMethod), SendResult.Invalid);
 
 			//Assert
 			//Check that the generic method called the non-generic
-			peer.Verify(m => m.TrySendMessage(opType, payload.Object, DeliveryMethod.Unknown, false, 0), Times.Once());
+			peer.Verify(m => m.TrySendMessage(opType, payload.Object, deliveryMethod, false, 0), Times.Once());
 		}
 
 		[Test]
@@ -175,7 +177,9 @@ namespace GladNet.Common.Tests
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
-		public static void Test_Peer_TrySendMessage_WithNullPacket([EnumRangeAttribute(typeof(OperationType))] OperationType opToTest)
+		public static void Test_Peer_TrySendMessage_WithNullPacket(
+			[EnumRange(typeof(OperationType))] OperationType opToTest,
+			[EnumRange(typeof(DeliveryMethod))] DeliveryMethod deliveryMethod)
 		{
 			//arrange
 			Mock<Peer> peer = CreatePeerMock();
@@ -184,7 +188,7 @@ namespace GladNet.Common.Tests
 			peer.CallBase = true;
 
 			//act
-			peer.Object.TrySendMessage(opToTest, null, DeliveryMethod.Unknown);
+			peer.Object.TrySendMessage(opToTest, null, deliveryMethod);
 
 			Assert.Fail("This test should fail with Exception of Type: ArguementNullException.");
 		}
