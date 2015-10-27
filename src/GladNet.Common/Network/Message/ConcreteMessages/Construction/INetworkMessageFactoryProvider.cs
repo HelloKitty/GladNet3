@@ -8,9 +8,9 @@ namespace GladNet.Common
 {
 	public interface INetworkMessageFactoryProvider
 	{
-		INetworkMessageFactory CreateType(OperationType opType);
+		INetworkMessageFactory GetFactoryFor(OperationType opType);
 
-		INetworkMessageFactory CreateType<TNetworkMessage>()
+		INetworkMessageFactory GetFactoryFor<TNetworkMessage>()
 			where TNetworkMessage : NetworkMessage;
 	}
 }

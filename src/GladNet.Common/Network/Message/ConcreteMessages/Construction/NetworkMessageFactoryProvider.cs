@@ -10,29 +10,31 @@ namespace GladNet.Common
 	{
 		private readonly Dictionary<Type, INetworkMessageFactory> factoryMap;
 
+		public static NetworkMessageFactoryProvider Create()
+		{
+			return new NetworkMessageFactoryProvider();
+		}
+
 		public NetworkMessageFactoryProvider()
 		{
 			factoryMap = new Dictionary<Type, INetworkMessageFactory>(3);
 		}
 
-		public INetworkMessageFactory CreateType(OperationType opType)
+		public INetworkMessageFactory GetFactoryFor(OperationType opType)
 		{
 			return CreateType(opType.ToNetworkMessageType());
 		}
 
-		public INetworkMessageFactory CreateType<TNetworkMessage>() 
+		public INetworkMessageFactory GetFactoryFor<TNetworkMessage>() 
 			where TNetworkMessage : NetworkMessage
 		{
 			return CreateType(typeof(TNetworkMessage));
 		}
 
-		public INetworkMessageFactoryProviderRegister Register<TNetworkMessage>(INetworkMessageFactory factory)
+		public void Register<TNetworkMessage>(INetworkMessageFactory factory)
 			where TNetworkMessage : NetworkMessage
 		{
 			Register(typeof(TNetworkMessage), factory);
-
-			//Used to chain registering.
-			return this;
 		}
 
 		private void Register(Type messageType, INetworkMessageFactory factory)
@@ -43,12 +45,9 @@ namespace GladNet.Common
 			factoryMap[messageType] = factory;
 		}
 
-		public INetworkMessageFactoryProviderRegister Register(OperationType opType, INetworkMessageFactory factory)
+		public void Register(OperationType opType, INetworkMessageFactory factory)
 		{
 			Register(opType.ToNetworkMessageType(), factory);
-
-			//Used to chain registering.
-			return this;
 		}
 
 		private INetworkMessageFactory CreateType(Type networkType)

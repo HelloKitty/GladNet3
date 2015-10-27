@@ -7,9 +7,9 @@ namespace GladNet.Common
 {
 	public interface INetworkMessageFactoryProviderRegister
 	{
-		INetworkMessageFactoryProviderRegister Register<TNetworkMessage>(INetworkMessageFactory factory)
+		void Register<TNetworkMessage>(INetworkMessageFactory factory)
 			where TNetworkMessage : NetworkMessage;
 
-		INetworkMessageFactoryProviderRegister Register(OperationType opType, INetworkMessageFactory factory);
+		void Register(OperationType opType, INetworkMessageFactory factory);
 	}
 }

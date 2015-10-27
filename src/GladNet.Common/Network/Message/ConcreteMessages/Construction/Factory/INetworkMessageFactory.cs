@@ -13,4 +13,14 @@ namespace GladNet.Common
 		NetworkMessage WithDefaultConstructed<TPayload>()
 			where TPayload : PacketPayload, new();
 	}
+
+	public interface INetworkMessageFactory<TNetworkMessageType> : INetworkMessageFactory
+		where TNetworkMessageType : NetworkMessage
+	{
+		new TNetworkMessageType With<TPayload>(TPayload payload)
+			where TPayload : PacketPayload;
+
+		new TNetworkMessageType WithDefaultConstructed<TPayload>()
+			where TPayload : PacketPayload, new();
+	}
 }

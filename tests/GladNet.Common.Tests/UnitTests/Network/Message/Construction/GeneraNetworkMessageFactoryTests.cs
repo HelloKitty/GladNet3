@@ -15,20 +15,20 @@ namespace GladNet.Common.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public static void Test_Constructor_For_Factory_With_Null()
 		{
-			GeneralNetworkMessageFactory factory = new GeneralNetworkMessageFactory(null);
+			GeneralNetworkMessageFactory<NetworkMessage> factory = new GeneralNetworkMessageFactory<NetworkMessage>(null);
 		}
 
 		[Test]
 		public static void Test_Constructor_With_Valid_Func()
 		{
-			GeneralNetworkMessageFactory factory = new GeneralNetworkMessageFactory(p => new EventMessage(p));
+			GeneralNetworkMessageFactory<NetworkMessage> factory = new GeneralNetworkMessageFactory<NetworkMessage>(p => new EventMessage(p));
 		}
 
 		[Test]
 		public static void Test_Creation_With_Valid_Payload()
 		{
 			//Arrange
-			GeneralNetworkMessageFactory factory = new GeneralNetworkMessageFactory(p => new EventMessage(p));
+			GeneralNetworkMessageFactory<NetworkMessage> factory = new GeneralNetworkMessageFactory<NetworkMessage>(p => new EventMessage(p));
 			PacketPayload payload = Mock.Of<PacketPayload>();
 
 			//act

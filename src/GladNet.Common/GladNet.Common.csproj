@@ -50,7 +50,10 @@
   <ItemGroup>
     <Compile Include="General\Copy\IDeepCloneable.cs" />
     <Compile Include="General\Copy\IShallowCloneable.cs" />
+    <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryExtensions.cs" />
+    <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryProviderExtensions.cs" />
     <Compile Include="General\Extensions\OperationTypeExtensions.cs" />
+    <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryRegisterExtensions.cs" />
     <Compile Include="General\Logging\IClassLogger.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\Factory\GeneralNetworkMessageFactory.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\Factory\INetworkMessageFactory.cs" />
@@ -88,15 +91,14 @@
     <Compile Include="General\Encryption\IEncryptable.cs" />
     <Compile Include="General\Encryption\IEncryptor.cs" />
     <Compile Include="General\Encryption\NetSendable.cs" />
-    <Compile Include="General\Fluents API\Encryption\IDecryptableChainer.cs" />
-    <Compile Include="General\Fluents API\Encryption\IEncryptableChainer.cs" />
-    <Compile Include="General\Fluents API\Serialization\IDeserializableChainer.cs" />
-    <Compile Include="General\Fluents API\Serialization\ISerializableChainer.cs" />
+    <Compile Include="General\Extensions\IDecryptableChainer.cs" />
+    <Compile Include="General\Extensions\IEncryptableChainer.cs" />
+    <Compile Include="General\Extensions\IDeserializableChainer.cs" />
+    <Compile Include="General\Extensions\ISerializableChainer.cs" />
     <Compile Include="Payload\PacketPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="General\Fluents API\Message\" />
     <Folder Include="Network\Peer\ConcretePeers\" />
   </ItemGroup>
   <ItemGroup>
