@@ -108,15 +108,15 @@ namespace GladNet.Common.Tests
 		public static void Test_Provided_Factory_Is_Providing_Correct_Factory_With_Fluent_Extension_By_Func_Register()
 		{
 			//arrange
-			NetworkMessageFactoryProvider factoryRegisterProvider = NetworkMessageFactoryProvider.Create()
+			NetworkMessageFactoryProvider netMessageFactoryProvider = NetworkMessageFactoryProvider.Create()
 				.RegisterAs(p => new EventMessage(p))
 				.RegisterAs(p => new RequestMessage(p))
 				.RegisterAs(p => new ResponseMessage(p));
 
 			//assert
-			Assert.AreEqual(typeof(EventMessage), factoryRegisterProvider.GetFactoryFor<EventMessage>().With(new StatusChangePayload(NetStatus.Connected)).GetType());
-			Assert.AreEqual(typeof(RequestMessage), factoryRegisterProvider.GetFactoryFor<RequestMessage>().With(new StatusChangePayload(NetStatus.Connected)).GetType());
-			Assert.AreEqual(typeof(ResponseMessage), factoryRegisterProvider.GetFactoryFor<ResponseMessage>().With(new StatusChangePayload(NetStatus.Connected)).GetType());
+			Assert.AreEqual(typeof(EventMessage), netMessageFactoryProvider.GetFactoryFor<EventMessage>().With(new StatusChangePayload(NetStatus.Connected)).GetType());
+			Assert.AreEqual(typeof(RequestMessage), netMessageFactoryProvider.GetFactoryFor<RequestMessage>().With(new StatusChangePayload(NetStatus.Connected)).GetType());
+			Assert.AreEqual(typeof(ResponseMessage), netMessageFactoryProvider.GetFactoryFor<ResponseMessage>().With(new StatusChangePayload(NetStatus.Connected)).GetType());
 		}
 
 		[Test]
@@ -127,7 +127,6 @@ namespace GladNet.Common.Tests
 
 			NetworkMessageFactoryProvider provider = NetworkMessageFactoryProvider.Create()
 				.RegisterAs(factory);
-
 
 			//assert
 			Assert.IsNotNull(provider.GetFactoryFor<StatusMessage>());

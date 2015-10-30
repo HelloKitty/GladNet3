@@ -10,7 +10,7 @@ using GladNet.Common.Extensions;
 namespace GladNet.Common.UnitTests
 {
 	[TestFixture]
-	public static class NetworkMessageExtTests
+	public static class DeliveryMethodExtTests
 	{
 		[Test]
 		//Test the mapping process. We DO NOT compile-time enforce mapping because we don't reference Lidgren dll where our DeliveryMethod is defined.

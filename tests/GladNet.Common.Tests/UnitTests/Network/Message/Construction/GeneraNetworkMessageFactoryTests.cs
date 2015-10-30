@@ -38,6 +38,7 @@ namespace GladNet.Common.Tests
 			Assert.NotNull(message);
 			Assert.AreSame(message.Payload.Data, payload);
 			Assert.AreEqual(typeof(EventMessage), message.GetType());
+
 		}
 	}
 }
