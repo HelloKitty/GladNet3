@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{830CFD0B-1D73-430B-950D-E8FBFFD3B41A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E718AFBB-6A8F-4AEF-BC2C-0F9E696BDA02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren", "src\GladNet.Lidgren\GladNet.Lidgren.csproj", "{87C9AD17-33F8-4BFD-B353-D0E22FA1D455}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Tests", "tests\GladNet.Lidgren.Tests\GladNet.Lidgren.Tests.csproj", "{C347D10D-790F-4030-833B-633CFBF4218C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87C9AD17-33F8-4BFD-B353-D0E22FA1D455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87C9AD17-33F8-4BFD-B353-D0E22FA1D455}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87C9AD17-33F8-4BFD-B353-D0E22FA1D455}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87C9AD17-33F8-4BFD-B353-D0E22FA1D455}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C347D10D-790F-4030-833B-633CFBF4218C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C347D10D-790F-4030-833B-633CFBF4218C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C347D10D-790F-4030-833B-633CFBF4218C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C347D10D-790F-4030-833B-633CFBF4218C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{87C9AD17-33F8-4BFD-B353-D0E22FA1D455} = {830CFD0B-1D73-430B-950D-E8FBFFD3B41A}
+		{C347D10D-790F-4030-833B-633CFBF4218C} = {E718AFBB-6A8F-4AEF-BC2C-0F9E696BDA02}
+	EndGlobalSection
+EndGlobal

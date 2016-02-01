@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GladNet.Common">
+      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\GladNet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="GladNet.Serializer">
+      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\GladNet.Serializer.dll</HintPath>
+    </Reference>
     <Reference Include="Lidgren.Network, Version=2012.1.7.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Dependency Builds\Lidgren\DLLs\Lidgren.Network.dll</HintPath>
@@ -46,12 +52,6 @@
     <Compile Include="Extensions\NetworkMessageExt.cs" />
     <Compile Include="Network\NetEngine\LidgrenNetEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GladNet.Common\GladNet.Common.csproj">
-      <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
-      <Name>GladNet.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
