@@ -1,3 +1,6 @@
 [submodule "lib/GladNet2"]
 	path = lib/GladNet2
 	url = https://github.com/HelloKitty/GladNet2.0.git
+[submodule "lib/Net35Essentials"]
+	path = lib/Net35Essentials
+	url = https://github.com/HelloKitty/.Net3.5Essentials.git
