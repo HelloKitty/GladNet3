@@ -4,3 +4,7 @@
 [submodule "lib/Net35Essentials"]
 	path = lib/Net35Essentials
 	url = https://github.com/HelloKitty/.Net3.5Essentials.git
+[submodule "lib/LoggingServices"]
+	path = lib/LoggingServices
+	url = https://github.com/HelloKitty/.NetLoggingServices.git
+	branch = Net-3.5
