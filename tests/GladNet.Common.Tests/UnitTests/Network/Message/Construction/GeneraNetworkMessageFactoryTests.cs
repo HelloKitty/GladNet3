@@ -12,10 +12,10 @@ namespace GladNet.Common.Tests
 	public static class GeneraNetworklMessageFactoryTests
 	{
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public static void Test_Constructor_For_Factory_With_Null()
 		{
-			GeneralNetworkMessageFactory<NetworkMessage> factory = new GeneralNetworkMessageFactory<NetworkMessage>(null);
+			//assert
+			Assert.Throws<ArgumentNullException>(() => new GeneralNetworkMessageFactory<NetworkMessage>(null));
 		}
 
 		[Test]

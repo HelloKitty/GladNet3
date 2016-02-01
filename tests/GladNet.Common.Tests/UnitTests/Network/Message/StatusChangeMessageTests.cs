@@ -41,15 +41,14 @@ namespace GladNet.Common.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public static void Test_Null_Reciever()
 		{
 			//arrange
 			Mock<StatusChangePayload> payload = new Mock<StatusChangePayload>(MockBehavior.Strict);
 			StatusMessage message = new StatusMessage(payload.Object);
 
-			//act
-			message.Dispatch(null, null); //expect an exception
+			//assert
+			Assert.Throws<ArgumentNullException>(() => message.Dispatch(null, null)); //expect an exception
 		}
 	}
 }

@@ -176,7 +176,6 @@ namespace GladNet.Common.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public static void Test_Peer_TrySendMessage_WithNullPacket(
 			[EnumRange(typeof(OperationType))] OperationType opToTest,
 			[EnumRange(typeof(DeliveryMethod))] DeliveryMethod deliveryMethod)
@@ -187,14 +186,11 @@ namespace GladNet.Common.Tests
 			//Enable calling implemented methods
 			peer.CallBase = true;
 
-			//act
-			peer.Object.TrySendMessage(opToTest, null, deliveryMethod);
-
-			Assert.Fail("This test should fail with Exception of Type: ArguementNullException.");
+			//assert
+			Assert.Throws<ArgumentNullException>(() => peer.Object.TrySendMessage(opToTest, null, deliveryMethod));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public static void Test_Peer_TrySendMessageGeneric_WithNullPacket([EnumRangeAttribute(typeof(OperationType))] OperationType opToTest)
 		{
 			//arrange
@@ -203,10 +199,8 @@ namespace GladNet.Common.Tests
 			//Enable calling implemented methods
 			peer.CallBase = true;
 
-			//act
-			peer.Object.TrySendMessage<TestPayloadWithStaticParams>(opToTest, null); //Call with dynamic as the mocked type fits the generic constraints but we can't compile time prove it.
-
-			Assert.Fail("This test should fail with Exception of Type: ArguementNullException.");
+			//asert
+			Assert.Throws<ArgumentNullException>(() => peer.Object.TrySendMessage<TestPayloadWithStaticParams>(opToTest, null)); //Call with dynamic as the mocked type fits the generic constraints but we can't compile time prove it.
 		}
 
 		[Test]

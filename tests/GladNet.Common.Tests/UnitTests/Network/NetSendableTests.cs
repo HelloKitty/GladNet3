@@ -27,10 +27,9 @@ namespace GladNet.Common.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public static void Test_Construction_Null_TData()
 		{
-			NetSendable<PacketPayload> netSendablePayload = new NetSendable<PacketPayload>(null);
+			Assert.Throws<ArgumentNullException>(() => new NetSendable<PacketPayload>(null));
 		}
 
 		[Test]
@@ -180,7 +179,6 @@ namespace GladNet.Common.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public static void Test_Cant_Decrypt_In_States([EnumRange(typeof(NetSendableState), NetSendableState.Encrypted)] NetSendableState state)
 		{
 			//arrange
@@ -189,11 +187,9 @@ namespace GladNet.Common.Tests
 
 			ChangeDataStateProperty(netSendable, state);
 
-			//act
-			netSendable.Decrypt(Mock.Of<IDecryptor>());
-
 			//assert
 			//should throw
+			Assert.Throws<InvalidOperationException>(() => netSendable.Decrypt(Mock.Of<IDecryptor>()));
 		}
 
 		[Test]

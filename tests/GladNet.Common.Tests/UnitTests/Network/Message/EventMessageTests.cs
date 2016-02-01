@@ -39,11 +39,10 @@ namespace GladNet.Common.UnitTests
 
 
 		[Test]
-		[ExpectedException]
 		public static void Test_Construction_Null_Packet()
 		{
 			//act
-			new EventMessage(null);
+			Assert.Throws<ArgumentNullException>(() => new EventMessage(null));
 
 			//assert
 			//Exception should be thrown for null.
@@ -70,7 +69,6 @@ namespace GladNet.Common.UnitTests
 		}
 
 		[Test]
-		[ExpectedException]
 		public static void Test_Dispatch_Null_Receiver()
 		{
 			//arrange
@@ -78,15 +76,13 @@ namespace GladNet.Common.UnitTests
 			EventMessage message = new EventMessage(packet.Object);
 			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
 
-			//act
-			message.Dispatch(null, parameters.Object);
-
 			//assert
 			//Exception should be thrown for null.
+
+			Assert.Throws<ArgumentNullException>(() => message.Dispatch(null, parameters.Object));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public static void Test_Dispatch_Null_Parameters()
 		{
 			//arrange
@@ -98,11 +94,9 @@ namespace GladNet.Common.UnitTests
 			//Also rigs it up so that the two mocks above should be the values provided.
 			receiever.Setup((actual) => actual.OnNetworkMessageReceive(message, null));
 
-			//act
-			message.Dispatch(receiever.Object, null);
-
 			//assert
 			//Exception should be thrown for null.
+			Assert.Throws<ArgumentNullException>(() => message.Dispatch(receiever.Object, null));
 		}
 	}
 }
