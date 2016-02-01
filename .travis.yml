@@ -1,20 +1,20 @@
 language: csharp
 solution: ./GladNetV2.sln
-sudo: required
 
 install:
-  - sudo apt-get install nunit-console
-  - nuget restore ./GladNetV2.sln
+  - nuget install NUnit.Runners -Version 3.0.1 -OutputDirectory tests/testrunner
+  - nuget restore GladNetV2.sln
 
 before_script:
   - chmod +x ./lib/BuildDependencies.sh
   - chmod +x ./tests/RunTests.sh
+  - chmod +x ./Build.sh
 
 script:
   - cd "$TRAVIS_BUILD_DIR/lib"
   - ./BuildDependencies.sh
   - cd "$TRAVIS_BUILD_DIR"
-  - xbuild ./GladNetV2.sln
+  - ./Build.sh
   - cd "$TRAVIS_BUILD_DIR/tests"
   - ./RunTests.sh
   - cd "$TRAVIS_BUILD_DIR"

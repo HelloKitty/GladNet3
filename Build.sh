@@ -1,0 +1,1 @@
+xbuild ./GladNetV2.sln /p:DebugSymbols=False
