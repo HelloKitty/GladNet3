@@ -1,0 +1,3 @@
+[submodule "lib/GladNet2"]
+	path = lib/GladNet2
+	url = https://github.com/HelloKitty/GladNet2.0.git
