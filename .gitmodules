@@ -8,3 +8,7 @@
 	path = lib/LoggingServices
 	url = https://github.com/HelloKitty/.NetLoggingServices.git
 	branch = Net-3.5
+[submodule "lib/Lidgren"]
+	path = lib/Lidgren
+	url = https://github.com/HelloKitty/lidgren-network-gen3.git
+	branch = Unity
