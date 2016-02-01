@@ -6,6 +6,7 @@ xbuild ./Lidgren/Lidgren.Network.sln /p:Configuration=Release /p:Platform="Any C
 mkdir -p Dependency\ Builds/Lidgren/DLLs/
 rsync -avv ./Lidgren/Lidgren.Network/bin/Release/ Dependency\ Builds/Lidgren/DLLs/
 
+./GladNet2/lib/BuildDependencies.sh
 nuget restore ./GladNet2/GladNetV2.sln
 xbuild ./GladNet2/GladNetV2.sln /p:Configuration=Release /p:Platform="Any CPU"
 mkdir -p Dependency\ Builds/GladNet/DLLs/
