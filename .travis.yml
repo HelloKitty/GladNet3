@@ -1,6 +1,9 @@
 language: csharp
 solution: ./GladNet2.Lidgren.sln
 
+before_install:
+  - git submodule update --init --recursive
+
 install:
   - nuget install NUnit.Runners -Version 3.0.1 -OutputDirectory tests/testrunner
   - nuget restore GladNet2.Lidgren.sln
