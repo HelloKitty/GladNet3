@@ -22,17 +22,3 @@ C:\Users\Glader\Documents\GitHub\GladNet2.0\src\GladNet.Lidgren\bin\Debug\Net35E
 C:\Users\Glader\Documents\GitHub\GladNet2.0\src\GladNet.Lidgren\obj\Debug\GladNet.Lidgren.csprojResolveAssemblyReference.cache
 C:\Users\Glader\Documents\GitHub\GladNet2.0\src\GladNet.Lidgren\obj\Debug\GladNet.Lidgren.dll
 C:\Users\Glader\Documents\GitHub\GladNet2.0\src\GladNet.Lidgren\obj\Debug\GladNet.Lidgren.pdb
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\GladNet.Lidgren.dll
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\GladNet.Lidgren.pdb
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\GladNet.Common.dll
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\GladNet.Serializer.dll
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\Lidgren.Network.dll
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\Logging.Services.dll
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\Net35Essentials.dll
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\GladNet.Common.pdb
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\GladNet.Serializer.pdb
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\Lidgren.Network.pdb
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\Logging.Services.pdb
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\bin\Debug\Net35Essentials.pdb
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\obj\Debug\GladNet.Lidgren.dll
-C:\Users\Glader\Documents\GitHub\GladNet2-Lidgren\src\GladNet.Lidgren\obj\Debug\GladNet.Lidgren.pdb

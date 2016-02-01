@@ -8,7 +8,7 @@ rsync -avv ./Lidgren/Lidgren.Network/bin/Release/ Dependency\ Builds/Lidgren/DLL
 
 chmod +x ./GladNet2/lib/BuildDependencies.sh
 ./GladNet2/lib/BuildDependencies.sh
-nuget restore ./GladNet2/GladNetV2.sln
+nuget restore GladNet2/GladNetV2.sln
 
 xbuild ./GladNet2/GladNetV2.sln /p:Configuration=Release /p:Platform="Any CPU"
 mkdir -p Dependency\ Builds/GladNet/DLLs/
