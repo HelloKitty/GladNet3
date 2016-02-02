@@ -8,7 +8,7 @@ namespace GladNet.Common
 {
 	public static class ISerializeableExtensions
 	{
-		public static IEncryptable SerializeWith<TObjectType>(this TObjectType obj, ISerializer serializer)
+		public static IEncryptable SerializeWith<TObjectType>(this TObjectType obj, ISerializerStrategy serializer)
 			where TObjectType : ISerializable, IEncryptable
 		{
 			obj.Serialize(serializer);

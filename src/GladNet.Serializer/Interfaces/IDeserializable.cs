@@ -15,6 +15,6 @@ namespace GladNet.Serializer
 		/// </summary>
 		/// <param name="deserializer">Deserialization strategy.</param>
 		/// <returns>Indicates if the deserialization was successful.</returns>
-		bool Deserialize(IDeserializer deserializer);
+		bool Deserialize(IDeserializerStrategy deserializer);
 	}
 }

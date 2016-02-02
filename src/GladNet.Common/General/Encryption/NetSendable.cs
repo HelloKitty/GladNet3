@@ -144,7 +144,7 @@ namespace GladNet.Common
 		/// <param name="serializer">Serializer object for the serialization process.</param>
 		/// <exception cref="InvalidOperationException">Throws if the data is not in Default <see cref="State"/></exception>
 		/// <returns>Inidicates if serialization was successful</returns>
-		public bool Serialize(ISerializer serializer)
+		public bool Serialize(ISerializerStrategy serializer)
 		{
 			if (serializer == null)
 				throw new ArgumentNullException("serializer", "The serializer cannot be null.");
@@ -171,7 +171,7 @@ namespace GladNet.Common
 		/// <param name="deserializer">Deserializer object for the deserialization process.</param>
 		/// <exception cref="InvalidOperationException">Throws if the <see cref="State"/> isn't Serialized.</exception>
 		/// <returns>Indicates if deserialization was successful</returns>
-		public bool Deserialize(IDeserializer deserializer)
+		public bool Deserialize(IDeserializerStrategy deserializer)
 		{
 			if (deserializer == null)
 				throw new ArgumentNullException("deserializer", "The derserializer cannot be null.");

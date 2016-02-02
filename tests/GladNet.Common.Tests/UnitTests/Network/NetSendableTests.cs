@@ -59,7 +59,7 @@ namespace GladNet.Common.Tests
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
 			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(payload.Object);
-			Mock<ISerializer> serializer = new Mock<ISerializer>(MockBehavior.Strict);
+			Mock<ISerializerStrategy> serializer = new Mock<ISerializerStrategy>(MockBehavior.Strict);
 
 			//We setup the serializer so it returns an empty non-null array.
 			serializer.Setup(x => x.Serialize(It.IsAny<PacketPayload>()))
@@ -81,7 +81,7 @@ namespace GladNet.Common.Tests
 			//arrange
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
 			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(payload.Object);
-			Mock<IDeserializer> deserializer = new Mock<IDeserializer>(MockBehavior.Strict);
+			Mock<IDeserializerStrategy> deserializer = new Mock<IDeserializerStrategy>(MockBehavior.Strict);
 
 			ChangeDataStateProperty(netSendable, NetSendableState.Serialized);
 
@@ -161,7 +161,7 @@ namespace GladNet.Common.Tests
 
 			//assert
 			//Check explictly. Something else could have thrown.
-			Assert.That(() => netSendable.Deserialize(Mock.Of<IDeserializer>()), Throws.Exception.TypeOf<InvalidOperationException>());
+			Assert.That(() => netSendable.Deserialize(Mock.Of<IDeserializerStrategy>()), Throws.Exception.TypeOf<InvalidOperationException>());
 		}
 
 		[Test]
@@ -175,7 +175,7 @@ namespace GladNet.Common.Tests
 			ChangeDataStateProperty(netSendable, state);
 	
 			//Assert
-			Assert.That(() => netSendable.Serialize(Mock.Of<ISerializer>()), Throws.Exception.TypeOf<InvalidOperationException>());
+			Assert.That(() => netSendable.Serialize(Mock.Of<ISerializerStrategy>()), Throws.Exception.TypeOf<InvalidOperationException>());
 		}
 
 		[Test]
@@ -292,7 +292,7 @@ namespace GladNet.Common.Tests
 		{
 			//arrange
 			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(Mock.Of<PacketPayload>());
-			ISerializer serializer = SetupNullReturningSerializer().Object;
+			ISerializerStrategy serializer = SetupNullReturningSerializer().Object;
 			bool result;
 
 			//act
@@ -308,7 +308,7 @@ namespace GladNet.Common.Tests
 		{
 			//arrange
 			NetSendable<PacketPayload> netSendable = new NetSendable<PacketPayload>(Mock.Of<PacketPayload>());
-			IDeserializer deserializer = SetupNullReturningDeserializer().Object;
+			IDeserializerStrategy deserializer = SetupNullReturningDeserializer().Object;
 			bool result;
 			ChangeDataStateProperty(netSendable, NetSendableState.Serialized);
 
@@ -342,7 +342,7 @@ namespace GladNet.Common.Tests
 			//A quick assert that the references on the payload are the same.
 			Assert.AreEqual(copiedSendableBeforeSerialization.Data, sendable.Data);
 
-			sendable.Serialize(Mock.Of<ISerializer>()); //We call this to change state
+			sendable.Serialize(Mock.Of<ISerializerStrategy>()); //We call this to change state
 			NetSendable<PacketPayload> copiedSendable = sendable.ShallowClone();
 			
 			//assert
@@ -379,16 +379,16 @@ namespace GladNet.Common.Tests
 			return encryptor;
 		}
 
-		private static Mock<ISerializer> SetupNullReturningSerializer()
+		private static Mock<ISerializerStrategy> SetupNullReturningSerializer()
 		{
-			Mock<ISerializer> serializer = new Mock<ISerializer>(MockBehavior.Strict);
+			Mock<ISerializerStrategy> serializer = new Mock<ISerializerStrategy>(MockBehavior.Strict);
 			serializer.Setup(d => d.Serialize<PacketPayload>(It.IsAny<PacketPayload>())).Returns(default(byte[]));
 			return serializer;
 		}
 
-		private static Mock<IDeserializer> SetupNullReturningDeserializer()
+		private static Mock<IDeserializerStrategy> SetupNullReturningDeserializer()
 		{
-			Mock<IDeserializer> deserializer = new Mock<IDeserializer>(MockBehavior.Strict);
+			Mock<IDeserializerStrategy> deserializer = new Mock<IDeserializerStrategy>(MockBehavior.Strict);
 			deserializer.Setup(d => d.Deserialize<PacketPayload>(It.IsAny<byte[]>())).Returns(default(PacketPayload));
 			return deserializer;
 		}

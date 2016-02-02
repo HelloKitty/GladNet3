@@ -16,6 +16,6 @@ namespace GladNet.Serializer
 		/// </summary>
 		/// <param name="serializer">Serialization strategy.</param>
 		/// <returns>Indicates if the serialization was successful.</returns>
-		bool Serialize(ISerializer serializer);
+		bool Serialize(ISerializerStrategy serializer);
 	}
 }

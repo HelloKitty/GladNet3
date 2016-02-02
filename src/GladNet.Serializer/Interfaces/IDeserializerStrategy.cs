@@ -8,7 +8,7 @@ namespace GladNet.Serializer
 	/// <summary>
 	/// Implementer provides deserialization services.
 	/// </summary>
-	public interface IDeserializer
+	public interface IDeserializerStrategy
 	{
 		/// <summary>
 		/// Deserializes the potential <typeparamref name="TData"/> instance represented by the <see cref="byte"/>[].
