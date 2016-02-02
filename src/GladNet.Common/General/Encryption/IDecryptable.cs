@@ -5,6 +5,9 @@ using System.Text;
 
 namespace GladNet.Common
 {
+	/// <summary>
+	/// Implementer is an object that can be decrypted.
+	/// </summary>
 	public interface IDecryptable
 	{
 		/// <summary>

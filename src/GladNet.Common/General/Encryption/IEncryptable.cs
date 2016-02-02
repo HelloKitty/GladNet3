@@ -7,7 +7,7 @@ using System.Text;
 namespace GladNet.Common
 {
 	/// <summary>
-	/// Contract that guarantees the implemting type can be encrypted and decrypted.
+	/// Implementer is an object that can be encrypted.
 	/// </summary>
 	public interface IEncryptable
 	{
