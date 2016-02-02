@@ -1,11 +1,12 @@
-﻿using System;
+﻿using GladNet.Common;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
 
-namespace GladNet.Common
+namespace GladNet.Server.Common
 {
 	/// <summary>
 	/// Contract that guarantees implementing types provide general network message sending functionality.
