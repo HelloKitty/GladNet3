@@ -34,6 +34,18 @@ namespace GladNet.Server.Common
 		{
 			return TrySendMessage(OperationType.Event, payload, deliveryMethod, encrypt, channel);
 		}
+
+		public SendResult SendEvent<TPacketType>(OperationType opType, TPacketType payload) 
+			where TPacketType : PacketPayload, IStaticPayloadParameters
+		{
+			return TrySendMessage<TPacketType>(OperationType.Event, payload);
+		}
+
+		public SendResult SendResponse<TPacketType>(OperationType opType, TPacketType payload) 
+			where TPacketType : PacketPayload, IStaticPayloadParameters
+		{
+			return TrySendMessage<TPacketType>(OperationType.Response, payload);
+		}
 		#endregion
 
 		protected sealed override void OnReceiveResponse(IResponseMessage message, IMessageParameters parameters)
