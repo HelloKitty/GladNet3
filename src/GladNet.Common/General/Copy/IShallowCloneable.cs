@@ -11,6 +11,10 @@ namespace GladNet.Common
 	/// </summary>
 	public interface IShallowCloneable
 	{
+		/// <summary>
+		/// Creates a shallow copied instance of an object.
+		/// </summary>
+		/// <returns>Returns a non-null shallow copied instance of an object.</returns>
 		object ShallowClone();
 	}
 
@@ -21,7 +25,12 @@ namespace GladNet.Common
 	/// <typeparam name="TObjectType">Type copying.</typeparam>
 	public interface IShallowCloneable<out TObjectType> : IShallowCloneable
 	{
-		//Hiding is intended
+
+		/// <summary>
+		/// Creates a shallow copied instance of an object.
+		/// </summary>
+		/// <returns>Returns a non-null shallow copied instance of an object.</returns>
+		/// Hiding is intended
 		new TObjectType ShallowClone();
 	}
 }

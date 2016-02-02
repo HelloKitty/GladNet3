@@ -11,6 +11,10 @@ namespace GladNet.Common
 	/// </summary>
 	public interface IDeepCloneable
 	{
+		/// <summary>
+		/// Creates a deep copied instance of an object.
+		/// </summary>
+		/// <returns>Returns a non-null deep copied instance of an object.</returns>
 		object DeepClone();
 	}
 
@@ -21,6 +25,10 @@ namespace GladNet.Common
 	/// <typeparam name="TObjectType">Type copying.</typeparam>
 	public interface IDeepCloneable<out TObjectType> : IDeepCloneable
 	{
+		/// <summary>
+		/// Creates a deep copied instance of an object.
+		/// </summary>
+		/// <returns>Returns a non-null deep copied instance of an object.</returns>
 		//Hiding is intended
 		new TObjectType DeepClone();
 	}
