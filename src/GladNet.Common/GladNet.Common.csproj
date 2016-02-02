@@ -52,7 +52,8 @@
     <Compile Include="General\Extensions\Encryption\IDecryptableExtensions.cs" />
     <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryExtensions.cs" />
     <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryProviderExtensions.cs" />
-    <Compile Include="General\Extensions\OperationTypeExtensions.cs" />
+    <Compile Include="General\Extensions\Parameters\IStaticPayloadParametersExtensions.cs" />
+    <Compile Include="General\Extensions\Parameters\OperationTypeExtensions.cs" />
     <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryRegisterExtensions.cs" />
     <Compile Include="General\Extensions\Serialization\ISerializeableExtensions.cs" />
     <Compile Include="General\Logging\IClassLogger.cs" />
@@ -80,7 +81,6 @@
     <Compile Include="Network\Parameters\IStaticPayloadParameters.cs" />
     <Compile Include="Network\Parameters\OperationType.cs" />
     <Compile Include="Network\Message\SendResult.cs" />
-    <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
     <Compile Include="Network\NetStatus.cs" />
     <Compile Include="Payload\Concrete Payloads\StatusChangePayload.cs" />

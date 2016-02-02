@@ -18,10 +18,10 @@ namespace GladNet.Common.Tests
 			[EnumRange(typeof(DeliveryMethod))] DeliveryMethod method)
 		{
 			//Should throw if it's null
-			Assert.That(() => ((IStaticPayloadParameters)null).VerifyExt(Mock.Of<IMessageParameters>()) , Throws.TypeOf<ArgumentNullException>());
-			Assert.That(() => ((IStaticPayloadParameters)Mock.Of<IStaticPayloadParameters>()).VerifyExt(null), Throws.TypeOf<ArgumentNullException>());
+			Assert.That(() => ((IStaticPayloadParameters)null).Verify(Mock.Of<IMessageParameters>()) , Throws.TypeOf<ArgumentNullException>());
+			Assert.That(() => ((IStaticPayloadParameters)Mock.Of<IStaticPayloadParameters>()).Verify(null), Throws.TypeOf<ArgumentNullException>());
 
-			Assert.That(() => ((IStaticPayloadParameters)null).VerifyExt(encrypt, channel, method), Throws.TypeOf<ArgumentNullException>());
+			Assert.That(() => ((IStaticPayloadParameters)null).Verify(encrypt, channel, method), Throws.TypeOf<ArgumentNullException>());
 		}
 
 		[Test]
@@ -43,11 +43,11 @@ namespace GladNet.Common.Tests
 			}
 
 			//assert
-			Assert.True(parameters.Object.VerifyExt(expectedParameters.Object));
-			Assert.True(parameters.Object.VerifyExt(expectedParameters.Object.Encrypted, expectedParameters.Object.Channel, expectedParameters.Object.DeliveryMethod));
+			Assert.True(parameters.Object.Verify(expectedParameters.Object));
+			Assert.True(parameters.Object.Verify(expectedParameters.Object.Encrypted, expectedParameters.Object.Channel, expectedParameters.Object.DeliveryMethod));
 
 			//Test that it doesn't return true if they differ
-			Assert.False(parameters.Object.VerifyExt(!(expectedParameters.Object.Encrypted),(byte)(expectedParameters.Object.Channel + 1), expectedParameters.Object.DeliveryMethod + 1));
+			Assert.False(parameters.Object.Verify(!(expectedParameters.Object.Encrypted),(byte)(expectedParameters.Object.Channel + 1), expectedParameters.Object.DeliveryMethod + 1));
 		}
 	}
 }

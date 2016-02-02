@@ -15,7 +15,7 @@ namespace GladNet.Common.Tests
 	{
 		public class TestPayloadWithStaticParams : PacketPayload, IStaticPayloadParameters
 		{
-			public bool VerifyAgainst(IMessageParameters parameters)
+			/*public bool VerifyAgainst(IMessageParameters parameters)
 			{
 				return true;
 			}
@@ -23,7 +23,7 @@ namespace GladNet.Common.Tests
 			public bool VerifyAgainst(bool encrypt, byte channel, DeliveryMethod method)
 			{
 				return true;
-			}
+			}*/
 
 			public bool Encrypted
 			{
