@@ -72,7 +72,7 @@
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
     <Compile Include="Network\Parameters\DeliveryMethod.cs" />
     <Compile Include="Network\Parameters\IMessageParameters.cs" />
-    <Compile Include="Network\Message\INetworkMessageReceiver.cs" />
+    <Compile Include="Network\Message\Recievers\INetworkMessageReceiver.cs" />
     <Compile Include="Network\Message\ConcreteMessages\NetworkMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\INetworkMessageFactoryProvider.cs" />
     <Compile Include="Network\Message\Network Senders\DispatchMessage.cs" />
