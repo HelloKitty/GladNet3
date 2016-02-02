@@ -7,11 +7,11 @@ namespace GladNet.Common
 {
 	public class DispatchMessage : IMessageParameters
 	{
-		private readonly NetworkMessage _Message;
+		private readonly NetworkMessage message;
 
 		public NetworkMessage Message
 		{
-			get { return _Message; }
+			get { return message; }
 		}
 
 		public DeliveryMethod DeliveryMethod { get; private set; }
@@ -25,7 +25,7 @@ namespace GladNet.Common
 
 		public DispatchMessage(NetworkMessage mess, DeliveryMethod deliveryMethod, bool encrypt, byte channel)
 		{
-			_Message = mess;
+			message = mess;
 			DeliveryMethod = deliveryMethod;
 			Encrypted = encrypt;
 			Channel = channel;
