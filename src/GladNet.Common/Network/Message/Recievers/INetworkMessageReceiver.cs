@@ -18,7 +18,6 @@ namespace GladNet.Common
 		/// <param name="parameters">The message parameters the message was sent with.</param>
 		void OnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters);
 
-
 		/// <summary>
 		/// Interface method overload for receiving a <see cref="IResponseMessage"/>.
 		/// </summary>
@@ -35,9 +34,9 @@ namespace GladNet.Common
 		void OnNetworkMessageReceive(IEventMessage message, IMessageParameters parameters);
 
 		/// <summary>
-		/// Dispatchable method that handles <see cref="NetStatus"/> changes.
+		/// Dispatchable method that handles <see cref="IStatusMessage"/> changes.
 		/// </summary>
 		/// <param name="status"></param>
-		void OnStatusChanged(NetStatus status);
+		void OnStatusChanged(IStatusMessage status, IMessageParameters parameters);
 	}
 }

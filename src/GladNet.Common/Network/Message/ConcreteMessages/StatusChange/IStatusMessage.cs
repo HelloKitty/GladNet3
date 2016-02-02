@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GladNet.Common
 {
-	public interface IStatusMessage
+	public interface IStatusMessage : INetworkMessage
 	{
 		NetStatus Status { get; }
 	}

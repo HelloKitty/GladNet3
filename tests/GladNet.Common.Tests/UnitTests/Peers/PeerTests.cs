@@ -48,7 +48,7 @@ namespace GladNet.Common.Tests
 			//TODO: When it's finished add test
 		}
 
-		[Test]
+		/*[Test]
 		public static void Test_Request_Receive_Method()
 		{
 			//arrange
@@ -127,11 +127,11 @@ namespace GladNet.Common.Tests
 			INetworkMessageReceiver receiver = peer.Object;
 
 			//act
-			receiver.OnStatusChanged(status);
+			receiver.OnStatusChanged(new StatusMessage(new StatusChangePayload(status)), null);
 
 			//assert
 			peer.Protected().Verify("OnStatusChanged", Times.Once(), status);
-		}
+		}*/
 
 		[Test]
 		public static void Test_Peer_TrySendMessage_Methods(
@@ -203,47 +203,6 @@ namespace GladNet.Common.Tests
 			Assert.Throws<ArgumentNullException>(() => peer.Object.TrySendMessage<TestPayloadWithStaticParams>(opToTest, null)); //Call with dynamic as the mocked type fits the generic constraints but we can't compile time prove it.
 		}
 
-		[Test]
-		public static void Test_Peer_Recieve_Emulation_Methods_WithFalse()
-		{
-			//arrange
-			Mock<Peer> peer = CreatePeerMock();
-			peer.CallBase = true;
-
-
-			//assert
-			//All emulation methods should throw.
-			Assert.That(() => peer.Object.EmulateOnStatusChanged(NetStatus.Connected), Throws.TypeOf<InvalidOperationException>());
-
-			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>()), 
-				Throws.TypeOf<InvalidOperationException>());
-
-			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>()), 
-				Throws.TypeOf<InvalidOperationException>());
-
-			Assert.That(() => peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>()), 
-				Throws.TypeOf<InvalidOperationException>());
-		}
-
-		[Test]
-		public static void Test_Peer_Recieve_Emulation_Methods_WithTrue()
-		{
-			//arrange
-			Mock<Peer> peer = CreatePeerMock();
-
-			peer.CallBase = true;
-			peer.Object.AllowReceiverEmulation = true;
-
-
-			//assert (shouldn't throw)
-			//Don't remove the asserts. It's best practice to Assert throwing nothing so that potential
-			peer.Object.EmulateOnStatusChanged(NetStatus.Connected);
-			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IEventMessage>(), Mock.Of<IMessageParameters>());
-			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IResponseMessage>(), Mock.Of<IMessageParameters>());
-			peer.Object.EmulateOnNetworkMessageReceive(Mock.Of<IRequestMessage>(), Mock.Of<IMessageParameters>());
-
-			Assert.Pass("Enumation methods didn't throw when emulation was enabled. Passes specification.");
-		}
 		private static Mock<Peer> CreatePeerMock()
 		{
 			return new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>());

@@ -11,10 +11,15 @@ namespace GladNet.Server.Common
 {
 	public abstract class ClientPeer : Peer, IClientNetworkMessageSender
 	{
-		public ClientPeer(ILogger logger, INetworkMessageSender sender, IConnectionDetails details)
+		public ClientPeer(ILogger logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService netMessageSubService)
 			: base(logger, sender, details)
 		{
+			if (netMessageSubService == null)
+				throw new ArgumentNullException(nameof(netMessageSubService), "Cannot create a peer with a null net message sub service. That would mean it cannot recieve messages.");
 
+			//Subscribe to request messages
+			netMessageSubService.SubscribeTo<RequestMessage>()
+				.With(OnReceiveRequest);
 		}
 
 		public override bool CanSend(OperationType opType)
@@ -48,26 +53,6 @@ namespace GladNet.Server.Common
 		}
 		#endregion
 
-		protected sealed override void OnReceiveResponse(IResponseMessage message, IMessageParameters parameters)
-		{
-			//ClientPeers don't handle events. They send them.
-			//If this is occuring in live production it is the result of likely packet forging.
-
-			//TODO: Logging.
-			//We call a virtual to let users do additional things if they'd like to override
-			OnInvalidOperationRecieved(message.GetType(), parameters, message as PacketPayload);
-		}
-
-		protected sealed override void OnReceiveEvent(IEventMessage message, IMessageParameters parameters)
-		{
-			//ClientPeers don't handle events. They send them.
-			//If this is occuring in live production it is the result of likely packet forging.
-
-			//TODO: Logging.
-			//We call a virtual to let users do additional things if they'd like to override
-			OnInvalidOperationRecieved(message.GetType(), parameters, message as PacketPayload);
-		}
-
 		protected virtual void OnInvalidOperationRecieved(Type packetType, IMessageParameters parameters, PacketPayload payload)
 		{
 			//Don't do anything here. We'll let inheritors do something extra by overriding this
@@ -79,7 +64,7 @@ namespace GladNet.Server.Common
 		}
 
 		#region Message Receivers
-		protected abstract override void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
+		protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
 		#endregion
 
 		protected override void OnStatusChanged(NetStatus status)

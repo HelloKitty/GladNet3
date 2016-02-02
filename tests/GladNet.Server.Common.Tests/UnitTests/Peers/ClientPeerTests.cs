@@ -33,7 +33,7 @@ namespace GladNet.Server.Common.UnitTests
 
 		private static Mock<ClientPeer> CreateClientPeerMock()
 		{
-			return new Mock<ClientPeer>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>());
+			return new Mock<ClientPeer>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
 		}
 	}
 }

@@ -52,6 +52,7 @@
     <Compile Include="General\Extensions\Encryption\IDecryptableExtensions.cs" />
     <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryExtensions.cs" />
     <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryProviderExtensions.cs" />
+    <Compile Include="General\Extensions\Message\Recievers\INetworkMessageSubcriptionServiceFluentExtensions.cs" />
     <Compile Include="General\Extensions\Parameters\IStaticPayloadParametersExtensions.cs" />
     <Compile Include="General\Extensions\Parameters\OperationTypeExtensions.cs" />
     <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryRegisterExtensions.cs" />
@@ -70,6 +71,12 @@
     <Compile Include="Network\Message\ConcreteMessages\Event\EventMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\IStatusMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
+    <Compile Include="Network\Message\Recievers\INetworkMessagePublisher.cs" />
+    <Compile Include="Network\Message\Recievers\INetworkMessageSubscriptionService.cs" />
+    <Compile Include="Network\Message\Recievers\INetworkMessageSubcriptionBuilder.cs" />
+    <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
+    <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
+    <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionBuilder.cs" />
     <Compile Include="Network\Parameters\DeliveryMethod.cs" />
     <Compile Include="Network\Parameters\IMessageParameters.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageReceiver.cs" />

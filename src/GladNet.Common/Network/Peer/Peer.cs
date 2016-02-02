@@ -8,7 +8,7 @@ using System.Text;
 
 namespace GladNet.Common
 {
-	public abstract class Peer : INetPeer, INetworkMessageReceiver, IClassLogger
+	public abstract class Peer : INetPeer, IClassLogger
 	{
 		private readonly INetworkMessageSender netMessageSender;
 
@@ -60,7 +60,7 @@ namespace GladNet.Common
 		}
 		#endregion
 
-		#region Message Receivers
+		/*
 		[SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
 		void INetworkMessageReceiver.OnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
 		{
@@ -80,14 +80,15 @@ namespace GladNet.Common
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
-		void INetworkMessageReceiver.OnStatusChanged(NetStatus status)
+		void INetworkMessageReceiver.OnStatusChanged(IStatusMessage status, IMessageParameters parameters)
 		{
-			OnStatusChanged(status);
-		}
+			//throw new NotImplementedException();
+			OnStatusChanged(status.Status);
+		}*/
 
 		//To stay in line with MS recommendation on explict implementions of interfaces we MUST provide a public callable replacement for INetworkMessageReciever.
 		//Refer to this: https://msdn.microsoft.com/en-us/library/ms182153.aspx for more information.
-		public void EmulateOnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
+		/*public void EmulateOnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
 		{
 			if (!AllowReceiverEmulation)
 				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
@@ -117,13 +118,12 @@ namespace GladNet.Common
 				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
 
 			OnStatusChanged(status);
-		}
+		}*/
 
-		protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
+		/*protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
 		protected abstract void OnReceiveResponse(IResponseMessage message, IMessageParameters parameters);
-		protected abstract void OnReceiveEvent(IEventMessage message, IMessageParameters parameters);
+		protected abstract void OnReceiveEvent(IEventMessage message, IMessageParameters parameters);*/
 		protected abstract void OnStatusChanged(NetStatus status);
-		#endregion
 
 		public virtual bool CanSend(OperationType opType)
 		{
