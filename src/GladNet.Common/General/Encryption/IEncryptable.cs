@@ -17,6 +17,6 @@ namespace GladNet.Common
 		/// <param name="encryptor">The encryptor object that handles the specifics of encryption.</param>
 		/// <exception cref="CryptographicException">Throws if encryption fails.</exception>
 		/// <returns>Indicates if encryption was successful.</returns>
-		bool Encrypt(IEncryptor encryptor);
+		bool Encrypt(IEncryptorStrategy encryptor);
 	}
 }

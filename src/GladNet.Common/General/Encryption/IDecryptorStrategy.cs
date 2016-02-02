@@ -9,8 +9,9 @@ namespace GladNet.Common
 	/// <summary>
 	/// Creates a contract that an implementing type is capable of decrypting a <see cref="byte[]"/>
 	/// No promise is made that the implementing type can decrypt data encrypted by any algorithm.
+	/// Implementer is a decryption strategy.
 	/// </summary>
-	public interface IDecryptor
+	public interface IDecryptorStrategy
 	{
 		/// <summary>
 		/// Decrypts a <see cref="byte[]"/> that is encrypted if possible.

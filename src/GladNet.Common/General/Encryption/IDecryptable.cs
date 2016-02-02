@@ -13,6 +13,6 @@ namespace GladNet.Common
 		/// <param name="decryptor">The decryptor object that handles the specifics of encryption.</param>
 		/// <exception cref="CryptographicException">Throws if decryption fails.</exception>
 		/// <returns>Indicates if decryption was successful.</returns>
-		bool Decrypt(IDecryptor decryptor);
+		bool Decrypt(IDecryptorStrategy decryptor);
 	}
 }

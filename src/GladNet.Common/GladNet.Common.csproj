@@ -88,9 +88,9 @@
     <Compile Include="Network\Peer\INetPeer.cs" />
     <Compile Include="Network\Peer\Peer.cs" />
     <Compile Include="General\Encryption\IDecryptable.cs" />
-    <Compile Include="General\Encryption\IDecryptor.cs" />
+    <Compile Include="General\Encryption\IDecryptorStrategy.cs" />
     <Compile Include="General\Encryption\IEncryptable.cs" />
-    <Compile Include="General\Encryption\IEncryptor.cs" />
+    <Compile Include="General\Encryption\IEncryptorStrategy.cs" />
     <Compile Include="General\Encryption\NetSendable.cs" />
     <Compile Include="Payload\PacketPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,8 +8,9 @@ namespace GladNet.Common
 {
 	/// <summary>
 	/// Creates a contract that an implementing type is capable of encrypting a <see cref="byte[]"/>
+	/// Implementer is an encryption strategy.
 	/// </summary>
-	public interface IEncryptor
+	public interface IEncryptorStrategy
 	{
 		/// <summary>
 		/// Encrypts a <see cref="byte[]"/>.

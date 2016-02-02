@@ -8,7 +8,7 @@ namespace GladNet.Common
 {
 	public static class IDecryptableExtensions
 	{
-		public static IDeserializable DecryptWith<TObjectType>(this TObjectType obj, IDecryptor decryptor)
+		public static IDeserializable DecryptWith<TObjectType>(this TObjectType obj, IDecryptorStrategy decryptor)
 			where TObjectType : IDecryptable, IDeserializable
 		{
 			obj.Decrypt(decryptor);

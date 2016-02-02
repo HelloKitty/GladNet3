@@ -79,7 +79,7 @@ namespace GladNet.Common
 		/// <param name="encryptor">Object responsible for the encryption.</param>
 		/// <exception cref="InvalidOperationException">Throws when the <see cref="NetSendable"/> is not in a Serialized <see cref="NetSendableState"/></exception>
 		/// <returns>Indicates if encryption was successful</returns>
-		public bool Encrypt(IEncryptor encryptor)
+		public bool Encrypt(IEncryptorStrategy encryptor)
 		{
 			if (encryptor == null)
 				throw new ArgumentNullException("encryptor", "The encryptor cannot be null.");
@@ -111,7 +111,7 @@ namespace GladNet.Common
 		/// <exception cref="InvalidOperationException">Throws when the <see cref="NetSendable"/> is not in a Encrypted <see cref="NetSendableState"/>
 		/// or if the internal byte representation is null..</exception>
 		/// <returns>Indicates if decryption was successful.</returns>
-		public bool Decrypt(IDecryptor decryptor)
+		public bool Decrypt(IDecryptorStrategy decryptor)
 		{
 
 			if (decryptor == null)
