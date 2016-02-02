@@ -7,6 +7,9 @@ using System.Text;
 
 namespace GladNet.Common
 {
+	/// <summary>
+	/// Contract that guarantees implementing types offer some network message sending functionality.
+	/// </summary>
 	public interface INetworkMessageSender
 	{
 		/// <summary>
