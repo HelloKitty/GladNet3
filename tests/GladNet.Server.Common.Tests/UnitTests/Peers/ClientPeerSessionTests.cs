@@ -72,6 +72,49 @@ namespace GladNet.Server.Common.UnitTests
 			subService.Verify(x => x.SubscribeToRequests(It.IsAny<OnNetworkRequestMessage>()), Times.Once());
         }
 
+
+		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ClientPeerSession))]
+		public static void Test_SendResposne_Calls_Send_Response_On_NetSend_Service()
+		{
+			//arrange
+			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			PacketPayload payload = Mock.Of<PacketPayload>();
+
+			//set it up to indicate we can send
+			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
+				.Returns(true);
+
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			peer.CallBase = true;
+
+			//act
+			peer.Object.SendResponse(payload, DeliveryMethod.ReliableOrdered, true, 5);
+
+			//assert
+			sendService.Verify(x => x.TrySendMessage(OperationType.Response, payload, DeliveryMethod.ReliableOrdered, true, 5), Times.Once());
+		}
+
+		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ClientPeerSession))]
+		public static void Test_SendResposne_Calls_Send_Event_On_NetSend_Service()
+		{
+			//arrange
+			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			PacketPayload payload = Mock.Of<PacketPayload>();
+
+			//set it up to indicate we can send
+			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
+				.Returns(true);
+
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			peer.CallBase = true;
+
+			//act
+			peer.Object.SendEvent(payload, DeliveryMethod.ReliableOrdered, true, 5);
+
+			//assert
+			sendService.Verify(x => x.TrySendMessage(OperationType.Event, payload, DeliveryMethod.ReliableOrdered, true, 5), Times.Once());
+		}
+
 		private static Mock<ClientPeerSession> CreateClientPeerMock()
 		{
 			return new Mock<ClientPeerSession>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
