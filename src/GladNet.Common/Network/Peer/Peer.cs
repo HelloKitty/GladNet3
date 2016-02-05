@@ -17,15 +17,14 @@ namespace GladNet.Common
 		/// </summary>
 		public IConnectionDetails PeerDetails { get; private set; }
 
-		/// <summary>
-		/// Enables or disables emulation methods for recieving.
-		/// </summary>
-		public bool AllowReceiverEmulation { get; set; }
-
 		public ILogger Logger { get; private set; }
 
 		protected Peer(ILogger logger, INetworkMessageSender messageSender, IConnectionDetails details)
 		{
+			logger.ThrowIfNull(nameof(logger));
+			messageSender.ThrowIfNull(nameof(messageSender));
+			details.ThrowIfNull(nameof(details));
+
 			PeerDetails = details;
 			netMessageSender = messageSender;
 			Logger = logger;
@@ -40,8 +39,7 @@ namespace GladNet.Common
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public virtual SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			if (payload == null)
-				throw new ArgumentNullException("payload", "Payload found null in: " + this.GetType() + " in TrySendMessage no params");
+			payload.ThrowIfNull(nameof(payload));
 
 			//TODO: Implement logging.
 			if (!CanSend(opType))
@@ -53,76 +51,12 @@ namespace GladNet.Common
 		//This is non-virtual because it should mirror non-generic methods functionality. It makes no sense to change them individually.
 		public SendResult TrySendMessage<TPacketType>(OperationType opType, TPacketType payload) where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
-			if (payload == null)
-				throw new ArgumentNullException("payload", "Payload found null in: " + this.GetType() + " in TrySendMessage no params");
+			payload.ThrowIfNull(nameof(payload));
 
 			return TrySendMessage(opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel);
 		}
 		#endregion
 
-		/*
-		[SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
-		void INetworkMessageReceiver.OnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
-		{
-			OnReceiveRequest(message, parameters);
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
-		void INetworkMessageReceiver.OnNetworkMessageReceive(IResponseMessage message, IMessageParameters parameters)
-		{
-			OnReceiveResponse(message, parameters);
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
-		void INetworkMessageReceiver.OnNetworkMessageReceive(IEventMessage message, IMessageParameters parameters)
-		{
-			OnReceiveEvent(message, parameters);
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
-		void INetworkMessageReceiver.OnStatusChanged(IStatusMessage status, IMessageParameters parameters)
-		{
-			//throw new NotImplementedException();
-			OnStatusChanged(status.Status);
-		}*/
-
-		//To stay in line with MS recommendation on explict implementions of interfaces we MUST provide a public callable replacement for INetworkMessageReciever.
-		//Refer to this: https://msdn.microsoft.com/en-us/library/ms182153.aspx for more information.
-		/*public void EmulateOnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
-		{
-			if (!AllowReceiverEmulation)
-				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
-
-			OnReceiveRequest(message, parameters);
-		}
-
-		public void EmulateOnNetworkMessageReceive(IResponseMessage message, IMessageParameters parameters)
-		{
-			if (!AllowReceiverEmulation)
-				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
-
-			OnReceiveResponse(message, parameters);
-		}
-
-		public void EmulateOnNetworkMessageReceive(IEventMessage message, IMessageParameters parameters)
-		{
-			if (!AllowReceiverEmulation)
-				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
-
-			OnReceiveEvent(message, parameters);
-		}
-
-		public void EmulateOnStatusChanged(NetStatus status)
-		{
-			if (!AllowReceiverEmulation)
-				throw new InvalidOperationException("Unable to emulate network receive method. Emulation must be explicitly enabled.");
-
-			OnStatusChanged(status);
-		}*/
-
-		/*protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
-		protected abstract void OnReceiveResponse(IResponseMessage message, IMessageParameters parameters);
-		protected abstract void OnReceiveEvent(IEventMessage message, IMessageParameters parameters);*/
 		protected abstract void OnStatusChanged(NetStatus status);
 
 		public virtual bool CanSend(OperationType opType)

@@ -58,14 +58,7 @@ namespace GladNet.Server.Common
 			//Don't do anything here. We'll let inheritors do something extra by overriding this
 		}
 
-		public override SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			return base.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel);
-		}
-
-		#region Message Receivers
 		protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
-		#endregion
 
 		protected override void OnStatusChanged(NetStatus status)
 		{
