@@ -11,7 +11,7 @@ namespace GladNet.Server.Common
 	/// <summary>
 	/// Contracts implementing types to offer specific/supported network message types such as; Response and Event.
 	/// </summary>
-	public interface IClientNetworkMessageSender
+	public interface IClientSessionNetworkMessageSender
 	{
 		/// <summary>
 		/// Sends a networked response.

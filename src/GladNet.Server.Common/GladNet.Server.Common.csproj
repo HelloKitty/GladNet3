@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Network\Message\Senders\IClientMessageSender.cs" />
     <Compile Include="Network\Peer\ClientPeerSession.cs" />
+    <Compile Include="Network\Peer\ServerPeerSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

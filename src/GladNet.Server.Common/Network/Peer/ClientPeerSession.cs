@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GladNet.Server.Common
 {
-	public abstract class ClientPeerSession : Peer, IClientNetworkMessageSender
+	public abstract class ClientPeerSession : Peer, IClientSessionNetworkMessageSender
 	{
 		public ClientPeerSession(ILogger logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService netMessageSubService)
 			: base(logger, sender, details)
