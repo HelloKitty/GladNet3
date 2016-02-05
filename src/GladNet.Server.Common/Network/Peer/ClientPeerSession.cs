@@ -21,10 +21,15 @@ namespace GladNet.Server.Common
 				.With(OnReceiveRequest);
 
 			//Subscribes to status changes
-			netMessageSubService.SubscribeTo<IStatusMessage>()
+			netMessageSubService.SubscribeTo<StatusMessage>()
 				.With(OnReceiveStatus);
 		}
 
+		/// <summary>
+		/// Indicates if a <see cref="Peer"/> can send the given <paramref name="opType"/>.
+		/// </summary>
+		/// <param name="opType"><see cref="OperationType"/> to check.</param>
+		/// <returns>True if the <see cref="Peer"/> can send the given <see cref="OperationType"/>.</returns>
 		public override bool CanSend(OperationType opType)
 		{
 			//Returns true if the opType matches ClientPeerSession opTypes AND the sender service can send the opType too.
@@ -97,6 +102,11 @@ namespace GladNet.Server.Common
 		}
 		#endregion
 
+		/// <summary>
+		/// Called internally when a request is recieved from the remote peer.
+		/// </summary>
+		/// <param name="message"><see cref="IRequestMessage"/> sent by the peer.</param>
+		/// <param name="parameters">Parameters the message was sent with.</param>
 		protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
 
 		protected virtual void OnStatusChanged(NetStatus status)
