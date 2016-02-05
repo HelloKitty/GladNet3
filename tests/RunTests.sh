@@ -1,1 +1,1 @@
-mono ./testrunner/NUnit.Console.3.0.1/tools/nunit3-console.exe ./GladNet2.Serialization.Protobuf.Tests/bin/Debug/GladNet2.Serialization.Protobuf.Tests.dll
+mono ./testrunner/NUnit.Console.3.0.1/tools/nunit3-console.exe ./GladNet.Serializer.Protobuf.Tests/bin/Debug/GladNet.Serializer.Protobuf.Tests.dll

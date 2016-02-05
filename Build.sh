@@ -1,1 +1,1 @@
-xbuild ./GladNet2.Serialization.Protobuf.sln /p:DebugSymbols=False
+xbuild ./GladNet.Serializer.Protobuf.sln /p:DebugSymbols=False

@@ -1,12 +1,12 @@
 language: csharp
-solution: ./GladNet2.Serialization.Protobuf.sln
+solution: ./GladNet.Serializer.Protobuf.sln
 
 before_install:
   - git submodule update --init --recursive
 
 install:
   - nuget install NUnit.Runners -Version 3.0.1 -OutputDirectory tests/testrunner
-  - nuget restore GladNet2.Serialization.Protobuf.sln
+  - nuget restore GladNet.Serializer.Protobuf.sln
 
 before_script:
   - chmod +x ./lib/BuildDependencies.sh
