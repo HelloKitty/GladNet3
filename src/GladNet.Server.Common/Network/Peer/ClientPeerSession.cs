@@ -11,18 +11,14 @@ namespace GladNet.Server.Common
 {
 	public abstract class ClientPeerSession : Peer, IClientSessionNetworkMessageSender
 	{
-		public ClientPeerSession(ILogger logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService netMessageSubService)
-			: base(logger, sender, details)
+		public ClientPeerSession(ILogger logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService subService)
+			: base(logger, sender, details, subService)
 		{
-			netMessageSubService.ThrowIfNull(nameof(netMessageSubService));
+			subService.ThrowIfNull(nameof(subService));
 
 			//Subscribe to request messages
-			netMessageSubService.SubscribeTo<RequestMessage>()
+			subService.SubscribeTo<RequestMessage>()
 				.With(OnReceiveRequest);
-
-			//Subscribes to status changes
-			netMessageSubService.SubscribeTo<StatusMessage>()
-				.With(OnReceiveStatus);
 		}
 
 		/// <summary>
@@ -74,7 +70,6 @@ namespace GladNet.Server.Common
 		/// Additionally this message/payloadtype is known to have static send parameters and those will be used in transit.
 		/// </summary>
 		/// <typeparam name="TPacketType">Type of the packet payload.</typeparam>
-		/// <param name="opType"><see cref="OperationType"/> of the message to send.</param>
 		/// <param name="payload">Payload instance to be sent in the message that contains static message parameters.</param>
 		/// <returns>Indication of the message send state.</returns>
 		public SendResult SendEvent<TPacketType>(TPacketType payload) 
@@ -90,7 +85,6 @@ namespace GladNet.Server.Common
 		/// Additionally this message/payloadtype is known to have static send parameters and those will be used in transit.
 		/// </summary>
 		/// <typeparam name="TPacketType">Type of the packet payload.</typeparam>
-		/// <param name="opType"><see cref="OperationType"/> of the message to send.</param>
 		/// <param name="payload">Payload instance to be sent in the message that contains static message parameters.</param>
 		/// <returns>Indication of the message send state.</returns>
 		public SendResult SendResponse<TPacketType>(TPacketType payload) 
@@ -108,22 +102,5 @@ namespace GladNet.Server.Common
 		/// <param name="message"><see cref="IRequestMessage"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
 		protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
-
-		protected virtual void OnStatusChanged(NetStatus status)
-		{
-			//TODO: Logging if debug
-
-			//TODO: Do internal handling for status change events that are ClientPeerSession specific.
-		}
-
-		private void OnReceiveStatus(IStatusMessage message, IMessageParameters parameters)
-		{
-			message.ThrowIfNull(nameof(message));
-
-			//I know I cast here so let's only call this once for efficiency
-			NetStatus s = message.Status;
-			if (s != Status)
-				OnStatusChanged(s);
-		}
 	}
 }

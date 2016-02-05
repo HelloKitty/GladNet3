@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace GladNet.Server.Common
 {
+	/// <summary>
+	/// Contracts implementing types to offer specific/supported network message types such as; Request
+	/// </summary>
 	public interface IClientPeerNetworkMessageSender
 	{
 		/// <summary>
