@@ -3,7 +3,7 @@ mkdir -p Dependency\ Builds/LoggingServices/DLLs/
 rsync -avv ./LoggingServices/src/LoggingServices/bin/Release/ Dependency\ Builds/LoggingServices/DLLs/
 
 chmod +x ./GladNet2/lib/BuildDependencies.sh
-cd GladNet2/lib/
+cd ./GladNet2/lib/
 ./BuildDependencies.sh
 cd ..
 cd ..
