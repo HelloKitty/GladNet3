@@ -40,10 +40,9 @@ namespace GladNet.Server.Common
 		/// Additionally this message/payloadtype is known to have static send parameters and those will be used in transit.
 		/// </summary>
 		/// <typeparam name="TPacketType">Type of the packet payload.</typeparam>
-		/// <param name="opType"><see cref="OperationType"/> of the message to send.</param>
 		/// <param name="payload">Payload instance to be sent in the message that contains static message parameters.</param>
 		/// <returns>Indication of the message send state.</returns>
-		SendResult SendEvent<TPacketType>(OperationType opType, TPacketType payload)
+		SendResult SendEvent<TPacketType>(TPacketType payload)
 			where TPacketType : PacketPayload, IStaticPayloadParameters;
 
 		/// <summary>
@@ -51,10 +50,9 @@ namespace GladNet.Server.Common
 		/// Additionally this message/payloadtype is known to have static send parameters and those will be used in transit.
 		/// </summary>
 		/// <typeparam name="TPacketType">Type of the packet payload.</typeparam>
-		/// <param name="opType"><see cref="OperationType"/> of the message to send.</param>
 		/// <param name="payload">Payload instance to be sent in the message that contains static message parameters.</param>
 		/// <returns>Indication of the message send state.</returns>
-		SendResult SendResponse<TPacketType>(OperationType opType, TPacketType payload)
+		SendResult SendResponse<TPacketType>(TPacketType payload)
 			where TPacketType : PacketPayload, IStaticPayloadParameters;
 	}
 }

@@ -77,7 +77,7 @@ namespace GladNet.Server.Common
 		/// <param name="opType"><see cref="OperationType"/> of the message to send.</param>
 		/// <param name="payload">Payload instance to be sent in the message that contains static message parameters.</param>
 		/// <returns>Indication of the message send state.</returns>
-		public SendResult SendEvent<TPacketType>(OperationType opType, TPacketType payload) 
+		public SendResult SendEvent<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
 			payload.ThrowIfNull(nameof(payload));
@@ -93,7 +93,7 @@ namespace GladNet.Server.Common
 		/// <param name="opType"><see cref="OperationType"/> of the message to send.</param>
 		/// <param name="payload">Payload instance to be sent in the message that contains static message parameters.</param>
 		/// <returns>Indication of the message send state.</returns>
-		public SendResult SendResponse<TPacketType>(OperationType opType, TPacketType payload) 
+		public SendResult SendResponse<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
 			payload.ThrowIfNull(nameof(payload));
