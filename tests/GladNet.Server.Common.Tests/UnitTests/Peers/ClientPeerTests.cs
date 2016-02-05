@@ -21,7 +21,10 @@ namespace GladNet.Server.Common.UnitTests
 		public static void Test_CanSend_IsRequest(OperationType opType, bool expectedResult)
 		{
 			//arrange
-			Mock<ClientPeer> peer = CreateClientPeerMock();
+			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
+			sender.Setup(x => x.CanSend(opType)).Returns(expectedResult); //set this up so it doesn't affect results
+
+            Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
 			peer.CallBase = true;
 
 			//act

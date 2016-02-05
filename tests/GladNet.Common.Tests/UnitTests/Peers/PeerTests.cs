@@ -15,16 +15,6 @@ namespace GladNet.Common.Tests
 	{
 		public class TestPayloadWithStaticParams : PacketPayload, IStaticPayloadParameters
 		{
-			/*public bool VerifyAgainst(IMessageParameters parameters)
-			{
-				return true;
-			}
-
-			public bool VerifyAgainst(bool encrypt, byte channel, DeliveryMethod method)
-			{
-				return true;
-			}*/
-
 			public bool Encrypted
 			{
 				get { return true; }
@@ -48,131 +38,56 @@ namespace GladNet.Common.Tests
 			//TODO: When it's finished add test
 		}
 
-		/*[Test]
-		public static void Test_Request_Receive_Method()
-		{
-			//arrange
-			Mock<Peer> peer = CreatePeerMock();
-			//This sets it up so that the implementation of concrete methods are available.
-			peer.CallBase = true;
-
-			INetworkMessageReceiver receiver = peer.Object;
-			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
-
-			//Create the message types
-			Mock<IRequestMessage> requestMessage = new Mock<IRequestMessage>(MockBehavior.Strict);
-
-			//act
-			//Call for event.
-			receiver.OnNetworkMessageReceive(requestMessage.Object, parameters.Object);
-
-			//assert
-			peer.Protected().Verify("OnReceiveRequest", Times.Once(), requestMessage.Object, parameters.Object);
-		}
-
-		[Test]
-		public static void Test_Event_Receive_Method()
-		{
-			//arrange
-			Mock<Peer> peer = CreatePeerMock();
-			//This sets it up so that the implementation of concrete methods are available.
-			peer.CallBase = true;
-
-			INetworkMessageReceiver receiver = peer.Object;
-			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
-
-			//Create the message types
-			Mock<IEventMessage> eventMessage = new Mock<IEventMessage>(MockBehavior.Strict);
-
-			//act
-			//Call for event.
-			receiver.OnNetworkMessageReceive(eventMessage.Object, parameters.Object);
-
-			//assert
-			//peer.As<INetworkMessageReceiver>().Verify(p => p.OnNetworkMessageReceive(eventMessage.Object, parameters.Object), Times.Once());
-			peer.Protected().Verify("OnReceiveEvent", Times.Once(), eventMessage.Object, parameters.Object);
-		}
-
-		[Test]
-		public static void Test_Response_Receive_Method()
-		{
-			//arrange
-			Mock<Peer> peer = CreatePeerMock();
-			//This sets it up so that the implementation of concrete methods are available.
-			peer.CallBase = true;
-
-			INetworkMessageReceiver receiver = peer.Object;
-			Mock<IMessageParameters> parameters = new Mock<IMessageParameters>(MockBehavior.Strict);
-
-			//Create the message types
-			Mock<IResponseMessage> responseMessage = new Mock<IResponseMessage>(MockBehavior.Strict);
-
-			//act
-			//Call for event.
-			receiver.OnNetworkMessageReceive(responseMessage.Object, parameters.Object);
-
-			//assert
-			//peer.As<INetworkMessageReceiver>().Verify(p => p.OnNetworkMessageReceive(eventMessage.Object, parameters.Object), Times.Once());
-			peer.Protected().Verify("OnReceiveResponse", Times.Once(), responseMessage.Object, parameters.Object);
-		}
-
-		[Test]
-		public static void Test_OnStatusChange_Method([EnumRange(typeof(NetStatus))] NetStatus status)
-		{
-			//arrange
-			Mock<Peer> peer = CreatePeerMock();
-			//This sets it up so that the implementation of concrete methods are available.
-			peer.CallBase = true;
-
-			INetworkMessageReceiver receiver = peer.Object;
-
-			//act
-			receiver.OnStatusChanged(new StatusMessage(new StatusChangePayload(status)), null);
-
-			//assert
-			peer.Protected().Verify("OnStatusChanged", Times.Once(), status);
-		}*/
-
 		[Test]
 		public static void Test_Peer_TrySendMessage_Methods(
 			[EnumRange(typeof(OperationType))] OperationType opType,
 			[EnumRange(typeof(DeliveryMethod))] DeliveryMethod deliveryMethod)
 		{
 			//arrange
-			Mock<Peer> peer = CreatePeerMock();
+			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
+			sender.Setup(x => x.CanSend(It.IsAny<OperationType>())).Returns(false);
+
+            Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>());
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
 			//Enable calling implemented methods
 			peer.CallBase = true;
 
 			//act
+			SendResult result;
 			if(peer.Object.CanSend(opType))
-				Assert.AreNotEqual(peer.Object.TrySendMessage(opType, payload.Object, deliveryMethod), SendResult.Invalid);
+				Assert.AreNotEqual(result = peer.Object.TrySendMessage(opType, payload.Object, deliveryMethod), SendResult.Invalid);
 			else
-				Assert.AreEqual(peer.Object.TrySendMessage(opType, payload.Object, deliveryMethod), SendResult.Invalid);
+				Assert.AreEqual(result = peer.Object.TrySendMessage(opType, payload.Object, deliveryMethod), SendResult.Invalid);
 
 			//Assert
 			//Check that the generic method called the non-generic
-			peer.Verify(m => m.TrySendMessage(opType, payload.Object, deliveryMethod, false, 0), Times.Once());
+			sender.Verify(m => m.TrySendMessage(opType, payload.Object, deliveryMethod, false, 0), 
+				result == SendResult.Invalid ? Times.Never() : Times.Once());
 		}
 
 		[Test]
 		public static void Test_Peer_TrySendMessageGeneric_Methods([EnumRangeAttribute(typeof(OperationType))] OperationType opType)
 		{
 			//arrange
-			Mock<Peer> peer = CreatePeerMock();
+			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
+			sender.Setup(x => x.CanSend(It.IsAny<OperationType>())).Returns(false);
+
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>());
 			TestPayloadWithStaticParams payload = new TestPayloadWithStaticParams();
 			//Enable calling implemented methods
 			peer.CallBase = true;
 
 			//act
+			SendResult result;
 			if (peer.Object.CanSend(opType))
-				Assert.AreNotEqual(peer.Object.TrySendMessage(opType, payload), SendResult.Invalid);
+				Assert.AreNotEqual(result = peer.Object.TrySendMessage(opType, payload), SendResult.Invalid);
 			else
-				Assert.AreEqual(peer.Object.TrySendMessage(opType, payload), SendResult.Invalid);
+				Assert.AreEqual(result = peer.Object.TrySendMessage(opType, payload), SendResult.Invalid);
 
 			//Assert
 			//Check that the generic method called the non-generic
-			peer.Verify(m => m.TrySendMessage(opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel), Times.Once());
+			sender.Verify(m => m.TrySendMessage(opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel), 
+				result == SendResult.Invalid ? Times.Never() : Times.Once());
 		}
 
 		[Test]

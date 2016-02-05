@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
-
 namespace GladNet.Common
 {
 	public abstract class Peer : INetPeer, IClassLogger
@@ -30,7 +29,7 @@ namespace GladNet.Common
 			Logger = logger;
 		}
 
-		#region Message Senders
+		/*#region Message Senders
 		//The idea here is we return invalids because sometimes a Peer can't send a certain message type.
 		//In most cases external classes shouldn't be interfacing with this class in this fashion.
 		//They should instead used more explict send methods. However, this exists to allow for
@@ -55,7 +54,7 @@ namespace GladNet.Common
 
 			return TrySendMessage(opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel);
 		}
-		#endregion
+		#endregion*/
 
 		protected abstract void OnStatusChanged(NetStatus status);
 

@@ -57,6 +57,7 @@
     <Compile Include="General\Extensions\Parameters\IStaticPayloadParametersExtensions.cs" />
     <Compile Include="General\Extensions\Parameters\OperationTypeExtensions.cs" />
     <Compile Include="General\Extensions\Message\Factories\INetworkMessageFactoryRegisterExtensions.cs" />
+    <Compile Include="General\Extensions\Peer\INetPeerExtensions.cs" />
     <Compile Include="General\Extensions\Serialization\ISerializeableExtensions.cs" />
     <Compile Include="General\Logging\IClassLogger.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\Factory\GeneralNetworkMessageFactory.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionBuilder.cs" />
+    <Compile Include="Network\Message\Senders\INetSender.cs" />
     <Compile Include="Network\Parameters\DeliveryMethod.cs" />
     <Compile Include="Network\Parameters\IMessageParameters.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageReceiver.cs" />

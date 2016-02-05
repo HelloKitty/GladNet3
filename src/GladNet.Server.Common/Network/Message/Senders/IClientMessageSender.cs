@@ -9,10 +9,9 @@ using System.Text;
 namespace GladNet.Server.Common
 {
 	/// <summary>
-	/// Contract that guarantees implementing types provide general network message sending functionality.
-	/// Also contracts implementing types to offer specific/supported network message types such as; Response and Event.
+	/// Contracts implementing types to offer specific/supported network message types such as; Response and Event.
 	/// </summary>
-	public interface IClientNetworkMessageSender : INetworkMessageSender
+	public interface IClientNetworkMessageSender
 	{
 		/// <summary>
 		/// Sends a networked response.
