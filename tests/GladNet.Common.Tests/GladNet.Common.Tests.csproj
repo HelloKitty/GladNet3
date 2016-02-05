@@ -66,6 +66,7 @@
     <Compile Include="UnitTests\Network\Message\ResponseMessageTests.cs" />
     <Compile Include="UnitTests\Network\Message\StatusChangeMessageTests.cs" />
     <Compile Include="UnitTests\Network\NetSendableTests.cs" />
+    <Compile Include="UnitTests\Network\Recievers\NetworkMessagePublisherTests.cs" />
     <Compile Include="UnitTests\Peers\PeerTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -34,45 +34,61 @@ namespace GladNet.Common
 
 		public void OnNetworkMessageReceive(IEventMessage message, IMessageParameters parameters)
 		{
+			message.ThrowIfNull(nameof(message));
+
 			if (EventPublisher != null)
 				EventPublisher.Invoke(message, parameters);
 		}
 
 		public void OnNetworkMessageReceive(IResponseMessage message, IMessageParameters parameters)
 		{
+			message.ThrowIfNull(nameof(message));
+
 			if (ResponsePublisher != null)
 				ResponsePublisher.Invoke(message, parameters);
 		}
 
 		public void OnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
 		{
+			message.ThrowIfNull(nameof(message));
+
 			if (RequestPublisher != null)
 				RequestPublisher.Invoke(message, parameters);
 		}
 
 		public void OnStatusChanged(IStatusMessage status, IMessageParameters parameters)
 		{
+			status.ThrowIfNull(nameof(status));
+
 			if (StatusPublisher != null)
 				StatusPublisher.Invoke(status, parameters);
 		}
 
 		public void SubscribeToEvents(OnNetworkEventMessage subscriber)
 		{
+			subscriber.ThrowIfNull(nameof(subscriber));
+
 			EventPublisher += subscriber;
 		}
 
 		public void SubscribeToRequests(OnNetworkRequestMessage subscriber)
 		{
+			subscriber.ThrowIfNull(nameof(subscriber));
+
 			RequestPublisher += subscriber;
 		}
 
 		public void SubscribeToResponses(OnNetworkResponseMessage subscriber)
 		{
+			subscriber.ThrowIfNull(nameof(subscriber));
+
 			ResponsePublisher += subscriber;
 		}
 
 		public void SubscribeToStatusChanges(OnNetworkStatusMessage subscriber)
 		{
+			subscriber.ThrowIfNull(nameof(subscriber));
+
 			StatusPublisher += subscriber;
 		}
 	}
