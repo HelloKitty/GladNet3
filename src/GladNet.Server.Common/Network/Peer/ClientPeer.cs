@@ -93,7 +93,7 @@ namespace GladNet.Server.Common
 
 		protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
 
-		protected override void OnStatusChanged(NetStatus status)
+		protected virtual void OnStatusChanged(NetStatus status)
 		{
 			//TODO: Logging if debug
 

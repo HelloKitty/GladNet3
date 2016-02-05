@@ -33,8 +33,6 @@ namespace GladNet.Common
 			Logger = logger;
 		}
 
-		protected abstract void OnStatusChanged(NetStatus status);
-
 		public virtual bool CanSend(OperationType opType)
 		{
 			return false;
