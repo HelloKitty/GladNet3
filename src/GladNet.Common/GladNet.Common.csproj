@@ -58,7 +58,7 @@
     <Compile Include="General\Extensions\Peer\INetPeerExtensions.cs" />
     <Compile Include="General\Extensions\Serialization\ISerializeableExtensions.cs" />
     <Compile Include="General\Logging\IClassLogger.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\INetworkMessageDataContainer.cs" />
+    <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\INetworkMessageFluentBuilder.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\NetworkMessageFactory.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\INetworkMessageFactory.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\NetworkMessageBuilder.cs" />
@@ -73,10 +73,10 @@
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageSubscriptionService.cs" />
-    <Compile Include="Network\Message\Recievers\INetworkMessageSubcriptionBuilder.cs" />
+    <Compile Include="Network\Message\Recievers\INetworkMessageSubcriptionFluentBuilder.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
-    <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionBuilder.cs" />
+    <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionFluentBuilder.cs" />
     <Compile Include="Network\Message\Senders\INetSender.cs" />
     <Compile Include="Network\Parameters\DeliveryMethod.cs" />
     <Compile Include="Network\Parameters\IMessageParameters.cs" />

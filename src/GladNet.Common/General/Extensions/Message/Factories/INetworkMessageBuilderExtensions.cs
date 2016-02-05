@@ -7,7 +7,7 @@ namespace GladNet.Common
 {
 	public static class INetworkMessageBuilderExtensions
 	{
-		public static INetworkMessageDataContainer<TNetworkMessageType> PrepareMessage<TNetworkMessageType>(this INetworkMessageFactory messageFactory)
+		public static INetworkMessageFluentBuilder<TNetworkMessageType> PrepareMessage<TNetworkMessageType>(this INetworkMessageFactory messageFactory)
 			where TNetworkMessageType : NetworkMessage
 		{
 			messageFactory.ThrowIfNull(nameof(messageFactory));

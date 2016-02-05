@@ -32,6 +32,11 @@ namespace GladNet.Common
 		/// </summary>
 		public event OnNetworkStatusMessage StatusPublisher;
 
+		/// <summary>
+		/// Interface method overload for receiving a <see cref="IEventMessage"/>.
+		/// </summary>
+		/// <param name="message">The event recieved from the remote peer.</param>
+		/// <param name="parameters">The message parameters the message was sent with.</param>
 		public void OnNetworkMessageReceive(IEventMessage message, IMessageParameters parameters)
 		{
 			message.ThrowIfNull(nameof(message));
@@ -40,6 +45,11 @@ namespace GladNet.Common
 				EventPublisher.Invoke(message, parameters);
 		}
 
+		/// <summary>
+		/// Interface method overload for receiving a <see cref="IResponseMessage"/>.
+		/// </summary>
+		/// <param name="message">The response recieved from the remote peer.</param>
+		/// <param name="parameters">The message parameters the message was sent with.</param>
 		public void OnNetworkMessageReceive(IResponseMessage message, IMessageParameters parameters)
 		{
 			message.ThrowIfNull(nameof(message));
@@ -48,6 +58,11 @@ namespace GladNet.Common
 				ResponsePublisher.Invoke(message, parameters);
 		}
 
+		/// <summary>
+		/// Interface method overload for receiving a <see cref="IRequestMessage"/>.
+		/// </summary>
+		/// <param name="message">The request recieved from the remote peer.</param>
+		/// <param name="parameters">The message parameters the message was sent with.</param>
 		public void OnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
 		{
 			message.ThrowIfNull(nameof(message));
@@ -56,6 +71,11 @@ namespace GladNet.Common
 				RequestPublisher.Invoke(message, parameters);
 		}
 
+		/// <summary>
+		/// Dispatchable method that handles <see cref="IStatusMessage"/> changes.
+		/// </summary>
+		/// <param name="status">The status message recieved from the remote peer.</param>
+		/// <param name="parameters">The message parameters the message was sent with.</param>
 		public void OnNetworkMessageReceive(IStatusMessage status, IMessageParameters parameters)
 		{
 			status.ThrowIfNull(nameof(status));
@@ -64,6 +84,10 @@ namespace GladNet.Common
 				StatusPublisher.Invoke(status, parameters);
 		}
 
+		/// <summary>
+		/// Subscribes to <see cref="IEventMessage"/> network messages.
+		/// </summary>
+		/// <param name="subscriber">Delegate target subscribing.</param>
 		public void SubscribeToEvents(OnNetworkEventMessage subscriber)
 		{
 			subscriber.ThrowIfNull(nameof(subscriber));
@@ -71,6 +95,10 @@ namespace GladNet.Common
 			EventPublisher += subscriber;
 		}
 
+		/// <summary>
+		/// Subscribes to <see cref="IRequestMessage"/> network messages.
+		/// </summary>
+		/// <param name="subscriber">Delegate target subscribing.</param>
 		public void SubscribeToRequests(OnNetworkRequestMessage subscriber)
 		{
 			subscriber.ThrowIfNull(nameof(subscriber));
@@ -78,6 +106,10 @@ namespace GladNet.Common
 			RequestPublisher += subscriber;
 		}
 
+		/// <summary>
+		/// Subscribes to <see cref="IResponseMessage"/> network messages.
+		/// </summary>
+		/// <param name="subscriber">Delegate target subscribing.</param>
 		public void SubscribeToResponses(OnNetworkResponseMessage subscriber)
 		{
 			subscriber.ThrowIfNull(nameof(subscriber));
@@ -85,6 +117,10 @@ namespace GladNet.Common
 			ResponsePublisher += subscriber;
 		}
 
+		/// <summary>
+		/// Subscribes to <see cref="IStatusMessage"/> network messages.
+		/// </summary>
+		/// <param name="subscriber">Delegate target subscribing.</param>
 		public void SubscribeToStatusChanges(OnNetworkStatusMessage subscriber)
 		{
 			subscriber.ThrowIfNull(nameof(subscriber));

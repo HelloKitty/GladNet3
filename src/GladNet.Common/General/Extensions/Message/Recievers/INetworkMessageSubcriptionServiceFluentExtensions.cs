@@ -13,10 +13,10 @@ namespace GladNet.Common
 		/// <typeparam name="TNetworkMessageType">Type of the network mesage to subscribe to.</typeparam>
 		/// <param name="service">Subscription service instance.</param>
 		/// <returns>A subscription builder that carries Type information that allows for subscriptions.</returns>
-		public static INetworkMessageSubcriptionBuilder<TNetworkMessageType> SubscribeTo<TNetworkMessageType>(this INetworkMessageSubscriptionService service)
+		public static INetworkMessageSubcriptionFluentBuilder<TNetworkMessageType> SubscribeTo<TNetworkMessageType>(this INetworkMessageSubscriptionService service)
 			where TNetworkMessageType : INetworkMessage
 		{
-			return new NetworkMessageSubscriptionBuilder<TNetworkMessageType>(service);
+			return new NetworkMessageSubscriptionFluentBuilder<TNetworkMessageType>(service);
 		}
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace GladNet.Common
 		/// <param name="builder">Instance of the fluent builder that carries Type information.</param>
 		/// <param name="subscriber">Subscriber delegate object.</param>
 		/// <returns>Fluently returns the instance this method was invoked on.</returns>
-		public static INetworkMessageSubcriptionBuilder<IEventMessage> With(this INetworkMessageSubcriptionBuilder<IEventMessage> builder, OnNetworkEventMessage subscriber)
+		public static INetworkMessageSubcriptionFluentBuilder<IEventMessage> With(this INetworkMessageSubcriptionFluentBuilder<IEventMessage> builder, OnNetworkEventMessage subscriber)
 		{
 			builder.Service.SubscribeToEvents(subscriber);
 
@@ -38,7 +38,7 @@ namespace GladNet.Common
 		/// <param name="builder">Instance of the fluent builder that carries Type information.</param>
 		/// <param name="subscriber">Subscriber delegate object.</param>
 		/// <returns>Fluently returns the instance this method was invoked on.</returns>
-		public static INetworkMessageSubcriptionBuilder<IResponseMessage> With(this INetworkMessageSubcriptionBuilder<IResponseMessage> builder, OnNetworkResponseMessage subscriber)
+		public static INetworkMessageSubcriptionFluentBuilder<IResponseMessage> With(this INetworkMessageSubcriptionFluentBuilder<IResponseMessage> builder, OnNetworkResponseMessage subscriber)
 		{
 			builder.Service.SubscribeToResponses(subscriber);
 
@@ -51,7 +51,7 @@ namespace GladNet.Common
 		/// <param name="builder">Instance of the fluent builder that carries Type information.</param>
 		/// <param name="subscriber">Subscriber delegate object.</param>
 		/// <returns>Fluently returns the instance this method was invoked on.</returns>
-		public static INetworkMessageSubcriptionBuilder<IRequestMessage> With(this INetworkMessageSubcriptionBuilder<IRequestMessage> builder, OnNetworkRequestMessage subscriber)
+		public static INetworkMessageSubcriptionFluentBuilder<IRequestMessage> With(this INetworkMessageSubcriptionFluentBuilder<IRequestMessage> builder, OnNetworkRequestMessage subscriber)
 		{
 			builder.Service.SubscribeToRequests(subscriber);
 
@@ -64,7 +64,7 @@ namespace GladNet.Common
 		/// <param name="builder">Instance of the fluent builder that carries Type information.</param>
 		/// <param name="subscriber">Subscriber delegate object.</param>
 		/// <returns>Fluently returns the instance this method was invoked on.</returns>
-		public static INetworkMessageSubcriptionBuilder<IStatusMessage> With(this INetworkMessageSubcriptionBuilder<IStatusMessage> builder, OnNetworkStatusMessage subscriber)
+		public static INetworkMessageSubcriptionFluentBuilder<IStatusMessage> With(this INetworkMessageSubcriptionFluentBuilder<IStatusMessage> builder, OnNetworkStatusMessage subscriber)
 		{
 			builder.Service.SubscribeToStatusChanges(subscriber);
 
@@ -77,7 +77,7 @@ namespace GladNet.Common
 		/// <param name="builder">Instance of the fluent builder that carries Type information.</param>
 		/// <param name="subscriber">Subscriber delegate object.</param>
 		/// <returns>Fluently returns the instance this method was invoked on.</returns>
-		public static INetworkMessageSubcriptionBuilder<EventMessage> With(this INetworkMessageSubcriptionBuilder<EventMessage> builder, OnNetworkEventMessage subscriber)
+		public static INetworkMessageSubcriptionFluentBuilder<EventMessage> With(this INetworkMessageSubcriptionFluentBuilder<EventMessage> builder, OnNetworkEventMessage subscriber)
 		{
 			builder.Service.SubscribeToEvents(subscriber);
 
@@ -90,7 +90,7 @@ namespace GladNet.Common
 		/// <param name="builder">Instance of the fluent builder that carries Type information.</param>
 		/// <param name="subscriber">Subscriber delegate object.</param>
 		/// <returns>Fluently returns the instance this method was invoked on.</returns>
-		public static INetworkMessageSubcriptionBuilder<ResponseMessage> With(this INetworkMessageSubcriptionBuilder<ResponseMessage> builder, OnNetworkResponseMessage subscriber)
+		public static INetworkMessageSubcriptionFluentBuilder<ResponseMessage> With(this INetworkMessageSubcriptionFluentBuilder<ResponseMessage> builder, OnNetworkResponseMessage subscriber)
 		{
 			builder.Service.SubscribeToResponses(subscriber);
 
@@ -103,7 +103,7 @@ namespace GladNet.Common
 		/// <param name="builder">Instance of the fluent builder that carries Type information.</param>
 		/// <param name="subscriber">Subscriber delegate object.</param>
 		/// <returns>Fluently returns the instance this method was invoked on.</returns>
-		public static INetworkMessageSubcriptionBuilder<RequestMessage> With(this INetworkMessageSubcriptionBuilder<RequestMessage> builder, OnNetworkRequestMessage subscriber)
+		public static INetworkMessageSubcriptionFluentBuilder<RequestMessage> With(this INetworkMessageSubcriptionFluentBuilder<RequestMessage> builder, OnNetworkRequestMessage subscriber)
 		{
 			builder.Service.SubscribeToRequests(subscriber);
 
@@ -116,7 +116,7 @@ namespace GladNet.Common
 		/// <param name="builder">Instance of the fluent builder that carries Type information.</param>
 		/// <param name="subscriber">Subscriber delegate object.</param>
 		/// <returns>Fluently returns the instance this method was invoked on.</returns>
-		public static INetworkMessageSubcriptionBuilder<StatusMessage> With(this INetworkMessageSubcriptionBuilder<StatusMessage> builder, OnNetworkStatusMessage subscriber)
+		public static INetworkMessageSubcriptionFluentBuilder<StatusMessage> With(this INetworkMessageSubcriptionFluentBuilder<StatusMessage> builder, OnNetworkStatusMessage subscriber)
 		{
 			builder.Service.SubscribeToStatusChanges(subscriber);
 
