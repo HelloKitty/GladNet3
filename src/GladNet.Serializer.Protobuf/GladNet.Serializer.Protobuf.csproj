@@ -55,7 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strategies\ProtobufnetSerializationStrategy.cs" />
+    <Compile Include="Strategies\ProtobufnetDeserializerStrategy.cs" />
+    <Compile Include="Strategies\ProtobufnetSerializerStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
