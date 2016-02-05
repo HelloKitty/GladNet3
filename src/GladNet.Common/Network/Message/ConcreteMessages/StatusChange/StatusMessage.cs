@@ -47,7 +47,7 @@ namespace GladNet.Common
 			if (receiver == null)
 				throw new ArgumentNullException("receiver", "INetworkMessageReciever must not be null.");
 
-			receiver.OnStatusChanged(this, parameters);
+			receiver.OnNetworkMessageReceive(this, parameters);
 		}
 
 		public override NetworkMessage DeepClone()

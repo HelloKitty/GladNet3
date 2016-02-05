@@ -36,7 +36,7 @@ namespace GladNet.Common
 		/// <summary>
 		/// Dispatchable method that handles <see cref="IStatusMessage"/> changes.
 		/// </summary>
-		/// <param name="status"></param>
-		void OnStatusChanged(IStatusMessage status, IMessageParameters parameters);
+		/// <param name="status">The status message recieved from the remote peer.</param>
+		void OnNetworkMessageReceive(IStatusMessage status, IMessageParameters parameters);
 	}
 }

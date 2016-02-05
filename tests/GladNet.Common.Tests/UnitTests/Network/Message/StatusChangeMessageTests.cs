@@ -37,7 +37,7 @@ namespace GladNet.Common.Tests
 
 			//assert
 			//We check that the proper method was called.
-			reciever.Verify(x => x.OnStatusChanged(message, null), Times.Once());
+			reciever.Verify(x => x.OnNetworkMessageReceive(message, null), Times.Once());
 		}
 
 		[Test]

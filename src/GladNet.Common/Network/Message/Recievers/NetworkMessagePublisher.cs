@@ -56,7 +56,7 @@ namespace GladNet.Common
 				RequestPublisher.Invoke(message, parameters);
 		}
 
-		public void OnStatusChanged(IStatusMessage status, IMessageParameters parameters)
+		public void OnNetworkMessageReceive(IStatusMessage status, IMessageParameters parameters)
 		{
 			status.ThrowIfNull(nameof(status));
 
