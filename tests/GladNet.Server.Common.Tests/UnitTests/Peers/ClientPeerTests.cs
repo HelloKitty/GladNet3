@@ -31,6 +31,44 @@ namespace GladNet.Server.Common.UnitTests
 			Assert.AreEqual(result, expectedResult);
 		}
 
+		[Test]
+		public static void Test_Throws_On_Null_Sub_Service()
+		{
+			//arrange
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(MockBehavior.Strict, Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), null);
+
+			//assert
+			Assert.IsTrue(new Func<bool>(() =>
+			{
+				try
+				{
+					var r = peer.Object;
+
+					return false;
+				}
+				catch(Exception e)
+				{
+					return e.InnerException.GetType() == typeof(ArgumentNullException);
+				}
+			}).Invoke(), "Expected it to throw exception from null sub service.");
+		}
+
+		[Test]
+		public static void Test_Registered_RequestMessage_With_NetMessageSubService()
+		{
+			//arrange
+			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object);
+            peer.CallBase = true;
+
+			//Makes sure it's created
+			//Otherwise Moq won't construct the object
+			var r = peer.Object;
+
+			//assert
+			subService.Verify(x => x.SubscribeToRequests(It.IsAny<OnNetworkRequestMessage>()), Times.Once());
+        }
+
 		private static Mock<ClientPeer> CreateClientPeerMock()
 		{
 			return new Mock<ClientPeer>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
