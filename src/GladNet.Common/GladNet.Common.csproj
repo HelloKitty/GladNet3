@@ -82,8 +82,6 @@
     <Compile Include="Network\Parameters\IMessageParameters.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageReceiver.cs" />
     <Compile Include="Network\Message\ConcreteMessages\NetworkMessage.cs" />
-    <Compile Include="Network\Message\Network Senders\DispatchMessage.cs" />
-    <Compile Include="Network\Message\Network Senders\INetworkDispatcher.cs" />
     <Compile Include="Network\Parameters\IStaticPayloadParameters.cs" />
     <Compile Include="Network\Parameters\OperationType.cs" />
     <Compile Include="Network\Message\SendResult.cs" />

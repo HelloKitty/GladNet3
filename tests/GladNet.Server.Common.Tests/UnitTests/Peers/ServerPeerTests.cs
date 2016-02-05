@@ -96,7 +96,7 @@ namespace GladNet.Server.Common.Tests
 			sendService.Verify(x => x.TrySendMessage(OperationType.Request, payload), Times.Once());
 		}
 
-		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ClientPeerSession))]
+		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ServerPeer))]
 		public static void Test_SendResposne_Calls_Send_Request_On_NetSend_Service()
 		{
 			//arrange
