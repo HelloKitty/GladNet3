@@ -42,7 +42,7 @@ namespace GladNet.Server.Common
 		/// <param name="channel">Optional: Inidicates the channel the network message should be sent on. Default: 0</param>
 		/// <returns>Indication of the message send state.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public SendResult SendResponse(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public virtual SendResult SendResponse(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			payload.ThrowIfNull(nameof(payload));
 
@@ -58,7 +58,7 @@ namespace GladNet.Server.Common
 		/// <param name="channel">Optional: Inidicates the channel the network message should be sent on. Default: 0</param>
 		/// <returns>Indication of the message send state.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		public SendResult SendEvent(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public virtual SendResult SendEvent(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			payload.ThrowIfNull(nameof(payload));
 
@@ -72,7 +72,7 @@ namespace GladNet.Server.Common
 		/// <typeparam name="TPacketType">Type of the packet payload.</typeparam>
 		/// <param name="payload">Payload instance to be sent in the message that contains static message parameters.</param>
 		/// <returns>Indication of the message send state.</returns>
-		public SendResult SendEvent<TPacketType>(TPacketType payload) 
+		public virtual SendResult SendEvent<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
 			payload.ThrowIfNull(nameof(payload));
@@ -87,7 +87,7 @@ namespace GladNet.Server.Common
 		/// <typeparam name="TPacketType">Type of the packet payload.</typeparam>
 		/// <param name="payload">Payload instance to be sent in the message that contains static message parameters.</param>
 		/// <returns>Indication of the message send state.</returns>
-		public SendResult SendResponse<TPacketType>(TPacketType payload) 
+		public virtual SendResult SendResponse<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
 			payload.ThrowIfNull(nameof(payload));

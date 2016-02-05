@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Logging.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GladNet.Server.Common
 {
@@ -43,6 +44,7 @@ namespace GladNet.Server.Common
 		/// <param name="encrypt">Optional: Indicates if the message should be encrypted. Default: false</param>
 		/// <param name="channel">Optional: Inidicates the channel the network message should be sent on. Default: 0</param>
 		/// <returns>Indication of the message send state.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public SendResult SendRequest(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			payload.ThrowIfNull(nameof(payload));
