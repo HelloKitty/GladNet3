@@ -27,7 +27,7 @@ namespace GladNet.Server.Common
 
 		public override bool CanSend(OperationType opType)
 		{
-			//Returns true if the opType matches ClientPeer opTypes AND the sender service can send the opType too.
+			//Returns true if the opType matches ClientPeerSession opTypes AND the sender service can send the opType too.
 			return opType == OperationType.Response || opType == OperationType.Event && NetworkSendService.CanSend(opType);
 		}
 
@@ -103,7 +103,7 @@ namespace GladNet.Server.Common
 		{
 			//TODO: Logging if debug
 
-			//TODO: Do internal handling for status change events that are ClientPeer specific.
+			//TODO: Do internal handling for status change events that are ClientPeerSession specific.
 		}
 
 		private void OnReceiveStatus(IStatusMessage message, IMessageParameters parameters)
