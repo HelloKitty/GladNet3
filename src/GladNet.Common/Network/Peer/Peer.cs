@@ -10,7 +10,7 @@ namespace GladNet.Common
 {
 	public abstract class Peer : INetPeer, IClassLogger
 	{
-		private readonly INetworkMessageSender netMessageSender;
+		public INetworkMessageSender NetworkSendService { get; private set; }
 
 		/// <summary>
 		/// Provides access to various connection related details for a this given Pee's connection.
@@ -26,7 +26,7 @@ namespace GladNet.Common
 			details.ThrowIfNull(nameof(details));
 
 			PeerDetails = details;
-			netMessageSender = messageSender;
+			NetworkSendService = messageSender;
 			Logger = logger;
 		}
 
@@ -45,7 +45,7 @@ namespace GladNet.Common
 			if (!CanSend(opType))
 				return SendResult.Invalid;
 
-			return netMessageSender.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel); //ncrunch: no coverage Reason: The line doesn't have to be tested. This is abstract and can be overidden.
+			return NetworkSendService.TrySendMessage(opType, payload, deliveryMethod, encrypt, channel); //ncrunch: no coverage Reason: The line doesn't have to be tested. This is abstract and can be overidden.
 		}
 
 		//This is non-virtual because it should mirror non-generic methods functionality. It makes no sense to change them individually.
