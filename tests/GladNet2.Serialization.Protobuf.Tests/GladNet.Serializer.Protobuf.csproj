@@ -50,6 +50,10 @@
       <HintPath>..\..\packages\NUnit.3.0.1\lib\net20\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -65,9 +69,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GladNet2.Serialization.Protobuf\GladNet2.Serialization.Protobuf.csproj">
+    <ProjectReference Include="..\..\src\GladNet2.Serialization.Protobuf\GladNet.Serializer.Protobuf.csproj">
       <Project>{7ce4020c-9052-48d8-ab62-686d701d2554}</Project>
-      <Name>GladNet2.Serialization.Protobuf</Name>
+      <Name>GladNet.Serializer.Protobuf</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

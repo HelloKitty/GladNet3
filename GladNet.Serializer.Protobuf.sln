@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet2.Serialization.Protobuf", "src\GladNet2.Serialization.Protobuf\GladNet2.Serialization.Protobuf.csproj", "{7CE4020C-9052-48D8-AB62-686D701D2554}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Serializer.Protobuf", "src\GladNet2.Serialization.Protobuf\GladNet.Serializer.Protobuf.csproj", "{7CE4020C-9052-48D8-AB62-686D701D2554}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C5F760C4-52EF-4319-8660-05FFB1493FAF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{256EF03D-311E-435B-BA99-17ABB3851FD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet2.Serialization.Protobuf.Tests", "tests\GladNet2.Serialization.Protobuf.Tests\GladNet2.Serialization.Protobuf.Tests.csproj", "{0898E624-4FA0-4F2F-BBD6-82BF470F427B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Serializer.Protobuf", "tests\GladNet2.Serialization.Protobuf.Tests\GladNet.Serializer.Protobuf.csproj", "{0898E624-4FA0-4F2F-BBD6-82BF470F427B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
