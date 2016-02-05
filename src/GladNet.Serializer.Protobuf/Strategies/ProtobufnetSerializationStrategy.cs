@@ -6,7 +6,7 @@ using System.Text;
 
 namespace GladNet.Serialization
 {
-	public class ProtobufnetSerializationStrategy : ISerializerStrategy
+	public class ProtobufnetSerializationStrategy// : ISerializerStrategy
 	{
 
 	}
