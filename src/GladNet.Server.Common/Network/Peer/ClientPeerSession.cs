@@ -9,17 +9,20 @@ using System.Threading.Tasks;
 
 namespace GladNet.Server.Common
 {
-	public abstract class ClientPeer : Peer, IClientNetworkMessageSender
+	public abstract class ClientPeerSession : Peer, IClientNetworkMessageSender
 	{
-		public ClientPeer(ILogger logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService netMessageSubService)
+		public ClientPeerSession(ILogger logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService netMessageSubService)
 			: base(logger, sender, details)
 		{
-			if (netMessageSubService == null)
-				throw new ArgumentNullException(nameof(netMessageSubService), "Cannot create a peer with a null net message sub service. That would mean it cannot recieve messages.");
+			netMessageSubService.ThrowIfNull(nameof(netMessageSubService));
 
 			//Subscribe to request messages
 			netMessageSubService.SubscribeTo<RequestMessage>()
 				.With(OnReceiveRequest);
+
+			//Subscribes to status changes
+			netMessageSubService.SubscribeTo<IStatusMessage>()
+				.With(OnReceiveStatus);
 		}
 
 		public override bool CanSend(OperationType opType)
@@ -40,6 +43,8 @@ namespace GladNet.Server.Common
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public SendResult SendResponse(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
+			payload.ThrowIfNull(nameof(payload));
+
 			return NetworkSendService.TrySendMessage(OperationType.Response, payload, deliveryMethod, encrypt, channel);
 		}
 
@@ -54,6 +59,8 @@ namespace GladNet.Server.Common
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public SendResult SendEvent(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
+			payload.ThrowIfNull(nameof(payload));
+
 			return NetworkSendService.TrySendMessage(OperationType.Event, payload, deliveryMethod, encrypt, channel);
 		}
 
@@ -68,6 +75,8 @@ namespace GladNet.Server.Common
 		public SendResult SendEvent<TPacketType>(OperationType opType, TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
+			payload.ThrowIfNull(nameof(payload));
+
 			return NetworkSendService.TrySendMessage<TPacketType>(OperationType.Event, payload);
 		}
 
@@ -82,14 +91,11 @@ namespace GladNet.Server.Common
 		public SendResult SendResponse<TPacketType>(OperationType opType, TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
+			payload.ThrowIfNull(nameof(payload));
+
 			return NetworkSendService.TrySendMessage<TPacketType>(OperationType.Response, payload);
 		}
 		#endregion
-
-		protected virtual void OnInvalidOperationRecieved(Type packetType, IMessageParameters parameters, PacketPayload payload)
-		{
-			//Don't do anything here. We'll let inheritors do something extra by overriding this
-		}
 
 		protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
 
@@ -98,6 +104,16 @@ namespace GladNet.Server.Common
 			//TODO: Logging if debug
 
 			//TODO: Do internal handling for status change events that are ClientPeer specific.
+		}
+
+		private void OnReceiveStatus(IStatusMessage message, IMessageParameters parameters)
+		{
+			message.ThrowIfNull(nameof(message));
+
+			//I know I cast here so let's only call this once for efficiency
+			NetStatus s = message.Status;
+			if (s != Status)
+				OnStatusChanged(s);
 		}
 	}
 }

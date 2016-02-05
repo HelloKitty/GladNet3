@@ -24,7 +24,7 @@ namespace GladNet.Server.Common.UnitTests
 			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
 			sender.Setup(x => x.CanSend(opType)).Returns(expectedResult); //set this up so it doesn't affect results
 
-            Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+            Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
 			peer.CallBase = true;
 
 			//act
@@ -38,7 +38,7 @@ namespace GladNet.Server.Common.UnitTests
 		public static void Test_Throws_On_Null_Sub_Service()
 		{
 			//arrange
-			Mock<ClientPeer> peer = new Mock<ClientPeer>(MockBehavior.Strict, Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), null);
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(MockBehavior.Strict, Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), null);
 
 			//assert
 			Assert.IsTrue(new Func<bool>(() =>
@@ -61,7 +61,7 @@ namespace GladNet.Server.Common.UnitTests
 		{
 			//arrange
 			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
-			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object);
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object);
             peer.CallBase = true;
 
 			//Makes sure it's created
@@ -72,9 +72,9 @@ namespace GladNet.Server.Common.UnitTests
 			subService.Verify(x => x.SubscribeToRequests(It.IsAny<OnNetworkRequestMessage>()), Times.Once());
         }
 
-		private static Mock<ClientPeer> CreateClientPeerMock()
+		private static Mock<ClientPeerSession> CreateClientPeerMock()
 		{
-			return new Mock<ClientPeer>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			return new Mock<ClientPeerSession>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
 		}
 	}
 }

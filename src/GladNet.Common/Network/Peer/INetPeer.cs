@@ -11,6 +11,8 @@ namespace GladNet.Common
 	/// </summary>
 	public interface INetPeer : INetSender
 	{
+		NetStatus Status { get; }
+
 		/// <summary>
 		/// Provides details about the peer.
 		/// </summary>

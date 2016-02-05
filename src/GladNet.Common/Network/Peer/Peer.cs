@@ -15,6 +15,8 @@ namespace GladNet.Common
 		/// </summary>
 		public INetworkMessageSender NetworkSendService { get; private set; }
 
+		public NetStatus Status { get; protected set; }
+
 		/// <summary>
 		/// Provides access to various connection related details for a this given Pee's connection.
 		/// </summary>
