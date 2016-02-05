@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace GladNet.Server.Common.UnitTests
 {
 	[TestFixture]
-	public static class ClientPeerTests
+	public static class ClientPeerSessionTests
 	{
 		[Test]
 		[TestCase(OperationType.Request, false)]
