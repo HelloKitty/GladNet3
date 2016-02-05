@@ -7,52 +7,73 @@ namespace GladNet.Common
 {
 	public class NetworkMessagePublisher : INetworkMessageReceiver, INetworkMessageSubscriptionService, INetworkMessagePublisher
 	{
-		public OnNetworkEventMessage EventPublisher { get; private set; }
+		//You may wonder why there is no locking or effort to keep this thread safe.
+		//This is a critical section of code that should be preformant and there isn't a benefit to locking
+		//Why are multiple threads subscribing and unsubing from the publisher? There really is no use-case
+		//Therefore although it'd be trivial to do I will not make this thread safe.
 
-		public OnNetworkRequestMessage RequestPublisher { get; private set; }
+		/// <summary>
+		/// Event channel.
+		/// </summary>
+		public event OnNetworkEventMessage EventPublisher;
 
-		public OnNetworkResponseMessage ResponsePublisher { get; private set; }
+		/// <summary>
+		/// Request channel.
+		/// </summary>
+		public event OnNetworkRequestMessage RequestPublisher;
 
-		public OnNetworkStatusMessage StatusPublisher { get; private set; }
+		/// <summary>
+		/// Response channel.
+		/// </summary>
+		public event OnNetworkResponseMessage ResponsePublisher;
+
+		/// <summary>
+		/// Status channel.
+		/// </summary>
+		public event OnNetworkStatusMessage StatusPublisher;
 
 		public void OnNetworkMessageReceive(IEventMessage message, IMessageParameters parameters)
 		{
-			throw new NotImplementedException();
+			if (EventPublisher != null)
+				EventPublisher.Invoke(message, parameters);
 		}
 
 		public void OnNetworkMessageReceive(IResponseMessage message, IMessageParameters parameters)
 		{
-			throw new NotImplementedException();
+			if (ResponsePublisher != null)
+				ResponsePublisher.Invoke(message, parameters);
 		}
 
 		public void OnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
 		{
-			throw new NotImplementedException();
+			if (RequestPublisher != null)
+				RequestPublisher.Invoke(message, parameters);
 		}
 
 		public void OnStatusChanged(IStatusMessage status, IMessageParameters parameters)
 		{
-			throw new NotImplementedException();
+			if (StatusPublisher != null)
+				StatusPublisher.Invoke(status, parameters);
 		}
 
 		public void SubscribeToEvents(OnNetworkEventMessage subscriber)
 		{
-			throw new NotImplementedException();
+			EventPublisher += subscriber;
 		}
 
 		public void SubscribeToRequests(OnNetworkRequestMessage subscriber)
 		{
-			throw new NotImplementedException();
+			RequestPublisher += subscriber;
 		}
 
 		public void SubscribeToResponses(OnNetworkResponseMessage subscriber)
 		{
-			throw new NotImplementedException();
+			ResponsePublisher += subscriber;
 		}
 
 		public void SubscribeToStatusChanges(OnNetworkStatusMessage subscriber)
 		{
-			throw new NotImplementedException();
+			StatusPublisher += subscriber;
 		}
 	}
 }
