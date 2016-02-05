@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Debug\AssertExtensions.cs" />
+    <Compile Include="DebugExtensions\AssertExtensions.cs" />
     <Compile Include="General\Copy\IDeepCloneable.cs" />
     <Compile Include="General\Copy\IShallowCloneable.cs" />
     <Compile Include="General\Extensions\Encryption\IDecryptableExtensions.cs" />
