@@ -45,14 +45,11 @@ namespace GladNet.Common
 		/// <param name="parameters">The <see cref="IMessageParameters"/> of the <see cref="RequestMessage"/>.</param>
 		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters)
 		{
-
-#if DEBUG || DEBUGBUILD
 			if(receiver == null)
 				throw new ArgumentNullException("receiver", typeof(INetworkMessageReceiver).ToString() + " parameter is null in " + GetType().ToString());
 
 			if(parameters == null)
 				throw new ArgumentNullException("parameters", typeof(IMessageParameters).ToString() + " parameter is null in " + GetType().ToString());
-#endif
 
 			receiver.OnNetworkMessageReceive(this, parameters);
 		}
