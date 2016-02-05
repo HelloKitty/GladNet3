@@ -9,20 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GladNet.Server.Common.UnitTests
+namespace GladNet.Server.Common.Tests
 {
 	[TestFixture]
 	public static class ClientPeerSessionTests
 	{
-		public class TestPayload : PacketPayload, IStaticPayloadParameters
-		{
-			public byte Channel { get { return 5; } }
-
-			public DeliveryMethod DeliveryMethod { get { return GladNet.Common.DeliveryMethod.ReliableOrdered; } }
-
-			public bool Encrypted { get { return true; } }
-		}
-
 		[Test]
 		[TestCase(OperationType.Request, false)]
 		[TestCase(OperationType.Event, true)]

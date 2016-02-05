@@ -74,5 +74,47 @@ namespace GladNet.Server.Common.Tests
 		}
 
 		//don't test that peer isn't subbed to request messages. They may listen for invalids
+
+		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ServerPeer))]
+		public static void Test_SendResposne_Calls_Send_Request_On_NetSend_Service_With_Generic_Static_Params()
+		{
+			//arrange
+			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			TestPayload payload = new TestPayload();
+
+			//set it up to indicate we can send
+			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
+				.Returns(true);
+
+			Mock<ServerPeer> peer = new Mock<ServerPeer>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			peer.CallBase = true;
+
+			//act
+			peer.Object.SendRequest(payload);
+
+			//assert
+			sendService.Verify(x => x.TrySendMessage(OperationType.Request, payload), Times.Once());
+		}
+
+		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ClientPeerSession))]
+		public static void Test_SendResposne_Calls_Send_Request_On_NetSend_Service()
+		{
+			//arrange
+			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			PacketPayload payload = Mock.Of<PacketPayload>();
+
+			//set it up to indicate we can send
+			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
+				.Returns(true);
+
+			Mock<ServerPeer> peer = new Mock<ServerPeer>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			peer.CallBase = true;
+
+			//act
+			peer.Object.SendRequest(payload, DeliveryMethod.ReliableOrdered, true, 5);
+
+			//assert
+			sendService.Verify(x => x.TrySendMessage(OperationType.Request, payload, DeliveryMethod.ReliableOrdered, true, 5), Times.Once());
+		}
 	}
 }
