@@ -30,6 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GladNet.Common">
+      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\GladNet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="GladNet.Serializer">
+      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\GladNet.Serializer.dll</HintPath>
+    </Reference>
+    <Reference Include="Logging.Services">
+      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\Logging.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Net35Essentials">
+      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\Net35Essentials.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
