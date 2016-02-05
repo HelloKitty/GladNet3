@@ -14,6 +14,15 @@ namespace GladNet.Server.Common.UnitTests
 	[TestFixture]
 	public static class ClientPeerSessionTests
 	{
+		public class TestPayload : PacketPayload, IStaticPayloadParameters
+		{
+			public byte Channel { get { return 5; } }
+
+			public DeliveryMethod DeliveryMethod { get { return GladNet.Common.DeliveryMethod.ReliableOrdered; } }
+
+			public bool Encrypted { get { return true; } }
+		}
+
 		[Test]
 		[TestCase(OperationType.Request, false)]
 		[TestCase(OperationType.Event, true)]
@@ -115,9 +124,46 @@ namespace GladNet.Server.Common.UnitTests
 			sendService.Verify(x => x.TrySendMessage(OperationType.Event, payload, DeliveryMethod.ReliableOrdered, true, 5), Times.Once());
 		}
 
-		private static Mock<ClientPeerSession> CreateClientPeerMock()
+		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ClientPeerSession))]
+		public static void Test_SendResposne_Calls_Send_Event_On_NetSend_Service_With_Generic_Static_Params()
 		{
-			return new Mock<ClientPeerSession>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			//arrange
+			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			TestPayload payload = new TestPayload();
+
+			//set it up to indicate we can send
+			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
+				.Returns(true);
+
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			peer.CallBase = true;
+
+			//act
+			peer.Object.SendEvent(payload);
+
+			//assert
+			sendService.Verify(x => x.TrySendMessage(OperationType.Event, payload), Times.Once());
+		}
+
+		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ClientPeerSession))]
+		public static void Test_SendResposne_Calls_Send_Response_On_NetSend_Service_With_Generic_Static_Params()
+		{
+			//arrange
+			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			TestPayload payload = new TestPayload();
+
+			//set it up to indicate we can send
+			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
+				.Returns(true);
+
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			peer.CallBase = true;
+
+			//act
+			peer.Object.SendResponse(payload);
+
+			//assert
+			sendService.Verify(x => x.TrySendMessage(OperationType.Response, payload), Times.Once());
 		}
 	}
 }
