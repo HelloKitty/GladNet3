@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProtobufnetRegistryTests.cs" />
     <Compile Include="ProtobufnetSerializerStrategyTests.cs" />
     <Compile Include="ProtobufnetDeserializerStrategyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
