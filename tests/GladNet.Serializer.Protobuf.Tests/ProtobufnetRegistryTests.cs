@@ -113,6 +113,41 @@ namespace GladNet.Serializer.Protobuf.Tests
 			Assert.IsTrue(registry.Register(typeof(TestBaseType)));
 		}
 
+		[Test]
+		public static void Test_Can_Register_Backwards_Include_Type()
+		{
+			//arrange
+			ProtobufnetRegistry registry = new ProtobufnetRegistry();
+			//TestChildTypeWithInclude value = new TestChildTypeWithInclude() { IntField = 5 };
+
+			//assert
+			Assert.IsTrue(registry.Register(typeof(TestChildTypeWithInclude)));
+        }
+
+		[Test]
+		public static void Test_Can_Serialize_Then_Deserialize_Backwards_Included_Type()
+		{
+			//arrange
+			TestBaseType typeToTest = new TestChildTypeWithInclude() { IntField = 5068 };
+			ProtobufnetRegistry registry = new ProtobufnetRegistry();
+
+			//act
+			registry.Register(typeof(TestChildTypeWithInclude));
+
+			//Serialize it
+			MemoryStream ms = new MemoryStream();
+
+			ProtoBuf.Serializer.Serialize(ms, typeToTest);
+			ms.Position = 0; //need to reset the stream
+
+			TestChildTypeWithInclude deserializedType = ProtoBuf.Serializer.Deserialize<TestBaseType>(ms)
+				as TestChildTypeWithInclude;
+
+			//assert
+			Assert.NotNull(deserializedType);
+			Assert.AreEqual(((TestChildTypeWithInclude)typeToTest).IntField, deserializedType.IntField);
+        }
+
 		[GladNetSerializationContract]
 		public class TestEmptyClass
 		{
@@ -177,5 +212,13 @@ namespace GladNet.Serializer.Protobuf.Tests
 			[GladNetMember(1)]
 			public int IntField;
 		}
-	}
+
+		[GladNetSerializationContract]
+		[GladNetSerializationInclude(2, typeof(TestBaseType), false)]
+		public class TestChildTypeWithInclude : TestBaseType
+		{
+			[GladNetMember(1)]
+			public int IntField;
+		}
+    }
 }

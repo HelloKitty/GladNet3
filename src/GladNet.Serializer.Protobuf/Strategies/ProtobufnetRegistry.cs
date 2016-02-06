@@ -10,6 +10,9 @@ namespace GladNet.Serializer.Protobuf
 {
 	public class ProtobufnetRegistry : ISerializerRegistry
 	{
+		//Must be static to surive through multiple instances
+		private static Dictionary<Type, object> registeredTypes = new Dictionary<Type, object>();
+
 		public bool Register(Type typeToRegister)
 		{
 			//Ok so here the fun begins.
@@ -20,7 +23,11 @@ namespace GladNet.Serializer.Protobuf
 
 			typeToRegister.ThrowIfNull(nameof(typeToRegister));
 
-			if (RuntimeTypeModel.Default.IsDefined(typeToRegister))
+			//if (RuntimeTypeModel.Default.IsDefined(typeToRegister))
+			//	return true;
+
+			//Can't use isDefined exclusively but it'll fail when doing two-way subtypes
+			if (registeredTypes.ContainsKey(typeToRegister))
 				return true;
 
 			//If it's not defined we need to add it.
@@ -43,8 +50,20 @@ namespace GladNet.Serializer.Protobuf
 
 			GladNetSerializationIncludeAttribute include = typeToRegister.Attribute<GladNetSerializationIncludeAttribute>();
 
-			if (include != null)
-				typeModel.AddSubType(include.TagID, include.DerivedTypeToInclude);
+			//this is the simple case; however unlike protobuf we support two-include
+			if (include != null && include.IncludeForDerived)
+				typeModel.AddSubType(include.TagID, include.TypeToWireTo);
+			else
+				if(include != null && !include.IncludeForDerived)
+				{
+					//this is not for mappping a base type to setup mapping for its child
+					//we need to map this child to its base
+					//so we need to get the MetaType for it
+					RuntimeTypeModel.Default.Add(include.TypeToWireTo, false)
+						.AddSubType(include.TagID, typeToRegister);
+				}
+
+			registeredTypes.Add(typeToRegister, null);
 
 			return true;
 		}
