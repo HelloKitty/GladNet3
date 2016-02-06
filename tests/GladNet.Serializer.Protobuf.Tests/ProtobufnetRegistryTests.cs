@@ -104,6 +104,15 @@ namespace GladNet.Serializer.Protobuf.Tests
 			Assert.AreNotEqual(typeToTest.ShouldntSerialize, deserializedType.ShouldntSerialize);
 		}
 
+		[Test]
+		public static void Test_Can_Register_Type_With_Includes()
+		{
+			//arrange
+			ProtobufnetRegistry registry = new ProtobufnetRegistry();
+
+			Assert.IsTrue(registry.Register(typeof(TestBaseType)));
+		}
+
 		[GladNetSerializationContract]
 		public class TestEmptyClass
 		{
@@ -153,6 +162,20 @@ namespace GladNet.Serializer.Protobuf.Tests
 
 			[GladNetMember(2)]
 			public SomeClass SomeClassField;
+		}
+
+		[GladNetSerializationContract]
+		[GladNetSerializationInclude(1, typeof(TestChildType))]
+		public class TestBaseType
+		{
+
+		}
+
+		[GladNetSerializationContract]
+		public class TestChildType : TestBaseType
+		{
+			[GladNetMember(1)]
+			public int IntField;
 		}
 	}
 }
