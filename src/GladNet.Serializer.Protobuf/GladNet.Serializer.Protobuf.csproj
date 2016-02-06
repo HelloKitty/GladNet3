@@ -7,8 +7,8 @@
     <ProjectGuid>{7CE4020C-9052-48D8-AB62-686D701D2554}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GladNet.Serialization.Protobuf</RootNamespace>
-    <AssemblyName>GladNet2.Serialization.Protobuf</AssemblyName>
+    <RootNamespace>GladNet.Serializer.Protobuf</RootNamespace>
+    <AssemblyName>GladNet.Serializer.Protobuf</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

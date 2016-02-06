@@ -7,8 +7,8 @@
     <ProjectGuid>{0898E624-4FA0-4F2F-BBD6-82BF470F427B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GladNet2.Serialization.Protobuf.Tests</RootNamespace>
-    <AssemblyName>GladNet2.Serialization.Protobuf.Tests</AssemblyName>
+    <RootNamespace>GladNet.Serializer.Protobuf.Tests</RootNamespace>
+    <AssemblyName>GladNet.Serializer.Protobuf.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
