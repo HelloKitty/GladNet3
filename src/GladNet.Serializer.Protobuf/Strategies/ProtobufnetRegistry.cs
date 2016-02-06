@@ -8,6 +8,10 @@ using System.Reflection;
 
 namespace GladNet.Serializer.Protobuf
 {
+	/// <summary>
+	/// Object provides registry serivces for registering types with
+	/// ProtoBuf-net with <see cref="RuntimeTypeModel"/>.
+	/// </summary>
 	public class ProtobufnetRegistry : ISerializerRegistry
 	{
 		//Must be static to surive through multiple instances
