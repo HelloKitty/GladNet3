@@ -37,10 +37,10 @@
       <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\GladNet.Serializer.dll</HintPath>
     </Reference>
     <Reference Include="Logging.Services">
-      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\Logging.Services.dll</HintPath>
+      <HintPath>..\..\lib\Dependency Builds\LoggingServices\DLLs\Logging.Services.dll</HintPath>
     </Reference>
     <Reference Include="Net35Essentials">
-      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\Net35Essentials.dll</HintPath>
+      <HintPath>..\..\lib\Dependency Builds\Net35Essentials\DLLs\Net35Essentials.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll</HintPath>
