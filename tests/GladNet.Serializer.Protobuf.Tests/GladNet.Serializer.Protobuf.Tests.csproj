@@ -62,11 +62,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Empty.cs" />
+    <Compile Include="ProtobufnetDeserializerStrategyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\GladNet.Serializer.Protobuf\GladNet.Serializer.Protobuf.csproj">
+      <Project>{7ce4020c-9052-48d8-ab62-686d701d2554}</Project>
+      <Name>GladNet.Serializer.Protobuf</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

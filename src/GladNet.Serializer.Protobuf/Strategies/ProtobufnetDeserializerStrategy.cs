@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace GladNet.Serialization
+namespace GladNet.Serializer.Protobuf
 {
-	public class ProtobufnetSerializationStrategy : IDeserializerStrategy
+	public class ProtobufnetDeserializerStrategy : IDeserializerStrategy
 	{
 		public TData Deserialize<TData>(byte[] value)
 		{

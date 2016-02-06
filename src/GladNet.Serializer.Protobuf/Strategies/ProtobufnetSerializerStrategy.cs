@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace GladNet.Serialization
+namespace GladNet.Serializer.Protobuf
 {
 	public class ProtobufnetSerializerStrategy : ISerializerStrategy
 	{
