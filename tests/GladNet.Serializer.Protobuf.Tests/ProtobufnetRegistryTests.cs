@@ -83,6 +83,7 @@ namespace GladNet.Serializer.Protobuf.Tests
 			typeToTest.IntField = 5;
 			typeToTest.SomeClassField = new TestWithNestedSerializableType.SomeClass() { SomeField = 8 };
 			ProtobufnetRegistry registry = new ProtobufnetRegistry();
+			typeToTest.ShouldntSerialize = 50643;
 
 			//act
 			registry.Register(typeof(TestWithNestedSerializableType));
@@ -100,6 +101,7 @@ namespace GladNet.Serializer.Protobuf.Tests
 			Assert.AreEqual(typeToTest.IntField, deserializedType.IntField);
 			Assert.NotNull(deserializedType.SomeClassField);
 			Assert.AreEqual(typeToTest.SomeClassField.SomeField, deserializedType.SomeClassField.SomeField);
+			Assert.AreNotEqual(typeToTest.ShouldntSerialize, deserializedType.ShouldntSerialize);
 		}
 
 		[GladNetSerializationContract]
@@ -130,6 +132,8 @@ namespace GladNet.Serializer.Protobuf.Tests
 
 			[GladNetMember(2)]
 			public SomeClass SomeClassField;
+
+			public int ShouldntSerialize;
 		}
 
 		[GladNetSerializationContract]
