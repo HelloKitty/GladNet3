@@ -6,6 +6,7 @@ chmod +x ./GladNet2/lib/BuildDependencies.sh
 cd GladNet2/lib/
 ./BuildDependencies.sh
 cd ..
+nuget restore GladNetV2.sln
 xbuild GladNetV2.sln /p:Configuration=Release /p:Platform="Any CPU"
 cd ..
 
