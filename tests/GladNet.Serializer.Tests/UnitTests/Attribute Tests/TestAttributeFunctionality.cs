@@ -61,7 +61,7 @@ namespace GladNet.Common.Tests
 
 			//assert
 			Assert.AreEqual(gma.TagID, tagID);
-			Assert.AreEqual(gma.DerivedTypeToInclude, derivedType);
+			Assert.AreEqual(gma.TypeToWireTo, derivedType);
 		}
 
 

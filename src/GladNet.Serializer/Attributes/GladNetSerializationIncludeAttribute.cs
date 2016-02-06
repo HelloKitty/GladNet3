@@ -10,7 +10,7 @@ namespace GladNet.Serializer
 	//GladNet uses Protobuf-net by default so the abstraction is loosely based on those specs.
 	/// <summary>
 	/// Implies a (unenforced) contract between a <see cref="GladNetSerializationContractAttribute"/> marked construct
-	/// and another <see cref="Type"/> that derives/implements the targeted <see cref="Type"/>. 
+	/// and another <see cref="Type"/> that is a derived or base type the targeted <see cref="Type"/>. 
 	/// Meta-data needed to map an int to a <see cref="Type"/>
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, 
@@ -21,7 +21,7 @@ namespace GladNet.Serializer
 		/// Indicates the <see cref="Type"/> of the inheriting/implementing
 		/// construct. Used to identify objects in case of less-derived Type serialized.
 		/// </summary>
-		public Type DerivedTypeToInclude { get; private set; }
+		public Type TypeToWireTo { get; private set; }
 
 		/// <summary>
 		/// Indiciates a unique (not enforced) ID for that can be used to map
@@ -29,24 +29,27 @@ namespace GladNet.Serializer
 		/// </summary>
 		public int TagID { get; private set; }
 
+		public bool IncludeForDerived { get; private set; }
+
 		/// <summary>
 		/// Marks a target with the Include attribute. 
 		/// Attribute doesn't handle enforcing.
 		/// </summary>
-		/// <param name="tagID">The unique (unenforced) ID to associate with the derived <see cref="Type"/>.</param>
-		/// <param name="derivedType">Type of the derived Type to associate with. (Unenforced to be a derived type)</param>
+		/// <param name="tagID">The unique (unenforced) ID to associate with the <see cref="Type"/>.</param>
+		/// <param name="type">Type of the derived or base Type to associate with. (Unenforced to be a derived or subtype)</param>
 		/// <exception cref="ArgumentOutOfRangeException">Throws if tagID is 0 or negative.</exception>
-		public GladNetSerializationIncludeAttribute(int tagID, Type derivedType)
+		public GladNetSerializationIncludeAttribute(int tagID, Type type, bool isForDerived = true)
 			: base()
 		{
 			//uint is not CLS compliant. We have no reason to use uint in .Net
 			if (tagID <= 0)
 				throw new ArgumentOutOfRangeException("tagID", "tagID must be a positive non-zero integer. See revelant documentation.");
 
-			if (derivedType == null)
+			if (type == null)
 				throw new ArgumentNullException("derivedType", "DerivedType cannot be null in " + typeof(GladNetSerializationIncludeAttribute) + ".ctor(...).");
 
-			DerivedTypeToInclude = derivedType;
+			IncludeForDerived = isForDerived;
+			TypeToWireTo = type;
 			TagID = tagID;
 		}
 	}
