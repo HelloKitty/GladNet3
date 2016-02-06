@@ -43,6 +43,7 @@
     <Compile Include="Attributes\GladNetSerializationContractAttribute.cs" />
     <Compile Include="Attributes\GladNetSerializationIncludeAttribute.cs" />
     <Compile Include="Interfaces\IDeserializable.cs" />
+    <Compile Include="Interfaces\ISerializerRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interfaces\IDeserializerStrategy.cs" />
     <Compile Include="Interfaces\ISerializable.cs" />
