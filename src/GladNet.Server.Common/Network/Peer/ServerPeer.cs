@@ -18,12 +18,10 @@ namespace GladNet.Server.Common
 
 			//ServerPeers should be interested in events and responses from the server they are a peer of
 			subService.SubscribeTo<EventMessage>()
-				.With(OnReceiveEvent);
+				.With((x, y) => OnReceiveEvent(x.Payload.Data, y));
 
 			subService.SubscribeTo<ResponseMessage>()
-				.With(OnReceiveResponse);
-
-			//We also care about status changes
+				.With((x, y) => OnReceiveResponse(x.Payload.Data, y));
 		}
 
 		/// <summary>
@@ -68,17 +66,17 @@ namespace GladNet.Server.Common
 		}
 
 		/// <summary>
-		/// Called internally when an event is recieved from the remote peer.
+		/// Called internally when an event is recieved.
 		/// </summary>
-		/// <param name="message"><see cref="IEventMessage"/> sent by the peer.</param>
+		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
-		protected abstract void OnReceiveEvent(IEventMessage message, IMessageParameters parameters);
+		protected abstract void OnReceiveEvent(PacketPayload payload, IMessageParameters parameters);
 
 		/// <summary>
-		/// Called internally when a response is recieved from the remote peer.
+		/// Called internally when a response is recieved.
 		/// </summary>
-		/// <param name="message"><see cref="IResponseMessage"/> sent by the peer.</param>
+		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
-		protected abstract void OnReceiveResponse(IResponseMessage message, IMessageParameters parameters);
+		protected abstract void OnReceiveResponse(PacketPayload payload, IMessageParameters parameters);
 	}
 }

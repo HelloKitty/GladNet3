@@ -18,7 +18,7 @@ namespace GladNet.Server.Common
 
 			//Subscribe to request messages
 			subService.SubscribeTo<RequestMessage>()
-				.With(OnReceiveRequest);
+				.With((x, y) => OnReceiveRequest(x.Payload.Data, y));
 		}
 
 		/// <summary>
@@ -99,8 +99,8 @@ namespace GladNet.Server.Common
 		/// <summary>
 		/// Called internally when a request is recieved from the remote peer.
 		/// </summary>
-		/// <param name="message"><see cref="IRequestMessage"/> sent by the peer.</param>
+		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
-		protected abstract void OnReceiveRequest(IRequestMessage message, IMessageParameters parameters);
+		protected abstract void OnReceiveRequest(PacketPayload payload, IMessageParameters parameters);
 	}
 }
