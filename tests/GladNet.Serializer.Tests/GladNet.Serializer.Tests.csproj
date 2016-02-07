@@ -54,13 +54,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GladNet.Serializer\GladNet.Serializer.csproj">
-      <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
-      <Name>GladNet.Serializer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\GladNet.Common\GladNet.Common.csproj">
       <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
       <Name>GladNet.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\GladNet.Serializer\GladNet.Serializer.csproj">
+      <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
+      <Name>GladNet.Serializer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
