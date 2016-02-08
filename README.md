@@ -6,6 +6,8 @@ If you're looking for concrete implementations, and not the unifying API of Glad
 
 Lidgren's: https://github.com/HelloKitty/GladNet2-Lidgren
 
+Photon Server's: https://github.com/HelloKitty/GladNet.PhotonServer
+
 ###Builds
 
 Linux/Mono: [![Build Status](https://travis-ci.org/HelloKitty/GladNet2.0.svg)](https://travis-ci.org/HelloKitty/GladNet2.0)
