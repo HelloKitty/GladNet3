@@ -23,11 +23,11 @@ namespace GladNet.Common
 		/// <summary>
 		/// Response channel.
 		/// </summary>
-        event OnNetworkResponseMessage ResponsePublisher;
+		event OnNetworkResponseMessage ResponsePublisher;
 
 		/// <summary>
 		/// Status channel.
 		/// </summary>
-        event OnNetworkStatusMessage StatusPublisher;
+		event OnNetworkStatusMessage StatusPublisher;
 	}
 }

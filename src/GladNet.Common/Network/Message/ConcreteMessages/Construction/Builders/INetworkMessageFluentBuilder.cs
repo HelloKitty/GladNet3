@@ -6,7 +6,7 @@ using System.Text;
 namespace GladNet.Common
 {
 	public interface INetworkMessageFluentBuilder<TNetworkMessageType>
-        where TNetworkMessageType : INetworkMessage
+		where TNetworkMessageType : INetworkMessage
 	{
 		PacketPayload Payload { get; set; }
 

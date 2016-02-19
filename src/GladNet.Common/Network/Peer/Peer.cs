@@ -7,7 +7,7 @@ using System.Text;
 
 namespace GladNet.Common
 {
-	public abstract class Peer : INetPeer, IClassLogger
+	public abstract class Peer : INetPeer, IClassLogger, IDisconnectable
 	{
 		/// <summary>
 		/// Peer's service for sending network messages.
@@ -24,20 +24,31 @@ namespace GladNet.Common
 
 		public ILogger Logger { get; private set; }
 
-		protected Peer(ILogger logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService)
+		protected IDisconnectionServiceHandler disconnectionHandler { get; private set; }
+
+		protected Peer(ILogger logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+			IDisconnectionServiceHandler disconnectHandler)
 		{
 			logger.ThrowIfNull(nameof(logger));
 			messageSender.ThrowIfNull(nameof(messageSender));
 			details.ThrowIfNull(nameof(details));
 			subService.ThrowIfNull(nameof(subService));
+			disconnectHandler.ThrowIfNull(nameof(disconnectHandler));
 
 			PeerDetails = details;
 			NetworkSendService = messageSender;
 			Logger = logger;
+			disconnectionHandler = disconnectHandler;
 
 			//All peers should care about status changes so we subscribe
 			subService.SubscribeTo<StatusMessage>()
 				.With(OnReceiveStatus);
+		}
+
+		public void Disconnect()
+		{
+			//Just request a disconnection from the service.
+			disconnectionHandler.Disconnect();
 		}
 
 		public virtual bool CanSend(OperationType opType)
