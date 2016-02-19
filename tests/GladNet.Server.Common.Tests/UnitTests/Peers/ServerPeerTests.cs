@@ -86,7 +86,7 @@ namespace GladNet.Server.Common.Tests
 			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
 				.Returns(true);
 
-			Mock<ServerPeer> peer = new Mock<ServerPeer>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			Mock<ServerPeer> peer = new Mock<ServerPeer>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//act
