@@ -24,7 +24,7 @@ namespace GladNet.Server.Common.Tests
 			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
 			sender.Setup(x => x.CanSend(opType)).Returns(expectedResult); //set this up so it doesn't affect results
 
-            Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
 			peer.CallBase = true;
 
 			//act
@@ -62,7 +62,7 @@ namespace GladNet.Server.Common.Tests
 			//arrange
 			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
 			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object);
-            peer.CallBase = true;
+			peer.CallBase = true;
 
 			//Makes sure it's created
 			//Otherwise Moq won't construct the object
@@ -70,7 +70,7 @@ namespace GladNet.Server.Common.Tests
 
 			//assert
 			subService.Verify(x => x.SubscribeToRequests(It.IsAny<OnNetworkRequestMessage>()), Times.Once());
-        }
+		}
 
 
 		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ClientPeerSession))]

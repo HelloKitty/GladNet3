@@ -47,7 +47,7 @@ namespace GladNet.Common.Tests
 			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
 			sender.Setup(x => x.CanSend(It.IsAny<OperationType>())).Returns(false);
 
-            Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>());
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
 			//Enable calling implemented methods
 			peer.CallBase = true;

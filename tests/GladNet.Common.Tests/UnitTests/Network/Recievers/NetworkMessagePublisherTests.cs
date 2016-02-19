@@ -41,7 +41,7 @@ namespace GladNet.Common.Tests
 		public static void Test_Subscribed_Target_Is_Invoked_On_Publish_Event()
 		{
 			GenericPublishMessageTest<IEventMessage>();
-        }
+		}
 
 		[Test]
 		public static void Test_Subscribed_Target_Is_Invoked_On_Publish_Response()

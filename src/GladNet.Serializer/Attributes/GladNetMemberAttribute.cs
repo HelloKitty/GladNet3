@@ -17,8 +17,8 @@ namespace GladNet.Serializer
 	public sealed class GladNetMemberAttribute : Attribute
 	{
 		/// <summary>
-        /// Indicates whether this member is mandatory.
-        /// </summary>
+		/// Indicates whether this member is mandatory.
+		/// </summary>
 		public bool IsRequired { get; set; }
 
 		/// <summary>
