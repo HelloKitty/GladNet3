@@ -11,7 +11,7 @@ namespace GladNet.Server.Common
 {
 	public abstract class ServerPeer : Peer, IClientPeerNetworkMessageSender
 	{
-		protected ServerPeer(ILogger logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService) 
+		protected ServerPeer(ILogger logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService)
 			: base(logger, messageSender, details, subService)
 		{
 			subService.ThrowIfNull(nameof(subService));
