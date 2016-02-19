@@ -11,8 +11,9 @@ namespace GladNet.Server.Common
 {
 	public abstract class ClientPeerSession : Peer, IClientSessionNetworkMessageSender
 	{
-		public ClientPeerSession(ILogger logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService subService)
-			: base(logger, sender, details, subService)
+		public ClientPeerSession(ILogger logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+			IDisconnectionServiceHandler disconnectHandler)
+				: base(logger, sender, details, subService, disconnectHandler)
 		{
 			subService.ThrowIfNull(nameof(subService));
 

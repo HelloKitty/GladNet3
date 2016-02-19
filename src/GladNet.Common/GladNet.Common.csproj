@@ -87,6 +87,7 @@
     <Compile Include="Network\Message\SendResult.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
     <Compile Include="Network\NetStatus.cs" />
+    <Compile Include="Network\Peer\Connection\IDisconnectable.cs" />
     <Compile Include="Network\Peer\Connection\IDisconnectionServiceHandler.cs" />
     <Compile Include="Network\Peer\Connection\OnNetworkDisconnect.cs" />
     <Compile Include="Payload\Concrete Payloads\StatusChangePayload.cs" />
