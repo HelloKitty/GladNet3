@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logging.Services;
+using Common.Logging;
 
 namespace GladNet.Server.Common
 {
@@ -13,7 +13,7 @@ namespace GladNet.Server.Common
 	/// </summary>
 	public abstract class ServerPeerSession : ClientPeerSession
 	{
-		public ServerPeerSession(ILogger logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService netMessageSubService,
+		public ServerPeerSession(ILog logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService netMessageSubService,
 			IDisconnectionServiceHandler disconnectHandler)
 				: base(logger, sender, details, netMessageSubService, disconnectHandler)
 		{

@@ -1,4 +1,4 @@
-﻿using Logging.Services;
+﻿using Common.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,6 @@ namespace GladNet.Common
 {
 	public interface IClassLogger
 	{
-		ILogger Logger { get; }
+		ILog Logger { get; }
 	}
 }
