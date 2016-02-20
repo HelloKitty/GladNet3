@@ -1,4 +1,4 @@
-﻿using Logging.Services;
+﻿using Common.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -22,11 +22,11 @@ namespace GladNet.Common
 		/// </summary>
 		public IConnectionDetails PeerDetails { get; private set; }
 
-		public ILogger Logger { get; private set; }
+		public ILog Logger { get; private set; }
 
 		protected IDisconnectionServiceHandler disconnectionHandler { get; private set; }
 
-		protected Peer(ILogger logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+		protected Peer(ILog logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
 		{
 			logger.ThrowIfNull(nameof(logger));
@@ -69,6 +69,10 @@ namespace GladNet.Common
 
 			//I know I cast here so let's only call this once for efficiency
 			NetStatus s = message.Status;
+
+			//Set the new status to the incoming status
+			Status = s;
+
 			if (s != Status)
 				OnStatusChanged(s);
 		}

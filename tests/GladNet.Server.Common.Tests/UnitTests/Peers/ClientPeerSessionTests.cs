@@ -1,6 +1,6 @@
 ﻿using GladNet.Common;
 using GladNet.Server.Common;
-using Logging.Services;
+using Common.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -24,7 +24,7 @@ namespace GladNet.Server.Common.Tests
 			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
 			sender.Setup(x => x.CanSend(opType)).Returns(expectedResult); //set this up so it doesn't affect results
 
-			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//act
@@ -38,7 +38,7 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_Throws_On_Null_Sub_Service()
 		{
 			//arrange
-			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(MockBehavior.Strict, Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), null, Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(MockBehavior.Strict, Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), null, Mock.Of<IDisconnectionServiceHandler>());
 
 			//assert
 			Assert.IsTrue(new Func<bool>(() =>
@@ -61,7 +61,7 @@ namespace GladNet.Server.Common.Tests
 		{
 			//arrange
 			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
-			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//Makes sure it's created
@@ -84,7 +84,7 @@ namespace GladNet.Server.Common.Tests
 			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
 				.Returns(true);
 
-			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//act
@@ -105,7 +105,7 @@ namespace GladNet.Server.Common.Tests
 			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
 				.Returns(true);
 
-			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//act
@@ -126,7 +126,7 @@ namespace GladNet.Server.Common.Tests
 			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
 				.Returns(true);
 
-			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//act
@@ -147,7 +147,7 @@ namespace GladNet.Server.Common.Tests
 			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
 				.Returns(true);
 
-			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILogger>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//act

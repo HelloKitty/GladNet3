@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logging.Services;
+using Common.Logging;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GladNet.Server.Common
 {
 	public abstract class ServerPeer : Peer, IClientPeerNetworkMessageSender
 	{
-		protected ServerPeer(ILogger logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+		protected ServerPeer(ILog logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
 				: base(logger, messageSender, details, subService, disconnectHandler)
 		{

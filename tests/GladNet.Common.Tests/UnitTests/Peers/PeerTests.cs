@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq.Protected;
-using Logging.Services;
+using Common.Logging;
 
 namespace GladNet.Common.Tests
 {
@@ -47,7 +47,7 @@ namespace GladNet.Common.Tests
 			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
 			sender.Setup(x => x.CanSend(It.IsAny<OperationType>())).Returns(false);
 
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			Mock<PacketPayload> payload = new Mock<PacketPayload>(MockBehavior.Strict);
 			//Enable calling implemented methods
 			peer.CallBase = true;
@@ -72,7 +72,7 @@ namespace GladNet.Common.Tests
 			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
 			sender.Setup(x => x.CanSend(It.IsAny<OperationType>())).Returns(false);
 
-			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILogger>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			TestPayloadWithStaticParams payload = new TestPayloadWithStaticParams();
 			//Enable calling implemented methods
 			peer.CallBase = true;
@@ -120,7 +120,7 @@ namespace GladNet.Common.Tests
 
 		private static Mock<Peer> CreatePeerMock()
 		{
-			return new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILogger>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			return new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 		}
 	}
 }
