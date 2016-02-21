@@ -6,16 +6,13 @@ before_install:
 
 install:
   - nuget install NUnit.Runners -Version 3.0.1 -OutputDirectory tests/testrunner
-  - nuget restore GladNet.Serializer.Protobuf.sln
+  - nuget restore GladNet.Serializer.Protobuf.sln -ConfigFile NuGet.config
 
 before_script:
-  - chmod +x ./lib/BuildDependencies.sh
   - chmod +x ./tests/RunTests.sh
   - chmod +x ./Build.sh
 
 script:
-  - cd "$TRAVIS_BUILD_DIR/lib"
-  - ./BuildDependencies.sh
   - cd "$TRAVIS_BUILD_DIR"
   - ./Build.sh
   - cd "$TRAVIS_BUILD_DIR/tests"

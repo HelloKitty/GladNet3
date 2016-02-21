@@ -30,21 +30,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GladNet.Common">
-      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\GladNet.Common.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net35\Common.Logging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GladNet.Serializer">
-      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\GladNet.Serializer.dll</HintPath>
+    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Common.Logging.Core.3.3.1\lib\net35\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Logging.Services">
-      <HintPath>..\..\lib\Dependency Builds\LoggingServices\DLLs\Logging.Services.dll</HintPath>
+    <Reference Include="GladNet.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Common.1.0.1\lib\net35\GladNet.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GladNet.Serializer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Serializer.1.0.1\lib\net35\GladNet.Serializer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Moq.4.2.1510.2205\lib\net35\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Net35Essentials">
-      <HintPath>..\..\lib\Dependency Builds\Net35Essentials\DLLs\Net35Essentials.dll</HintPath>
+    <Reference Include="Net35Essentials, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Net35Essentials.1.0.2\lib\net35\Net35Essentials.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.0.5813.39033, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.0.1\lib\net20\nunit.framework.dll</HintPath>
