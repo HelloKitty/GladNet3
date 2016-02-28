@@ -3,21 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Common.Logging;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GladNet.Server.Common
 {
-	public abstract class ServerPeer : Peer, IClientPeerNetworkMessageSender
+	public abstract class ClientPeer : Peer, IClientPeerNetworkMessageSender
 	{
-		protected ServerPeer(ILog logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+		protected ClientPeer(ILog logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
 				: base(logger, messageSender, details, subService, disconnectHandler)
 		{
 			subService.ThrowIfNull(nameof(subService));
 
-			//ServerPeers should be interested in events and responses from the server they are a peer of
+			//ClientPeers should be interested in events and responses from the server they are a peer of
 			subService.SubscribeTo<EventMessage>()
 				.With((x, y) => OnReceiveEvent(x.Payload.Data, y));
 

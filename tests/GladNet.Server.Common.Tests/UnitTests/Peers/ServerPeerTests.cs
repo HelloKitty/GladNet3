@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace GladNet.Server.Common.Tests
 {
-	[TestFixture(TestOf = typeof(ServerPeer))]
+	[TestFixture(TestOf = typeof(ClientPeer))]
 	public static class ServerPeerTests
 	{
-		[Test(Author = "Andrew Blakely", Description = "Should only be able to send requests.", TestOf = typeof(ServerPeer))]
+		[Test(Author = "Andrew Blakely", Description = "Should only be able to send requests.", TestOf = typeof(ClientPeer))]
 		[TestCase(OperationType.Request, true)]
 		[TestCase(OperationType.Event, false)]
 		[TestCase(OperationType.Response, false)]
@@ -23,7 +23,7 @@ namespace GladNet.Server.Common.Tests
 			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
 			sender.Setup(x => x.CanSend(opType)).Returns(expectedResult); //set this up so it doesn't affect results
 
-			Mock<ServerPeer> peer = new Mock<ServerPeer>(Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//act
@@ -33,19 +33,19 @@ namespace GladNet.Server.Common.Tests
 			Assert.AreEqual(result, expectedResult);
 		}
 
-		[Test(Author = "Andrew Blakely", TestOf = typeof(ServerPeer))]
+		[Test(Author = "Andrew Blakely", TestOf = typeof(ClientPeer))]
 		public static void Test_Ctor_Doesnt_Throw_On_Non_Null_Dependencies()
 		{
 			//Assert
-			Assert.DoesNotThrow(() => { var r = new Mock<ServerPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>()).Object; } );
+			Assert.DoesNotThrow(() => { var r = new Mock<ClientPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>()).Object; } );
 		}
 
-		[Test(Author = "Andrew Blakely", Description = nameof(ServerPeer) + " should be listening for events and responses.", TestOf = typeof(ServerPeer))]
+		[Test(Author = "Andrew Blakely", Description = nameof(ClientPeer) + " should be listening for events and responses.", TestOf = typeof(ClientPeer))]
 		public static void Test_Registered_EventMessage_With_NetMessageSubService()
 		{
 			//arrange
 			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
-			Mock<ServerPeer> peer = new Mock<ServerPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//Makes sure it's created
@@ -57,12 +57,12 @@ namespace GladNet.Server.Common.Tests
 		}
 
 
-		[Test(Author = "Andrew Blakely", Description = nameof(ServerPeer) + " should be listening for events and responses.", TestOf = typeof(ServerPeer))]
+		[Test(Author = "Andrew Blakely", Description = nameof(ClientPeer) + " should be listening for events and responses.", TestOf = typeof(ClientPeer))]
 		public static void Test_Registered_ResponseMessage_With_NetMessageSubService()
 		{
 			//arrange
 			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
-			Mock<ServerPeer> peer = new Mock<ServerPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//Makes sure it's created
@@ -75,7 +75,7 @@ namespace GladNet.Server.Common.Tests
 
 		//don't test that peer isn't subbed to request messages. They may listen for invalids
 
-		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ServerPeer))]
+		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ClientPeer))]
 		public static void Test_SendResposne_Calls_Send_Request_On_NetSend_Service_With_Generic_Static_Params()
 		{
 			//arrange
@@ -86,7 +86,7 @@ namespace GladNet.Server.Common.Tests
 			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
 				.Returns(true);
 
-			Mock<ServerPeer> peer = new Mock<ServerPeer>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//act
@@ -96,7 +96,7 @@ namespace GladNet.Server.Common.Tests
 			sendService.Verify(x => x.TrySendMessage(OperationType.Request, payload), Times.Once());
 		}
 
-		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ServerPeer))]
+		[Test(Author = "Andrew Blakely", Description = "Calling send response should call send service.", TestOf = typeof(ClientPeer))]
 		public static void Test_SendResposne_Calls_Send_Request_On_NetSend_Service()
 		{
 			//arrange
@@ -107,7 +107,7 @@ namespace GladNet.Server.Common.Tests
 			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
 				.Returns(true);
 
-			Mock<ServerPeer> peer = new Mock<ServerPeer>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//act
