@@ -6,7 +6,7 @@ using System.Text;
 using Common.Logging;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GladNet.Server.Common
+namespace GladNet.Common
 {
 	public abstract class ClientPeer : Peer, IClientPeerNetworkMessageSender
 	{

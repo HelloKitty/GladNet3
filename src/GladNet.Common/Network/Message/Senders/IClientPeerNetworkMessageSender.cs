@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
-namespace GladNet.Server.Common
+namespace GladNet.Common
 {
 	/// <summary>
 	/// Contracts implementing types to offer specific/supported network message types such as; Request
