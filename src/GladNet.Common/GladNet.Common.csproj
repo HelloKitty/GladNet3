@@ -79,6 +79,7 @@
     <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionFluentBuilder.cs" />
+    <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetSender.cs" />
     <Compile Include="Network\Parameters\DeliveryMethod.cs" />
     <Compile Include="Network\Parameters\IMessageParameters.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Network\Message\SendResult.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
     <Compile Include="Network\NetStatus.cs" />
+    <Compile Include="Network\Peer\ClientPeer.cs" />
     <Compile Include="Network\Peer\Connection\IDisconnectable.cs" />
     <Compile Include="Network\Peer\Connection\IDisconnectionServiceHandler.cs" />
     <Compile Include="Network\Peer\Connection\OnNetworkDisconnect.cs" />

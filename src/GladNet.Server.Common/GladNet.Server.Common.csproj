@@ -47,10 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageSender.cs" />
     <Compile Include="Network\Message\Senders\IClientSessionNetworkMessageSender.cs" />
     <Compile Include="Network\Peer\ClientPeerSession.cs" />
-    <Compile Include="Network\Peer\ServerPeer.cs" />
     <Compile Include="Network\Peer\ServerPeerSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
