@@ -14,6 +14,9 @@ namespace GladNet.Common
 	[GladNetSerializationContract]
 	public abstract class PacketPayload
 	{
-		
+		public PacketPayload()
+		{
+			
+		}
 	}
 }
