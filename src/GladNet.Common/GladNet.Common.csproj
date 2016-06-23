@@ -103,13 +103,16 @@
     <Compile Include="General\Encryption\IEncryptable.cs" />
     <Compile Include="General\Encryption\IEncryptorStrategy.cs" />
     <Compile Include="General\Encryption\NetSendable.cs" />
-    <Compile Include="Payload\PacketPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Network\Peer\ConcretePeers\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GladNet.Payload\GladNet.Payload.csproj">
+      <Project>{862f3fd5-4fda-43d8-9fa1-d2179d695338}</Project>
+      <Name>GladNet.Payload</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GladNet.Serializer\GladNet.Serializer.csproj">
       <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
       <Name>GladNet.Serializer</Name>
