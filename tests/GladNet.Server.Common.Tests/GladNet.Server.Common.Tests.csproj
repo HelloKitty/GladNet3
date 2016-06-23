@@ -63,9 +63,16 @@
     <Compile Include="UnitTests\Peers\TestPayload.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\src\GladNet.Common\GladNet.Common.csproj">
       <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
       <Name>GladNet.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\GladNet.Payload\GladNet.Payload.csproj">
+      <Project>{862f3fd5-4fda-43d8-9fa1-d2179d695338}</Project>
+      <Name>GladNet.Payload</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\GladNet.Serializer\GladNet.Serializer.csproj">
       <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
@@ -75,9 +82,6 @@
       <Project>{8b05f085-d102-4d2f-a643-8e3734ad6f97}</Project>
       <Name>GladNet.Server.Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,10 +1,4 @@
-﻿using GladNet.Common;
-using GladNet.Serializer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using GladNet.Serializer;
 
 namespace GladNet.Common
 {
@@ -14,6 +8,10 @@ namespace GladNet.Common
 	[GladNetSerializationContract]
 	public abstract class PacketPayload
 	{
+		/// <summary>
+		/// Public parameterless constructor for protobuf-net style
+		/// serialization schemes.
+		/// </summary>
 		public PacketPayload()
 		{
 			
