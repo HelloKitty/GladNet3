@@ -122,17 +122,21 @@ namespace GladNet.Serializer.Protobuf.Tests
 
 			//assert
 			Assert.IsTrue(registry.Register(typeof(TestChildTypeWithInclude)));
-        }
+		}
 
 		[Test]
 		public static void Test_Can_Serialize_Then_Deserialize_Backwards_Included_Type()
 		{
 			//arrange
-			TestBaseType typeToTest = new TestChildTypeWithInclude() { IntField = 5068 };
+			TestBaseType typeToTest = new TestChildTypeWithInclude(5068);
 			ProtobufnetRegistry registry = new ProtobufnetRegistry();
 
 			//act
+			registry.Register(typeof(TestBaseType));
+			registry.Register(typeof(TestChildTypeWithInclude2));
 			registry.Register(typeof(TestChildTypeWithInclude));
+			registry.Register(typeof(TestChildType));
+			
 
 			//Serialize it
 			MemoryStream ms = new MemoryStream();
@@ -145,8 +149,16 @@ namespace GladNet.Serializer.Protobuf.Tests
 
 			//assert
 			Assert.NotNull(deserializedType);
-			Assert.AreEqual(((TestChildTypeWithInclude)typeToTest).IntField, deserializedType.IntField);
-        }
+			Assert.AreEqual(deserializedType.GetType(), typeToTest.GetType());
+			Assert.AreEqual(((TestChildTypeWithInclude)typeToTest).IntField2, deserializedType.IntField2);
+		}
+
+		public static void Test_Deserializes_To_Right_Type()
+		{
+			//ProtobufnetRegistry registry = new ProtobufnetRegistry();
+
+			//registry.Register(
+		}
 
 		[GladNetSerializationContract]
 		public class TestEmptyClass
@@ -210,15 +222,33 @@ namespace GladNet.Serializer.Protobuf.Tests
 		public class TestChildType : TestBaseType
 		{
 			[GladNetMember(1)]
-			public int IntField;
+			public int IntField1;
 		}
 
 		[GladNetSerializationContract]
 		[GladNetSerializationInclude(2, typeof(TestBaseType), false)]
 		public class TestChildTypeWithInclude : TestBaseType
 		{
-			[GladNetMember(1)]
-			public int IntField;
+			[GladNetMember(3)]
+			public int IntField2 { get; private set; }
+
+			public TestChildTypeWithInclude(int val)
+			{
+				IntField2 = val;
+			}
+
+			public TestChildTypeWithInclude()
+			{
+
+			}
 		}
-    }
+
+		[GladNetSerializationContract]
+		[GladNetSerializationInclude(3, typeof(TestBaseType), false)]
+		public class TestChildTypeWithInclude2 : TestBaseType
+		{
+			[GladNetMember(2)]
+			public int IntField5;
+		}
+	}
 }
