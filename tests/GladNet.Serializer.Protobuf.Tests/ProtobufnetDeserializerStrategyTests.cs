@@ -46,6 +46,6 @@ namespace GladNet.Serializer.Protobuf
 			Assert.AreEqual(ProtoBuf.Serializer.Deserialize<TObjectType>(ms), deserializer.Deserialize<TObjectType>(ms.ToArray()));
 
 			ms.Dispose();
-        }
+		}
 	}
 }

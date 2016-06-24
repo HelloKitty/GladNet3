@@ -20,7 +20,8 @@ namespace GladNet.Serializer.Protobuf
 		/// <returns>An instance/value serialized from the given instance of <typeparamref name="TData"/>.</returns>
 		public byte[] Serialize<TData>(TData data)
 		{
-			data.ThrowIfNull(nameof(data));
+			if (data == null)
+				throw new ArgumentNullException(nameof(data), $"Provided {data} is a null arg.");
 
 			using (MemoryStream ms = new MemoryStream())
 			{

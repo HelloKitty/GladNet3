@@ -25,7 +25,8 @@ namespace GladNet.Serializer.Protobuf
 			//However, we must make sure to check if it's already been registered or we might get circular graphs which
 			//would overflow. But that'd be a weird type anyway.
 
-			typeToRegister.ThrowIfNull(nameof(typeToRegister));
+			if (typeToRegister == null)
+				throw new ArgumentNullException(nameof(typeToRegister), $"Provided {typeToRegister} is a null arg.");
 
 			//if (RuntimeTypeModel.Default.IsDefined(typeToRegister))
 			//	return true;

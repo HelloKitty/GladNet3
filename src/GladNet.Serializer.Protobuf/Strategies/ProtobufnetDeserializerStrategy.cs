@@ -24,10 +24,11 @@ namespace GladNet.Serializer.Protobuf
 			{
 				TData data = ProtoBuf.Serializer.Deserialize<TData>(ms);
 
-				data.ThrowIfNull(nameof(data));
+				if (data == null)
+					throw new InvalidOperationException($"Resulting serialized value {data} is null.");
 
 				return data;
-            }
+			}
 		}
 	}
 }
