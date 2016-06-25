@@ -14,6 +14,8 @@ namespace GladNet.Serializer.Protobuf
 	/// </summary>
 	public class ProtobufnetRegistry : ISerializerRegistry
 	{
+		//TODO: Make this class thread safe.
+
 		//Must be static to surive through multiple instances
 		private static Dictionary<Type, object> registeredTypes = new Dictionary<Type, object>();
 
@@ -27,6 +29,9 @@ namespace GladNet.Serializer.Protobuf
 
 			if (typeToRegister == null)
 				throw new ArgumentNullException(nameof(typeToRegister), $"Provided {typeToRegister} is a null arg.");
+
+			if (typeToRegister.IsEnum)
+				return true;
 
 			//if (RuntimeTypeModel.Default.IsDefined(typeToRegister))
 			//	return true;

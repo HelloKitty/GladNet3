@@ -70,6 +70,7 @@
     <Compile Include="ProtobufnetSerializerStrategyTests.cs" />
     <Compile Include="ProtobufnetDeserializerStrategyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegressionTests\EnumContractRegressionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
