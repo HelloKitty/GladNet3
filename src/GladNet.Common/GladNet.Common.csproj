@@ -94,6 +94,7 @@
     <Compile Include="Network\Peer\Connection\IDisconnectable.cs" />
     <Compile Include="Network\Peer\Connection\IDisconnectionServiceHandler.cs" />
     <Compile Include="Network\Peer\Connection\OnNetworkDisconnect.cs" />
+    <Compile Include="Network\Peer\Connection\DefaultDisconnectionServiceHandler.cs" />
     <Compile Include="Payload\Concrete Payloads\StatusChangePayload.cs" />
     <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />
     <Compile Include="Network\Peer\INetPeer.cs" />
