@@ -8,7 +8,7 @@ namespace GladNet.Common
 	/// <summary>
 	/// Service offering disconnection functionality.
 	/// </summary>
-	public interface IDisconnectionServiceHandler
+	public interface IDisconnectionServiceHandler : IDisconnectable
 	{
 		/// <summary>
 		/// Publisher of <see cref="OnNetworkDisconnect"/> events to subscribers.
@@ -19,10 +19,5 @@ namespace GladNet.Common
 		/// Indicates if the connection is disconnected.
 		/// </summary>
 		bool isDisconnected { get; }
-
-		/// <summary>
-		/// Disconnects the connection.
-		/// </summary>
-		void Disconnect();
 	}
 }

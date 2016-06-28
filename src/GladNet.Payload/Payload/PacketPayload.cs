@@ -1,10 +1,12 @@
 ﻿using GladNet.Serializer;
+using System;
 
 namespace GladNet.Common
 {
 	/// <summary>
 	/// Base-class for user-created wire-type data units.
 	/// </summary>
+	[CLSCompliant(true)]
 	[GladNetSerializationContract]
 	public abstract class PacketPayload
 	{
