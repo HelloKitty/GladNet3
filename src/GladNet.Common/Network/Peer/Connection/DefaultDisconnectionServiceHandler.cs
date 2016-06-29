@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GladNet.Common.Network
+namespace GladNet.Common
 {
 	//Stole this implementation from GladNet.PhotonServer's adapter.
 	//Should serve well as a simple implementation in-lieu of custom implementations
