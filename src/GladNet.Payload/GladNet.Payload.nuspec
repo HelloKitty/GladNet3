@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>GladNet.Payload</id>
+    <version>%PackageVersion%</version>
+    <title>GladNet.Payload</title>
+    <authors>www.github.com/HelloKitty</authors>
+    <owners>www.github.com/HelloKitty</owners>
+    <licenseUrl>https://github.com/HelloKitty/GladNet2/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/HelloKitty/GladNet2</projectUrl>
+    <description>GladNet2 specification for Payloads.</description>
+    <copyright>Copyright 2015-2016</copyright>
+    <tags>GladNet Glad GladNet2 Glad2 GladNet.Payload GladNet2.Payload Payload</tags>
+  </metadata>
+<dependencies>
+  <dependency id="GladNet.Serializer" version="%PackageVersion%" />
+</dependencies>
+</package>
