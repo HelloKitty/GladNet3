@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>GladNet.Serializer</id>
-    <version>%PackageVersion%</version>
+    <version>$version$</version>
     <title>GladNet.Serializer</title>
     <authors>www.github.com/HelloKitty</authors>
     <owners>www.github.com/HelloKitty</owners>
