@@ -11,10 +11,10 @@
     <description>GladNet2 contracts and interfaces for GladNet2 server applications.</description>
     <copyright>Copyright 2015-2016</copyright>
     <tags>GladNet Glad GladNet2 Glad2 GladNet.Server.Common GladNet2.Server.Common Server.Common</tags>
+    <dependencies>
+      <dependency id="GladNet.Serializer" version=%PackageVersion% />
+      <dependency id="GladNet.Payload" version=%PackageVersion% />
+      <dependency id="GladNet.Common" version=%PackageVersion% />
+    </dependencies>
   </metadata>
-<dependencies>
-  <dependency id="GladNet.Serializer" version="%PackageVersion%" />
-  <dependency id="GladNet.Payload" version="%PackageVersion%" />
-  <dependency id="GladNet.Common" version="%PackageVersion%" />
-</dependencies>
 </package>
