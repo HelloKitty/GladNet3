@@ -12,9 +12,9 @@
     <copyright>Copyright 2015-2016</copyright>
     <tags>GladNet Glad GladNet2 Glad2 GladNet.Common GladNet2.Common Common</tags>
     <dependencies>
-       <dependency id="GladNet.Serializer" version=%PackageVersion% />
-       <dependency id="GladNet.Payload" version=%PackageVersion% />
-       <dependency id="GladNet.Common" version=%PackageVersion% />
+       <dependency id="GladNet.Serializer" version=$version$ />
+       <dependency id="GladNet.Payload" version=$version$ />
+       <dependency id="GladNet.Common" version=$version$ />
     </dependencies>
   </metadata>
 </package>
