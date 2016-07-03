@@ -12,12 +12,22 @@ namespace GladNet.Common
 	[GladNetSerializationContract]
 	public class StatusMessage : NetworkMessage, IStatusMessage
 	{
+		private NetStatus? _Status = null;
 		public NetStatus Status
 		{
 			get
 			{
-				//Constructor enforces the Type. Casting is safe.
-				return (Payload.Data as StatusChangePayload).Status;
+				//Double check locking
+				if(!_Status.HasValue)
+				{
+					lock(syncObj)
+					{
+						//Constructor enforces the Type. Casting is safe.
+						return _Status.HasValue ? _Status.Value : (_Status = (Payload.Data as StatusChangePayload).Status).Value;
+					}
+				}
+				else
+					return _Status.Value;
 			}
 		}
 
