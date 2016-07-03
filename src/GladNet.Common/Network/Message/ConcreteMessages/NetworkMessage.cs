@@ -25,6 +25,7 @@ namespace GladNet.Common
 		/// </summary>
 		protected readonly object syncObj = new object();
 
+		//TODO: Make this NetSendable thread-safe and using proper locking in this class to prevent corruption
 		/// <summary>
 		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
 		/// <see cref="NetSendable"/> enforces its wire readyness.
@@ -32,6 +33,9 @@ namespace GladNet.Common
 		[GladNetMember(GladNetDataIndex.Index5, IsRequired = true)]
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
+		//We should manage this structure internally as there is no reason to expose it
+		//In fact, it may change implementation in the future and is something depend on it would be
+		//a disaster similar to the one we're in right now implementing this feature lol
 		/// <summary>
 		/// Internally managed wire-ready routing code stack.
 		/// This carries critical information about how a message should be routed through the server.
@@ -82,9 +86,24 @@ namespace GladNet.Common
 		/// <returns></returns>
 		byte[] ISerializationVisitable.SerializeWithVisitor(ISerializerStrategy serializer)
 		{
-			//We need visit style functionality because some serializers require to be told about the class in the heirarhcy
-			//For example protobuf-net won't accept interface serialization with types.
-			return serializer.Serialize<NetworkMessage>(this);
+			//Double check locking
+			lock(syncObj)
+			{
+				//We should lock this second because nobody will ever be locking on THIS classes syncObj
+				//and the payload syncObj should never be locked up in deadlock because it's called externally and will eventually end without
+				//waiting for this classes lock
+				lock(Payload.syncObj)
+				{
+					//once inside this lock we need to check the Payload's state
+					//I don't really know if this is how we should handle this but I guess it works
+					if (Payload.DataState == NetSendableState.Default)
+						Payload.Serialize(serializer);
+
+					//We need visit style functionality because some serializers require to be told about the class in the heirarhcy
+					//For example protobuf-net won't accept interface serialization with types.
+					return serializer.Serialize<NetworkMessage>(this);
+				}
+			}
 		}
 	}
 }
