@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Common.Logging;
 using System.Diagnostics.CodeAnalysis;
+using GladNet.Payload;
 
 namespace GladNet.Common
 {

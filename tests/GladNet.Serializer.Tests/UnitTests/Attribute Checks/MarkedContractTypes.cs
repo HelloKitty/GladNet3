@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using GladNet.Serializer;
+using GladNet.Payload;
 
 namespace GladNet.Common.Tests
 {

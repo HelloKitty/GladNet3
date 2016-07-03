@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq.Protected;
 using Common.Logging;
+using GladNet.Payload;
 
 namespace GladNet.Common.Tests
 {

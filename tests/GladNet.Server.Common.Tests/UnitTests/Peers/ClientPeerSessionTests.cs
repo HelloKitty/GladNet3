@@ -4,6 +4,7 @@ using Common.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
+using GladNet.Payload;
 
 namespace GladNet.Server.Common.Tests
 {
