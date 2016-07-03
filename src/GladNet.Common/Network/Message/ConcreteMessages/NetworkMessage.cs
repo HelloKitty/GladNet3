@@ -20,7 +20,7 @@ namespace GladNet.Common
 		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
 		/// <see cref="NetSendable"/> enforces its wire readyness.
 		/// </summary>
-		[GladNetMember(1, IsRequired = true)]
+		[GladNetMember(GladNetPayloadDataIndex.Index1, IsRequired = true)]
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
 		/// <summary>

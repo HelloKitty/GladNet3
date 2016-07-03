@@ -32,7 +32,7 @@ namespace GladNet.Common
 		/// <summary>
 		/// Indicates the state the object is currently in.
 		/// </summary>
-		[GladNetMember(1, IsRequired = true)]
+		[GladNetMember(GladNetPayloadDataIndex.Index1, IsRequired = true)]
 		public NetSendableState DataState { get; private set; }
 
 		//This should never be serialized over the network.
@@ -45,7 +45,7 @@ namespace GladNet.Common
 		/// <summary>
 		/// The wire-ready byte[] that represents the TData in the corressponding <see cref="State"/>
 		/// </summary>
-		[GladNetMember(2, IsRequired = true)]
+		[GladNetMember(GladNetPayloadDataIndex.Index2, IsRequired = true)]
 		private byte[] byteData = null;
 
 		/// <summary>
