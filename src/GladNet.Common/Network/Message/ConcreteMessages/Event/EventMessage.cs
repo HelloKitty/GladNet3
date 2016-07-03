@@ -1,4 +1,5 @@
-﻿using GladNet.Common;
+﻿using Easyception;
+using GladNet.Common;
 using GladNet.Payload;
 using GladNet.Serializer;
 using System;
@@ -45,11 +46,8 @@ namespace GladNet.Common
 		/// <param name="parameters">The <see cref="IMessageParameters"/> of the <see cref="EventMessage"/>.</param>
 		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters)
 		{
-			if(receiver == null)
-				throw new ArgumentNullException("receiver", typeof(INetworkMessageReceiver).ToString() + " parameter is null in " + GetType().ToString());
-
-			if(parameters == null)
-				throw new ArgumentNullException("parameters", typeof(IMessageParameters).ToString() + " parameter is null in " + GetType().ToString());
+			Throw<ArgumentNullException>.If.IsNull(receiver, nameof(receiver), $"{nameof(INetworkMessageReceiver)} parameter is null in {this.GetType().Name}");
+			Throw<ArgumentNullException>.If.IsNull(parameters, nameof(parameters), $"{nameof(IMessageParameters)} parameter is null in {this.GetType().Name}");
 
 			receiver.OnNetworkMessageReceive(this, parameters);
 		}

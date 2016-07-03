@@ -1,4 +1,5 @@
-﻿using GladNet.Common;
+﻿using Easyception;
+using GladNet.Common;
 using GladNet.Payload;
 using GladNet.Serializer;
 using System;
@@ -45,8 +46,7 @@ namespace GladNet.Common
 		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters = null)
 		{
 			//We don't need IMessageParameters for this type of message.
-			if (receiver == null)
-				throw new ArgumentNullException("receiver", "INetworkMessageReciever must not be null.");
+			Throw<ArgumentNullException>.If.IsNull(receiver, nameof(receiver), $"{nameof(INetworkMessageReceiver)} parameter is null in {this.GetType().Name}");
 
 			receiver.OnNetworkMessageReceive(this, parameters);
 		}
