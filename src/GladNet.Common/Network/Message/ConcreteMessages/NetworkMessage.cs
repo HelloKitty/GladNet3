@@ -21,6 +21,11 @@ namespace GladNet.Common
 	public abstract class NetworkMessage : INetworkMessage, IDeepCloneable<NetworkMessage>
 	{
 		/// <summary>
+		/// Internal class locking/sync object.
+		/// </summary>
+		protected readonly object syncObj = new object();
+
+		/// <summary>
 		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
 		/// <see cref="NetSendable"/> enforces its wire readyness.
 		/// </summary>
