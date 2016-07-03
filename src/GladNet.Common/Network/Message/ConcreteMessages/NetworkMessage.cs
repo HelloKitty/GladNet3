@@ -33,6 +33,13 @@ namespace GladNet.Common
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
 		/// <summary>
+		/// Internally managed wire-ready routing code stack.
+		/// This carries critical information about how a message should be routed through the server.
+		/// </summary>
+		[GladNetMember(GladNetDataIndex.Index6)]
+		private Stack<int> _routingCodeStack = null;
+
+		/// <summary>
 		/// Main constructor for <see cref="NetworkMessage"/> that requires a <see cref="PacketPayload"/> payload.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">Throws if <see cref="PacketPayload"/> instance supplied is null.</exception>
