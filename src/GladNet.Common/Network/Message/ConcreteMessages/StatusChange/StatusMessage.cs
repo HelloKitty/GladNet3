@@ -13,6 +13,9 @@ namespace GladNet.Common
 	public class StatusMessage : NetworkMessage, IStatusMessage
 	{
 		private NetStatus? _Status = null;
+		/// <summary>
+		/// Indicates the <see cref="NetStatus"/> sent with this <see cref="NetworkMessage"/>.
+		/// </summary>
 		public NetStatus Status
 		{
 			get
@@ -53,6 +56,12 @@ namespace GladNet.Common
 			//Used for deep cloning
 		}
 
+		/// <summary>
+		/// Dispatches the <see cref="StatusMessage"/> (this) to the supplied <see cref="INetworkMessageReceiver"/>.
+		/// </summary>
+		/// <param name="receiver">The target <see cref="INetworkMessageReceiver"/>.</param>
+		/// <exception cref="ArgumentNullException">Throws if the receiver is null.</exception>
+		/// <param name="parameters">The <see cref="IMessageParameters"/> of the <see cref="EventMessage"/>.</param>
 		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters = null)
 		{
 			//We don't need IMessageParameters for this type of message.
