@@ -39,16 +39,14 @@ namespace GladNet.Serializer
 		/// <param name="tagID">The unique (unenforced) ID to associate with the <see cref="Type"/>.</param>
 		/// <param name="type">Type of the derived or base Type to associate with. (Unenforced to be a derived or subtype)</param>
 		/// <exception cref="ArgumentOutOfRangeException">Throws if tagID is 0 or negative.</exception>
-		[Obsolete("This ctor is now obsolete. The reason is because GladNet must now control indicies on payloads. GladNet now has internal members on its payloads.", true)]
-		public GladNetSerializationIncludeAttribute(int tagID, Type type, bool isForDerived = true)
+		internal GladNetSerializationIncludeAttribute(int tagID, Type type, bool isForDerived = true)
 			: base()
 		{
 			//uint is not CLS compliant. We have no reason to use uint in .Net
 			if (tagID <= 0)
 				throw new ArgumentOutOfRangeException("tagID", "tagID must be a positive non-zero integer. See revelant documentation.");
 
-			if (type == null)
-				throw new ArgumentNullException("derivedType", "DerivedType cannot be null in " + typeof(GladNetSerializationIncludeAttribute) + ".ctor(...).");
+			Throw<ArgumentNullException>.If.IsNull(type, nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
 
 			IncludeForDerived = isForDerived;
 			TypeToWireTo = type;

@@ -14,14 +14,17 @@ namespace GladNet.Common
 	/// Contains various network message related Enums.
 	/// </summary>
 	[GladNetSerializationContract]
-	[GladNetSerializationInclude()]
+	[GladNetSerializationInclude(1, typeof(EventMessage))]
+	[GladNetSerializationInclude(2, typeof(ResponseMessage))]
+	[GladNetSerializationInclude(3, typeof(RequestMessage))]
+	[GladNetSerializationInclude(4, typeof(StatusMessage))]
 	public abstract class NetworkMessage : INetworkMessage, IDeepCloneable<NetworkMessage>
 	{
 		/// <summary>
 		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
 		/// <see cref="NetSendable"/> enforces its wire readyness.
 		/// </summary>
-		[GladNetMember(GladNetDataIndex.Index1, IsRequired = true)]
+		[GladNetMember(GladNetDataIndex.Index5, IsRequired = true)]
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
 		/// <summary>
@@ -34,7 +37,6 @@ namespace GladNet.Common
 		{
 			//NetSendable should verify non-null payload.
 		}
-
 
 		protected NetworkMessage(NetSendable<PacketPayload> sendPayload)
 		{
@@ -66,6 +68,11 @@ namespace GladNet.Common
 		/// </summary>
 		/// <param name="serializer"></param>
 		/// <returns></returns>
-		public abstract byte[] SerializeWithVisitor(ISerializerStrategy serializer);
+		byte[] ISerializationVisitable.SerializeWithVisitor(ISerializerStrategy serializer)
+		{
+			//We need visit style functionality because some serializers require to be told about the class in the heirarhcy
+			//For example protobuf-net won't accept interface serialization with types.
+			return serializer.Serialize<NetworkMessage>(this);
+		}
 	}
 }

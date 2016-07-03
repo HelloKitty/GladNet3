@@ -17,7 +17,6 @@ namespace GladNet.Common
 	[GladNetSerializationContract]
 	public class RequestMessage : NetworkMessage, IRequestMessage
 	{
-
 		/// <summary>
 		/// Constructor for <see cref="RequestMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>
