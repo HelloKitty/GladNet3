@@ -30,6 +30,11 @@ namespace GladNet.Common
 			where TData : class
 	{
 		/// <summary>
+		/// Internal object locking/sync object.
+		/// </summary>
+		internal readonly object syncObj = new object();
+
+		/// <summary>
 		/// Indicates the state the object is currently in.
 		/// </summary>
 		[GladNetMember(GladNetDataIndex.Index1, IsRequired = true)]
