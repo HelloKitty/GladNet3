@@ -46,8 +46,11 @@ namespace GladNet.Common
 		/// <param name="parameters">The <see cref="IMessageParameters"/> of the <see cref="RequestMessage"/>.</param>
 		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters)
 		{
-			Throw<ArgumentNullException>.If.IsNull(receiver, nameof(receiver), $"{nameof(INetworkMessageReceiver)} parameter is null in {this.GetType().Name}");
-			Throw<ArgumentNullException>.If.IsNull(parameters, nameof(parameters), $"{nameof(IMessageParameters)} parameter is null in {this.GetType().Name}");
+			Throw<ArgumentNullException>.If.IsNull(receiver)
+				?.Now(nameof(receiver), $"{nameof(INetworkMessageReceiver)} parameter is null in {this.GetType().Name}");
+
+			Throw<ArgumentNullException>.If.IsNull(parameters)
+				?.Now(nameof(parameters), $"{nameof(IMessageParameters)} parameter is null in {this.GetType().Name}");
 
 			receiver.OnNetworkMessageReceive(this, parameters);
 		}

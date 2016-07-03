@@ -1,4 +1,5 @@
-﻿using GladNet.Common;
+﻿using Easyception;
+using GladNet.Common;
 using GladNet.Payload;
 using GladNet.Serializer;
 using System;
@@ -56,8 +57,8 @@ namespace GladNet.Common
 
 		protected NetworkMessage(NetSendable<PacketPayload> sendPayload)
 		{
-			if (sendPayload == null)
-				throw new ArgumentNullException("netSendablePacket", "A null Netsendable<PacketPayload> was passed for NetworkMessage creation."); //ncrunch: no coverage
+			Throw<ArgumentNullException>.If.IsNull(sendPayload)
+				?.Now(nameof(sendPayload), $"A null {nameof(NetSendable<PacketPayload>)} was passed for {nameof(NetworkMessage)} creation.");
 
 			Payload = sendPayload;
 		}

@@ -1,4 +1,5 @@
 ﻿using Common.Logging;
+using Easyception;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -29,11 +30,11 @@ namespace GladNet.Common
 		protected Peer(ILog logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
 		{
-			logger.ThrowIfNull(nameof(logger));
-			messageSender.ThrowIfNull(nameof(messageSender));
-			details.ThrowIfNull(nameof(details));
-			subService.ThrowIfNull(nameof(subService));
-			disconnectHandler.ThrowIfNull(nameof(disconnectHandler));
+			Throw<ArgumentNullException>.If.IsNull(logger)?.Now(nameof(logger));
+			Throw<ArgumentNullException>.If.IsNull(messageSender)?.Now(nameof(messageSender));
+			Throw<ArgumentNullException>.If.IsNull(details)?.Now(nameof(details));
+			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
+			Throw<ArgumentNullException>.If.IsNull(disconnectHandler)?.Now(nameof(disconnectHandler));
 
 			PeerDetails = details;
 			NetworkSendService = messageSender;
@@ -65,7 +66,7 @@ namespace GladNet.Common
 
 		private void OnReceiveStatus(IStatusMessage message, IMessageParameters parameters)
 		{
-			message.ThrowIfNull(nameof(message));
+			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
 
 			//I know I cast here so let's only call this once for efficiency
 			NetStatus s = message.Status;

@@ -54,7 +54,7 @@ namespace GladNet.Serializer
 			//Check if it's defined. Users may try to cheat the system by casting an int
 			//Me must assert that this is an issue as if we don't they'll encounter odd issues in the future when
 			//it collides with internal indicies
-			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetDataIndex), dataIndex));
+			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetDataIndex), dataIndex))?.Now();
 
 			TagID = (int)dataIndex;
 		}

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GladNet.Payload;
+using Easyception;
 
 namespace GladNet.Server.Common
 {
@@ -16,7 +17,7 @@ namespace GladNet.Server.Common
 			IDisconnectionServiceHandler disconnectHandler)
 				: base(logger, sender, details, subService, disconnectHandler)
 		{
-			subService.ThrowIfNull(nameof(subService));
+			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
 
 			//Subscribe to request messages
 			subService.SubscribeTo<RequestMessage>()
@@ -46,7 +47,7 @@ namespace GladNet.Server.Common
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public virtual SendResult SendResponse(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			payload.ThrowIfNull(nameof(payload));
+			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Response, payload, deliveryMethod, encrypt, channel);
 		}
@@ -62,7 +63,7 @@ namespace GladNet.Server.Common
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public virtual SendResult SendEvent(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			payload.ThrowIfNull(nameof(payload));
+			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Event, payload, deliveryMethod, encrypt, channel);
 		}
@@ -77,7 +78,7 @@ namespace GladNet.Server.Common
 		public virtual SendResult SendEvent<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
-			payload.ThrowIfNull(nameof(payload));
+			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
 
 			return NetworkSendService.TrySendMessage<TPacketType>(OperationType.Event, payload);
 		}
@@ -92,7 +93,7 @@ namespace GladNet.Server.Common
 		public virtual SendResult SendResponse<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
-			payload.ThrowIfNull(nameof(payload));
+			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
 
 			return NetworkSendService.TrySendMessage<TPacketType>(OperationType.Response, payload);
 		}

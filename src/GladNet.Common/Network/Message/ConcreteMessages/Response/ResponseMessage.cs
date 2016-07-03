@@ -24,8 +24,8 @@ namespace GladNet.Common
 		public ResponseMessage(PacketPayload payload)
 			: base(payload)
 		{
-			if (payload == null)
-				throw new ArgumentNullException("payload", "Payload of " + this.GetType() + " cannot be null in construction.");
+			Throw<ArgumentNullException>.If.IsNull(payload)
+				?.Now(nameof(payload), $"Payload for {this.GetType().Name} must not be null in construction.");
 		}
 
 		/// <summary>
@@ -46,8 +46,11 @@ namespace GladNet.Common
 		/// <param name="parameters">The <see cref="IMessageParameters"/> of the <see cref="ResponseMessage"/>.</param>
 		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters)
 		{
-			Throw<ArgumentNullException>.If.IsNull(receiver, nameof(receiver), $"{nameof(INetworkMessageReceiver)} parameter is null in {this.GetType().Name}");
-			Throw<ArgumentNullException>.If.IsNull(parameters, nameof(parameters), $"{nameof(IMessageParameters)} parameter is null in {this.GetType().Name}");
+			Throw<ArgumentNullException>.If.IsNull(receiver)
+				?.Now(nameof(receiver), $"{nameof(INetworkMessageReceiver)} parameter is null in {this.GetType().Name}");
+
+			Throw<ArgumentNullException>.If.IsNull(parameters)
+				?.Now(nameof(parameters), $"{nameof(IMessageParameters)} parameter is null in {this.GetType().Name}");
 
 			receiver.OnNetworkMessageReceive(this, parameters);
 		}

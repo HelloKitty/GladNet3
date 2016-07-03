@@ -60,7 +60,8 @@ namespace GladNet.Common
 		/// <param name="data">Instance of TData to be wire-ready prepared.</param>
 		public NetSendable(TData data)
 		{
-			Throw<ArgumentNullException>.If.IsNull(data, nameof(data), $"{nameof(data)} of Type: {typeof(TData).Name} cannot be null in construction.");
+			Throw<ArgumentNullException>.If.IsNull(data)
+				?.Now(nameof(data), $"{nameof(data)} of Type: {typeof(TData).Name} cannot be null in construction.");
 
 			Data = data;
 			DataState = NetSendableState.Default;
@@ -86,7 +87,8 @@ namespace GladNet.Common
 		/// <returns>Indicates if encryption was successful</returns>
 		public bool Encrypt(IEncryptorStrategy encryptor)
 		{
-			Throw<ArgumentNullException>.If.IsNull(encryptor, nameof(encryptor), $"{nameof(encryptor)} of Type: {typeof(IEncryptorStrategy).Name} cannot be null in {nameof(Encrypt)}.");
+			Throw<ArgumentNullException>.If.IsNull(encryptor)
+				?.Now(nameof(encryptor), $"{nameof(encryptor)} of Type: {typeof(IEncryptorStrategy).Name} cannot be null in {nameof(Encrypt)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
@@ -125,7 +127,8 @@ namespace GladNet.Common
 		/// <returns>Indicates if decryption was successful.</returns>
 		public bool Decrypt(IDecryptorStrategy decryptor)
 		{
-			Throw<ArgumentNullException>.If.IsNull(decryptor, nameof(decryptor), $"{nameof(decryptor)} of Type: {typeof(IDecryptorStrategy).Name} cannot be null in {nameof(Decrypt)}.");
+			Throw<ArgumentNullException>.If.IsNull(decryptor)
+				?.Now(nameof(decryptor), $"{nameof(decryptor)} of Type: {typeof(IDecryptorStrategy).Name} cannot be null in {nameof(Decrypt)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
@@ -164,7 +167,8 @@ namespace GladNet.Common
 		/// <returns>Inidicates if serialization was successful</returns>
 		public bool Serialize(ISerializerStrategy serializer)
 		{
-			Throw<ArgumentNullException>.If.IsNull(serializer, nameof(serializer), $"{nameof(serializer)} of Type: {typeof(ISerializerStrategy).Name} cannot be null in {nameof(Decrypt)}.");
+			Throw<ArgumentNullException>.If.IsNull(serializer)
+				?.Now(nameof(serializer), $"{nameof(serializer)} of Type: {typeof(ISerializerStrategy).Name} cannot be null in {nameof(Decrypt)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
@@ -198,7 +202,8 @@ namespace GladNet.Common
 		/// <returns>Indicates if deserialization was successful</returns>
 		public bool Deserialize(IDeserializerStrategy deserializer)
 		{
-			Throw<ArgumentNullException>.If.IsNull(deserializer, nameof(deserializer), $"{nameof(deserializer)} of Type: {typeof(IDeserializerStrategy).Name} cannot be null in {nameof(Decrypt)}.");
+			Throw<ArgumentNullException>.If.IsNull(deserializer)
+				?.Now(nameof(deserializer), $"{nameof(deserializer)} of Type: {typeof(IDeserializerStrategy).Name} cannot be null in {nameof(Decrypt)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
@@ -229,7 +234,7 @@ namespace GladNet.Common
 		[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "byteData")]
 		private void ThrowIfInvalidState(NetSendableState expectedState)
 		{
-			Throw<InvalidOperationException>.If.IsTrue(DataState != expectedState);
+			Throw<InvalidOperationException>.If.IsTrue(DataState != expectedState)?.Now();
 		}
 
 		/// <summary>

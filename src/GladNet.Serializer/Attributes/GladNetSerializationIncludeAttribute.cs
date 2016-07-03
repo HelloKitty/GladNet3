@@ -46,7 +46,8 @@ namespace GladNet.Serializer
 			if (tagID <= 0)
 				throw new ArgumentOutOfRangeException("tagID", "tagID must be a positive non-zero integer. See revelant documentation.");
 
-			Throw<ArgumentNullException>.If.IsNull(type, nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
+			Throw<ArgumentNullException>.If.IsNull(type)
+				?.Now(nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
 
 			IncludeForDerived = isForDerived;
 			TypeToWireTo = type;
@@ -64,8 +65,9 @@ namespace GladNet.Serializer
 			: base()
 		{
 			//uint is not CLS compliant. We have no reason to use uint in .Net
-			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetIncludeIndex), includeIndex));
-			Throw<ArgumentNullException>.If.IsNull(type, nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
+			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetIncludeIndex), includeIndex))?.Now();
+			Throw<ArgumentNullException>.If.IsNull(type)
+				?.Now(nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
 
 			IncludeForDerived = isForDerived;
 			TypeToWireTo = type;

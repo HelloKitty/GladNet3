@@ -6,6 +6,7 @@ using System.Text;
 using Common.Logging;
 using System.Diagnostics.CodeAnalysis;
 using GladNet.Payload;
+using Easyception;
 
 namespace GladNet.Common
 {
@@ -15,7 +16,7 @@ namespace GladNet.Common
 			IDisconnectionServiceHandler disconnectHandler)
 				: base(logger, messageSender, details, subService, disconnectHandler)
 		{
-			subService.ThrowIfNull(nameof(subService));
+			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
 
 			//ClientPeers should be interested in events and responses from the server they are a peer of
 			subService.SubscribeTo<EventMessage>()
@@ -46,7 +47,7 @@ namespace GladNet.Common
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public SendResult SendRequest(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			payload.ThrowIfNull(nameof(payload));
+			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Request, payload, deliveryMethod, encrypt, channel);
 		}
@@ -61,7 +62,7 @@ namespace GladNet.Common
 		public SendResult SendRequest<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
-			payload.ThrowIfNull(nameof(payload));
+			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Request, payload);
 		}
