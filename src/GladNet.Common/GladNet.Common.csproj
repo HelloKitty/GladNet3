@@ -73,6 +73,7 @@
     <Compile Include="Network\Message\ConcreteMessages\Event\EventMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\IStatusMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
+    <Compile Include="Network\Message\IPayloadContainer.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageSubscriptionService.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageSubcriptionFluentBuilder.cs" />
