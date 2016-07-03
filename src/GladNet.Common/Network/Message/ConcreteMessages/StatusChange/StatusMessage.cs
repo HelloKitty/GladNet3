@@ -22,13 +22,10 @@ namespace GladNet.Common
 			{
 				//Double check locking
 				if(!_Status.HasValue)
-				{
 					lock(syncObj)
-					{
-						//Constructor enforces the Type. Casting is safe.
-						return _Status.HasValue ? _Status.Value : (_Status = (Payload.Data as StatusChangePayload).Status).Value;
-					}
-				}
+						lock(Payload.syncObj)
+							//Constructor enforces the Type. Casting is safe.
+							return _Status.HasValue ? _Status.Value : (_Status = (Payload.Data as StatusChangePayload).Status).Value;
 				else
 					return _Status.Value;
 			}
@@ -72,10 +69,12 @@ namespace GladNet.Common
 
 		public override NetworkMessage DeepClone()
 		{
-			//Shallow clone of the payload is valid because internally it's represented as a non-instance specific mutable PacketPayload and/or
-			//a non-mutating byte[] that is used for serialization/encryption and new instances of the byte[] are created if they're mutated.
-			//This helps us out in preformance when we want to serialize once and encrypt for many.
-			return new StatusMessage(Payload.ShallowClone());
+			lock (syncObj)
+				lock (Payload.syncObj)
+					//Shallow clone of the payload is valid because internally it's represented as a non-instance specific mutable PacketPayload and/or
+					//a non-mutating byte[] that is used for serialization/encryption and new instances of the byte[] are created if they're mutated.
+					//This helps us out in preformance when we want to serialize once and encrypt for many.
+					return new StatusMessage(Payload.ShallowClone());
 		}
 	}
 }

@@ -54,7 +54,9 @@ namespace GladNet.Common
 
 		public override NetworkMessage DeepClone()
 		{
-			return new RequestMessage(Payload.ShallowClone());
+			lock (syncObj)
+				lock (Payload.syncObj)
+					return new RequestMessage(Payload.ShallowClone());
 		}
 	}
 }

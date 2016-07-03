@@ -74,7 +74,10 @@ namespace GladNet.Common
 
 		object IDeepCloneable.DeepClone()
 		{
-			return this.DeepClone();
+			//Have to lock on both
+			lock(syncObj)
+				lock(Payload.syncObj)
+					return this.DeepClone();
 		}
 
 		/// <summary>
