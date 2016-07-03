@@ -14,13 +14,14 @@ namespace GladNet.Common
 	/// Contains various network message related Enums.
 	/// </summary>
 	[GladNetSerializationContract]
+	[GladNetSerializationInclude()]
 	public abstract class NetworkMessage : INetworkMessage, IDeepCloneable<NetworkMessage>
 	{
 		/// <summary>
 		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
 		/// <see cref="NetSendable"/> enforces its wire readyness.
 		/// </summary>
-		[GladNetMember(GladNetPayloadDataIndex.Index1, IsRequired = true)]
+		[GladNetMember(GladNetDataIndex.Index1, IsRequired = true)]
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
 		/// <summary>
@@ -57,5 +58,14 @@ namespace GladNet.Common
 		{
 			return this.DeepClone();
 		}
+
+		/// <summary>
+		/// Serializes the <see cref="NetworkMessage"/> using a visiting serializer.
+		/// The reason we have this is so we can get concrete Type when serializing.
+		/// Deserialization is easy because we know what to expect.
+		/// </summary>
+		/// <param name="serializer"></param>
+		/// <returns></returns>
+		public abstract byte[] SerializeWithVisitor(ISerializerStrategy serializer);
 	}
 }

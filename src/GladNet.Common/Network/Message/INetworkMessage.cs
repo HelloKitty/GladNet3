@@ -1,4 +1,5 @@
 ﻿using GladNet.Payload;
+using GladNet.Serializer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace GladNet.Common
 	/// Contract for a networked message. Provides the barest of function which exposes the <see cref="NetSendable"/> <see cref="PacketPayload"/>
 	/// of the message.
 	/// </summary>
-	public interface INetworkMessage
+	public interface INetworkMessage : ISerializationVisitable
 	{
 		/// <summary>
 		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.

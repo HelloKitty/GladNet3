@@ -47,14 +47,14 @@ namespace GladNet.Serializer
 		/// <summary>
 		/// Create a new member attribute for a target data.
 		/// </summary>
-		/// <param name="dataIndex">A valid unique <see cref="GladNetPayloadDataIndex"/> for this type.</param>
-		/// <exception cref="ArgumentException">Throws if <paramref name="dataIndex"/> is outside of the range of valid <see cref="GladNetPayloadDataIndex"/>s.</exception>
-		public GladNetMemberAttribute(GladNetPayloadDataIndex dataIndex)
+		/// <param name="dataIndex">A valid unique <see cref="GladNetDataIndex"/> for this type.</param>
+		/// <exception cref="ArgumentException">Throws if <paramref name="dataIndex"/> is outside of the range of valid <see cref="GladNetDataIndex"/>s.</exception>
+		public GladNetMemberAttribute(GladNetDataIndex dataIndex)
 		{
 			//Check if it's defined. Users may try to cheat the system by casting an int
 			//Me must assert that this is an issue as if we don't they'll encounter odd issues in the future when
 			//it collides with internal indicies
-			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetPayloadDataIndex), dataIndex));
+			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetDataIndex), dataIndex));
 
 			TagID = (int)dataIndex;
 		}

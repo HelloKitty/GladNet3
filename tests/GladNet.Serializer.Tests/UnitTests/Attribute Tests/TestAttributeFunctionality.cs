@@ -22,14 +22,14 @@ namespace GladNet.Common.Tests
 			//attribute is based on protobuf-net specs.
 
 			//arrange
-			Assert.Throws<ArgumentException>(() => new GladNetMemberAttribute((GladNetPayloadDataIndex)tagID));
+			Assert.Throws<ArgumentException>(() => new GladNetMemberAttribute((GladNetDataIndex)tagID));
 		}
 
 		[Test]
-		public static void Test_MemberAttribute_Ctor_With_Valid_Tags([Range((int)GladNetPayloadDataIndex.Index1, (int)GladNetPayloadDataIndex.Index38)] int tagID)
+		public static void Test_MemberAttribute_Ctor_With_Valid_Tags([Range((int)GladNetDataIndex.Index1, (int)GladNetDataIndex.Index38)] int tagID)
 		{
 			//arrange
-			GladNetMemberAttribute gma = new GladNetMemberAttribute((GladNetPayloadDataIndex)tagID);
+			GladNetMemberAttribute gma = new GladNetMemberAttribute((GladNetDataIndex)tagID);
 
 			//assert
 			Assert.AreEqual(gma.TagID, tagID);
@@ -46,14 +46,14 @@ namespace GladNet.Common.Tests
 			//attribute is based on protobuf-net specs.
 
 			//assert
-			Assert.Throws<ArgumentException>(() => new GladNetSerializationIncludeAttribute((GladNetPayloadIncludeIndex)tagID, typeof(GladNetSerializationIncludeAttribute)));
+			Assert.Throws<ArgumentException>(() => new GladNetSerializationIncludeAttribute((GladNetIncludeIndex)tagID, typeof(GladNetSerializationIncludeAttribute)));
 		}
 
 		[Test] //just picking a random Type to use for testing.
-		public static void Test_IncludeAttribute_Ctor_With_Valid_Tags([Range((int)GladNetPayloadIncludeIndex.Index1, (int)GladNetPayloadIncludeIndex.Index38)] int tagID)
+		public static void Test_IncludeAttribute_Ctor_With_Valid_Tags([Range((int)GladNetIncludeIndex.Index1, (int)GladNetIncludeIndex.Index38)] int tagID)
 		{
 			//arrange
-			GladNetSerializationIncludeAttribute gma = new GladNetSerializationIncludeAttribute((GladNetPayloadIncludeIndex)tagID, typeof(GladNetSerializationIncludeAttribute));
+			GladNetSerializationIncludeAttribute gma = new GladNetSerializationIncludeAttribute((GladNetIncludeIndex)tagID, typeof(GladNetSerializationIncludeAttribute));
 
 			//assert
 			Assert.AreEqual(gma.TagID, tagID);
@@ -62,10 +62,10 @@ namespace GladNet.Common.Tests
 
 
 		[Test]
-		public static void Test_IncludeAttribute_Ctor_With_Null_Type([Range((int)GladNetPayloadIncludeIndex.Index1, (int)GladNetPayloadIncludeIndex.Index38)] int tagID)
+		public static void Test_IncludeAttribute_Ctor_With_Null_Type([Range((int)GladNetIncludeIndex.Index1, (int)GladNetIncludeIndex.Index38)] int tagID)
 		{
 			//assert
-			Assert.Throws<ArgumentNullException>(() => new GladNetSerializationIncludeAttribute((GladNetPayloadIncludeIndex)tagID, null));
+			Assert.Throws<ArgumentNullException>(() => new GladNetSerializationIncludeAttribute((GladNetIncludeIndex)tagID, null));
 		}
 	}
 }

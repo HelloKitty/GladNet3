@@ -47,7 +47,7 @@
     <Compile Include="Attributes\GladNetSerializationContractAttribute.cs" />
     <Compile Include="Attributes\GladNetSerializationIncludeAttribute.cs" />
     <Compile Include="Enums\GladNetPayloadDataIndex.cs" />
-    <Compile Include="Enums\GladNetPayloadIncludeIndex.cs" />
+    <Compile Include="Enums\GladNetIncludeIndex.cs" />
     <Compile Include="Interfaces\IDeserializable.cs" />
     <Compile Include="Interfaces\ISerializationVisitable.cs" />
     <Compile Include="Interfaces\ISerializerRegistry.cs" />

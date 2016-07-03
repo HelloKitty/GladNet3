@@ -59,14 +59,14 @@ namespace GladNet.Serializer
 		/// Marks a target with the Include attribute. 
 		/// Attribute doesn't handle enforcing.
 		/// </summary>
-		/// <param name="includeIndex">A valid unique <see cref="GladNetPayloadIncludeIndex"/> for the target <see cref="Type"/>.</param>
+		/// <param name="includeIndex">A valid unique <see cref="GladNetIncludeIndex"/> for the target <see cref="Type"/>.</param>
 		/// <param name="type">Type of the derived or base Type to associate with. (Unenforced to be a derived or subtype)</param>
 		/// <exception cref="ArgumentOutOfRangeException">Throws if tagID is 0 or negative.</exception>
-		public GladNetSerializationIncludeAttribute(GladNetPayloadIncludeIndex includeIndex, Type type, bool isForDerived = true)
+		public GladNetSerializationIncludeAttribute(GladNetIncludeIndex includeIndex, Type type, bool isForDerived = true)
 			: base()
 		{
 			//uint is not CLS compliant. We have no reason to use uint in .Net
-			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetPayloadIncludeIndex), includeIndex));
+			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetIncludeIndex), includeIndex));
 			Throw<ArgumentNullException>.If.IsNull(type, nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
 
 			IncludeForDerived = isForDerived;
