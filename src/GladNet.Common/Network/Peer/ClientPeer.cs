@@ -20,6 +20,8 @@ namespace GladNet.Common
 			IDisconnectionServiceHandler disconnectHandler
 #if !ENDUSER
 			, INetworkMessageRouteBackService routebackService)
+#else
+			)
 #endif
 				: base(logger, messageSender, details, subService, disconnectHandler)
 		{

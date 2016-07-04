@@ -7,6 +7,7 @@ using System.Text;
 
 namespace GladNet.Common
 {
+#if !ENDUSER
 	public interface INetworkMessageRouteBackService
 	{
 		/// <summary>
@@ -69,4 +70,5 @@ namespace GladNet.Common
 		SendResult RouteResponse<TPacketType>(TPacketType payload, IRoutableMessage routingDetails)
 			where TPacketType : PacketPayload, IStaticPayloadParameters;
 	}
+#endif
 }

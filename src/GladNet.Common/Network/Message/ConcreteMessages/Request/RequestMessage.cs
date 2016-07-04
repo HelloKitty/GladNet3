@@ -16,7 +16,10 @@ namespace GladNet.Common
 	/// Subtypes for such a thing.
 	/// </summary>
 	[GladNetSerializationContract]
-	public class RequestMessage : NetworkMessage, IRequestMessage, IRoutableMessage
+	public class RequestMessage : NetworkMessage, IRequestMessage
+#if !ENDUSER
+		, IRoutableMessage
+#endif
 	{
 		//TODO: Prevent routing exploits. Right now clients could spoof routing info
 		//WE NEED TO SANITIZE

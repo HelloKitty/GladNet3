@@ -11,7 +11,10 @@ namespace GladNet.Common
 	/// Generally these ellict <see cref="IResponseMessage"/> but there is no implict mechanism in either <see cref="INetworkMessage"/>
 	/// Subtypes for such a thing.
 	/// </summary>
-	public interface IRequestMessage : INetworkMessage, IRoutableMessage
+	public interface IRequestMessage : INetworkMessage
+#if !ENDUSER
+		, IRoutableMessage
+#endif
 	{
 
 	}

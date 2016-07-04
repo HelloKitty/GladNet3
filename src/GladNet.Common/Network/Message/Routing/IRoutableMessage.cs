@@ -5,6 +5,7 @@ using System.Text;
 
 namespace GladNet.Common
 {
+#if !ENDUSER
 	/// <summary>
 	/// Routing contract for messages who can be routed.
 	/// </summary>
@@ -51,4 +52,5 @@ namespace GladNet.Common
 		/// </summary>
 		bool isRoutingBack { get; set; }
 	}
+#endif
 }
