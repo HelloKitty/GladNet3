@@ -22,7 +22,7 @@ namespace GladNet.Common
 		/// <param name="channel">Indicates the channel for this message to be sent over.</param>
 		/// <returns>Indication of the message send state.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		SendResult TrySendMessage(IResponseMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		SendResult TryRouteMessage(IResponseMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 
 		/// <summary>
 		/// Tries to send the <see cref="IEventMessage"/> message without routing semantics.
@@ -33,7 +33,7 @@ namespace GladNet.Common
 		/// <param name="channel">Indicates the channel for this message to be sent over.</param>
 		/// <returns>Indication of the message send state.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		SendResult TrySendMessage(IEventMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		SendResult TryRouteMessage(IEventMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 
 		/// <summary>
 		/// Tries to send the <see cref="IResponseMessage"/> message without routing semantics.
@@ -44,6 +44,6 @@ namespace GladNet.Common
 		/// <param name="channel">Indicates the channel for this message to be sent over.</param>
 		/// <returns>Indication of the message send state.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		SendResult TrySendMessage(IRequestMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		SendResult TryRouteMessage(IRequestMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 	}
 }

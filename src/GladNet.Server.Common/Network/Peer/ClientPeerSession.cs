@@ -132,7 +132,7 @@ namespace GladNet.Server.Common
 		{
 			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
 
-			return NetworkSendService.TrySendMessage(message, deliveryMethod, encrypt, channel);
+			return NetworkSendService.TryRouteMessage(message, deliveryMethod, encrypt, channel);
 		}
 
 		/// <summary>
@@ -147,7 +147,7 @@ namespace GladNet.Server.Common
 		{
 			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
 
-			return NetworkSendService.TrySendMessage(message, deliveryMethod, encrypt, channel);
+			return NetworkSendService.TryRouteMessage(message, deliveryMethod, encrypt, channel);
 		}
 	}
 }
