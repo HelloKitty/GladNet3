@@ -27,8 +27,9 @@ namespace GladNet.Common
 		/// </summary>
 		int LocalPort { get; }
 
+		//https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/AUIDSpecification.md
 		/// <summary>
-		/// Connection ID of the peer. (unique per port)
+		/// Application Unique ID (AUID) of the peer.
 		/// </summary>
 		int ConnectionID { get; }
 	}
