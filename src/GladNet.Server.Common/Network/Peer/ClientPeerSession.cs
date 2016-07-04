@@ -11,7 +11,7 @@ using Easyception;
 
 namespace GladNet.Server.Common
 {
-	public abstract class ClientPeerSession : Peer, IClientSessionNetworkMessageSender
+	public abstract class ClientPeerSession : Peer, IClientSessionNetworkMessageSender, IClientSessionNetworkMessageRouter
 	{
 		public ClientPeerSession(ILog logger, INetworkMessageRouterService sender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
@@ -105,5 +105,35 @@ namespace GladNet.Server.Common
 		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
 		protected abstract void OnReceiveRequest(PacketPayload payload, IMessageParameters parameters);
+
+		/// <summary>
+		/// Routes a <see cref="IResponseMessage"/> message.
+		/// </summary>
+		/// <param name="message"><see cref="IResponseMessage"/> to route.</param>
+		/// <param name="deliveryMethod">Desired <see cref="DeliveryMethod"/> for the response. See documentation for more information.</param>
+		/// <param name="encrypt">Optional: Indicates if the message should be encrypted. Default: false</param>
+		/// <param name="channel">Optional: Inidicates the channel the network message should be sent on. Default: 0</param>
+		/// <returns>Indication of the message send state.</returns>
+		public SendResult RouteResponse(IResponseMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		{
+			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
+
+			return NetworkSendService.TrySendMessage(message, deliveryMethod, encrypt, channel);
+		}
+
+		/// <summary>
+		/// Routes a <see cref="IEventMessage"/> message.
+		/// </summary>
+		/// <param name="message"><see cref="IEventMessage"/> to route.</param>
+		/// <param name="deliveryMethod">Desired <see cref="DeliveryMethod"/> for the event. See documentation for more information.</param>
+		/// <param name="encrypt">Optional: Indicates if the message should be encrypted. Default: false</param>
+		/// <param name="channel">Optional: Inidicates the channel the network message should be sent on. Default: 0</param>
+		/// <returns>Indication of the message send state.</returns>
+		public SendResult RouteEvent(IEventMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		{
+			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
+
+			return NetworkSendService.TrySendMessage(message, deliveryMethod, encrypt, channel);
+		}
 	}
 }
