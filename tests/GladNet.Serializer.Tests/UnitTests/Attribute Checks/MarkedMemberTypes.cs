@@ -1,4 +1,5 @@
 ﻿using GladNet.Common;
+using GladNet.Message;
 using GladNet.Payload;
 using GladNet.Serializer;
 using NUnit.Framework;

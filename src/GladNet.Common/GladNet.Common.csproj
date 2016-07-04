@@ -42,14 +42,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net35\Common.Logging.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Common.Logging.Core.3.3.1\lib\net35\Common.Logging.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
       <Private>True</Private>
@@ -64,78 +56,13 @@
   <ItemGroup>
     <Compile Include="General\Copy\IDeepCloneable.cs" />
     <Compile Include="General\Copy\IShallowCloneable.cs" />
-    <Compile Include="General\Extensions\Encryption\IDecryptableExtensions.cs" />
-    <Compile Include="General\Extensions\Message\Factories\INetworkMessageBuilderExtensions.cs" />
-    <Compile Include="General\Extensions\Message\Recievers\INetworkMessageSubcriptionServiceFluentExtensions.cs" />
-    <Compile Include="General\Extensions\Parameters\IStaticPayloadParametersExtensions.cs" />
-    <Compile Include="General\Extensions\Parameters\OperationTypeExtensions.cs" />
-    <Compile Include="General\Extensions\Peer\INetPeerExtensions.cs" />
-    <Compile Include="General\Extensions\Serialization\ISerializeableExtensions.cs" />
-    <Compile Include="General\Logging\IClassLogger.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\INetworkMessageFluentBuilder.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\NetworkMessageFactory.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\INetworkMessageFactory.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\NetworkMessageBuilder.cs" />
-    <Compile Include="Network\Message\INetworkMessage.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Response\IResponseMessage.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Response\ResponseMessage.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Request\IRequestMessage.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Request\RequestMessage.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Event\IEventMessage.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\Event\EventMessage.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\StatusChange\IStatusMessage.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
-    <Compile Include="Network\Message\IPayloadContainer.cs" />
-    <Compile Include="Network\Message\Recievers\INetworkMessagePublisher.cs" />
-    <Compile Include="Network\Message\Recievers\INetworkMessageSubscriptionService.cs" />
-    <Compile Include="Network\Message\Recievers\INetworkMessageSubcriptionFluentBuilder.cs" />
-    <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
-    <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
-    <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionFluentBuilder.cs" />
-    <Compile Include="Network\Message\Routing\INetworkMessageRouteBackService.cs" />
-    <Compile Include="Network\Message\Routing\IRoutableMessage.cs" />
-    <Compile Include="Network\Message\Senders\IClientPeerPayloadSender.cs" />
-    <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageRouter.cs" />
-    <Compile Include="Network\Message\Senders\INetSender.cs" />
-    <Compile Include="Network\Message\Senders\INetworkMessagePayloadSenderService.cs" />
     <Compile Include="Network\Parameters\DeliveryMethod.cs" />
-    <Compile Include="Network\Parameters\IMessageParameters.cs" />
-    <Compile Include="Network\Message\Recievers\INetworkMessageReceiver.cs" />
-    <Compile Include="Network\Message\ConcreteMessages\NetworkMessage.cs" />
-    <Compile Include="Network\Parameters\IStaticPayloadParameters.cs" />
     <Compile Include="Network\Parameters\OperationType.cs" />
     <Compile Include="Network\Message\SendResult.cs" />
-    <Compile Include="Network\Message\Senders\INetworkMessageRouterService.cs" />
     <Compile Include="Network\NetStatus.cs" />
-    <Compile Include="Network\Peer\ClientPeer.cs" />
-    <Compile Include="Network\Peer\Connection\IDisconnectable.cs" />
-    <Compile Include="Network\Peer\Connection\IDisconnectionServiceHandler.cs" />
-    <Compile Include="Network\Peer\Connection\OnNetworkDisconnect.cs" />
-    <Compile Include="Network\Peer\Connection\DefaultDisconnectionServiceHandler.cs" />
-    <Compile Include="Payload\Concrete Payloads\StatusChangePayload.cs" />
-    <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />
-    <Compile Include="Network\Peer\INetPeer.cs" />
-    <Compile Include="Network\Peer\Peer.cs" />
-    <Compile Include="General\Encryption\IDecryptable.cs" />
-    <Compile Include="General\Encryption\IDecryptorStrategy.cs" />
-    <Compile Include="General\Encryption\IEncryptable.cs" />
-    <Compile Include="General\Encryption\IEncryptorStrategy.cs" />
-    <Compile Include="General\Encryption\NetSendable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Network\Peer\ConcretePeers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GladNet.Payload\GladNet.Payload.csproj">
-      <Project>{862f3fd5-4fda-43d8-9fa1-d2179d695338}</Project>
-      <Name>GladNet.Payload</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GladNet.Serializer\GladNet.Serializer.csproj">
-      <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
-      <Name>GladNet.Serializer</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

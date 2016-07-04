@@ -87,10 +87,6 @@
       <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
       <Name>GladNet.Serializer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\GladNet.Server.Common\GladNet.Server.Common.csproj">
-      <Project>{8b05f085-d102-4d2f-a643-8e3734ad6f97}</Project>
-      <Name>GladNet.Server.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

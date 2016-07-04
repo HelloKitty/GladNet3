@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0FA4728F-7096-4996-8385-5BF5CC00B6FC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GladNet.Message</RootNamespace>
+    <AssemblyName>GladNet.Message</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Message\ConcreteMessages\Event\EventMessage.cs" />
+    <Compile Include="Message\ConcreteMessages\Event\IEventMessage.cs" />
+    <Compile Include="Message\ConcreteMessages\NetworkMessage.cs" />
+    <Compile Include="Message\ConcreteMessages\Request\IRequestMessage.cs" />
+    <Compile Include="Message\ConcreteMessages\Request\RequestMessage.cs" />
+    <Compile Include="Message\ConcreteMessages\Response\IResponseMessage.cs" />
+    <Compile Include="Message\ConcreteMessages\Response\ResponseMessage.cs" />
+    <Compile Include="Message\ConcreteMessages\StatusChange\IStatusMessage.cs" />
+    <Compile Include="Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
+    <Compile Include="Message\INetworkMessage.cs" />
+    <Compile Include="Message\IPayloadContainer.cs" />
+    <Compile Include="Message\NetSendable.cs" />
+    <Compile Include="Message\Recievers\INetworkMessageReceiver.cs" />
+    <Compile Include="Message\Routing\IRoutableMessage.cs" />
+    <Compile Include="Parameters\IMessageParameters.cs" />
+    <Compile Include="Parameters\IStaticPayloadParameters.cs" />
+    <Compile Include="Payload\Concrete Payloads\StatusChangePayload.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GladNet.Common\GladNet.Common.csproj">
+      <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
+      <Name>GladNet.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Encryption\GladNet.Encryption.csproj">
+      <Project>{bc813bfb-016b-4c85-b613-857f8c377be3}</Project>
+      <Name>GladNet.Encryption</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Payload\GladNet.Payload.csproj">
+      <Project>{862f3fd5-4fda-43d8-9fa1-d2179d695338}</Project>
+      <Name>GladNet.Payload</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Serializer\GladNet.Serializer.csproj">
+      <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
+      <Name>GladNet.Serializer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Message\ConcreteMessages\Construction\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
