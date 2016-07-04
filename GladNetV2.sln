@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Message.Tests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Engine.Common.Tests", "tests\GladNet.Engine.Common.Tests\GladNet.Engine.Common.Tests.csproj", "{EA3C7D16-2AF7-4A5C-BED3-71B1716193D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Engine.Server", "tests\GladNet.Engine.Server\GladNet.Engine.Server.csproj", "{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Engine.Server.Tests", "tests\GladNet.Engine.Server.Tests\GladNet.Engine.Server.Tests.csproj", "{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
