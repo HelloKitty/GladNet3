@@ -9,31 +9,41 @@ using System.Text;
 namespace GladNet.Common
 {
 	/// <summary>
-	/// Contract that guarantees implementing types offer some network message sending functionality.
+	/// Contract that guarantees implementing types offer some <see cref="INetworkMessage"/> and <see cref="PacketPayload"/> sending functionality.
 	/// </summary>
-	public interface INetworkMessageSender : INetSender
+	public interface INetworkMessageSender : INetSender, INetworkMessagePayloadSender
 	{
 		/// <summary>
-		/// Attempts to send a message; may fail and failure will be reported.
+		/// Tries to send the <see cref="IResponseMessage"/> message without routing semantics.
 		/// </summary>
-		/// <param name="opType"><see cref="OperationType"/> of the message to send.</param>
-		/// <param name="payload">Payload instance to be sent in the message.</param>
+		/// <param name="message"><see cref="IResponseMessage"/> to be sent.</param>
 		/// <param name="deliveryMethod">The deseried <see cref="DeliveryMethod"/> of the message.</param>
 		/// <param name="encrypt">Indicates if the message should be encrypted.</param>
 		/// <param name="channel">Indicates the channel for this message to be sent over.</param>
 		/// <returns>Indication of the message send state.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		SendResult TrySendMessage(IResponseMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 
 		/// <summary>
-		/// Attempts to send a message; may fail and failure will be reported.
-		/// Additionally this message/payloadtype is known to have static send parameters and those will be used in transit.
+		/// Tries to send the <see cref="IEventMessage"/> message without routing semantics.
 		/// </summary>
-		/// <typeparam name="TPacketType">Type of the packet payload.</typeparam>
-		/// <param name="opType"><see cref="OperationType"/> of the message to send.</param>
-		/// <param name="payload">Payload instance to be sent in the message that contains static message parameters.</param>
+		/// <param name="message"><see cref="IEventMessage"/> to be sent.</param>
+		/// <param name="deliveryMethod">The deseried <see cref="DeliveryMethod"/> of the message.</param>
+		/// <param name="encrypt">Indicates if the message should be encrypted.</param>
+		/// <param name="channel">Indicates the channel for this message to be sent over.</param>
 		/// <returns>Indication of the message send state.</returns>
-		SendResult TrySendMessage<TPacketType>(OperationType opType, TPacketType payload)
-			where TPacketType : PacketPayload, IStaticPayloadParameters;
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		SendResult TrySendMessage(IEventMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+
+		/// <summary>
+		/// Tries to send the <see cref="IResponseMessage"/> message without routing semantics.
+		/// </summary>
+		/// <param name="message"><see cref="IResponseMessage"/> to be sent.</param>
+		/// <param name="deliveryMethod">The deseried <see cref="DeliveryMethod"/> of the message.</param>
+		/// <param name="encrypt">Indicates if the message should be encrypted.</param>
+		/// <param name="channel">Indicates the channel for this message to be sent over.</param>
+		/// <returns>Indication of the message send state.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+		SendResult TrySendMessage(IRequestMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 	}
 }
