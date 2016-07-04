@@ -34,6 +34,9 @@ namespace GladNet.Common
 		[GladNetMember(GladNetDataIndex.Index5, IsRequired = true)]
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
+		//TODO: Prevent routing exploits. Right now clients could spoof routing info
+		//WE NEED TO SANITIZE
+#if !ENDUSER
 		/// <summary>
 		/// Indicates if the message has any valid keys for routing.
 		/// </summary>
@@ -49,6 +52,7 @@ namespace GladNet.Common
 			}
 		}
 
+
 		//We should manage this structure internally as there is no reason to expose it
 		//In fact, it may change implementation in the future and is something depend on it would be
 		//a disaster similar to the one we're in right now implementing this feature lol
@@ -58,6 +62,7 @@ namespace GladNet.Common
 		/// </summary>
 		[GladNetMember(GladNetDataIndex.Index6)]
 		private Stack<int> _routingCodeStack = null;
+#endif
 
 		/// <summary>
 		/// Main constructor for <see cref="NetworkMessage"/> that requires a <see cref="PacketPayload"/> payload.
@@ -125,6 +130,7 @@ namespace GladNet.Common
 			}
 		}
 
+#if !ENDUSER
 		/// <summary>
 		/// Pushes a new routing key into the message.
 		/// This key indicates where a message to this message should be routed back to.
@@ -192,5 +198,6 @@ namespace GladNet.Common
 				}
 			}
 		}
+#endif
 	}
 }
