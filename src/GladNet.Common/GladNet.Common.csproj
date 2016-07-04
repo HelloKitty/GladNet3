@@ -86,6 +86,7 @@
     <Compile Include="Network\Message\Routing\IRoutableMessage.cs" />
     <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetSender.cs" />
+    <Compile Include="Network\Message\Senders\INetworkMessagePayloadSender.cs" />
     <Compile Include="Network\Parameters\DeliveryMethod.cs" />
     <Compile Include="Network\Parameters\IMessageParameters.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageReceiver.cs" />
