@@ -1,7 +1,7 @@
 ﻿using GladNet.Serializer;
 using System;
 
-namespace GladNet.Common
+namespace GladNet.Payload
 {
 	/// <summary>
 	/// Base-class for user-created wire-type data units.

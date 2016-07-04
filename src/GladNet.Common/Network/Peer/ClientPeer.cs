@@ -5,23 +5,48 @@ using System.Linq;
 using System.Text;
 using Common.Logging;
 using System.Diagnostics.CodeAnalysis;
+using GladNet.Payload;
+using Easyception;
 
 namespace GladNet.Common
 {
-	public abstract class ClientPeer : Peer, IClientPeerNetworkMessageSender
+	public abstract class ClientPeer : Peer, IClientPeerPayloadSender
 	{
-		protected ClientPeer(ILog logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
-			IDisconnectionServiceHandler disconnectHandler)
+#if !ENDUSER
+		private INetworkMessageRouteBackService messageRoutebackService { get; }
+#endif
+
+		protected ClientPeer(ILog logger, INetworkMessageRouterService messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+			IDisconnectionServiceHandler disconnectHandler
+#if !ENDUSER
+			, INetworkMessageRouteBackService routebackService)
+#else
+			)
+#endif
 				: base(logger, messageSender, details, subService, disconnectHandler)
 		{
-			subService.ThrowIfNull(nameof(subService));
+			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
 
+//Enduser clients shouldn't be routing messages so we don't need to call internal method
+//Example: A gameclient for a player. These sorts of clients do NOT need to route messages they recieve.
+#if !ENDUSER
 			//ClientPeers should be interested in events and responses from the server they are a peer of
 			subService.SubscribeTo<EventMessage>()
-				.With((x, y) => OnReceiveEvent(x.Payload.Data, y));
+				.With(OnReceiveEvent);
 
 			subService.SubscribeTo<ResponseMessage>()
-				.With((x, y) => OnReceiveResponse(x.Payload.Data, y));
+				.With(OnInternalReceiveResponse);
+
+			Throw<ArgumentNullException>.If.IsNull(routebackService)?.Now(nameof(routebackService));
+			messageRoutebackService = routebackService;
+#else
+			//ClientPeers should be interested in events and responses from the server they are a peer of
+			subService.SubscribeTo<EventMessage>()
+				.With(OnReceiveEvent);
+
+			subService.SubscribeTo<ResponseMessage>()
+				.With(OnReceiveResponse);
+#endif
 		}
 
 		/// <summary>
@@ -45,7 +70,7 @@ namespace GladNet.Common
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public SendResult SendRequest(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			payload.ThrowIfNull(nameof(payload));
+			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Request, payload, deliveryMethod, encrypt, channel);
 		}
@@ -60,23 +85,50 @@ namespace GladNet.Common
 		public SendResult SendRequest<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
-			payload.ThrowIfNull(nameof(payload));
+			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Request, payload);
 		}
 
+//Enduser clients shouldn't be routing messages.
+//Example: A gameclient for a player. These sorts of clients do NOT need to route messages they recieve.
+#if !ENDUSER
+		/// <summary>
+		/// Called internally when a response is recieved.
+		/// </summary>
+		/// <param name="payload"><see cref="IResponseMessage"/> sent by the peer.</param>
+		/// <param name="parameters">Parameters the message was sent with.</param>
+		private void OnInternalReceiveResponse(IResponseMessage responseMessage, IMessageParameters parameters)
+		{
+			//We should check if the message is routing back.
+			//This is suggested in the GladNet2 routing specification
+			//Under "Route-back Outside Userspace": https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
+			if (responseMessage.isRoutingBack)
+			{
+				//Right now we just pass on the parameters.
+				messageRoutebackService.RouteResponse(responseMessage, parameters);
+			}
+
+			//GladNet2 routing specification dictates that we should push the AUID
+			//into the routing stack:https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
+			responseMessage.Push(PeerDetails.ConnectionID);
+
+			OnReceiveResponse(responseMessage, parameters);
+		}
+#endif
+
 		/// <summary>
 		/// Called internally when an event is recieved.
 		/// </summary>
-		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
+		/// <param name="eventMessage"><see cref="IEventMessage"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
-		protected abstract void OnReceiveEvent(PacketPayload payload, IMessageParameters parameters);
+		protected abstract void OnReceiveEvent(IEventMessage eventMessage, IMessageParameters parameters);
 
 		/// <summary>
 		/// Called internally when a response is recieved.
 		/// </summary>
-		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
+		/// <param name="payload"><see cref="IResponseMessage"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
-		protected abstract void OnReceiveResponse(PacketPayload payload, IMessageParameters parameters);
+		protected abstract void OnReceiveResponse(IResponseMessage responseMessage, IMessageParameters parameters);
 	}
 }

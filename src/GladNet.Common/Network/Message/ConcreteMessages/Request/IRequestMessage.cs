@@ -12,6 +12,9 @@ namespace GladNet.Common
 	/// Subtypes for such a thing.
 	/// </summary>
 	public interface IRequestMessage : INetworkMessage
+#if !ENDUSER
+		, IRoutableMessage
+#endif
 	{
 
 	}

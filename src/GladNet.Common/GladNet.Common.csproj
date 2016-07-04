@@ -32,6 +32,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EndUser|AnyCPU'">
+    <OutputPath>bin\EndUser\</OutputPath>
+    <DefineConstants>TRACE;ENDUSER EndUser</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net35\Common.Logging.dll</HintPath>
@@ -39,6 +48,10 @@
     </Reference>
     <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.Core.3.3.1\lib\net35\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -49,7 +62,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DebugExtensions\AssertExtensions.cs" />
     <Compile Include="General\Copy\IDeepCloneable.cs" />
     <Compile Include="General\Copy\IShallowCloneable.cs" />
     <Compile Include="General\Extensions\Encryption\IDecryptableExtensions.cs" />
@@ -73,14 +85,19 @@
     <Compile Include="Network\Message\ConcreteMessages\Event\EventMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\IStatusMessage.cs" />
     <Compile Include="Network\Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
+    <Compile Include="Network\Message\IPayloadContainer.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageSubscriptionService.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageSubcriptionFluentBuilder.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionFluentBuilder.cs" />
-    <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageSender.cs" />
+    <Compile Include="Network\Message\Routing\INetworkMessageRouteBackService.cs" />
+    <Compile Include="Network\Message\Routing\IRoutableMessage.cs" />
+    <Compile Include="Network\Message\Senders\IClientPeerPayloadSender.cs" />
+    <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageRouter.cs" />
     <Compile Include="Network\Message\Senders\INetSender.cs" />
+    <Compile Include="Network\Message\Senders\INetworkMessagePayloadSenderService.cs" />
     <Compile Include="Network\Parameters\DeliveryMethod.cs" />
     <Compile Include="Network\Parameters\IMessageParameters.cs" />
     <Compile Include="Network\Message\Recievers\INetworkMessageReceiver.cs" />
@@ -88,7 +105,7 @@
     <Compile Include="Network\Parameters\IStaticPayloadParameters.cs" />
     <Compile Include="Network\Parameters\OperationType.cs" />
     <Compile Include="Network\Message\SendResult.cs" />
-    <Compile Include="Network\Message\Senders\INetworkMessageSender.cs" />
+    <Compile Include="Network\Message\Senders\INetworkMessageRouterService.cs" />
     <Compile Include="Network\NetStatus.cs" />
     <Compile Include="Network\Peer\ClientPeer.cs" />
     <Compile Include="Network\Peer\Connection\IDisconnectable.cs" />

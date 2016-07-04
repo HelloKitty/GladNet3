@@ -1,4 +1,6 @@
-﻿using GladNet.Common;
+﻿using Easyception;
+using GladNet.Common;
+using GladNet.Payload;
 using GladNet.Serializer;
 using System;
 using System.Collections.Generic;
@@ -13,13 +15,23 @@ namespace GladNet.Common
 	/// Contains various network message related Enums.
 	/// </summary>
 	[GladNetSerializationContract]
+	[GladNetSerializationInclude(1, typeof(EventMessage))]
+	[GladNetSerializationInclude(2, typeof(ResponseMessage))]
+	[GladNetSerializationInclude(3, typeof(RequestMessage))]
+	[GladNetSerializationInclude(4, typeof(StatusMessage))]
 	public abstract class NetworkMessage : INetworkMessage, IDeepCloneable<NetworkMessage>
 	{
+		/// <summary>
+		/// Internal class locking/sync object.
+		/// </summary>
+		protected readonly object syncObj = new object();
+
+		//TODO: Make this NetSendable thread-safe and using proper locking in this class to prevent corruption
 		/// <summary>
 		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
 		/// <see cref="NetSendable"/> enforces its wire readyness.
 		/// </summary>
-		[GladNetMember(1, IsRequired = true)]
+		[GladNetMember(GladNetDataIndex.Index5, IsRequired = true)]
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
 		/// <summary>
@@ -33,11 +45,10 @@ namespace GladNet.Common
 			//NetSendable should verify non-null payload.
 		}
 
-
 		protected NetworkMessage(NetSendable<PacketPayload> sendPayload)
 		{
-			if (sendPayload == null)
-				throw new ArgumentNullException("netSendablePacket", "A null Netsendable<PacketPayload> was passed for NetworkMessage creation."); //ncrunch: no coverage
+			Throw<ArgumentNullException>.If.IsNull(sendPayload)
+				?.Now(nameof(sendPayload), $"A null {nameof(NetSendable<PacketPayload>)} was passed for {nameof(NetworkMessage)} creation.");
 
 			Payload = sendPayload;
 		}
@@ -54,7 +65,39 @@ namespace GladNet.Common
 
 		object IDeepCloneable.DeepClone()
 		{
-			return this.DeepClone();
+			//Have to lock on both
+			lock(syncObj)
+				lock(Payload.syncObj)
+					return this.DeepClone();
+		}
+
+		/// <summary>
+		/// Serializes the <see cref="NetworkMessage"/> using a visiting serializer.
+		/// The reason we have this is so we can get concrete Type when serializing.
+		/// Deserialization is easy because we know what to expect.
+		/// </summary>
+		/// <param name="serializer"></param>
+		/// <returns></returns>
+		byte[] ISerializationVisitable.SerializeWithVisitor(ISerializerStrategy serializer)
+		{
+			//Double check locking
+			lock(syncObj)
+			{
+				//We should lock this second because nobody will ever be locking on THIS classes syncObj
+				//and the payload syncObj should never be locked up in deadlock because it's called externally and will eventually end without
+				//waiting for this classes lock
+				lock(Payload.syncObj)
+				{
+					//once inside this lock we need to check the Payload's state
+					//I don't really know if this is how we should handle this but I guess it works
+					if (Payload.DataState == NetSendableState.Default)
+						Payload.Serialize(serializer);
+
+					//We need visit style functionality because some serializers require to be told about the class in the heirarhcy
+					//For example protobuf-net won't accept interface serialization with types.
+					return serializer.Serialize<NetworkMessage>(this);
+				}
+			}
 		}
 	}
 }

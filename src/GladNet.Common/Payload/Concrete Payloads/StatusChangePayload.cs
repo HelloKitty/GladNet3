@@ -1,4 +1,5 @@
 ﻿using GladNet.Common;
+using GladNet.Payload;
 using GladNet.Serializer;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace GladNet.Common
 		/// <summary>
 		/// Indicates the <see cref="NetStats"/> of the change.
 		/// </summary>
-		[GladNetMember(1, IsRequired = true)]
+		[GladNetMember(GladNetDataIndex.Index1, IsRequired = true)]
 		public NetStatus Status { get; private set; }
 
 		/// <summary>

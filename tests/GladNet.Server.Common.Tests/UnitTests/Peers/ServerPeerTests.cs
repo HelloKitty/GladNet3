@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GladNet.Payload;
 
 namespace GladNet.Server.Common.Tests
 {
@@ -20,10 +21,10 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_CanSend_IsRequest(OperationType opType, bool expectedResult)
 		{
 			//arrange
-			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
+			Mock<INetworkMessageRouterService> sender = new Mock<INetworkMessageRouterService>();
 			sender.Setup(x => x.CanSend(opType)).Returns(expectedResult); //set this up so it doesn't affect results
 
-			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>(), Mock.Of<INetworkMessageRouteBackService>());
 			peer.CallBase = true;
 
 			//act
@@ -37,7 +38,7 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_Ctor_Doesnt_Throw_On_Non_Null_Dependencies()
 		{
 			//Assert
-			Assert.DoesNotThrow(() => { var r = new Mock<ClientPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>()).Object; } );
+			Assert.DoesNotThrow(() => { var r = new Mock<ClientPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>(), Mock.Of<INetworkMessageRouteBackService>()).Object; } );
 		}
 
 		[Test(Author = "Andrew Blakely", Description = nameof(ClientPeer) + " should be listening for events and responses.", TestOf = typeof(ClientPeer))]
@@ -45,7 +46,7 @@ namespace GladNet.Server.Common.Tests
 		{
 			//arrange
 			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
-			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>(), Mock.Of<INetworkMessageRouteBackService>());
 			peer.CallBase = true;
 
 			//Makes sure it's created
@@ -62,7 +63,7 @@ namespace GladNet.Server.Common.Tests
 		{
 			//arrange
 			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
-			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>(), Mock.Of<INetworkMessageRouteBackService>());
 			peer.CallBase = true;
 
 			//Makes sure it's created
@@ -79,14 +80,14 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_SendResposne_Calls_Send_Request_On_NetSend_Service_With_Generic_Static_Params()
 		{
 			//arrange
-			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			Mock<INetworkMessageRouterService> sendService = new Mock<INetworkMessageRouterService>(MockBehavior.Loose);
 			TestPayload payload = new TestPayload();
 
 			//set it up to indicate we can send
 			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
 				.Returns(true);
 
-			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>(), Mock.Of<INetworkMessageRouteBackService>());
 			peer.CallBase = true;
 
 			//act
@@ -100,14 +101,14 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_SendResposne_Calls_Send_Request_On_NetSend_Service()
 		{
 			//arrange
-			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			Mock<INetworkMessageRouterService> sendService = new Mock<INetworkMessageRouterService>(MockBehavior.Loose);
 			PacketPayload payload = Mock.Of<PacketPayload>();
 
 			//set it up to indicate we can send
 			sendService.Setup(x => x.CanSend(It.IsAny<OperationType>()))
 				.Returns(true);
 
-			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeer> peer = new Mock<ClientPeer>(Mock.Of<ILog>(), sendService.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>(), Mock.Of<INetworkMessageRouteBackService>());
 			peer.CallBase = true;
 
 			//act

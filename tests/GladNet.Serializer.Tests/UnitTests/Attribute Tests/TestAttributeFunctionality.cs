@@ -22,16 +22,14 @@ namespace GladNet.Common.Tests
 			//attribute is based on protobuf-net specs.
 
 			//arrange
-			Assert.Throws<ArgumentOutOfRangeException>(() => new GladNetMemberAttribute(tagID));
+			Assert.Throws<ArgumentException>(() => new GladNetMemberAttribute((GladNetDataIndex)tagID));
 		}
 
 		[Test]
-		[TestCase(1)]
-		[TestCase(int.MaxValue)]
-		public static void Test_MemberAttribute_Ctor_With_Valid_Tags(int tagID)
+		public static void Test_MemberAttribute_Ctor_With_Valid_Tags([Range((int)GladNetDataIndex.Index1, (int)GladNetDataIndex.Index38)] int tagID)
 		{
 			//arrange
-			GladNetMemberAttribute gma = new GladNetMemberAttribute(tagID);
+			GladNetMemberAttribute gma = new GladNetMemberAttribute((GladNetDataIndex)tagID);
 
 			//assert
 			Assert.AreEqual(gma.TagID, tagID);
@@ -48,29 +46,26 @@ namespace GladNet.Common.Tests
 			//attribute is based on protobuf-net specs.
 
 			//assert
-			Assert.Throws<ArgumentOutOfRangeException>(() => new GladNetSerializationIncludeAttribute(tagID, typeof(GladNetSerializationIncludeAttribute)));
+			Assert.Throws<ArgumentException>(() => new GladNetSerializationIncludeAttribute((GladNetIncludeIndex)tagID, typeof(GladNetSerializationIncludeAttribute)));
 		}
 
 		[Test] //just picking a random Type to use for testing.
-		[TestCase(1, typeof(GladNetSerializationIncludeAttribute))]
-		[TestCase(int.MaxValue, typeof(GladNetSerializationIncludeAttribute))]
-		public static void Test_IncludeAttribute_Ctor_With_Valid_Tags(int tagID, Type derivedType)
+		public static void Test_IncludeAttribute_Ctor_With_Valid_Tags([Range((int)GladNetIncludeIndex.Index1, (int)GladNetIncludeIndex.Index38)] int tagID)
 		{
 			//arrange
-			GladNetSerializationIncludeAttribute gma = new GladNetSerializationIncludeAttribute(tagID, derivedType);
+			GladNetSerializationIncludeAttribute gma = new GladNetSerializationIncludeAttribute((GladNetIncludeIndex)tagID, typeof(GladNetSerializationIncludeAttribute));
 
 			//assert
 			Assert.AreEqual(gma.TagID, tagID);
-			Assert.AreEqual(gma.TypeToWireTo, derivedType);
+			Assert.AreEqual(gma.TypeToWireTo, typeof(GladNetSerializationIncludeAttribute));
 		}
 
 
 		[Test]
-		[TestCase(int.MaxValue, null)]
-		public static void Test_IncludeAttribute_Ctor_With_Null_Type(int tagID, Type derivedType)
+		public static void Test_IncludeAttribute_Ctor_With_Null_Type([Range((int)GladNetIncludeIndex.Index1, (int)GladNetIncludeIndex.Index38)] int tagID)
 		{
 			//assert
-			Assert.Throws<ArgumentNullException>(() => new GladNetSerializationIncludeAttribute(tagID, derivedType));
+			Assert.Throws<ArgumentNullException>(() => new GladNetSerializationIncludeAttribute((GladNetIncludeIndex)tagID, null));
 		}
 	}
 }

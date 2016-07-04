@@ -1,4 +1,5 @@
-﻿using GladNet.Serializer;
+﻿using GladNet.Payload;
+using GladNet.Serializer;
 using Moq;
 using NUnit.Framework;
 using System;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Easyception;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,19 +39,39 @@ namespace GladNet.Serializer
 		/// <param name="tagID">The unique (unenforced) ID to associate with the <see cref="Type"/>.</param>
 		/// <param name="type">Type of the derived or base Type to associate with. (Unenforced to be a derived or subtype)</param>
 		/// <exception cref="ArgumentOutOfRangeException">Throws if tagID is 0 or negative.</exception>
-		public GladNetSerializationIncludeAttribute(int tagID, Type type, bool isForDerived = true)
+		internal GladNetSerializationIncludeAttribute(int tagID, Type type, bool isForDerived = true)
 			: base()
 		{
 			//uint is not CLS compliant. We have no reason to use uint in .Net
 			if (tagID <= 0)
 				throw new ArgumentOutOfRangeException("tagID", "tagID must be a positive non-zero integer. See revelant documentation.");
 
-			if (type == null)
-				throw new ArgumentNullException("derivedType", "DerivedType cannot be null in " + typeof(GladNetSerializationIncludeAttribute) + ".ctor(...).");
+			Throw<ArgumentNullException>.If.IsNull(type)
+				?.Now(nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
 
 			IncludeForDerived = isForDerived;
 			TypeToWireTo = type;
 			TagID = tagID;
+		}
+
+		/// <summary>
+		/// Marks a target with the Include attribute. 
+		/// Attribute doesn't handle enforcing.
+		/// </summary>
+		/// <param name="includeIndex">A valid unique <see cref="GladNetIncludeIndex"/> for the target <see cref="Type"/>.</param>
+		/// <param name="type">Type of the derived or base Type to associate with. (Unenforced to be a derived or subtype)</param>
+		/// <exception cref="ArgumentOutOfRangeException">Throws if tagID is 0 or negative.</exception>
+		public GladNetSerializationIncludeAttribute(GladNetIncludeIndex includeIndex, Type type, bool isForDerived = true)
+			: base()
+		{
+			//uint is not CLS compliant. We have no reason to use uint in .Net
+			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetIncludeIndex), includeIndex))?.Now();
+			Throw<ArgumentNullException>.If.IsNull(type)
+				?.Now(nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
+
+			IncludeForDerived = isForDerived;
+			TypeToWireTo = type;
+			TagID = (int)includeIndex;
 		}
 	}
 }

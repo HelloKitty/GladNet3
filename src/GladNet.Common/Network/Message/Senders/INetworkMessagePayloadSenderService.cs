@@ -1,16 +1,16 @@
-﻿using System;
+﻿using GladNet.Payload;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
-
 namespace GladNet.Common
 {
 	/// <summary>
-	/// Contract that guarantees implementing types offer some network message sending functionality.
+	/// Contract that guarantees implementing types offer some <see cref="PacketPayload"/> sending functionality.
 	/// </summary>
-	public interface INetworkMessageSender : INetSender
+	public interface INetworkMessagePayloadSenderService : INetSender
 	{
 		/// <summary>
 		/// Attempts to send a message; may fail and failure will be reported.

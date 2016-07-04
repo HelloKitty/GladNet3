@@ -6,6 +6,7 @@ using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using GladNet.Common;
 using GladNet.Serializer;
+using Easyception;
 
 namespace GladNet.Common
 {	
@@ -30,9 +31,14 @@ namespace GladNet.Common
 			where TData : class
 	{
 		/// <summary>
+		/// Internal object locking/sync object.
+		/// </summary>
+		internal readonly object syncObj = new object();
+
+		/// <summary>
 		/// Indicates the state the object is currently in.
 		/// </summary>
-		[GladNetMember(1, IsRequired = true)]
+		[GladNetMember(GladNetDataIndex.Index1, IsRequired = true)]
 		public NetSendableState DataState { get; private set; }
 
 		//This should never be serialized over the network.
@@ -45,7 +51,7 @@ namespace GladNet.Common
 		/// <summary>
 		/// The wire-ready byte[] that represents the TData in the corressponding <see cref="State"/>
 		/// </summary>
-		[GladNetMember(2, IsRequired = true)]
+		[GladNetMember(GladNetDataIndex.Index2, IsRequired = true)]
 		private byte[] byteData = null;
 
 		/// <summary>
@@ -54,8 +60,8 @@ namespace GladNet.Common
 		/// <param name="data">Instance of TData to be wire-ready prepared.</param>
 		public NetSendable(TData data)
 		{
-			if (data == null)
-				throw new ArgumentNullException("data", "TData data cannot be null in construction.");
+			Throw<ArgumentNullException>.If.IsNull(data)
+				?.Now(nameof(data), $"{nameof(data)} of Type: {typeof(TData).Name} cannot be null in construction.");
 
 			Data = data;
 			DataState = NetSendableState.Default;
@@ -81,26 +87,34 @@ namespace GladNet.Common
 		/// <returns>Indicates if encryption was successful</returns>
 		public bool Encrypt(IEncryptorStrategy encryptor)
 		{
-			if (encryptor == null)
-				throw new ArgumentNullException("encryptor", "The encryptor cannot be null.");
+			Throw<ArgumentNullException>.If.IsNull(encryptor)
+				?.Now(nameof(encryptor), $"{nameof(encryptor)} of Type: {typeof(IEncryptorStrategy).Name} cannot be null in {nameof(Encrypt)}.");
 
-			ThrowIfInvalidState(NetSendableState.Serialized);
-			
-			try
+			//We must lock the entire process
+			//Why? Because state could change before the lock and things would be invalid
+			lock (syncObj)
 			{
-				byteData = encryptor.Encrypt(byteData);
-			}
-			catch (CryptographicException)
-			{
-				return false;
+				//TODO: Don't throw
+				ThrowIfInvalidState(NetSendableState.Serialized);
+
+				try
+				{
+					byteData = encryptor.Encrypt(byteData);
+				}
+				catch (CryptographicException)
+				{
+					return false;
+				}
+
+				//Check the state of the bytes
+				if (byteData == null)
+					return false;
+
+				//If sucessful the data should be in an encrypted state.
+				DataState = NetSendableState.Encrypted;
+
 			}
 
-			//Check the state of the bytes
-			if (byteData == null)
-				return false;
-
-			//If sucessful the data should be in an encrypted state.
-			DataState = NetSendableState.Encrypted;
 			return true;
 		}
 
@@ -113,28 +127,35 @@ namespace GladNet.Common
 		/// <returns>Indicates if decryption was successful.</returns>
 		public bool Decrypt(IDecryptorStrategy decryptor)
 		{
+			Throw<ArgumentNullException>.If.IsNull(decryptor)
+				?.Now(nameof(decryptor), $"{nameof(decryptor)} of Type: {typeof(IDecryptorStrategy).Name} cannot be null in {nameof(Decrypt)}.");
 
-			if (decryptor == null)
-				throw new ArgumentNullException("decryptor", "The decryptor cannot be null.");
-
-			//We don't want to throw. Remote peers could send invalid packets that DOS us with exception generation.
-			ThrowIfInvalidState(NetSendableState.Encrypted);
-
-			try
+			//We must lock the entire process
+			//Why? Because state could change before the lock and things would be invalid
+			lock (syncObj)
 			{
-				byteData = decryptor.Decrypt(byteData);
-			}
-			catch(CryptographicException)
-			{
-				return false;
+				//TODO: Don't throw
+				//We don't want to throw. Remote peers could send invalid packets that DOS us with exception generation.
+				ThrowIfInvalidState(NetSendableState.Encrypted);
+
+				try
+				{
+					byteData = decryptor.Decrypt(byteData);
+				}
+				catch (CryptographicException)
+				{
+					return false;
+				}
+
+				//Check the state of the bytes
+				if (byteData == null)
+					return false;
+
+				//If successful the data should be in a serialized state.
+				DataState = NetSendableState.Serialized;
+
 			}
 
-			//Check the state of the bytes
-			if (byteData == null)
-				return false;
-
-			//If successful the data should be in a serialized state.
-			DataState = NetSendableState.Serialized;
 			return true;
 		}
 
@@ -146,22 +167,30 @@ namespace GladNet.Common
 		/// <returns>Inidicates if serialization was successful</returns>
 		public bool Serialize(ISerializerStrategy serializer)
 		{
-			if (serializer == null)
-				throw new ArgumentNullException("serializer", "The serializer cannot be null.");
+			Throw<ArgumentNullException>.If.IsNull(serializer)
+				?.Now(nameof(serializer), $"{nameof(serializer)} of Type: {typeof(ISerializerStrategy).Name} cannot be null in {nameof(Decrypt)}.");
 
-			ThrowIfInvalidState(NetSendableState.Default);
+			//We must lock the entire process
+			//Why? Because state could change before the lock and things would be invalid
+			lock (syncObj)
+			{
+				ThrowIfInvalidState(NetSendableState.Default);
 
-			byteData = serializer.Serialize(Data);
+				byteData = serializer.Serialize(Data);
 
-			//Check the state of the bytes
-			if (byteData == null)
-				return false;
+				//Check the state of the bytes
+				if (byteData == null)
+					return false;
 
-			//If successful the data should be in a serialized state
-			DataState = NetSendableState.Serialized;
+				//We must lock this too
+				//Otherwise race conditions
+				//If successful the data should be in a serialized state
+				DataState = NetSendableState.Serialized;
 
-			//We don't need Data anymore and it can be recreated from the current state now.
-			Data = null;
+				//We don't need Data anymore and it can be recreated from the current state now.
+				Data = null;
+			}
+
 			return true;
 		}
 
@@ -173,17 +202,25 @@ namespace GladNet.Common
 		/// <returns>Indicates if deserialization was successful</returns>
 		public bool Deserialize(IDeserializerStrategy deserializer)
 		{
-			if (deserializer == null)
-				throw new ArgumentNullException("deserializer", "The derserializer cannot be null.");
+			Throw<ArgumentNullException>.If.IsNull(deserializer)
+				?.Now(nameof(deserializer), $"{nameof(deserializer)} of Type: {typeof(IDeserializerStrategy).Name} cannot be null in {nameof(Decrypt)}.");
 
-			ThrowIfInvalidState(NetSendableState.Serialized);
+			//We must lock the entire process
+			//Why? Because state could change before the lock and things would be invalid
+			lock (syncObj)
+			{
+				ThrowIfInvalidState(NetSendableState.Serialized);
 
-			Data = deserializer.Deserialize<TData>(byteData);
+				Data = deserializer.Deserialize<TData>(byteData);
 
-			if (Data == null)
-				return false;
+				if (Data == null)
+					return false;
 
-			DataState = NetSendableState.Default;
+				//We must lock this too
+				//Otherwise race conditions
+				DataState = NetSendableState.Default;		
+			}
+
 			return true;
 		}
 
@@ -197,8 +234,7 @@ namespace GladNet.Common
 		[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "byteData")]
 		private void ThrowIfInvalidState(NetSendableState expectedState)
 		{
-			if(DataState != expectedState)
-				throw new InvalidOperationException(GetType() + " was not in required state " + expectedState + " was in " + DataState);
+			Throw<InvalidOperationException>.If.IsTrue(DataState != expectedState)?.Now();
 		}
 
 		/// <summary>
@@ -207,7 +243,8 @@ namespace GladNet.Common
 		/// <returns>A shallow copied instance of this NetSendable. Preserves reference to byte[] for efficient multiplexing.</returns>
 		public NetSendable<TData> ShallowClone()
 		{
-			return ((IShallowCloneable)this).ShallowClone() as NetSendable<TData>;
+			lock(syncObj)
+				return ((IShallowCloneable)this).ShallowClone() as NetSendable<TData>;
 		}
 
 		/// <summary>
@@ -216,8 +253,9 @@ namespace GladNet.Common
 		/// <returns>A shallow copied instance of this NetSendable. Preserves reference to byte[] for efficient multiplexing.</returns>
 		object IShallowCloneable.ShallowClone()
 		{
-			//As of Oct. 8th 2015 it is valid to MemberwiseClone for valid ShallowCopy.
-			return MemberwiseClone(); //it never shouldn't be of this type
+			lock(syncObj)
+				//As of Oct. 8th 2015 it is valid to MemberwiseClone for valid ShallowCopy.
+				return MemberwiseClone(); //it never shouldn't be of this type
 		}
 	}
 }

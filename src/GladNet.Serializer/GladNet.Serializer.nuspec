@@ -11,5 +11,8 @@
     <description>GladNet2 specification for serialization contracts, interfaces and attributes.</description>
     <copyright>Copyright 2015-2016</copyright>
     <tags>GladNet Glad GladNet2 Glad2 GladNet.Serializer GladNet2.Serializer Serializer</tags>
+    <dependencies>
+      <dependency id="Easyception" version="2.0.0" />
+    </dependencies>
   </metadata>
 </package>

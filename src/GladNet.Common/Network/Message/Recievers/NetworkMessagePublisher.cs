@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Easyception;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,10 +40,9 @@ namespace GladNet.Common
 		/// <param name="parameters">The message parameters the message was sent with.</param>
 		public void OnNetworkMessageReceive(IEventMessage message, IMessageParameters parameters)
 		{
-			message.ThrowIfNull(nameof(message));
+			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
 
-			if (EventPublisher != null)
-				EventPublisher.Invoke(message, parameters);
+			EventPublisher?.Invoke(message, parameters);
 		}
 
 		/// <summary>
@@ -52,10 +52,9 @@ namespace GladNet.Common
 		/// <param name="parameters">The message parameters the message was sent with.</param>
 		public void OnNetworkMessageReceive(IResponseMessage message, IMessageParameters parameters)
 		{
-			message.ThrowIfNull(nameof(message));
+			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
 
-			if (ResponsePublisher != null)
-				ResponsePublisher.Invoke(message, parameters);
+			ResponsePublisher?.Invoke(message, parameters);
 		}
 
 		/// <summary>
@@ -65,10 +64,9 @@ namespace GladNet.Common
 		/// <param name="parameters">The message parameters the message was sent with.</param>
 		public void OnNetworkMessageReceive(IRequestMessage message, IMessageParameters parameters)
 		{
-			message.ThrowIfNull(nameof(message));
+			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
 
-			if (RequestPublisher != null)
-				RequestPublisher.Invoke(message, parameters);
+			RequestPublisher?.Invoke(message, parameters);
 		}
 
 		/// <summary>
@@ -78,10 +76,9 @@ namespace GladNet.Common
 		/// <param name="parameters">The message parameters the message was sent with.</param>
 		public void OnNetworkMessageReceive(IStatusMessage status, IMessageParameters parameters)
 		{
-			status.ThrowIfNull(nameof(status));
+			Throw<ArgumentNullException>.If.IsNull(status)?.Now(nameof(status));
 
-			if (StatusPublisher != null)
-				StatusPublisher.Invoke(status, parameters);
+			StatusPublisher?.Invoke(status, parameters);
 		}
 
 		/// <summary>
@@ -90,7 +87,7 @@ namespace GladNet.Common
 		/// <param name="subscriber">Delegate target subscribing.</param>
 		public void SubscribeToEvents(OnNetworkEventMessage subscriber)
 		{
-			subscriber.ThrowIfNull(nameof(subscriber));
+			Throw<ArgumentNullException>.If.IsNull(subscriber)?.Now(nameof(subscriber));
 
 			EventPublisher += subscriber;
 		}
@@ -101,7 +98,7 @@ namespace GladNet.Common
 		/// <param name="subscriber">Delegate target subscribing.</param>
 		public void SubscribeToRequests(OnNetworkRequestMessage subscriber)
 		{
-			subscriber.ThrowIfNull(nameof(subscriber));
+			Throw<ArgumentNullException>.If.IsNull(subscriber)?.Now(nameof(subscriber));
 
 			RequestPublisher += subscriber;
 		}
@@ -112,7 +109,7 @@ namespace GladNet.Common
 		/// <param name="subscriber">Delegate target subscribing.</param>
 		public void SubscribeToResponses(OnNetworkResponseMessage subscriber)
 		{
-			subscriber.ThrowIfNull(nameof(subscriber));
+			Throw<ArgumentNullException>.If.IsNull(subscriber)?.Now(nameof(subscriber));
 
 			ResponsePublisher += subscriber;
 		}
@@ -123,7 +120,7 @@ namespace GladNet.Common
 		/// <param name="subscriber">Delegate target subscribing.</param>
 		public void SubscribeToStatusChanges(OnNetworkStatusMessage subscriber)
 		{
-			subscriber.ThrowIfNull(nameof(subscriber));
+			Throw<ArgumentNullException>.If.IsNull(subscriber)?.Now(nameof(subscriber));
 
 			StatusPublisher += subscriber;
 		}

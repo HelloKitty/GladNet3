@@ -25,8 +25,8 @@ Available on a Nuget Feed: https://www.myget.org/F/hellokitty/api/v2 [![hellokit
 #### Linux/Mono - Unit Tests
 ||Debug x86|Debug x64|Release x86|Release x64|
 |:--:|:--:|:--:|:--:|:--:|:--:|
-|**master**| N/A | N/A | N/A | [![Build Status](https://travis-ci.org/HelloKitty/GladNet2.0.svg?branch=master)](https://travis-ci.org/HelloKitty/GladNet2.0) |
-|**dev**| N/A | N/A | N/A | [![Build Status](https://travis-ci.org/HelloKitty/GladNet2.0.svg?branch=dev)](https://travis-ci.org/HelloKitty/GladNet2.0)|
+|**master**| N/A | N/A | N/A | [![Build Status](https://travis-ci.org/HelloKitty/GladNet2.svg?branch=master)](https://travis-ci.org/HelloKitty/GladNet2) |
+|**dev**| N/A | N/A | N/A | [![Build Status](https://travis-ci.org/HelloKitty/GladNet2.svg?branch=dev)](https://travis-ci.org/HelloKitty/GladNet2)|
 
 #### Windows - Unit Tests
 

@@ -11,6 +11,9 @@ namespace GladNet.Common
 	/// </summary>
 	public interface INetPeer : INetSender
 	{
+		/// <summary>
+		/// Indicates the Network Status of the current <see cref="INetPeer"/>.
+		/// </summary>
 		NetStatus Status { get; }
 
 		/// <summary>
@@ -21,6 +24,6 @@ namespace GladNet.Common
 		/// <summary>
 		/// Peer's service for sending network messages.
 		/// </summary>
-		INetworkMessageSender NetworkSendService { get; }
+		INetworkMessageRouterService NetworkSendService { get; }
 	}
 }
