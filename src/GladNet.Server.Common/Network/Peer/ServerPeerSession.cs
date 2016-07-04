@@ -24,8 +24,8 @@ namespace GladNet.Server.Common
 		/// <summary>
 		/// Called internally when a request is recieved from the remote peer.
 		/// </summary>
-		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
+		/// <param name="requestMessage"><see cref="IRequestMessage"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
-		protected override abstract void OnReceiveRequest(PacketPayload payload, IMessageParameters parameters);
+		protected override abstract void OnReceiveRequest(IRequestMessage requestMessage, IMessageParameters parameters);
 	}
 }

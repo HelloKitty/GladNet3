@@ -21,7 +21,7 @@ namespace GladNet.Server.Common
 
 			//Subscribe to request messages
 			subService.SubscribeTo<RequestMessage>()
-				.With((x, y) => OnReceiveRequest(x.Payload.Data, y));
+				.With(OnInternalReceiveRequest);
 		}
 
 		/// <summary>
@@ -100,11 +100,25 @@ namespace GladNet.Server.Common
 		#endregion
 
 		/// <summary>
-		/// Called internally when a request is recieved from the remote peer.
+		/// Called internally first when a request is recieved from the remote peer.
 		/// </summary>
-		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
+		/// <param name="requestMessage"><see cref="IRequestMessage"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
-		protected abstract void OnReceiveRequest(PacketPayload payload, IMessageParameters parameters);
+		private void OnInternalReceiveRequest(IRequestMessage requestMessage, IMessageParameters parameters)
+		{
+			//GladNet2 routing specification dictates that we should push the AUID
+			//into the routing stack:https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
+			requestMessage.Push(PeerDetails.ConnectionID);
+
+			OnReceiveRequest(requestMessage, parameters);
+		}
+
+		/// <summary>
+		/// Called internally second when a request is recieved from the remote peer.
+		/// </summary>
+		/// <param name="requestMessage"><see cref="IRequestMessage"/> sent by the peer.</param>
+		/// <param name="parameters">Parameters the message was sent with.</param>
+		protected abstract void OnReceiveRequest(IRequestMessage requestMessage, IMessageParameters parameters);
 
 		/// <summary>
 		/// Routes a <see cref="IResponseMessage"/> message.
