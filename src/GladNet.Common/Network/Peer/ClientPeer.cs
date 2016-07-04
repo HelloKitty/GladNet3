@@ -18,12 +18,24 @@ namespace GladNet.Common
 		{
 			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
 
+//Enduser clients shouldn't be routing messages so we don't need to call internal method
+//Example: A gameclient for a player. These sorts of clients do NOT need to route messages they recieve.
+#if !ENDUSER
 			//ClientPeers should be interested in events and responses from the server they are a peer of
 			subService.SubscribeTo<EventMessage>()
-				.With((x, y) => OnReceiveEvent(x.Payload.Data, y));
+				.With(OnInternalReceiveEvent);
 
 			subService.SubscribeTo<ResponseMessage>()
-				.With((x, y) => OnReceiveResponse(x.Payload.Data, y));
+				.With(OnInternalReceiveResponse);
+
+#else
+			//ClientPeers should be interested in events and responses from the server they are a peer of
+			subService.SubscribeTo<EventMessage>()
+				.With(OnReceiveEvent);
+
+			subService.SubscribeTo<ResponseMessage>()
+				.With(OnReceiveResponse);
+#endif
 		}
 
 		/// <summary>
@@ -67,18 +79,50 @@ namespace GladNet.Common
 			return NetworkSendService.TrySendMessage(OperationType.Request, payload);
 		}
 
+//Enduser clients shouldn't be routing messages.
+//Example: A gameclient for a player. These sorts of clients do NOT need to route messages they recieve.
+#if !ENDUSER
 		/// <summary>
 		/// Called internally when an event is recieved.
 		/// </summary>
-		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
+		/// <param name="eventMessage"><see cref="IEventMessage"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
-		protected abstract void OnReceiveEvent(PacketPayload payload, IMessageParameters parameters);
+		private void OnInternalReceiveEvent(IEventMessage eventMessage, IMessageParameters parameters)
+		{
+			//GladNet2 routing specification dictates that we should push the AUID
+			//into the routing stack:https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
+			eventMessage.Push(PeerDetails.ConnectionID);
+
+			OnReceiveEvent(eventMessage, parameters);
+		}
 
 		/// <summary>
 		/// Called internally when a response is recieved.
 		/// </summary>
-		/// <param name="payload"><see cref="PacketPayload"/> sent by the peer.</param>
+		/// <param name="payload"><see cref="IResponseMessage"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
-		protected abstract void OnReceiveResponse(PacketPayload payload, IMessageParameters parameters);
+		private void OnInternalReceiveResponse(IResponseMessage responseMessage, IMessageParameters parameters)
+		{
+			//GladNet2 routing specification dictates that we should push the AUID
+			//into the routing stack:https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
+			responseMessage.Push(PeerDetails.ConnectionID);
+
+			OnReceiveResponse(responseMessage, parameters);
+		}
+#endif
+
+		/// <summary>
+		/// Called internally when an event is recieved.
+		/// </summary>
+		/// <param name="eventMessage"><see cref="IEventMessage"/> sent by the peer.</param>
+		/// <param name="parameters">Parameters the message was sent with.</param>
+		protected abstract void OnReceiveEvent(IEventMessage eventMessage, IMessageParameters parameters);
+
+		/// <summary>
+		/// Called internally when a response is recieved.
+		/// </summary>
+		/// <param name="payload"><see cref="IResponseMessage"/> sent by the peer.</param>
+		/// <param name="parameters">Parameters the message was sent with.</param>
+		protected abstract void OnReceiveResponse(IResponseMessage responseMessage, IMessageParameters parameters);
 	}
 }
