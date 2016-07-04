@@ -6,8 +6,14 @@ using System.Text;
 
 namespace GladNet.Common
 {
+	/// <summary>
+	/// Contract for class that provides externally visible logging services.
+	/// </summary>
 	public interface IClassLogger
 	{
+		/// <summary>
+		/// Class logging service.
+		/// </summary>
 		ILog Logger { get; }
 	}
 }
