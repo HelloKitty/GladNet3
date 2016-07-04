@@ -35,6 +35,14 @@ namespace GladNet.Common
 			}
 		}
 
+		//Read Route-back Outside Userspace for information on why we do this: https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
+		/// <summary>
+		/// Indicates if the message is currently routing back.
+		/// This can help indicate to GladNet2 internals whether we should let
+		/// the message even reach userspace.
+		/// </summary>
+		[GladNetMember(GladNetDataIndex.Index1, IsRequired = true)]
+		public bool isRoutingBack { get; set; }
 
 		//We should manage this structure internally as there is no reason to expose it
 		//In fact, it may change implementation in the future and is something depend on it would be
@@ -43,7 +51,7 @@ namespace GladNet.Common
 		/// Internally managed wire-ready routing code stack.
 		/// This carries critical information about how a message should be routed through the server.
 		/// </summary>
-		[GladNetMember(GladNetDataIndex.Index6)]
+		[GladNetMember(GladNetDataIndex.Index2)]
 		internal Stack<int> _routingCodeStack = null;
 #endif
 

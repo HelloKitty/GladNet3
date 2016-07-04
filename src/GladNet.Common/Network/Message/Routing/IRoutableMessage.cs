@@ -42,5 +42,13 @@ namespace GladNet.Common
 		/// </summary>
 		/// <param name="message"></param>
 		void ExportRoutingDataTo(IRoutableMessage message);
+
+		//Read Route-back Outside Userspace for information on why we do this: https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
+		/// <summary>
+		/// Indicates if the message is currently routing back.
+		/// This can help indicate to GladNet2 internals whether we should let
+		/// the message even reach userspace.
+		/// </summary>
+		bool isRoutingBack { get; set; }
 	}
 }
