@@ -102,5 +102,78 @@ namespace GladNet.Common.UnitTests
 			//Exception should be thrown for null.
 			Assert.Throws<ArgumentNullException>(() => message.Dispatch(receiever.Object, null));
 		}
+
+		[Test]
+		public static void Test_Event_Message_Routing_Stack_Has_Pushed_Value()
+		{
+			//arrange
+			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			ResponseMessage message = new ResponseMessage(packet.Object);
+
+			//act
+			message.Push(5);
+
+			//assert
+			Assert.NotNull(message.Peek());
+			Assert.True(message.isMessageRoutable);
+			Assert.AreEqual(5, message.Peek());
+		}
+
+		[Test]
+		public static void Test_Event_Message_Routing_Stack_Has_Pushed_Values()
+		{
+			//arrange
+			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			ResponseMessage message = new ResponseMessage(packet.Object);
+
+			//act
+			message.Push(5);
+			message.Push(4);
+			message.Push(3);
+
+			//assert
+			Assert.NotNull(message.Peek());
+			Assert.True(message.isMessageRoutable);
+
+			Assert.AreEqual(3, message.Pop());
+			Assert.AreEqual(4, message.Pop());
+			Assert.AreEqual(5, message.Pop());
+
+			Assert.IsNull(message.Peek());
+			Assert.IsFalse(message.isMessageRoutable); //shouldn't be able to rout
+		}
+
+		[Test]
+		public static void Test_Event_Message_Routing_Stack_Can_Export_To_Other_Message()
+		{
+			//arrange
+			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+			ResponseMessage message = new ResponseMessage(packet.Object);
+
+			//act
+			message.Push(5);
+			message.Push(4);
+			message.Push(3);
+
+			ResponseMessage rMessage = new ResponseMessage(packet.Object);
+
+			//export routing stack
+			message.ExportRoutingDataTo(rMessage);
+
+			List<IRoutableMessage> Messages = new List<IRoutableMessage>() { rMessage, message };
+
+			foreach (IRoutableMessage m in Messages)
+			{
+				Assert.NotNull(m.Peek());
+				Assert.True(m.isMessageRoutable);
+
+				Assert.AreEqual(3, m.Pop());
+				Assert.AreEqual(4, m.Pop());
+				Assert.AreEqual(5, m.Pop());
+
+				Assert.IsNull(m.Peek());
+				Assert.IsFalse(m.isMessageRoutable);
+			}
+		}
 	}
 }

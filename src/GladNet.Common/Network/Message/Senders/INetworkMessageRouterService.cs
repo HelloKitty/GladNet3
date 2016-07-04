@@ -25,17 +25,6 @@ namespace GladNet.Common
 		SendResult TryRouteMessage(IResponseMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 
 		/// <summary>
-		/// Tries to send the <see cref="IEventMessage"/> message without routing semantics.
-		/// </summary>
-		/// <param name="message"><see cref="IEventMessage"/> to be sent.</param>
-		/// <param name="deliveryMethod">The deseried <see cref="DeliveryMethod"/> of the message.</param>
-		/// <param name="encrypt">Indicates if the message should be encrypted.</param>
-		/// <param name="channel">Indicates the channel for this message to be sent over.</param>
-		/// <returns>Indication of the message send state.</returns>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		SendResult TryRouteMessage(IEventMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
-
-		/// <summary>
 		/// Tries to send the <see cref="IResponseMessage"/> message without routing semantics.
 		/// </summary>
 		/// <param name="message"><see cref="IResponseMessage"/> to be sent.</param>

@@ -35,5 +35,12 @@ namespace GladNet.Common
 		/// Indicates if the message has any valid keys for routing.
 		/// </summary>
 		bool isMessageRoutable { get; }
+
+		/// <summary>
+		/// Exports the internal routing data to the target <see cref="IRoutableMessage"/>
+		/// parameter <paramref name="message"/>.
+		/// </summary>
+		/// <param name="message"></param>
+		void ExportRoutingDataTo(IRoutableMessage message);
 	}
 }

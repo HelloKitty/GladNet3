@@ -13,17 +13,7 @@ namespace GladNet.Common
 	/// of the message.
 	/// </summary>
 	public interface INetworkMessage : ISerializationVisitable, IPayloadContainer
-#if !ENDUSER //EndUser doesn't need message routing functionality
-		, IRoutableMessage
-#endif
 	{
-#if !ENDUSER
-		/// <summary>
-		/// Exports the internal routing data to the target <see cref="IRoutableMessage"/>
-		/// parameter <paramref name="message"/>.
-		/// </summary>
-		/// <param name="message"></param>
-		void ExportRoutingDataTo(IRoutableMessage message);
-#endif
+
 	}
 }

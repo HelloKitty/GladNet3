@@ -134,20 +134,5 @@ namespace GladNet.Server.Common
 
 			return NetworkSendService.TryRouteMessage(message, deliveryMethod, encrypt, channel);
 		}
-
-		/// <summary>
-		/// Routes a <see cref="IEventMessage"/> message.
-		/// </summary>
-		/// <param name="message"><see cref="IEventMessage"/> to route.</param>
-		/// <param name="deliveryMethod">Desired <see cref="DeliveryMethod"/> for the event. See documentation for more information.</param>
-		/// <param name="encrypt">Optional: Indicates if the message should be encrypted. Default: false</param>
-		/// <param name="channel">Optional: Inidicates the channel the network message should be sent on. Default: 0</param>
-		/// <returns>Indication of the message send state.</returns>
-		public SendResult RouteEvent(IEventMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
-
-			return NetworkSendService.TryRouteMessage(message, deliveryMethod, encrypt, channel);
-		}
 	}
 }

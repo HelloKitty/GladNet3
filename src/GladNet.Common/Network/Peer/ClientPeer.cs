@@ -23,7 +23,7 @@ namespace GladNet.Common
 #if !ENDUSER
 			//ClientPeers should be interested in events and responses from the server they are a peer of
 			subService.SubscribeTo<EventMessage>()
-				.With(OnInternalReceiveEvent);
+				.With(OnReceiveEvent);
 
 			subService.SubscribeTo<ResponseMessage>()
 				.With(OnInternalReceiveResponse);
@@ -82,20 +82,6 @@ namespace GladNet.Common
 //Enduser clients shouldn't be routing messages.
 //Example: A gameclient for a player. These sorts of clients do NOT need to route messages they recieve.
 #if !ENDUSER
-		/// <summary>
-		/// Called internally when an event is recieved.
-		/// </summary>
-		/// <param name="eventMessage"><see cref="IEventMessage"/> sent by the peer.</param>
-		/// <param name="parameters">Parameters the message was sent with.</param>
-		private void OnInternalReceiveEvent(IEventMessage eventMessage, IMessageParameters parameters)
-		{
-			//GladNet2 routing specification dictates that we should push the AUID
-			//into the routing stack:https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
-			eventMessage.Push(PeerDetails.ConnectionID);
-
-			OnReceiveEvent(eventMessage, parameters);
-		}
-
 		/// <summary>
 		/// Called internally when a response is recieved.
 		/// </summary>
