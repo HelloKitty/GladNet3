@@ -18,7 +18,7 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_Ctor_Doesnt_Throw_On_Non_Null_Dependencies()
 		{
 			//assert
-			Assert.DoesNotThrow(() => { var r = new Mock<ServerPeerSession>(Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>()).Object; });
+			Assert.DoesNotThrow(() => { var r = new Mock<ServerPeerSession>(Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>(), Mock.Of<INetworkMessageRouteBackService>()).Object; });
 		}
 
 		[Test(Author = "Andrew Blakely", Description = "Should only be able to send events and responses", TestOf = typeof(ServerPeerSession))]
@@ -31,7 +31,7 @@ namespace GladNet.Server.Common.Tests
 			Mock<INetworkMessageRouterService> sender = new Mock<INetworkMessageRouterService>();
 			sender.Setup(x => x.CanSend(opType)).Returns(expectedResult); //set this up so it doesn't affect results
 
-			Mock<ServerPeerSession> peer = new Mock<ServerPeerSession>(Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ServerPeerSession> peer = new Mock<ServerPeerSession>(Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>(), Mock.Of<INetworkMessageRouteBackService>());
 			peer.CallBase = true;
 
 			//act
@@ -46,7 +46,7 @@ namespace GladNet.Server.Common.Tests
 		{
 			//arrange
 			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
-			Mock<ServerPeerSession> peer = new Mock<ServerPeerSession>(Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ServerPeerSession> peer = new Mock<ServerPeerSession>(Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>(), Mock.Of<INetworkMessageRouteBackService>());
 			peer.CallBase = true;
 
 			//Makes sure it's created

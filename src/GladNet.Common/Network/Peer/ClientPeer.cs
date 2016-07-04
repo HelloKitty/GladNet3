@@ -12,8 +12,15 @@ namespace GladNet.Common
 {
 	public abstract class ClientPeer : Peer, IClientPeerPayloadSender
 	{
+#if !ENDUSER
+		private INetworkMessageRouteBackService messageRoutebackService { get; }
+#endif
+
 		protected ClientPeer(ILog logger, INetworkMessageRouterService messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
-			IDisconnectionServiceHandler disconnectHandler)
+			IDisconnectionServiceHandler disconnectHandler
+#if !ENDUSER
+			, INetworkMessageRouteBackService routebackService)
+#endif
 				: base(logger, messageSender, details, subService, disconnectHandler)
 		{
 			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
@@ -28,6 +35,8 @@ namespace GladNet.Common
 			subService.SubscribeTo<ResponseMessage>()
 				.With(OnInternalReceiveResponse);
 
+			Throw<ArgumentNullException>.If.IsNull(routebackService)?.Now(nameof(routebackService));
+			messageRoutebackService = routebackService;
 #else
 			//ClientPeers should be interested in events and responses from the server they are a peer of
 			subService.SubscribeTo<EventMessage>()
@@ -89,6 +98,15 @@ namespace GladNet.Common
 		/// <param name="parameters">Parameters the message was sent with.</param>
 		private void OnInternalReceiveResponse(IResponseMessage responseMessage, IMessageParameters parameters)
 		{
+			//We should check if the message is routing back.
+			//This is suggested in the GladNet2 routing specification
+			//Under "Route-back Outside Userspace": https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
+			if (responseMessage.isRoutingBack)
+			{
+				//Right now we just pass on the parameters.
+				messageRoutebackService.RouteResponse(responseMessage, parameters);
+			}
+
 			//GladNet2 routing specification dictates that we should push the AUID
 			//into the routing stack:https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
 			responseMessage.Push(PeerDetails.ConnectionID);

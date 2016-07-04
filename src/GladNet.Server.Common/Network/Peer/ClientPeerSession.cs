@@ -13,11 +13,16 @@ namespace GladNet.Server.Common
 {
 	public abstract class ClientPeerSession : Peer, IClientSessionNetworkMessageSender, IClientSessionNetworkMessageRouter
 	{
+		private INetworkMessageRouteBackService messageRoutebackService { get; }
+
 		public ClientPeerSession(ILog logger, INetworkMessageRouterService sender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
-			IDisconnectionServiceHandler disconnectHandler)
+			IDisconnectionServiceHandler disconnectHandler, INetworkMessageRouteBackService routebackService)
 				: base(logger, sender, details, subService, disconnectHandler)
 		{
 			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
+			Throw<ArgumentNullException>.If.IsNull(routebackService)?.Now(nameof(routebackService));
+
+			messageRoutebackService = routebackService;
 
 			//Subscribe to request messages
 			subService.SubscribeTo<RequestMessage>()
@@ -106,6 +111,14 @@ namespace GladNet.Server.Common
 		/// <param name="parameters">Parameters the message was sent with.</param>
 		private void OnInternalReceiveRequest(IRequestMessage requestMessage, IMessageParameters parameters)
 		{
+			//We should check if the message is routing back.
+			//This is suggested in the GladNet2 routing specification
+			//Under "Route-back Outside Userspace": https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
+			if (requestMessage.isRoutingBack)
+			{
+				messageRoutebackService.RouteRequest(requestMessage, parameters);
+			}
+
 			//GladNet2 routing specification dictates that we should push the AUID
 			//into the routing stack:https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
 			requestMessage.Push(PeerDetails.ConnectionID);
