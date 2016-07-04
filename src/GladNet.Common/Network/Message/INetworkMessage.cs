@@ -12,12 +12,13 @@ namespace GladNet.Common
 	/// Contract for a networked message. Provides the barest of function which exposes the <see cref="NetSendable"/> <see cref="PacketPayload"/>
 	/// of the message.
 	/// </summary>
-	public interface INetworkMessage : ISerializationVisitable
+	public interface INetworkMessage : ISerializationVisitable, IPayloadContainer, IRoutableMessage
 	{
 		/// <summary>
-		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
-		/// <see cref="NetSendable"/> enforces its wire readyness.
+		/// Exports the internal routing data to the target <see cref="IRoutableMessage"/>
+		/// parameter <paramref name="message"/>.
 		/// </summary>
-		NetSendable<PacketPayload> Payload { get; }
+		/// <param name="message"></param>
+		void ExportRoutingDataTo(IRoutableMessage message);
 	}
 }

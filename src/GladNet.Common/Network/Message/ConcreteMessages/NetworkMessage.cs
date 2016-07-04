@@ -34,6 +34,21 @@ namespace GladNet.Common
 		[GladNetMember(GladNetDataIndex.Index5, IsRequired = true)]
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
+		/// <summary>
+		/// Indicates if the message has any valid keys for routing.
+		/// </summary>
+		public bool isMessageRoutable
+		{
+			get
+			{
+				//Have to lock
+				lock(syncObj)
+				{
+					return _routingCodeStack != null && _routingCodeStack.Count != 0;
+				}
+			}
+		}
+
 		//We should manage this structure internally as there is no reason to expose it
 		//In fact, it may change implementation in the future and is something depend on it would be
 		//a disaster similar to the one we're in right now implementing this feature lol
@@ -106,6 +121,74 @@ namespace GladNet.Common
 					//We need visit style functionality because some serializers require to be told about the class in the heirarhcy
 					//For example protobuf-net won't accept interface serialization with types.
 					return serializer.Serialize<NetworkMessage>(this);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Pushes a new routing key into the message.
+		/// This key indicates where a message to this message should be routed back to.
+		/// </summary>
+		/// <param name="routingKey">Unique routing key.</param>
+		public void Push(int routingKey)
+		{
+			lock(syncObj)
+			{
+				if (_routingCodeStack == null)
+					_routingCodeStack = new Stack<int>(1); //most will only need a depth of 2 routing so only 1 slot is needed
+
+				_routingCodeStack.Push(routingKey);
+			}
+		}
+
+		/// <summary>
+		/// Removes a routing key from the message.
+		/// This key indicates where this message should be forwared to.
+		/// </summary>
+		/// <returns>A unique routing key.</returns>
+		public int? Pop()
+		{
+			lock(syncObj)
+			{
+				if (_routingCodeStack == null)
+					return null;
+				else
+					if (_routingCodeStack.Count != 0)
+						return _routingCodeStack.Pop();
+					else
+						return null;
+			}
+		}
+
+		/// <summary>
+		/// Peeks at the routing key this message would use
+		/// to route. Call Pop to both Peek and Remove the key before sending.
+		/// </summary>
+		/// <returns>Returns the routing ID or null if there are no routing IDs.</returns>
+		public int? Peek()
+		{
+			lock (syncObj)
+			{
+				if (_routingCodeStack == null)
+					return null;
+				else
+					if (_routingCodeStack.Count != 0)
+						return _routingCodeStack.Peek();
+					else
+						return null;
+			}
+		}
+
+		public void ExportRoutingDataTo(IRoutableMessage message)
+		{
+			//So, this is sorta a hack but it's a good one
+			//for preformance
+			if(message is NetworkMessage)
+			{
+				NetworkMessage castedMessage = message as NetworkMessage;
+				lock(syncObj)
+				{
+					_routingCodeStack.ToArray();
 				}
 			}
 		}

@@ -7,13 +7,14 @@ using System.Text;
 namespace GladNet.Common
 {
 	/// <summary>
-	/// Implementer exposes a <see cref="PacketPayload"/>
+	/// Implementer exposes a <see cref="NetSendable{PacketPayload}"/>
 	/// </summary>
 	public interface IPayloadContainer
 	{
 		/// <summary>
-		/// Instance of the <see cref="PacketPayload"/> in the container.
+		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
+		/// <see cref="NetSendable"/> enforces its wire readyness.
 		/// </summary>
-		PacketPayload Payload { get; }
+		NetSendable<PacketPayload> Payload { get; }
 	}
 }
