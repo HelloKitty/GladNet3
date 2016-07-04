@@ -92,6 +92,7 @@
     <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionFluentBuilder.cs" />
+    <Compile Include="Network\Message\Routing\INetworkMessageRouteBackService.cs" />
     <Compile Include="Network\Message\Routing\IRoutableMessage.cs" />
     <Compile Include="Network\Message\Senders\IClientPeerPayloadSender.cs" />
     <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageRouter.cs" />
