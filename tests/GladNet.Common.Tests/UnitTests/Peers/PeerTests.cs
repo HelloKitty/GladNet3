@@ -45,7 +45,7 @@ namespace GladNet.Common.Tests
 			[EnumRange(typeof(DeliveryMethod))] DeliveryMethod deliveryMethod)
 		{
 			//arrange
-			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
+			Mock<INetworkMessageRouterService> sender = new Mock<INetworkMessageRouterService>();
 			sender.Setup(x => x.CanSend(It.IsAny<OperationType>())).Returns(false);
 
 			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
@@ -70,7 +70,7 @@ namespace GladNet.Common.Tests
 		public static void Test_Peer_TrySendMessageGeneric_Methods([EnumRangeAttribute(typeof(OperationType))] OperationType opType)
 		{
 			//arrange
-			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
+			Mock<INetworkMessageRouterService> sender = new Mock<INetworkMessageRouterService>();
 			sender.Setup(x => x.CanSend(It.IsAny<OperationType>())).Returns(false);
 
 			Mock<Peer> peer = new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
@@ -121,7 +121,7 @@ namespace GladNet.Common.Tests
 
 		private static Mock<Peer> CreatePeerMock()
 		{
-			return new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
+			return new Mock<Peer>(MockBehavior.Loose, Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
 		}
 	}
 }

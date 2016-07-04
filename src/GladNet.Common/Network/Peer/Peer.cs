@@ -17,7 +17,7 @@ namespace GladNet.Common
 		/// Peer's service for sending network messages.
 		/// Use Extension methods or specific types for an neater API.
 		/// </summary>
-		public INetworkMessageSender NetworkSendService { get; private set; }
+		public INetworkMessageRouterService NetworkSendService { get; private set; }
 
 		/// <summary>
 		/// Indicates the Network Status of the current <see cref="INetPeer"/>.
@@ -40,7 +40,7 @@ namespace GladNet.Common
 		/// </summary>
 		protected IDisconnectionServiceHandler disconnectionHandler { get; private set; }
 
-		protected Peer(ILog logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+		protected Peer(ILog logger, INetworkMessageRouterService messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
 		{
 			Throw<ArgumentNullException>.If.IsNull(logger)?.Now(nameof(logger));

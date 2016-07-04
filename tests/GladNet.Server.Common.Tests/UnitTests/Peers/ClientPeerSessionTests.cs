@@ -18,7 +18,7 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_CanSend_IsRequest(OperationType opType, bool expectedResult)
 		{
 			//arrange
-			Mock<INetworkMessageSender> sender = new Mock<INetworkMessageSender>();
+			Mock<INetworkMessageRouterService> sender = new Mock<INetworkMessageRouterService>();
 			sender.Setup(x => x.CanSend(opType)).Returns(expectedResult); //set this up so it doesn't affect results
 
 			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILog>(), sender.Object, Mock.Of<IConnectionDetails>(), Mock.Of<INetworkMessageSubscriptionService>(), Mock.Of<IDisconnectionServiceHandler>());
@@ -35,7 +35,7 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_Throws_On_Null_Sub_Service()
 		{
 			//arrange
-			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(MockBehavior.Strict, Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), null, Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(MockBehavior.Strict, Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), null, Mock.Of<IDisconnectionServiceHandler>());
 
 			//assert
 			Assert.IsTrue(new Func<bool>(() =>
@@ -58,7 +58,7 @@ namespace GladNet.Server.Common.Tests
 		{
 			//arrange
 			Mock<INetworkMessageSubscriptionService> subService = new Mock<INetworkMessageSubscriptionService>(MockBehavior.Loose);
-			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILog>(), Mock.Of<INetworkMessageSender>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
+			Mock<ClientPeerSession> peer = new Mock<ClientPeerSession>(Mock.Of<ILog>(), Mock.Of<INetworkMessageRouterService>(), Mock.Of<IConnectionDetails>(), subService.Object, Mock.Of<IDisconnectionServiceHandler>());
 			peer.CallBase = true;
 
 			//Makes sure it's created
@@ -74,7 +74,7 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_SendResposne_Calls_Send_Response_On_NetSend_Service()
 		{
 			//arrange
-			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			Mock<INetworkMessageRouterService> sendService = new Mock<INetworkMessageRouterService>(MockBehavior.Loose);
 			PacketPayload payload = Mock.Of<PacketPayload>();
 
 			//set it up to indicate we can send
@@ -95,7 +95,7 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_SendResposne_Calls_Send_Event_On_NetSend_Service()
 		{
 			//arrange
-			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			Mock<INetworkMessageRouterService> sendService = new Mock<INetworkMessageRouterService>(MockBehavior.Loose);
 			PacketPayload payload = Mock.Of<PacketPayload>();
 
 			//set it up to indicate we can send
@@ -116,7 +116,7 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_SendResposne_Calls_Send_Event_On_NetSend_Service_With_Generic_Static_Params()
 		{
 			//arrange
-			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			Mock<INetworkMessageRouterService> sendService = new Mock<INetworkMessageRouterService>(MockBehavior.Loose);
 			TestPayload payload = new TestPayload();
 
 			//set it up to indicate we can send
@@ -137,7 +137,7 @@ namespace GladNet.Server.Common.Tests
 		public static void Test_SendResposne_Calls_Send_Response_On_NetSend_Service_With_Generic_Static_Params()
 		{
 			//arrange
-			Mock<INetworkMessageSender> sendService = new Mock<INetworkMessageSender>(MockBehavior.Loose);
+			Mock<INetworkMessageRouterService> sendService = new Mock<INetworkMessageRouterService>(MockBehavior.Loose);
 			TestPayload payload = new TestPayload();
 
 			//set it up to indicate we can send

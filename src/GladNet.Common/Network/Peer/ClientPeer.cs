@@ -10,9 +10,9 @@ using Easyception;
 
 namespace GladNet.Common
 {
-	public abstract class ClientPeer : Peer, IClientPeerNetworkMessageSender
+	public abstract class ClientPeer : Peer, IClientPeerPayloadSender
 	{
-		protected ClientPeer(ILog logger, INetworkMessageSender messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+		protected ClientPeer(ILog logger, INetworkMessageRouterService messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
 				: base(logger, messageSender, details, subService, disconnectHandler)
 		{

@@ -9,9 +9,9 @@ using System.Text;
 namespace GladNet.Common
 {
 	/// <summary>
-	/// Contracts implementing types to offer specific/supported network message types such as; Request
+	/// Contracts implementing types to offer specific/supported <see cref="PacketPayload"/> sending such as; Request
 	/// </summary>
-	public interface IClientPeerNetworkMessageSender
+	public interface IClientPeerPayloadSender
 	{
 		/// <summary>
 		/// Sends a networked request.

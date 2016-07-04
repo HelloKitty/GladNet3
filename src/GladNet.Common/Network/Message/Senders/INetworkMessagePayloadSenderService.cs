@@ -10,7 +10,7 @@ namespace GladNet.Common
 	/// <summary>
 	/// Contract that guarantees implementing types offer some <see cref="PacketPayload"/> sending functionality.
 	/// </summary>
-	public interface INetworkMessagePayloadSender
+	public interface INetworkMessagePayloadSenderService : INetSender
 	{
 		/// <summary>
 		/// Attempts to send a message; may fail and failure will be reported.

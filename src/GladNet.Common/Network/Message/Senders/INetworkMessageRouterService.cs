@@ -11,7 +11,7 @@ namespace GladNet.Common
 	/// <summary>
 	/// Contract that guarantees implementing types offer some <see cref="INetworkMessage"/> and <see cref="PacketPayload"/> sending functionality.
 	/// </summary>
-	public interface INetworkMessageSender : INetSender, INetworkMessagePayloadSender
+	public interface INetworkMessageRouterService : INetSender, INetworkMessagePayloadSenderService
 	{
 		/// <summary>
 		/// Tries to send the <see cref="IResponseMessage"/> message without routing semantics.

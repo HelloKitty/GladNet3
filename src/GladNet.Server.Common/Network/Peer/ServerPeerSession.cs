@@ -14,7 +14,7 @@ namespace GladNet.Server.Common
 	/// </summary>
 	public abstract class ServerPeerSession : ClientPeerSession
 	{
-		public ServerPeerSession(ILog logger, INetworkMessageSender sender, IConnectionDetails details, INetworkMessageSubscriptionService netMessageSubService,
+		public ServerPeerSession(ILog logger, INetworkMessageRouterService sender, IConnectionDetails details, INetworkMessageSubscriptionService netMessageSubService,
 			IDisconnectionServiceHandler disconnectHandler)
 				: base(logger, sender, details, netMessageSubService, disconnectHandler)
 		{
