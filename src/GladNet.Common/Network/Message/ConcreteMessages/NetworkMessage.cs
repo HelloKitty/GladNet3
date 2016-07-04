@@ -194,9 +194,15 @@ namespace GladNet.Common
 				NetworkMessage castedMessage = message as NetworkMessage;
 				lock(syncObj)
 				{
-					_routingCodeStack.ToArray();
+					//No reason to copy null stack
+					if(_routingCodeStack != null)
+						//We should transfer the routing stack but also preserve the other routing stack
+						//We probably won't need it but just in case the user wants to do something with it still
+						castedMessage._routingCodeStack = new Stack<int>(_routingCodeStack.Reverse()); //We must create a reverse copy of the stack:http://stackoverflow.com/questions/7391348/c-sharp-clone-a-stack
 				}
 			}
+			
+			//TOOD: Implement the routing for non-NetworkMessages
 		}
 #endif
 	}
