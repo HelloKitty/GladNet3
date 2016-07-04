@@ -83,6 +83,7 @@
     <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionFluentBuilder.cs" />
+    <Compile Include="Network\Message\Routing\IRoutableMessage.cs" />
     <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageSender.cs" />
     <Compile Include="Network\Message\Senders\INetSender.cs" />
     <Compile Include="Network\Parameters\DeliveryMethod.cs" />
