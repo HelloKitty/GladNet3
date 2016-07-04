@@ -7,6 +7,7 @@ using System.Text;
 using System.Reflection;
 using GladNet.Serializer;
 using GladNet.Payload;
+using GladNet.Message;
 
 namespace GladNet.Common.Tests
 {
@@ -24,9 +25,7 @@ namespace GladNet.Common.Tests
 		[TestCase(typeof(EventMessage))]
 		[TestCase(typeof(PacketPayload))]
 		[TestCase(typeof(NetSendable<>))]
-		[TestCase(typeof(NetSendableState))]
 		[TestCase(typeof(StatusChangePayload))]
-		[TestCase(typeof(NetStatus))]
 		public static void Check_If_Types_Are_Marked(Type typeExpectedToBeMarked)
 		{
 			//Arrange

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>GladNet.Engine.Common</id>
+    <version>$version$</version>
+    <title>GladNet.Engine.Common</title>
+    <authors>www.github.com/HelloKitty</authors>
+    <owners>www.github.com/HelloKitty</owners>
+    <licenseUrl>https://github.com/HelloKitty/GladNet2/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/HelloKitty/GladNet2</projectUrl>
+    <description>GladNet2 contracts and interfaces for GladNet2 server engine.</description>
+    <copyright>Copyright 2015-2016</copyright>
+    <tags>GladNet Glad GladNet2 Glad2 GladNet.Engine.Common GladNet2.Engine.Common Engine Common</tags>
+    <dependencies>
+       <dependency id="GladNet.Serializer" version="$version$" />
+       <dependency id="GladNet.Engine.Common" version="$version$" />
+       <dependency id="GladNet.Common" version="$version$" />
+       <dependency id="GladNet.Payload" version="$version$" />
+       <dependency id="GladNet.Encryption" version="$version$" />
+       <dependency id="GladNet.Message" version="$version$" />
+       <dependency id="Common.Logging" version="3.3.1" />
+       <dependency id="Common.Logging.Core" version="3.3.1" />
+       <dependency id="Easyception" version="2.0.0" />
+    </dependencies>
+  </metadata>
+</package>

@@ -1,5 +1,4 @@
 ﻿using GladNet.Common;
-using GladNet.Serializer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -14,7 +13,6 @@ namespace GladNet.Common
 	/// <summary>
 	/// Represents the network status of a connection.
 	/// </summary>
-	[GladNetSerializationContract]
 	public enum NetStatus : byte
 	{
 		Connecting,
