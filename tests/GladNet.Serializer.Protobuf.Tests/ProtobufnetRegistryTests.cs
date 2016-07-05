@@ -169,7 +169,7 @@ namespace GladNet.Serializer.Protobuf.Tests
 		[GladNetSerializationContract]
 		public class TestWithMember
 		{
-			[GladNetMember(1)]
+			[GladNetMember(GladNetDataIndex.Index1)]
 			public int IntField;
 		}
 
@@ -179,14 +179,14 @@ namespace GladNet.Serializer.Protobuf.Tests
 			[GladNetSerializationContract]
 			public class SomeClass
 			{
-				[GladNetMember(2)]
+				[GladNetMember(GladNetDataIndex.Index2)]
 				public int SomeField;
 			}
 
-			[GladNetMember(1)]
+			[GladNetMember(GladNetDataIndex.Index1)]
 			public int IntField;
 
-			[GladNetMember(2)]
+			[GladNetMember(GladNetDataIndex.Index2)]
 			public SomeClass SomeClassField;
 
 			public int ShouldntSerialize;
@@ -198,21 +198,21 @@ namespace GladNet.Serializer.Protobuf.Tests
 			[GladNetSerializationContract]
 			public class SomeClass
 			{
-				[GladNetMember(2)]
+				[GladNetMember(GladNetDataIndex.Index2)]
 				private int SomeField;
 
 				public TestCircularGraph CircleField;
 			}
 
-			[GladNetMember(1)]
+			[GladNetMember(GladNetDataIndex.Index1)]
 			public int IntField;
 
-			[GladNetMember(2)]
+			[GladNetMember(GladNetDataIndex.Index2)]
 			public SomeClass SomeClassField;
 		}
 
 		[GladNetSerializationContract]
-		[GladNetSerializationInclude(1, typeof(TestChildType))]
+		[GladNetSerializationInclude(GladNetIncludeIndex.Index1, typeof(TestChildType))]
 		public class TestBaseType
 		{
 
@@ -221,15 +221,15 @@ namespace GladNet.Serializer.Protobuf.Tests
 		[GladNetSerializationContract]
 		public class TestChildType : TestBaseType
 		{
-			[GladNetMember(1)]
+			[GladNetMember(GladNetDataIndex.Index1)]
 			public int IntField1;
 		}
 
 		[GladNetSerializationContract]
-		[GladNetSerializationInclude(2, typeof(TestBaseType), false)]
+		[GladNetSerializationInclude(GladNetIncludeIndex.Index2, typeof(TestBaseType), false)]
 		public class TestChildTypeWithInclude : TestBaseType
 		{
-			[GladNetMember(3)]
+			[GladNetMember(GladNetDataIndex.Index3)]
 			public int IntField2 { get; private set; }
 
 			public TestChildTypeWithInclude(int val)
@@ -244,10 +244,10 @@ namespace GladNet.Serializer.Protobuf.Tests
 		}
 
 		[GladNetSerializationContract]
-		[GladNetSerializationInclude(3, typeof(TestBaseType), false)]
+		[GladNetSerializationInclude(GladNetIncludeIndex.Index3, typeof(TestBaseType), false)]
 		public class TestChildTypeWithInclude2 : TestBaseType
 		{
-			[GladNetMember(2)]
+			[GladNetMember(GladNetDataIndex.Index2)]
 			public int IntField5;
 		}
 	}
