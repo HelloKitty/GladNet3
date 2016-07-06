@@ -1,4 +1,5 @@
-﻿using GladNet.Payload;
+﻿using GladNet.Common;
+using GladNet.Payload;
 using GladNet.Serializer;
 using System;
 using System.Collections.Generic;

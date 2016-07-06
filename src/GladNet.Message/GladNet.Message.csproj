@@ -54,6 +54,7 @@
     <Compile Include="Message\ConcreteMessages\StatusChange\IStatusMessage.cs" />
     <Compile Include="Message\ConcreteMessages\StatusChange\StatusMessage.cs" />
     <Compile Include="Message\INetworkMessage.cs" />
+    <Compile Include="Message\IOperationTypeMappable.cs" />
     <Compile Include="Message\IPayloadContainer.cs" />
     <Compile Include="Message\NetSendable.cs" />
     <Compile Include="Message\Recievers\INetworkMessageReceiver.cs" />

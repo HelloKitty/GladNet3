@@ -21,6 +21,11 @@ namespace GladNet.Message
 		, IRoutableMessage
 #endif
 	{
+		/// <summary>
+		/// Indicates the <see cref="OperationType"/> that this object maps to.
+		/// </summary>
+		public OperationType OperationTypeMappedValue { get { return OperationType.Request; } }
+
 		//TODO: Prevent routing exploits. Right now clients could spoof routing info
 		//WE NEED TO SANITIZE
 #if !ENDUSER
