@@ -16,25 +16,17 @@ namespace GladNet.Engine.Common
 	public interface INetworkMessageRouterService : INetSender, INetworkMessagePayloadSenderService
 	{
 		/// <summary>
-		/// Tries to send the <see cref="IResponseMessage"/> message without routing semantics.
+		/// Tries to send the <typeparamref name="TMessageType"/> message without routing semantics.
 		/// </summary>
-		/// <param name="message"><see cref="IResponseMessage"/> to be sent.</param>
+		/// <typeparam name="TMessageType">A <see cref="INetworkMessage"/> type that implements <see cref="IRoutableMessage"/>.</typeparam>
+		/// <param name="message"><typeparamref name="TMessageType"/> to be sent.</param>
 		/// <param name="deliveryMethod">The deseried <see cref="DeliveryMethod"/> of the message.</param>
 		/// <param name="encrypt">Indicates if the message should be encrypted.</param>
 		/// <param name="channel">Indicates the channel for this message to be sent over.</param>
+		/// <exception cref="InvalidOperationException">Throws this if the <see cref="IOperationTypeMappable"/> cannot map to a handable <see cref="OperationType"/>.</exception>
 		/// <returns>Indication of the message send state.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		SendResult TryRouteMessage(IResponseMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
-
-		/// <summary>
-		/// Tries to send the <see cref="IResponseMessage"/> message without routing semantics.
-		/// </summary>
-		/// <param name="message"><see cref="IResponseMessage"/> to be sent.</param>
-		/// <param name="deliveryMethod">The deseried <see cref="DeliveryMethod"/> of the message.</param>
-		/// <param name="encrypt">Indicates if the message should be encrypted.</param>
-		/// <param name="channel">Indicates the channel for this message to be sent over.</param>
-		/// <returns>Indication of the message send state.</returns>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-		SendResult TryRouteMessage(IRequestMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		SendResult TryRouteMessage<TMessageType>(TMessageType message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+			where TMessageType : INetworkMessage, IRoutableMessage, IOperationTypeMappable; //we need IOperationTypeMappable so that we don't have to abuse type introspection which is sorta a smell
 	}
 }
