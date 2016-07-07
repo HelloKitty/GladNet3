@@ -17,6 +17,11 @@ namespace GladNet.Message
 	[GladNetSerializationContract]
 	public class ResponseMessage : NetworkMessage, IResponseMessage
 	{
+		/// <summary>
+		/// Indicates the <see cref="OperationType"/> that this object maps to.
+		/// </summary>
+		public OperationType OperationTypeMappedValue { get { return OperationType.Response; } }
+
 		//TODO: Prevent routing exploits. Right now clients could spoof routing info
 		//WE NEED TO SANITIZE
 #if !ENDUSER

@@ -19,6 +19,11 @@ namespace GladNet.Message
 	public class EventMessage : NetworkMessage, IEventMessage
 	{
 		/// <summary>
+		/// Indicates the <see cref="OperationType"/> that this object maps to.
+		/// </summary>
+		public OperationType OperationTypeMappedValue { get { return OperationType.Event; } }
+
+		/// <summary>
 		/// Constructor for <see cref="EventMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>
 		/// <param name="payload"><see cref="PacketPayload"/> of the <see cref="NetworkMessage"/>.</param>

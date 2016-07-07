@@ -28,6 +28,20 @@ namespace GladNet.Common.UnitTests
 		}
 
 		[Test]
+		public static void Test_OperationType_Returning_Correctly()
+		{
+			//arrange
+			Mock<PacketPayload> packet = new Mock<PacketPayload>(MockBehavior.Strict);
+
+			//act
+			ResponseMessage message = new ResponseMessage(packet.Object);
+
+			//assert
+			//Just that it doesn't throw
+			Assert.AreEqual(message.OperationTypeMappedValue, OperationType.Response);
+		}
+
+		[Test]
 		public static void Test_Properties_After_Construction()
 		{
 			//arrange
