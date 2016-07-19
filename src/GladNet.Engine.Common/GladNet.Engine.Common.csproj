@@ -60,6 +60,8 @@
     <Compile Include="General\Extensions\Peer\INetPeerExtensions.cs" />
     <Compile Include="General\Extensions\Serialization\ISerializeableExtensions.cs" />
     <Compile Include="Logging\IClassLogger.cs" />
+    <Compile Include="Network\AUID\IAUIDService.cs" />
+    <Compile Include="Network\AUID\AUIDServiceCollection.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\INetworkMessageFactory.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\INetworkMessageFluentBuilder.cs" />
     <Compile Include="Network\Message\ConcreteMessages\Construction\Builders\NetworkMessageBuilder.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionFluentBuilder.cs" />
+    <Compile Include="Network\Message\Routing\DefaultNetworkMessageRouteBackService.cs" />
     <Compile Include="Network\Message\Routing\INetworkMessageRouteBackService.cs" />
     <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageRouter.cs" />
     <Compile Include="Network\Message\Senders\IClientPeerPayloadSender.cs" />
