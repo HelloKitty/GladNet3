@@ -13,20 +13,13 @@ namespace GladNet.Engine.Common
 	public interface INetworkMessageRouteBackService
 	{
 		/// <summary>
-		/// Routes a <see cref="IResponseMessage"/> using the provided <see cref="IMessageParameters"/>.
+		/// Routes a <typeparamref name="TMessageType"/> using the provided <see cref="IMessageParameters"/>.
 		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="parameters"></param>
+		/// <param name="message">Routable message type instance.</param>
+		/// <param name="parameters">Parameters to send the message with.</param>
 		/// <returns></returns>
-		SendResult RouteResponse(IResponseMessage message, IMessageParameters parameters);
-
-		/// <summary>
-		/// Routes a <see cref="IRequestMessage"/> using the provided <see cref="IMessageParameters"/>.
-		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-		SendResult RouteRequest(IRequestMessage message, IMessageParameters parameters);
+		SendResult Route<TMessageType>(TMessageType message, IMessageParameters parameters)
+			where TMessageType : IOperationTypeMappable, IRoutableMessage, INetworkMessage;
 
 		/// <summary>
 		/// Routes a request payload using the provided <paramref name="routingDetails"/>

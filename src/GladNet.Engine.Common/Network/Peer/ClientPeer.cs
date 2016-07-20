@@ -107,7 +107,7 @@ namespace GladNet.Engine.Common
 			if (responseMessage.isRoutingBack)
 			{
 				//Right now we just pass on the parameters.
-				messageRoutebackService.RouteResponse(responseMessage, parameters);
+				messageRoutebackService.Route(responseMessage, parameters);
 			}
 
 			//GladNet2 routing specification dictates that we should push the AUID
