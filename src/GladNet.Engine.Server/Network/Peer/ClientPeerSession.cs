@@ -118,7 +118,7 @@ namespace GladNet.Engine.Server
 			//Under "Route-back Outside Userspace": https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
 			if (requestMessage.isRoutingBack)
 			{
-				messageRoutebackService.RouteRequest(requestMessage, parameters);
+				messageRoutebackService.Route(requestMessage, parameters);
 			}
 
 			//GladNet2 routing specification dictates that we should push the AUID

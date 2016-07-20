@@ -33,18 +33,7 @@ namespace GladNet.Engine.Common
 			Logger = logger;
 		}
 
-		/// <summary>
-		/// Routes a <see cref="IResponseMessage"/> using the provided <see cref="IMessageParameters"/>.
-		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-		public SendResult RouteResponse(IResponseMessage message, IMessageParameters parameters)
-		{
-			return RouteMessage(message, parameters);
-		}
-
-		public SendResult RouteMessage<TMessageType>(TMessageType message, IMessageParameters parameters)
+		public SendResult Route<TMessageType>(TMessageType message, IMessageParameters parameters)
 			where TMessageType : INetworkMessage, IRoutableMessage, IOperationTypeMappable
 		{
 			return RouteMessage(message, parameters.DeliveryMethod, parameters.Encrypted, parameters.Channel);
@@ -80,17 +69,6 @@ namespace GladNet.Engine.Common
 			}
 			else
 				return peer.NetworkSendService.TryRouteMessage(message, deliveryMethod, encrypt, channel);
-		}
-
-		/// <summary>
-		/// Routes a <see cref="IRequestMessage"/> using the provided <see cref="IMessageParameters"/>.
-		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-		public SendResult RouteRequest(IRequestMessage message, IMessageParameters parameters)
-		{
-			return RouteMessage(message, parameters);
 		}
 
 		/// <summary>
