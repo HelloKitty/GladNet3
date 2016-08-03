@@ -24,7 +24,7 @@ namespace GladNet.Serializer.Protobuf
 			ProtobufnetDeserializerStrategy deserializer = new ProtobufnetDeserializerStrategy();
 
 			//assert
-			Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize<object>(null));
+			Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize<object>((Stream)null));
 		}
 
 		[Test]
