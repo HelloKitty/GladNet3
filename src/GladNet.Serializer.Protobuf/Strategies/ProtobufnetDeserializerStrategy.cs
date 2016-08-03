@@ -12,6 +12,19 @@ namespace GladNet.Serializer.Protobuf
 	/// </summary>
 	public class ProtobufnetDeserializerStrategy : IDeserializerStrategy
 	{
+		public TData Deserialize<TData>(Stream stream)
+		{
+			if (stream == null)
+				throw new ArgumentNullException(nameof(stream), $"Provided stream object cannot be null.");
+
+			TData data = ProtoBuf.Serializer.Deserialize<TData>(stream);
+
+			if (data == null)
+				throw new InvalidOperationException($"Resulting serialized value {data} is null.");
+
+			return data;
+		}
+
 		/// <summary>
 		/// Deserializes the potential <typeparamref name="TData"/> instance represented by the <see cref="byte"/>[] using Protobuf-net.
 		/// </summary>
@@ -22,12 +35,7 @@ namespace GladNet.Serializer.Protobuf
 		{
 			using (MemoryStream ms = new MemoryStream(value))
 			{
-				TData data = ProtoBuf.Serializer.Deserialize<TData>(ms);
-
-				if (data == null)
-					throw new InvalidOperationException($"Resulting serialized value {data} is null.");
-
-				return data;
+				return Deserialize<TData>(ms);
 			}
 		}
 	}
