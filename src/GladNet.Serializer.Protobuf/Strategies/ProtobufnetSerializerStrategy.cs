@@ -25,10 +25,18 @@ namespace GladNet.Serializer.Protobuf
 
 			using (MemoryStream ms = new MemoryStream())
 			{
-				ProtoBuf.Serializer.Serialize(ms, data);
+				Serialize(ms, data);
 
 				return ms.ToArray();
 			}
+		}
+
+		public void Serialize<TData>(Stream stream, TData data)
+		{
+			if(stream == null)
+				throw new ArgumentNullException(nameof(stream), $"Provided stream object cannot be null.");
+
+			ProtoBuf.Serializer.Serialize(stream, data);
 		}
 	}
 }
