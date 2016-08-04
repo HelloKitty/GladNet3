@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Engine.Server.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Message.Handlers", "src\GladNet.Message.Handlers\GladNet.Message.Handlers.csproj", "{F386635D-0C22-4666-AD39-3DDD9B62B72F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Message.Handlers.Tests", "tests\GladNet.Message.Handlers.Tests\GladNet.Message.Handlers.Tests.csproj", "{E93EDACE-E222-4680-A080-9AE2F0C5A966}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,12 @@ Global
 		{F386635D-0C22-4666-AD39-3DDD9B62B72F}.EndUser|Any CPU.Build.0 = Release|Any CPU
 		{F386635D-0C22-4666-AD39-3DDD9B62B72F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F386635D-0C22-4666-AD39-3DDD9B62B72F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.EndUser|Any CPU.ActiveCfg = Release|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.EndUser|Any CPU.Build.0 = Release|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,5 +138,6 @@ Global
 		{EA3C7D16-2AF7-4A5C-BED3-71B1716193D0} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 		{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 		{F386635D-0C22-4666-AD39-3DDD9B62B72F} = {0955E7B1-0BFB-4058-9469-29FF5FF4AA28}
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 	EndGlobalSection
 EndGlobal
