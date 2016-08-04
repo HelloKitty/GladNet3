@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25029.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Common", "src\GladNet.Common\GladNet.Common.csproj", "{9603BBAF-5F68-4176-A032-3E8BEAF8F9E2}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -31,6 +31,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Engine.Common.Tests", "tests\GladNet.Engine.Common.Tests\GladNet.Engine.Common.Tests.csproj", "{EA3C7D16-2AF7-4A5C-BED3-71B1716193D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Engine.Server.Tests", "tests\GladNet.Engine.Server.Tests\GladNet.Engine.Server.Tests.csproj", "{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Message.Handlers", "src\GladNet.Message.Handlers\GladNet.Message.Handlers.csproj", "{F386635D-0C22-4666-AD39-3DDD9B62B72F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Message.Handlers.Tests", "tests\GladNet.Message.Handlers.Tests\GladNet.Message.Handlers.Tests.csproj", "{E93EDACE-E222-4680-A080-9AE2F0C5A966}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +109,18 @@ Global
 		{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7}.EndUser|Any CPU.Build.0 = Release|Any CPU
 		{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F386635D-0C22-4666-AD39-3DDD9B62B72F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F386635D-0C22-4666-AD39-3DDD9B62B72F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F386635D-0C22-4666-AD39-3DDD9B62B72F}.EndUser|Any CPU.ActiveCfg = Release|Any CPU
+		{F386635D-0C22-4666-AD39-3DDD9B62B72F}.EndUser|Any CPU.Build.0 = Release|Any CPU
+		{F386635D-0C22-4666-AD39-3DDD9B62B72F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F386635D-0C22-4666-AD39-3DDD9B62B72F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.EndUser|Any CPU.ActiveCfg = Release|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.EndUser|Any CPU.Build.0 = Release|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,5 +137,7 @@ Global
 		{E92B8019-F1D4-4CE2-85E6-1F75A4453F20} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 		{EA3C7D16-2AF7-4A5C-BED3-71B1716193D0} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 		{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
+		{F386635D-0C22-4666-AD39-3DDD9B62B72F} = {0955E7B1-0BFB-4058-9469-29FF5FF4AA28}
+		{E93EDACE-E222-4680-A080-9AE2F0C5A966} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 	EndGlobalSection
 EndGlobal
