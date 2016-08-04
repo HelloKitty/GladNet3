@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,21 +44,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Handlers\IPayloadHandler.cs" />
-    <Compile Include="Handlers\IPayloadHandlerRegistry.cs" />
-    <Compile Include="Handlers\PayloadHandlerTypeAttribute.cs" />
-    <Compile Include="Handlers\Services\EventPayloadHandlerService.cs" />
-    <Compile Include="Handlers\Services\IEventPayloadHandlerService.cs" />
-    <Compile Include="Handlers\Services\IRequestPayloadHandlerService.cs" />
-    <Compile Include="Handlers\Services\IResponsePayloadHandlerService.cs" />
-    <Compile Include="Handlers\Services\MultipleChainResponsbilityPayloadHandlerStrategy.cs" />
-    <Compile Include="Handlers\Services\RequestPayloadHandlerService.cs" />
-    <Compile Include="Handlers\Services\ResponsePayloadHandlerService.cs" />
-    <Compile Include="Handlers\Strategies\ChainPayloadHandler.cs" />
-    <Compile Include="Handlers\Strategies\IPayloadHandlerStrategy.cs" />
-    <Compile Include="Metadata\IEventPayloadHandler.cs" />
-    <Compile Include="Metadata\IRequestPayloadHandler.cs" />
-    <Compile Include="Metadata\IResponsePayloadHandler.cs" />
+    <Compile Include="Handlers\IMessageHandler.cs" />
+    <Compile Include="Handlers\IMessageHandlerRegistry.cs" />
+    <Compile Include="Handlers\MessageHandlerTypeAttribute .cs" />
+    <Compile Include="Handlers\Services\EventMessageHandlerService.cs" />
+    <Compile Include="Handlers\Services\IEventMessageHandlerService.cs" />
+    <Compile Include="Handlers\Services\IRequestMessageHandlerService.cs" />
+    <Compile Include="Handlers\Services\IResponseMessageHandlerService.cs" />
+    <Compile Include="Handlers\Services\MultipleChainResponsbilityMessageHandlerStrategy.cs" />
+    <Compile Include="Handlers\Services\RequestPayloadMessageService.cs" />
+    <Compile Include="Handlers\Services\ResponsePayloadMessageService.cs" />
+    <Compile Include="Handlers\Strategies\ChainMessageHandler.cs" />
+    <Compile Include="Handlers\Strategies\IMessageHandlerStrategy.cs" />
+    <Compile Include="Handlers\Concrete\IEventMessageHandler.cs" />
+    <Compile Include="Handlers\Concrete\IRequestMessageHandler.cs" />
+    <Compile Include="Handlers\Concrete\IResponseMessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,8 +78,14 @@
       <Project>{862f3fd5-4fda-43d8-9fa1-d2179d695338}</Project>
       <Name>GladNet.Payload</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GladNet.Serializer\GladNet.Serializer.csproj">
+      <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
+      <Name>GladNet.Serializer</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
