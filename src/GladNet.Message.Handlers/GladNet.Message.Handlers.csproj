@@ -40,9 +40,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\IPayloadHandler.cs" />
+    <Compile Include="Handlers\IPayloadHandlerRegistry.cs" />
+    <Compile Include="Handlers\PayloadHandlerTypeAttribute.cs" />
+    <Compile Include="Handlers\Services\EventPayloadHandlerService.cs" />
+    <Compile Include="Handlers\Services\IEventPayloadHandlerService.cs" />
+    <Compile Include="Handlers\Services\IRequestPayloadHandlerService.cs" />
+    <Compile Include="Handlers\Services\IResponsePayloadHandlerService.cs" />
+    <Compile Include="Handlers\Services\MultipleChainResponsbilityPayloadHandlerStrategy.cs" />
+    <Compile Include="Handlers\Services\RequestPayloadHandlerService.cs" />
+    <Compile Include="Handlers\Services\ResponsePayloadHandlerService.cs" />
+    <Compile Include="Handlers\Strategies\ChainPayloadHandler.cs" />
+    <Compile Include="Handlers\Strategies\IPayloadHandlerStrategy.cs" />
+    <Compile Include="Metadata\IEventPayloadHandler.cs" />
+    <Compile Include="Metadata\IRequestPayloadHandler.cs" />
+    <Compile Include="Metadata\IResponsePayloadHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GladNet.Common\GladNet.Common.csproj">
+      <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
+      <Name>GladNet.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Engine.Common\GladNet.Engine.Common.csproj">
+      <Project>{17c60530-5a42-429e-9b88-6273552c7913}</Project>
+      <Name>GladNet.Engine.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GladNet.Message\GladNet.Message.csproj">
       <Project>{0fa4728f-7096-4996-8385-5bf5cc00b6fc}</Project>
       <Name>GladNet.Message</Name>
@@ -52,10 +75,7 @@
       <Name>GladNet.Payload</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Handlers\" />
-    <Folder Include="Metadata\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

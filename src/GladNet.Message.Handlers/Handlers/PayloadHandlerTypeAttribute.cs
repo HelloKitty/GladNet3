@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GladLive.Common
+namespace GladNet.Message.Handlers
 {
 	/// <summary>
 	/// Metadata marker for a payload handler.

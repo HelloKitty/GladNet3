@@ -1,10 +1,11 @@
-﻿using GladNet.Common;
+﻿using GladNet.Engine.Common;
+using GladNet.Payload;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GladLive.Common
+namespace GladNet.Message.Handlers
 {
 	/// <summary>
 	/// Service tries to handle a <typeparamref name="TPayloadType"/>.
