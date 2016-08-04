@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\PayloadCollectionBuilderExtensions.cs" />
     <Compile Include="Handlers\IMessageHandler.cs" />
     <Compile Include="Handlers\IMessageHandlerRegistry.cs" />
     <Compile Include="Handlers\MessageHandlerTypeAttribute .cs" />
@@ -54,7 +55,7 @@
     <Compile Include="Handlers\Services\MultipleChainResponsbilityMessageHandlerStrategy.cs" />
     <Compile Include="Handlers\Services\RequestPayloadMessageService.cs" />
     <Compile Include="Handlers\Services\ResponsePayloadMessageService.cs" />
-    <Compile Include="Handlers\Strategies\ChainMessageHandler.cs" />
+    <Compile Include="Handlers\Strategies\ChainMessageHandlerStrategy.cs" />
     <Compile Include="Handlers\Strategies\IMessageHandlerStrategy.cs" />
     <Compile Include="Handlers\Concrete\IEventMessageHandler.cs" />
     <Compile Include="Handlers\Concrete\IRequestMessageHandler.cs" />
@@ -86,6 +87,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

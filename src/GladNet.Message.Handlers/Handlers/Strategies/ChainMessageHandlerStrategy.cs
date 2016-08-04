@@ -12,7 +12,7 @@ namespace GladNet.Message.Handlers
 	/// Provides chain of responsibility semantics as a strategy for payload handling.
 	/// </summary>
 	/// <typeparam name="TPeerType">Session type to handle.</typeparam>
-	public class ChainMessageHandler<TPeerType, TNetworkMessageType> : IMessageHandlerStrategy<TPeerType, TNetworkMessageType>, IMessageHandlerRegistry<TPeerType, TNetworkMessageType>
+	public class ChainMessageHandlerStrategy<TPeerType, TNetworkMessageType> : IMessageHandlerStrategy<TPeerType, TNetworkMessageType>, IMessageHandlerRegistry<TPeerType, TNetworkMessageType>
 		where TPeerType : INetPeer
 		where TNetworkMessageType : INetworkMessage
 	{
@@ -21,12 +21,12 @@ namespace GladNet.Message.Handlers
 		/// </summary>
 		private IList<IMessageHandler<TPeerType, TNetworkMessageType>> handlers { get; }
 
-		public ChainMessageHandler()
+		public ChainMessageHandlerStrategy()
 		{
 			handlers = new List<IMessageHandler<TPeerType, TNetworkMessageType>>();
 		}
 
-		public ChainMessageHandler(IEnumerable<IMessageHandler<TPeerType, TNetworkMessageType>> handlersToChain)
+		public ChainMessageHandlerStrategy(IEnumerable<IMessageHandler<TPeerType, TNetworkMessageType>> handlersToChain)
 		{
 			Throw<ArgumentNullException>.If.IsNull(handlersToChain)?.Now(nameof(handlersToChain), $"Chain handler must have non-null collection of handlers to chain over.");
 

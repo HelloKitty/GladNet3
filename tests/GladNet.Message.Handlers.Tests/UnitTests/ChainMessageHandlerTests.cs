@@ -20,14 +20,14 @@ namespace GladLive.Common.Tests
 		public static void Test_Ctor_Doesnt_Throw()
 		{
 			//arrange
-			Assert.DoesNotThrow(() => new ChainMessageHandler<INetPeer, INetworkMessage>());
+			Assert.DoesNotThrow(() => new ChainMessageHandlerStrategy<INetPeer, INetworkMessage>());
 		}
 
 		[Test]
 		public static void Test_Can_Add_New_Handler()
 		{
 			//arrange
-			var chain = new ChainMessageHandler<INetPeer, INetworkMessage>();
+			var chain = new ChainMessageHandlerStrategy<INetPeer, INetworkMessage>();
 			Mock<IMessageHandler<INetPeer, INetworkMessage>> handler = new Mock<IMessageHandler<INetPeer, INetworkMessage>>();
 
 			//act
@@ -41,7 +41,7 @@ namespace GladLive.Common.Tests
 		public static void Test_Indicates_Add_Failure_On_Null()
 		{
 			//arrange
-			var chain = new ChainMessageHandler<INetPeer, INetworkMessage>();
+			var chain = new ChainMessageHandlerStrategy<INetPeer, INetworkMessage>();
 
 			//act
 			bool result = chain.Register(null);
@@ -55,7 +55,7 @@ namespace GladLive.Common.Tests
 		public static void Test_Chain_Handler_Calls_Handle_Methods_On_Handler()
 		{
 			//arrange
-			var chain = new ChainMessageHandler<INetPeer, INetworkMessage>();
+			var chain = new ChainMessageHandlerStrategy<INetPeer, INetworkMessage>();
 			Mock<IMessageHandler<INetPeer, INetworkMessage>> handler = new Mock<IMessageHandler<INetPeer, INetworkMessage>>();
 
 			handler.Setup(x => x.TryProcessMessage(It.IsAny<INetworkMessage>(), It.IsAny<IMessageParameters>(), It.IsAny<INetPeer>()))
@@ -76,7 +76,7 @@ namespace GladLive.Common.Tests
 		public static void Test_Chain_Handler_Calls_Handle_Methods_On_Handlers_Multiple()
 		{
 			//arrange
-			var chain = new ChainMessageHandler<INetPeer, INetworkMessage>();
+			var chain = new ChainMessageHandlerStrategy<INetPeer, INetworkMessage>();
 
 			Mock<IMessageHandler<INetPeer, INetworkMessage>> handler1 = new Mock<IMessageHandler<INetPeer, INetworkMessage>>();
 
