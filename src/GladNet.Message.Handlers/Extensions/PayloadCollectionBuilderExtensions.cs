@@ -26,8 +26,6 @@ namespace GladNet.Message.Handlers
 			where TPeerType : INetPeer
 			where TNetworkMessageType : INetworkMessage
 		{
-			Throw<ArgumentNullException>.If.IsNull(handlers)?.Now(nameof(handlers), $"Cannot build a {nameof(ChainMessageHandlerStrategy<TPeerType, TNetworkMessageType>)} with a null collection of {nameof(IMessageHandler<TPeerType, TNetworkMessageType>)}");
-
 			return new ChainMessageHandlerStrategy<TPeerType, TNetworkMessageType>(handlers);
 		}
 	}
