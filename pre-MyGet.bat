@@ -1,0 +1,1 @@
+nuget update GladNet.Serializer.Protobuf.sln
