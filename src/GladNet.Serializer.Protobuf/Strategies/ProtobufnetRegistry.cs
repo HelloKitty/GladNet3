@@ -19,6 +19,18 @@ namespace GladNet.Serializer.Protobuf
 		//Must be static to surive through multiple instances
 		private static Dictionary<Type, object> registeredTypes = new Dictionary<Type, object>();
 
+		public ProtobufnetRegistry()
+		{
+			if (registeredTypes.ContainsKey(typeof(Stack<int>)))
+				return;
+
+			if (RuntimeTypeModel.Default.CanSerialize(typeof(Stack<int>)))
+				return;
+
+			//Otherwise we need to register the stack
+			ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(Stack<int>), false).SetSurrogate(typeof(StackIntSurrogate));
+		}
+
 		public bool Register(Type typeToRegister)
 		{
 			//Ok so here the fun begins.
