@@ -79,6 +79,7 @@
     <Compile Include="ProtobufnetDeserializerStrategyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegressionTests\EnumContractRegressionTest.cs" />
+    <Compile Include="RegressionTests\ProtobufnetCouldntDeserializeMessageWithNetSendable.cs" />
     <Compile Include="RegressionTests\ProtobufnetCouldntSerializeMessageWithInternalStack.cs" />
   </ItemGroup>
   <ItemGroup>
