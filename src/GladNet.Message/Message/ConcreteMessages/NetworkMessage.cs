@@ -35,6 +35,15 @@ namespace GladNet.Message
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
 		/// <summary>
+		/// Protected protobuf-net constructor.
+		/// </summary>
+		protected NetworkMessage()
+			: base()
+		{
+				
+		}
+
+		/// <summary>
 		/// Main constructor for <see cref="NetworkMessage"/> that requires a <see cref="PacketPayload"/> payload.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">Throws if <see cref="PacketPayload"/> instance supplied is null.</exception>

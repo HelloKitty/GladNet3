@@ -24,6 +24,15 @@ namespace GladNet.Message
 		public OperationType OperationTypeMappedValue { get { return OperationType.Event; } }
 
 		/// <summary>
+		/// Protected protobuf-net constructor.
+		/// </summary>
+		protected EventMessage()
+			: base()
+		{
+
+		}
+
+		/// <summary>
 		/// Constructor for <see cref="EventMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>
 		/// <param name="payload"><see cref="PacketPayload"/> of the <see cref="NetworkMessage"/>.</param>
