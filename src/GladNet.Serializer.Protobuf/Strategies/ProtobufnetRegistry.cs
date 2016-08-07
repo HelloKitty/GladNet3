@@ -70,13 +70,17 @@ namespace GladNet.Serializer.Protobuf
 
 			//If might have a include on it so we should check it to register it with the subtype
 
-			GladNetSerializationIncludeAttribute include = typeToRegister.Attribute<GladNetSerializationIncludeAttribute>();
+			IEnumerable<GladNetSerializationIncludeAttribute> includes = typeToRegister.Attributes<GladNetSerializationIncludeAttribute>();
 
-			//this is the simple case; however unlike protobuf we support two-include
-			if (include != null && include.IncludeForDerived)
-				typeModel.AddSubType(include.TagID, include.TypeToWireTo);
-			else
-				if(include != null && !include.IncludeForDerived)
+			foreach(GladNetSerializationIncludeAttribute include in includes)
+			{
+				//this is the simple case; however unlike protobuf we support two-include
+				if (include != null && include.IncludeForDerived)
+				{
+					typeModel.AddSubType(include.TagID, include.TypeToWireTo);
+				}
+				else
+					if (include != null && !include.IncludeForDerived)
 				{
 					//this is not for mappping a base type to setup mapping for its child
 					//we need to map this child to its base
@@ -84,6 +88,7 @@ namespace GladNet.Serializer.Protobuf
 					RuntimeTypeModel.Default.Add(include.TypeToWireTo, false)
 						.AddSubType(include.TagID, typeToRegister);
 				}
+			}
 
 			registeredTypes.Add(typeToRegister, null);
 
