@@ -63,6 +63,16 @@ namespace GladNet.Message
 		[GladNetMember(GladNetDataIndex.Index2)]
 		internal Stack<int> _routingCodeStack = null;
 #endif
+
+		/// <summary>
+		/// Protected protobuf-net constructor.
+		/// </summary>
+		protected RequestMessage()
+			: base()
+		{
+
+		}
+
 		/// <summary>
 		/// Constructor for <see cref="RequestMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>

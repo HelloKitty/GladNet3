@@ -61,6 +61,15 @@ namespace GladNet.Message
 #endif
 
 		/// <summary>
+		/// Protected protobuf-net constructor.
+		/// </summary>
+		protected ResponseMessage()
+			: base()
+		{
+
+		}
+
+		/// <summary>
 		/// Constructor for <see cref="ResponseMessage"/> that calls <see cref="NetworkMessage"/>.ctor
 		/// </summary>
 		/// <param name="payload"><see cref="PacketPayload"/> of the <see cref="NetworkMessage"/>.</param>

@@ -32,6 +32,15 @@ namespace GladNet.Message
 		}
 
 		/// <summary>
+		/// Protected protobuf-net constructor.
+		/// </summary>
+		protected StatusMessage()
+			: base()
+		{
+
+		}
+
+		/// <summary>
 		/// Constructor for <see cref="StatusMessage"/> that requires a <see cref="StatusChangePayload"/> payload.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">Throws if <see cref="StatusChangePayload"/> instance supplied is null.</exception>
