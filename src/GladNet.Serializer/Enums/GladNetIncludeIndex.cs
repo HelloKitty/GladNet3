@@ -58,5 +58,9 @@ namespace GladNet.Serializer
 		/// This Enum field indicates the last internal reserved value for data indicies.
 		/// </summary>
 		LastInternalSlot = 0,
+
+		//TODO: Make these internal and shift the other payloads forward. I'm not doing it now to save time
+		AuthenticationRequest = 1000,
+		AuthenticationResponse = 10001
 	}
 }

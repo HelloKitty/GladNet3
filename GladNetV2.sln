@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Message.Handlers", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Message.Handlers.Tests", "tests\GladNet.Message.Handlers.Tests\GladNet.Message.Handlers.Tests.csproj", "{E93EDACE-E222-4680-A080-9AE2F0C5A966}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GladNet.Payload.Authentication", "src\GladNet.Payload.Authentication\GladNet.Payload.Authentication.xproj", "{396709BC-2621-44B9-841C-9950ECE34FAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,12 @@ Global
 		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.EndUser|Any CPU.Build.0 = Release|Any CPU
 		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Release|Any CPU.Build.0 = Release|Any CPU
+		{396709BC-2621-44B9-841C-9950ECE34FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{396709BC-2621-44B9-841C-9950ECE34FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{396709BC-2621-44B9-841C-9950ECE34FAF}.EndUser|Any CPU.ActiveCfg = Debug|Any CPU
+		{396709BC-2621-44B9-841C-9950ECE34FAF}.EndUser|Any CPU.Build.0 = Debug|Any CPU
+		{396709BC-2621-44B9-841C-9950ECE34FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{396709BC-2621-44B9-841C-9950ECE34FAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,5 +147,6 @@ Global
 		{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 		{F386635D-0C22-4666-AD39-3DDD9B62B72F} = {0955E7B1-0BFB-4058-9469-29FF5FF4AA28}
 		{E93EDACE-E222-4680-A080-9AE2F0C5A966} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
+		{396709BC-2621-44B9-841C-9950ECE34FAF} = {0955E7B1-0BFB-4058-9469-29FF5FF4AA28}
 	EndGlobalSection
 EndGlobal
