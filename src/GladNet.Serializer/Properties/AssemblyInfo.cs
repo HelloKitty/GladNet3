@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Microsoft 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
+[assembly: InternalsVisibleTo("GladNet.Payload.Authentication")]
 [assembly: InternalsVisibleTo("GladNet.Common")]
 [assembly: InternalsVisibleTo("GladNet.Message")]
 

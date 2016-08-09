@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 // Assembly marked as compliant.
 [assembly: CLSCompliant(true)]
+[assembly: InternalsVisibleTo("GladNet.Payload.Authentication", AllInternalsVisible = true)]
 [assembly: AssemblyTitle("GladNet.Payload")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
