@@ -7,8 +7,6 @@
 %MsBuildExe% src/GladNet.Payload/GladNet.Payload.csproj /p:Configuration=Release
 %MsBuildExe% src/GladNet.Serializer/GladNet.Serializer.csproj /p:Configuration=Release
 
-PAUSE
-
 cd ./src/GladNet.Payload.Authentication
 dotnet restore
 cd ..
