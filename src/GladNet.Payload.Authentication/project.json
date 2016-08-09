@@ -1,53 +1,27 @@
 {
   "version": "1.0.0-*",
 
-  "dependencies": {
-    "NETStandard.Library": "1.6.0"
-  },
+	"dependencies": {
+		"GladNet.Payload": "2.0.*",
+		"GladNet.Serializer": "2.0.*",
+		"NETStandard.Library": "1.6.0"
+	},
 
 	"frameworks": {
         "net35": {
-            "dependencies": {
-													"GladNet.Payload": {
-														"target": "project"
-													},
-													"GladNet.Serializer": {
-														"target": "project"
-													}
-            }
+            "dependencies": {            }
         },
 
         "net40": {
-            "dependencies": {
-													"GladNet.Payload": {
-														"target": "project"
-													},
-													"GladNet.Serializer": {
-														"target": "project"
-													}
-            }
+            "dependencies": {            }
         },
 
         "net45": {
-            "dependencies": {
-													"GladNet.Payload": {
-														"target": "project"
-													},
-													"GladNet.Serializer": {
-														"target": "project"
-													}
-            }
+            "dependencies": {            }
         },
 
         "net451": {
-            "dependencies": {
-													"GladNet.Payload": {
-														"target": "project"
-													},
-													"GladNet.Serializer": {
-														"target": "project"
-													}
-            }
+            "dependencies": {            }
         }
 	}
 }
