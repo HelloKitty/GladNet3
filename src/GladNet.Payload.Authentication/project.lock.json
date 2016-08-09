@@ -3,34 +3,118 @@
   "version": 2,
   "targets": {
     ".NETFramework,Version=v3.5": {
-      "NETStandard.Library/1.6.0": {
-        "type": "package"
-      },
-      "GladNet.Payload/1.0.0": {
-        "type": "project",
-        "dependencies": {
-          "GladNet.Serializer": "1.0.0"
+      "Easyception/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/Easyception.dll": {}
+        },
+        "runtime": {
+          "lib/net35/Easyception.dll": {}
         }
       },
-      "GladNet.Serializer/1.0.0": {
-        "type": "project"
+      "GladNet.Payload/2.0.19": {
+        "type": "package",
+        "dependencies": {
+          "Easyception": "2.0.0",
+          "GladNet.Serializer": "2.0.19"
+        },
+        "compile": {
+          "lib/net35/GladNet.Payload.dll": {}
+        },
+        "runtime": {
+          "lib/net35/GladNet.Payload.dll": {}
+        }
+      },
+      "GladNet.Serializer/2.0.19": {
+        "type": "package",
+        "dependencies": {
+          "Easyception": "2.0.0"
+        },
+        "compile": {
+          "lib/net35/GladNet.Serializer.dll": {}
+        },
+        "runtime": {
+          "lib/net35/GladNet.Serializer.dll": {}
+        }
+      },
+      "NETStandard.Library/1.6.0": {
+        "type": "package"
       }
     },
     ".NETFramework,Version=v4.0": {
-      "NETStandard.Library/1.6.0": {
-        "type": "package"
-      },
-      "GladNet.Payload/1.0.0": {
-        "type": "project",
-        "dependencies": {
-          "GladNet.Serializer": "1.0.0"
+      "Easyception/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/Easyception.dll": {}
+        },
+        "runtime": {
+          "lib/net35/Easyception.dll": {}
         }
       },
-      "GladNet.Serializer/1.0.0": {
-        "type": "project"
+      "GladNet.Payload/2.0.19": {
+        "type": "package",
+        "dependencies": {
+          "Easyception": "2.0.0",
+          "GladNet.Serializer": "2.0.19"
+        },
+        "compile": {
+          "lib/net35/GladNet.Payload.dll": {}
+        },
+        "runtime": {
+          "lib/net35/GladNet.Payload.dll": {}
+        }
+      },
+      "GladNet.Serializer/2.0.19": {
+        "type": "package",
+        "dependencies": {
+          "Easyception": "2.0.0"
+        },
+        "compile": {
+          "lib/net35/GladNet.Serializer.dll": {}
+        },
+        "runtime": {
+          "lib/net35/GladNet.Serializer.dll": {}
+        }
+      },
+      "NETStandard.Library/1.6.0": {
+        "type": "package"
       }
     },
     ".NETFramework,Version=v4.5": {
+      "Easyception/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/Easyception.dll": {}
+        },
+        "runtime": {
+          "lib/net35/Easyception.dll": {}
+        }
+      },
+      "GladNet.Payload/2.0.19": {
+        "type": "package",
+        "dependencies": {
+          "Easyception": "2.0.0",
+          "GladNet.Serializer": "2.0.19"
+        },
+        "compile": {
+          "lib/net35/GladNet.Payload.dll": {}
+        },
+        "runtime": {
+          "lib/net35/GladNet.Payload.dll": {}
+        }
+      },
+      "GladNet.Serializer/2.0.19": {
+        "type": "package",
+        "dependencies": {
+          "Easyception": "2.0.0"
+        },
+        "compile": {
+          "lib/net35/GladNet.Serializer.dll": {}
+        },
+        "runtime": {
+          "lib/net35/GladNet.Serializer.dll": {}
+        }
+      },
       "Microsoft.NETCore.Platforms/1.0.1": {
         "type": "package",
         "compile": {
@@ -410,18 +494,43 @@
         "runtime": {
           "lib/net45/_._": {}
         }
-      },
-      "GladNet.Payload/1.0.0": {
-        "type": "project",
-        "dependencies": {
-          "GladNet.Serializer": "1.0.0"
-        }
-      },
-      "GladNet.Serializer/1.0.0": {
-        "type": "project"
       }
     },
     ".NETFramework,Version=v4.5.1": {
+      "Easyception/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/Easyception.dll": {}
+        },
+        "runtime": {
+          "lib/net35/Easyception.dll": {}
+        }
+      },
+      "GladNet.Payload/2.0.19": {
+        "type": "package",
+        "dependencies": {
+          "Easyception": "2.0.0",
+          "GladNet.Serializer": "2.0.19"
+        },
+        "compile": {
+          "lib/net35/GladNet.Payload.dll": {}
+        },
+        "runtime": {
+          "lib/net35/GladNet.Payload.dll": {}
+        }
+      },
+      "GladNet.Serializer/2.0.19": {
+        "type": "package",
+        "dependencies": {
+          "Easyception": "2.0.0"
+        },
+        "compile": {
+          "lib/net35/GladNet.Serializer.dll": {}
+        },
+        "runtime": {
+          "lib/net35/GladNet.Serializer.dll": {}
+        }
+      },
       "Microsoft.NETCore.Platforms/1.0.1": {
         "type": "package",
         "compile": {
@@ -811,19 +920,42 @@
         "runtime": {
           "lib/net45/_._": {}
         }
-      },
-      "GladNet.Payload/1.0.0": {
-        "type": "project",
-        "dependencies": {
-          "GladNet.Serializer": "1.0.0"
-        }
-      },
-      "GladNet.Serializer/1.0.0": {
-        "type": "project"
       }
     }
   },
   "libraries": {
+    "Easyception/2.0.0": {
+      "sha512": "46cHaDQ8kcTikcceMxkKHHQ6RghJkI1FEQ4occoX5TAU7aFktObWldaKmu9BjItlpl0twiA26+pJ2pSlSnpStw==",
+      "type": "package",
+      "path": "Easyception/2.0.0",
+      "files": [
+        "Easyception.2.0.0.nupkg.sha512",
+        "Easyception.nuspec",
+        "lib/net35/Easyception.dll"
+      ]
+    },
+    "GladNet.Payload/2.0.19": {
+      "sha512": "lsJHxpwTPAUHxOVCoPrW4V0XZnbhMM1sp7NPYyezyO9CpmfIwWL5opnKk3X5FtweXPZGhde8sDZhRmT8oPmu3Q==",
+      "type": "package",
+      "path": "GladNet.Payload/2.0.19",
+      "files": [
+        "GladNet.Payload.2.0.19.nupkg.sha512",
+        "GladNet.Payload.nuspec",
+        "lib/net35/GladNet.Payload.XML",
+        "lib/net35/GladNet.Payload.dll"
+      ]
+    },
+    "GladNet.Serializer/2.0.19": {
+      "sha512": "yB6j0e/0GlXJAHk+z+5bJFFQpw2HS80wxvjzvnY3VQd5tL93uo6k4UhZHJzwDJ6zKuFmrdvsjSSXvyjtXlhjtQ==",
+      "type": "package",
+      "path": "GladNet.Serializer/2.0.19",
+      "files": [
+        "GladNet.Serializer.2.0.19.nupkg.sha512",
+        "GladNet.Serializer.nuspec",
+        "lib/net35/GladNet.Serializer.XML",
+        "lib/net35/GladNet.Serializer.dll"
+      ]
+    },
     "Microsoft.NETCore.Platforms/1.0.1": {
       "sha512": "2G6OjjJzwBfNOO8myRV/nFrbTw5iA+DEm0N+qUqhrOmaVtn4pC77h38I1jsXGw5VH55+dPfQsqHD0We9sCl9FQ==",
       "type": "package",
@@ -2904,36 +3036,18 @@
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
       ]
-    },
-    "GladNet.Payload/1.0.0": {
-      "type": "project",
-      "msbuildProject": "../GladNet.Payload/GladNet.Payload.csproj"
-    },
-    "GladNet.Serializer/1.0.0": {
-      "type": "project",
-      "msbuildProject": "../GladNet.Serializer/GladNet.Serializer.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "": [
+      "GladNet.Payload >= 2.0.*",
+      "GladNet.Serializer >= 2.0.*",
       "NETStandard.Library >= 1.6.0"
     ],
-    ".NETFramework,Version=v3.5": [
-      "GladNet.Payload",
-      "GladNet.Serializer"
-    ],
-    ".NETFramework,Version=v4.0": [
-      "GladNet.Payload",
-      "GladNet.Serializer"
-    ],
-    ".NETFramework,Version=v4.5": [
-      "GladNet.Payload",
-      "GladNet.Serializer"
-    ],
-    ".NETFramework,Version=v4.5.1": [
-      "GladNet.Payload",
-      "GladNet.Serializer"
-    ]
+    ".NETFramework,Version=v3.5": [],
+    ".NETFramework,Version=v4.0": [],
+    ".NETFramework,Version=v4.5": [],
+    ".NETFramework,Version=v4.5.1": []
   },
   "tools": {},
   "projectFileToolGroups": {}

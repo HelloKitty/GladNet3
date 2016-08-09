@@ -15,9 +15,5 @@
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GladNet.Payload\GladNet.Payload.csproj" />
-    <ProjectReference Include="..\GladNet.Serializer\GladNet.Serializer.csproj" />
-  </ItemGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>
