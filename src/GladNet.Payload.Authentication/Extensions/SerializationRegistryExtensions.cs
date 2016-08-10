@@ -13,7 +13,7 @@ namespace GladNet.Serializer
 		/// </summary>
 		/// <param name="registry">Registry to register the payloads to.</param>
 		/// <returns>The registry for fluent chaining.</returns>
-		public static ISerializerRegistry RegisterAutenticationPayloads(this ISerializerRegistry registry)
+		public static ISerializerRegistry RegisterAuthenticationPayloads(this ISerializerRegistry registry)
 		{
 			//Register the payloads.
 			registry.Register(typeof(AuthenticationRequest));

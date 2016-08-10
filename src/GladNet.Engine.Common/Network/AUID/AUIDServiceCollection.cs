@@ -24,9 +24,11 @@ namespace GladNet.Engine.Common
 
 		}
 
+		//TODO: Switch to net core so we can target multiple frameworks and remove this policy
+		//WARNING: Must use NoRecursion policy on Unity3D.
 		/// <summary>
 		/// Syncronationization object for accessing the dictionary.
 		/// </summary>
-		public ReaderWriterLockSlim syncObj { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+		public ReaderWriterLockSlim syncObj { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 	}
 }

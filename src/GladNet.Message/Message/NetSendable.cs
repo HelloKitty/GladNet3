@@ -168,7 +168,7 @@ namespace GladNet.Message
 		public bool Serialize(ISerializerStrategy serializer)
 		{
 			Throw<ArgumentNullException>.If.IsNull(serializer)
-				?.Now(nameof(serializer), $"{nameof(serializer)} of Type: {typeof(ISerializerStrategy).Name} cannot be null in {nameof(Decrypt)}.");
+				?.Now(nameof(serializer), $"{nameof(serializer)} of Type: {typeof(ISerializerStrategy).Name} cannot be null in {nameof(Serialize)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
@@ -203,7 +203,7 @@ namespace GladNet.Message
 		public bool Deserialize(IDeserializerStrategy deserializer)
 		{
 			Throw<ArgumentNullException>.If.IsNull(deserializer)
-				?.Now(nameof(deserializer), $"{nameof(deserializer)} of Type: {typeof(IDeserializerStrategy).Name} cannot be null in {nameof(Decrypt)}.");
+				?.Now(nameof(deserializer), $"{nameof(deserializer)} of Type: {typeof(IDeserializerStrategy).Name} cannot be null in {nameof(Deserialize)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
