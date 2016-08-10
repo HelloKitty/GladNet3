@@ -16,7 +16,7 @@ namespace GladNet.Serializer
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, 
 		AllowMultiple = true, Inherited = false)]
-	public sealed class GladNetSerializationIncludeAttribute : Attribute
+	public class GladNetSerializationIncludeAttribute : Attribute
 	{
 		/// <summary>
 		/// Indicates the <see cref="Type"/> of the inheriting/implementing

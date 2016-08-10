@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UnitTests\Attribute Checks\MarkedMemberTypes.cs" />
+    <Compile Include="UnitTests\Attribute Tests\GladNetSerializationIncludeAttributeTests.cs" />
     <Compile Include="UnitTests\Attribute Tests\TestAttributeFunctionality.cs" />
     <Compile Include="UnitTests\Attribute Checks\MarkedContractTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
