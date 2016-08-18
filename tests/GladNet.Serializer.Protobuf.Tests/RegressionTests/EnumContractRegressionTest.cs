@@ -68,12 +68,18 @@ namespace GladNet.Serializer.Protobuf.Tests
 		{
 			[GladNetMember(GladNetDataIndex.Index1)]
 			public TestEnum TestEnumVal = TestEnum.Yep;
+
+			public TestClass()
+			{
+				TestEnumVal = TestEnum.Test;
+			}
+				
 		}
 
 		[GladNetSerializationContract]
 		public enum TestEnum : byte
 		{
-			Test,
+			Test = 0,
 			Values,
 			Yep
 		}
