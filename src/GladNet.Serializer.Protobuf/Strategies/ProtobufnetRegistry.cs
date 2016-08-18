@@ -43,6 +43,10 @@ namespace GladNet.Serializer.Protobuf
 			if (typeToRegister == null)
 				throw new ArgumentNullException(nameof(typeToRegister), $"Provided {typeToRegister} is a null arg.");
 
+			//Can't use isDefined exclusively but it'll fail when doing two-way subtypes
+			if (registeredTypes.ContainsKey(typeToRegister))
+				return true;
+
 			if (typeof(IEnumerable).IsAssignableFrom(typeToRegister) || typeToRegister.IsArray)
 				if (typeToRegister.IsArray)
 					Register(typeToRegister.GetElementType());
@@ -53,9 +57,6 @@ namespace GladNet.Serializer.Protobuf
 			//if (RuntimeTypeModel.Default.IsDefined(typeToRegister))
 			//	return true;
 
-			//Can't use isDefined exclusively but it'll fail when doing two-way subtypes
-			if (registeredTypes.ContainsKey(typeToRegister))
-				return true;
 
 			if (typeToRegister.IsEnum)
 			{
