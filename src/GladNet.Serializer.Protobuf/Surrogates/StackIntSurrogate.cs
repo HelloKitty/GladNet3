@@ -14,7 +14,7 @@ namespace GladNet.Serializer.Protobuf
 	{
 		//string is serializable so we'll just copy this property back and forth
 		[ProtoMember(1)]
-		public List<int> surrogatedStackList { get; private set; }
+		public List<int> surrogatedStackList { get; private set; } = null;
 
 		public StackIntSurrogate()
 		{
