@@ -18,6 +18,7 @@ namespace GladNet.Serializer.Protobuf.Tests
 
 			registry.Register(typeof(NetworkMessage));
 			registry.Register(typeof(RequestMessage));
+			registry.Register(typeof(RequestMessage));
 			registry.Register(typeof(EventMessage));
 			registry.Register(typeof(ResponseMessage));
 			registry.Register(typeof(StatusMessage));
