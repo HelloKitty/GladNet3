@@ -1,1 +1,1 @@
-xbuild ./GladNet2.Lidgren.sln /p:DebugSymbols=False
+xbuild ./GladNet.Lidgren.sln /p:DebugSymbols=False
