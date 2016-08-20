@@ -31,18 +31,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GladNet.Common">
-      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\GladNet.Common.dll</HintPath>
+    <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GladNet.Serializer">
-      <HintPath>..\..\lib\Dependency Builds\GladNet\DLLs\GladNet.Serializer.dll</HintPath>
+    <Reference Include="GladNet.Common, Version=2.0.32.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Common.2.0.32\lib\net35\GladNet.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Lidgren.Network">
-      <HintPath>..\..\lib\Dependency Builds\Lidgren\DLLs\Lidgren.Network.dll</HintPath>
-    </Reference>
-    <Reference Include="Logging.Services, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Dependency Builds\LoggingServices\DLLs\Logging.Services.dll</HintPath>
+      <HintPath>..\..\lib\Temp\Lidgren\Lidgren.Network.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
@@ -68,9 +66,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GladNet.Lidgren\GladNet.Lidgren.csproj">
-      <Project>{87c9ad17-33f8-4bfd-b353-d0e22fa1d455}</Project>
-      <Name>GladNet.Lidgren</Name>
+    <ProjectReference Include="..\..\src\GladNet.Lidgren.Common\GladNet.Lidgren.Common.csproj">
+      <Project>{651156cd-de54-4f5a-99bd-290460eb57fb}</Project>
+      <Name>GladNet.Lidgren.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

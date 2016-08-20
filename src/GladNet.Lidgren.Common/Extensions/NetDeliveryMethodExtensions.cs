@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lidgren.Network;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace GladNet.Common.Extensions
 	/// <summary>
 	/// Provides extension methods for the <see cref="GladNet.Common.NetworkMessage"/> Type as well as its various enums.
 	/// </summary>
-	public static class NetworkMessageExt
+	public static class NetDeliveryMethodExtensions
 	{
 		/// <summary>
 		/// This translates <see cref="NetDeliveryMethod"/> to GladNet <see cref="PacketPayload.DeliveryMethod"/>
@@ -16,7 +17,7 @@ namespace GladNet.Common.Extensions
 		/// </summary>
 		/// <param name="deliveryMethod">The instance to be used for translation.</param>
 		/// <exception cref="ArgumentException">Throws an exception if the <see cref="NetDeliveryMethod"/> is undefined.</exception>
-		/// <returns>The equivalent <see cref="NetworkMessageExt.DeliveryMethod"/> for the given <see cref="NetDeliveryMethod"/></returns>
+		/// <returns>The equivalent <see cref="NetDeliveryMethodExtensions.DeliveryMethod"/> for the given <see cref="NetDeliveryMethod"/></returns>
 		public static DeliveryMethod NetDeliveryMethodTypeToGladNetDeliveryType(this NetDeliveryMethod deliveryMethod)
 		{
 			switch (deliveryMethod)
