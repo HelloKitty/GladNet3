@@ -9,6 +9,7 @@ using GladNet.Message;
 
 namespace GladNet.Lidgren.Engine.Common
 {
+	[Obsolete]
 	public class LidgrenNetworkMessagePublisherService : NetworkMessagePublisher, INetworkMessageDispatcher
 	{
 		private IDeserializerStrategy deserializer { get; }

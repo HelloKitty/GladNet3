@@ -77,9 +77,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\Message\ILidgrenMessageContextFactory.cs" />
+    <Compile Include="Network\Message\ContextMessages\Concrete\LidgrenNetworkMessageMessageContext.cs" />
+    <Compile Include="Network\Message\ContextMessages\Concrete\LidgrenStatusChangeMessageContext.cs" />
+    <Compile Include="Network\Message\ContextMessages\ILidgrenMessageContextFactory.cs" />
     <Compile Include="Network\Message\INetworkMessageDispatcher.cs" />
-    <Compile Include="Network\Message\LidgrenMessageContext.cs" />
+    <Compile Include="Network\Message\ContextMessages\LidgrenMessageContext.cs" />
     <Compile Include="Network\Message\LidgrenMessageDetailsAdapter.cs" />
     <Compile Include="Network\Message\LidgrenNetworkMessagePublisherService.cs" />
     <Compile Include="Network\Message\LidgrenNetworkMessageRouterService.cs" />
