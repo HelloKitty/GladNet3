@@ -182,56 +182,52 @@ namespace GladNet.Lidgren.Engine.Common
 		protected virtual void Dispose(bool disposing)
 		{
 			//These checks aren't thread safe but it's better than nothing.
+			if (disposedValue)
+				return;
 
-			if(!disposedValue)
-				lockObj.EnterUpgradeableReadLock();
-
+			lockObj.EnterUpgradeableReadLock();
 			try
 			{
 				if (!disposedValue)
 				{
 					if (disposing)
 					{
-						// TODO: dispose managed state (managed objects).
+						// TODO: dispose managed state (managed objects)
 					}
-
-					outgoingMessageQueue.Dispose();
-					incomingMessageQueue.Dispose();
 
 					// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
 					// TODO: set large fields to null.
+					outgoingMessageQueue.Dispose();
+					incomingMessageQueue.Dispose();
 
+					//Do not Thread.Abort. Unity will throwup
 					managedNetworkThread = null;
 
-					if (!disposedValue)
-						lockObj.EnterWriteLock();
+					lockObj.EnterWriteLock();
 					try
 					{
 						disposedValue = true;
 					}
 					finally
 					{
-						if (!disposedValue)
-							lockObj.ExitWriteLock();
+						lockObj.ExitWriteLock();
 					}
 				}
 			}
 			finally
 			{
-				if (!disposedValue)
-					lockObj.ExitUpgradeableReadLock();
+				lockObj.ExitUpgradeableReadLock();
 
-				if (disposing)
-					lockObj.Dispose();
+				lockObj.Dispose();
 			}
 			
 		}
 
-		// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-		// ~ManagedLidgrenNetworkThread() {
-		//   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-		//   Dispose(false);
-		// }
+		 ~ManagedLidgrenNetworkThread()
+		{
+		   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+		   Dispose(false);
+		}
 
 		// This code added to correctly implement the disposable pattern.
 		public void Dispose()
@@ -239,7 +235,7 @@ namespace GladNet.Lidgren.Engine.Common
 			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
 			Dispose(true);
 			// TODO: uncomment the following line if the finalizer is overridden above.
-			// GC.SuppressFinalize(this);
+			GC.SuppressFinalize(this);
 		}
 		#endregion
 
