@@ -14,8 +14,17 @@ namespace GladNet.Lidgren.Client
 {
 	public class LidgrenClientNetworkMessageRouterService : LidgrenNetworkMessageRouterService<NetClient>
 	{
+		/// <summary>
+		/// Serialization strategy.
+		/// </summary>
 		private ISerializerStrategy serializer { get; }
 
+		/// <summary>
+		/// Creates a new <see cref="NetClient"/>-based network message router service for Lidgren.
+		/// </summary>
+		/// <param name="messageFactory">The network message factory.</param>
+		/// <param name="peerObj">The <see cref="NetPeer"/> object.</param>
+		/// <param name="serializerStrategy">Serialization strategy.</param>
 		public LidgrenClientNetworkMessageRouterService(INetworkMessageFactory messageFactory, NetClient peerObj, ISerializerStrategy serializerStrategy)
 			: base(messageFactory, peerObj)
 		{
@@ -31,6 +40,14 @@ namespace GladNet.Lidgren.Client
 			return opType == OperationType.Request;
 		}
 
+		/// <summary>
+		/// Child implemented sending functionality. Sends a provided <see cref="INetworkMessage"/> strategy
+		/// </summary>
+		/// <param name="message">Network message to send.</param>
+		/// <param name="deliveryMethod">Delivery method to send.</param>
+		/// <param name="encrypt">Indicates if the message should be encrypted before being sent.</param>
+		/// <param name="channel"></param>
+		/// <returns></returns>
 		protected override NetSendResult SendMessage(INetworkMessage message, DeliveryMethod deliveryMethod, bool encrypt, byte channel)
 		{
 			if (this.lidgrenNetworkPeer.Status != NetPeerStatus.Running)
