@@ -67,6 +67,9 @@
       <HintPath>..\..\packages\GladNet.Serializer.2.0.32\lib\net35\GladNet.Serializer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Lidgren.Network">
+      <HintPath>..\..\lib\Temp\Lidgren\Lidgren.Network.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -75,11 +78,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GladNetServices\LidgrenClientConnectionDetailsAdapter.cs" />
+    <Compile Include="Network\LidgrenClientConnectionDetailsAdapter.cs" />
+    <Compile Include="Network\LidgrenClientNetworkMessageRouterService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GladNet.Lidgren.Common\GladNet.Lidgren.Common.csproj">
+      <Project>{651156cd-de54-4f5a-99bd-290460eb57fb}</Project>
+      <Name>GladNet.Lidgren.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Lidgren.Engine.Common\GladNet.Lidgren.Engine.Common.csproj">
+      <Project>{3f4e7114-c269-43a5-b919-0c65f1b98091}</Project>
+      <Name>GladNet.Lidgren.Engine.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
