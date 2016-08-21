@@ -49,5 +49,41 @@ namespace GladNet.Lidgren.Engine.Common
 			return base.Dequeue();
 		}
 #endif
+
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposedValue)
+			{
+				if (disposing)
+				{
+					// TODO: dispose managed state (managed objects).
+					this.Clear();
+				}
+
+				this.syncRoot.Dispose();
+				this.QueueSemaphore.Close();
+
+				disposedValue = true;
+			}
+		}
+
+		 ~SemaphoreQueue()
+		{
+		   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+		   Dispose(false);
+		 }
+
+		// This code added to correctly implement the disposable pattern.
+		public void Dispose()
+		{
+			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+			Dispose(true);
+
+			GC.SuppressFinalize(this);
+		}
+		#endregion
 	}
 }

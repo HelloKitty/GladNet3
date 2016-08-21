@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace GladNet.Lidgren.Engine.Common
 {
-	public interface IThreadedQueue<TWaitHandleType>
+	public interface IThreadedQueue<TWaitHandleType> : IDisposable
 		where TWaitHandleType : WaitHandle
 	{
 		TWaitHandleType QueueSemaphore { get; }
