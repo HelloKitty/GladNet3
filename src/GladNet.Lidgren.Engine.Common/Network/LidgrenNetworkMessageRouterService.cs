@@ -11,11 +11,28 @@ using GladNet.Lidgren.Common;
 
 namespace GladNet.Lidgren.Engine.Common
 {
+	//non-generic contract
+	public abstract class LidgrenNetworkMessageRouterService : INetworkMessageRouteBackService
+	{
+		public abstract SendResult Route<TMessageType>(TMessageType message, IMessageParameters parameters) 
+			where TMessageType : IOperationTypeMappable, IRoutableMessage, INetworkMessage;
+
+		public abstract SendResult RouteRequest(PacketPayload payload, IRoutableMessage routingDetails, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+
+		public abstract SendResult RouteRequest<TPacketType>(TPacketType payload, IRoutableMessage routingDetails) 
+			where TPacketType : PacketPayload, IStaticPayloadParameters;
+
+		public abstract SendResult RouteResponse(PacketPayload payload, IRoutableMessage routingDetails, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+
+		public abstract SendResult RouteResponse<TPacketType>(TPacketType payload, IRoutableMessage routingDetails) 
+			where TPacketType : PacketPayload, IStaticPayloadParameters;
+	}
+
 	/// <summary>
 	/// Abstract contract for message routing/sending service for Lidgren peers/connections.
 	/// </summary>
 	/// <typeparam name="TLidgrenPeerType">Concrete <see cref="NetPeer"/> type (Generic for strongly typed child access).</typeparam>
-	public abstract class LidgrenNetworkMessageRouterService<TLidgrenPeerType> : INetworkMessageRouterService
+	public abstract class LidgrenNetworkMessageRouterService<TLidgrenPeerType> : LidgrenNetworkMessageRouterService
 		where TLidgrenPeerType : NetPeer
 	{
 		private INetworkMessageFactory networkMessageFactory { get; }
