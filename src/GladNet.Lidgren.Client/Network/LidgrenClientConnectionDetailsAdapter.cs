@@ -41,11 +41,12 @@ namespace GladNet.Lidgren.Client
 		/// <param name="remotePort">Remote port of the connection.</param>
 		/// <param name="localPort">Local port of the connection.</param>
 		/// <param name="connectionID">Unique (port-wise) ID of the connection.</param>
-		public LidgrenClientConnectionDetailsAdapter(string remoteIP, int remotePort, int localPort)
+		public LidgrenClientConnectionDetailsAdapter(string remoteIP, int remotePort, int localPort, int uniqueIdentifier)
 		{
 			RemoteIP = IPAddress.Parse(remoteIP);
 			RemotePort = remotePort;
 			LocalPort = localPort;
+			ConnectionID = uniqueIdentifier;
 		}
 	}
 }
