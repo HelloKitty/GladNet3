@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Network\LidgrenClientConnectionDetailsAdapter.cs" />
     <Compile Include="Network\LidgrenClientNetworkMessageRouterService.cs" />
+    <Compile Include="Network\LidgrenClientPeer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

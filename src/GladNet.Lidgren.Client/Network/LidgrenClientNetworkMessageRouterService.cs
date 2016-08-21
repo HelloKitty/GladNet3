@@ -56,7 +56,6 @@ namespace GladNet.Lidgren.Client
 #else
 				return NetSendResult.FailedNotConnected;
 #endif
-
 			NetOutgoingMessage outgoingMessage = this.lidgrenNetworkPeer.CreateMessage(); //TODO: Create a system to estimate message size.
 
 			//We only need to serialize and send for user-messages

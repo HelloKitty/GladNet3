@@ -78,11 +78,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Network\Message\INetworkMessageDispatcher.cs" />
+    <Compile Include="Network\Message\LidgrenMessageContext.cs" />
     <Compile Include="Network\Message\LidgrenMessageDetailsAdapter.cs" />
     <Compile Include="Network\Message\LidgrenNetworkMessagePublisherService.cs" />
     <Compile Include="Network\Message\LidgrenNetworkMessageRouterService.cs" />
     <Compile Include="Network\Message\LidgrenStatusMessage.cs" />
+    <Compile Include="Network\Peer\ISendServiceSelectionStrategy.cs" />
+    <Compile Include="Network\Threading\INetworkThread.cs" />
+    <Compile Include="Network\Threading\IThreadedQueue.cs" />
+    <Compile Include="Network\Threading\ManagedLidgrenNetworkThread.cs" />
+    <Compile Include="Network\Threading\SemaphoreQueue.cs" />
+    <Compile Include="Network\Threading\WaitableQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\INetworkAbstractFactory.cs" />
     <Compile Include="Services\INetworkMessageFactory.cs" />
     <Compile Include="Services\LidgrenNetworkMessageFactory.cs" />
   </ItemGroup>

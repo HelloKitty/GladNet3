@@ -6,12 +6,12 @@ using System.Threading;
 
 namespace GladNet.Lidgren.Engine.Common
 {
-	public class WaitableQueue<T> : Queue<T>, IThreadedQueue<EventWaitHandle>
+	public class SemaphoreQueue<T> : Queue<T>, IThreadedQueue<Semaphore>
 	{
 		/// <summary>
 		/// A manual-managed semaphore for the <see cref="Queue{T}"/>.
 		/// </summary>
-		public EventWaitHandle QueueSemaphore { get; } = new EventWaitHandle(false, EventResetMode.ManualReset);
+		public Semaphore QueueSemaphore { get; } = new Semaphore(0, int.MaxValue);
 
 		/// <summary>
 		/// A read/write optimized syncronization queue.
@@ -21,7 +21,7 @@ namespace GladNet.Lidgren.Engine.Common
 		/// <summary>
 		/// Creates a default <see cref="WaitableQueue{T}"/> with a <see cref="EventWaitHandle"/>.
 		/// </summary>
-		public WaitableQueue()
+		public SemaphoreQueue()
 		{
 
 		}
