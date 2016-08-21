@@ -77,10 +77,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\INetworkMessageDispatcher.cs" />
-    <Compile Include="Network\LidgrenMessageDetailsAdapter.cs" />
-    <Compile Include="Network\LidgrenNetworkMessagePublisherService.cs" />
-    <Compile Include="Network\LidgrenNetworkMessageRouterService.cs" />
+    <Compile Include="Network\Message\INetworkMessageDispatcher.cs" />
+    <Compile Include="Network\Message\LidgrenMessageDetailsAdapter.cs" />
+    <Compile Include="Network\Message\LidgrenNetworkMessagePublisherService.cs" />
+    <Compile Include="Network\Message\LidgrenNetworkMessageRouterService.cs" />
+    <Compile Include="Network\Message\LidgrenStatusMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\INetworkMessageFactory.cs" />
     <Compile Include="Services\LidgrenNetworkMessageFactory.cs" />

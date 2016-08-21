@@ -16,5 +16,11 @@ namespace GladNet.Lidgren.Engine.Common
 		/// </summary>
 		/// <param name="message"></param>
 		void Dispatch(NetIncomingMessage message);
+
+		/// <summary>
+		/// Dispatched the incoming status change.
+		/// </summary>
+		/// <param name="status">New status.</param>
+		void Dispatch(NetConnectionStatus status);
 	}
 }

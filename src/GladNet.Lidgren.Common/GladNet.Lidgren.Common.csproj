@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\NetConnectionDetailsExtensions.cs" />
     <Compile Include="Extensions\NetDeliveryMethodExtensions.cs" />
     <Compile Include="Extensions\NetSendResultExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

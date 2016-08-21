@@ -51,5 +51,15 @@ namespace GladNet.Lidgren.Engine.Common
 
 			gladNetNetworkMessage?.Dispatch(this, new LidgrenMessageDetailsAdapter(message, false)); //TODO: Encryption implementation
 		}
+
+		public void Dispatch(NetConnectionStatus status)
+		{
+			LidgrenStatusMessage message = new LidgrenStatusMessage(status);
+
+			//Just dispatch as a real status message
+			this.OnNetworkMessageReceive(message, null);
+		}
+
+		//TODO: Add internal message dispatching
 	}
 }
