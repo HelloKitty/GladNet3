@@ -12,19 +12,22 @@ using GladNet.Lidgren.Common;
 namespace GladNet.Lidgren.Engine.Common
 {
 	//non-generic contract
-	public abstract class LidgrenNetworkMessageRouterService : INetworkMessageRouteBackService
+	public abstract class LidgrenNetworkMessageRouterService : INetworkMessageRouterService
 	{
-		public abstract SendResult Route<TMessageType>(TMessageType message, IMessageParameters parameters) 
-			where TMessageType : IOperationTypeMappable, IRoutableMessage, INetworkMessage;
+		/// <summary>
+		/// Indicates if the <see cref="OperationType"/> can be sent.
+		/// Inheritors implement and configure sendable types.
+		/// </summary>
+		/// <param name="opType">Operation type to check.</param>
+		/// <returns>True if the type can be sent.</returns>
+		public abstract bool CanSend(OperationType opType);
 
-		public abstract SendResult RouteRequest(PacketPayload payload, IRoutableMessage routingDetails, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
+		public abstract SendResult TryRouteMessage<TMessageType>(TMessageType message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0) 
+			where TMessageType : INetworkMessage, IRoutableMessage, IOperationTypeMappable;
 
-		public abstract SendResult RouteRequest<TPacketType>(TPacketType payload, IRoutableMessage routingDetails) 
-			where TPacketType : PacketPayload, IStaticPayloadParameters;
+		public abstract SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
 
-		public abstract SendResult RouteResponse(PacketPayload payload, IRoutableMessage routingDetails, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0);
-
-		public abstract SendResult RouteResponse<TPacketType>(TPacketType payload, IRoutableMessage routingDetails) 
+		public abstract SendResult TrySendMessage<TPacketType>(OperationType opType, TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters;
 	}
 
@@ -51,18 +54,9 @@ namespace GladNet.Lidgren.Engine.Common
 			networkMessageFactory = messageFactory;
 		}
 
-		/// <summary>
-		/// Indicates if the <see cref="OperationType"/> can be sent.
-		/// Inheritors implement and configure sendable types.
-		/// </summary>
-		/// <param name="opType">Operation type to check.</param>
-		/// <returns>True if the type can be sent.</returns>
-		public abstract bool CanSend(OperationType opType);
-
 		protected abstract NetSendResult SendMessage(INetworkMessage message, DeliveryMethod deliveryMethod, bool encrypt, byte channel);
 
-		public SendResult TryRouteMessage<TMessageType>(TMessageType message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0) 
-			where TMessageType : INetworkMessage, IRoutableMessage, IOperationTypeMappable
+		public override SendResult TryRouteMessage<TMessageType>(TMessageType message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			if (!CanSend(message.OperationTypeMappedValue))
 				throw new InvalidOperationException($"Cannot send {message.OperationTypeMappedValue} with the {this.GetType().Name} because the service cannot handle that {nameof(OperationType)}.");
@@ -70,7 +64,7 @@ namespace GladNet.Lidgren.Engine.Common
 			return SendValidMessage(message, deliveryMethod, encrypt, channel);
 		}
 
-		public SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
+		public override SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
 			if (!CanSend(opType))
 				throw new InvalidOperationException($"Cannot send {opType} with the {this.GetType().Name} because the service cannot handle that {nameof(OperationType)}.");
@@ -86,8 +80,7 @@ namespace GladNet.Lidgren.Engine.Common
 		}
 
 		//TODO: This should be an extension method in GladNet.
-		public SendResult TrySendMessage<TPacketType>(OperationType opType, TPacketType payload) 
-			where TPacketType : PacketPayload, IStaticPayloadParameters
+		public override SendResult TrySendMessage<TPacketType>(OperationType opType, TPacketType payload)
 		{
 			return TrySendMessage(opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel);
 		}
