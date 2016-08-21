@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace GladNet.Lidgren.Engine.Common
 {
-	public class SemaphoreQueue<T> : Queue<T>, IThreadedQueue<Semaphore>
+	public class SemaphoreQueue<T> : Queue<T>, IThreadedQueue<T, Semaphore>
 	{
 		/// <summary>
 		/// A manual-managed semaphore for the <see cref="Queue{T}"/>.
@@ -17,6 +17,8 @@ namespace GladNet.Lidgren.Engine.Common
 		/// A read/write optimized syncronization queue.
 		/// </summary>
 		public ReaderWriterLockSlim syncRoot { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion); //Unity requires no recursion
+
+		WaitHandle IThreadedQueue<T>.QueueSemaphore { get { return QueueSemaphore; } }
 
 		/// <summary>
 		/// Creates a default <see cref="WaitableQueue{T}"/> with a <see cref="EventWaitHandle"/>.
