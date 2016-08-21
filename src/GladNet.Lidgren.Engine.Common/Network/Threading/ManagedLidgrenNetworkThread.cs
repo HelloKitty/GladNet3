@@ -128,6 +128,11 @@ namespace GladNet.Lidgren.Engine.Common
 		{
 			NetIncomingMessage message = peer.ReadMessage();
 
+			//If the context factory cannot create a context for this
+			//message type then we should not enter the lock and attempt to create a context for it.
+			if (!messageContextFactory.CanCreateContext(message.MessageType))
+				return;
+
 			incomingMessageQueue.syncRoot.EnterWriteLock();
 			try
 			{
