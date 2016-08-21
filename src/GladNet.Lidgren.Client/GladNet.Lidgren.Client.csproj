@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{651156CD-DE54-4F5A-99BD-290460EB57FB}</ProjectGuid>
+    <ProjectGuid>{F9EBC3CC-4176-4174-A1E8-69985EB5421E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GladNet.Lidgren.Common</RootNamespace>
-    <AssemblyName>GladNet.Lidgren.Common</AssemblyName>
+    <RootNamespace>GladNet.Lidgren.Client</RootNamespace>
+    <AssemblyName>GladNet.Lidgren.Client</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -32,11 +32,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+      <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net35\Common.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
+      <HintPath>..\..\packages\Common.Logging.Core.3.3.1\lib\net35\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -51,6 +51,10 @@
       <HintPath>..\..\packages\GladNet.Encryption.2.0.32\lib\net35\GladNet.Encryption.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GladNet.Engine.Common, Version=2.0.32.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Engine.Common.2.0.32\lib\net35\GladNet.Engine.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GladNet.Message, Version=2.0.32.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\GladNet.Message.2.0.32\lib\net35\GladNet.Message.dll</HintPath>
       <Private>True</Private>
@@ -63,9 +67,6 @@
       <HintPath>..\..\packages\GladNet.Serializer.2.0.32\lib\net35\GladNet.Serializer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Lidgren.Network">
-      <HintPath>..\..\lib\Temp\Lidgren\Lidgren.Network.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -74,15 +75,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\NetDeliveryMethodExtensions.cs" />
-    <Compile Include="Extensions\NetSendResultExtensions.cs" />
+    <Compile Include="GladNetServices\LidgrenClientConnectionDetailsAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GladNetServices\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Tests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Common", "src\GladNet.Lidgren.Common\GladNet.Lidgren.Common.csproj", "{651156CD-DE54-4F5A-99BD-290460EB57FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Client", "src\GladNet.Lidgren.Client\GladNet.Lidgren.Client.csproj", "{F9EBC3CC-4176-4174-A1E8-69985EB5421E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Server", "src\GladNet.Lidgren.Server\GladNet.Lidgren.Server.csproj", "{30D892A8-D24F-49AC-AAE6-61F3E2DCD248}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Engine.Common", "src\GladNet.Lidgren.Engine.Common\GladNet.Lidgren.Engine.Common.csproj", "{3F4E7114-C269-43A5-B919-0C65F1B98091}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +31,18 @@ Global
 		{651156CD-DE54-4F5A-99BD-290460EB57FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{651156CD-DE54-4F5A-99BD-290460EB57FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{651156CD-DE54-4F5A-99BD-290460EB57FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9EBC3CC-4176-4174-A1E8-69985EB5421E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9EBC3CC-4176-4174-A1E8-69985EB5421E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9EBC3CC-4176-4174-A1E8-69985EB5421E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9EBC3CC-4176-4174-A1E8-69985EB5421E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30D892A8-D24F-49AC-AAE6-61F3E2DCD248}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30D892A8-D24F-49AC-AAE6-61F3E2DCD248}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30D892A8-D24F-49AC-AAE6-61F3E2DCD248}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30D892A8-D24F-49AC-AAE6-61F3E2DCD248}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F4E7114-C269-43A5-B919-0C65F1B98091}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F4E7114-C269-43A5-B919-0C65F1B98091}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F4E7114-C269-43A5-B919-0C65F1B98091}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F4E7114-C269-43A5-B919-0C65F1B98091}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,5 +50,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C347D10D-790F-4030-833B-633CFBF4218C} = {E718AFBB-6A8F-4AEF-BC2C-0F9E696BDA02}
 		{651156CD-DE54-4F5A-99BD-290460EB57FB} = {830CFD0B-1D73-430B-950D-E8FBFFD3B41A}
+		{F9EBC3CC-4176-4174-A1E8-69985EB5421E} = {830CFD0B-1D73-430B-950D-E8FBFFD3B41A}
+		{30D892A8-D24F-49AC-AAE6-61F3E2DCD248} = {830CFD0B-1D73-430B-950D-E8FBFFD3B41A}
+		{3F4E7114-C269-43A5-B919-0C65F1B98091} = {830CFD0B-1D73-430B-950D-E8FBFFD3B41A}
 	EndGlobalSection
 EndGlobal
