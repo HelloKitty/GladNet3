@@ -77,6 +77,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\INetworkMessageDispatcher.cs" />
+    <Compile Include="Network\LidgrenMessageDetailsAdapter.cs" />
+    <Compile Include="Network\LidgrenNetworkMessagePublisherService.cs" />
     <Compile Include="Network\LidgrenNetworkMessageRouterService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\INetworkMessageFactory.cs" />
