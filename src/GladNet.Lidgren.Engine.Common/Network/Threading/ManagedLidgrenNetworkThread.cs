@@ -46,7 +46,7 @@ namespace GladNet.Lidgren.Engine.Common
 
 		private ILidgrenMessageContextFactory messageContextFactory { get; }
 
-		public ManagedLidgrenNetworkThread(ISerializerStrategy serializerStrategy, ILidgrenMessageContextFactory lidgrenMessageContextFactory)
+		public ManagedLidgrenNetworkThread(ISerializerStrategy serializerStrategy, ILidgrenMessageContextFactory lidgrenMessageContextFactory, ISendServiceSelectionStrategy sendStrategy)
 		{
 			if (serializerStrategy == null)
 				throw new ArgumentNullException(nameof(serializerStrategy), $"Provided {nameof(ISerializerStrategy)} cannot be null.");
@@ -54,6 +54,10 @@ namespace GladNet.Lidgren.Engine.Common
 			if (lidgrenMessageContextFactory == null)
 				throw new ArgumentNullException(nameof(lidgrenMessageContextFactory), $"Provided {nameof(ILidgrenMessageContextFactory)} cannot be null.");
 
+			if (sendStrategy == null)
+				throw new ArgumentNullException(nameof(sendStrategy), $"Provided {nameof(ISendServiceSelectionStrategy)} cannot be null.");
+
+			sendServiceStrategy = sendStrategy;
 			messageContextFactory = lidgrenMessageContextFactory;
 			serializer = serializerStrategy;
 		}

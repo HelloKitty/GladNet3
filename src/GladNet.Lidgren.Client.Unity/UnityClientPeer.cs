@@ -108,7 +108,7 @@ namespace GladNet.Lidgren.Client.Unity
 				return false;
 
 			//Create a new managed thread
-			managedNetworkThread = new ManagedLidgrenNetworkThread(serializer, new LidgrenClientMessageContextFactory(deserializer));
+			managedNetworkThread = new ManagedLidgrenNetworkThread(serializer, new LidgrenClientMessageContextFactory(deserializer), new ClientSendServiceSelectionStrategy(this.NetworkSendService));
 
 			//Start the thread and give the peer the context
 			managedNetworkThread.Start(internalLidgrenNetworkClient);
