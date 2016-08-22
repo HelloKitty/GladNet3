@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3F4E7114-C269-43A5-B919-0C65F1B98091}</ProjectGuid>
+    <ProjectGuid>{783B9217-A390-4685-A298-94E01FB35D44}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GladNet.Lidgren.Engine.Common</RootNamespace>
-    <AssemblyName>GladNet.Lidgren.Engine.Common</AssemblyName>
+    <RootNamespace>GladNet.Lidgren.Server.Unity</RootNamespace>
+    <AssemblyName>GladNet.Lidgren.Server.Unity</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -75,26 +75,13 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\lidgren-network-gen3\lib\Unity\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\Message\ContextMessages\Concrete\LidgrenNetworkMessageMessageContext.cs" />
-    <Compile Include="Network\Message\ContextMessages\Concrete\LidgrenStatusChangeMessageContext.cs" />
-    <Compile Include="Network\Message\ContextMessages\ILidgrenMessageContextFactory.cs" />
-    <Compile Include="Network\Message\INetworkMessageDispatcher.cs" />
-    <Compile Include="Network\Message\ContextMessages\LidgrenMessageContext.cs" />
-    <Compile Include="Network\Message\LidgrenMessageDetailsAdapter.cs" />
-    <Compile Include="Network\Message\LidgrenNetworkMessagePublisherService.cs" />
-    <Compile Include="Network\Message\LidgrenNetworkMessageRouterService.cs" />
-    <Compile Include="Network\Message\LidgrenStatusMessage.cs" />
-    <Compile Include="Network\Peer\ISendServiceSelectionStrategy.cs" />
-    <Compile Include="Network\Threading\INetworkThread.cs" />
-    <Compile Include="Network\Threading\IThreadedQueue.cs" />
-    <Compile Include="Network\Threading\ManagedLidgrenNetworkThread.cs" />
-    <Compile Include="Network\Threading\SemaphoreQueue.cs" />
-    <Compile Include="Network\Threading\WaitableQueue.cs" />
+    <Compile Include="Network\UnityServerApplicationBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\INetworkMessageFactory.cs" />
-    <Compile Include="Services\LidgrenNetworkMessageFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -103,6 +90,14 @@
     <ProjectReference Include="..\GladNet.Lidgren.Common\GladNet.Lidgren.Common.csproj">
       <Project>{651156cd-de54-4f5a-99bd-290460eb57fb}</Project>
       <Name>GladNet.Lidgren.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Lidgren.Engine.Common\GladNet.Lidgren.Engine.Common.csproj">
+      <Project>{3f4e7114-c269-43a5-b919-0c65f1b98091}</Project>
+      <Name>GladNet.Lidgren.Engine.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Lidgren.Server\GladNet.Lidgren.Server.csproj">
+      <Project>{30d892a8-d24f-49ac-aae6-61f3e2dcd248}</Project>
+      <Name>GladNet.Lidgren.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -60,7 +60,7 @@ namespace GladNet.Lidgren.Client.Unity
 			//Initialize basic services
 			internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(connectionInfo.ApplicationIdentifier) { AcceptIncomingConnections = false });
 			NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), internalLidgrenNetworkClient, serializer);
-
+			PeerDetails = new LidgrenClientConnectionDetailsAdapter(connectionInfo.ServerIp, connectionInfo.RemotePort, 0, 0); //we don't know port and id is not important on client
 			RegisterPayloadTypes(this.serializerRegister);
 
 			//Subscribe to the messages.
@@ -128,6 +128,7 @@ namespace GladNet.Lidgren.Client.Unity
 			IEnumerable<LidgrenMessageContext> messages = null;
 
 			//TODO: Maybe read to check count first.
+			//Lock only as short as we need to.
 			managedNetworkThread.IncomingMessageQueue.syncRoot.EnterWriteLock();
 			try
 			{
