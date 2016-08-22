@@ -19,5 +19,7 @@ namespace GladNet.Lidgren.Engine.Common
 		ReaderWriterLockSlim syncRoot { get; }
 
 		T Dequeue();
+
+		IEnumerable<T> DequeueAll();
 	}
 }

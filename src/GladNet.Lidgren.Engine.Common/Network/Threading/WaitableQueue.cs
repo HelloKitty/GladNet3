@@ -28,6 +28,18 @@ namespace GladNet.Lidgren.Engine.Common
 
 		}
 
+		public IEnumerable<T> DequeueAll()
+		{
+#if DEBUG || DEBUGBUILD
+			if (!syncRoot.IsWriteLockHeld && !syncRoot.IsReadLockHeld)
+				throw new InvalidOperationException($"Cannot {nameof(DequeueAll)} objects in {nameof(WaitableQueue<T>)} without locking with {nameof(syncRoot)}.");
+#endif
+
+			IEnumerable<T> dequeued = this.ToList();
+			this.Clear();
+			return dequeued;
+		}
+
 		//We do debugging to check for proper syncronization
 #if DEBUG || DEBUGBUILD
 		public new void Enqueue(T item)

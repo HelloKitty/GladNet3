@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Server", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Engine.Common", "src\GladNet.Lidgren.Engine.Common\GladNet.Lidgren.Engine.Common.csproj", "{3F4E7114-C269-43A5-B919-0C65F1B98091}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Lidgren.Client.Unity", "src\GladNet.Lidgren.Client.Unity\GladNet.Lidgren.Client.Unity.csproj", "{51B596E7-CC99-4062-9887-84D38442E5C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{3F4E7114-C269-43A5-B919-0C65F1B98091}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F4E7114-C269-43A5-B919-0C65F1B98091}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F4E7114-C269-43A5-B919-0C65F1B98091}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51B596E7-CC99-4062-9887-84D38442E5C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B596E7-CC99-4062-9887-84D38442E5C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B596E7-CC99-4062-9887-84D38442E5C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B596E7-CC99-4062-9887-84D38442E5C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +59,6 @@ Global
 		{F9EBC3CC-4176-4174-A1E8-69985EB5421E} = {830CFD0B-1D73-430B-950D-E8FBFFD3B41A}
 		{30D892A8-D24F-49AC-AAE6-61F3E2DCD248} = {830CFD0B-1D73-430B-950D-E8FBFFD3B41A}
 		{3F4E7114-C269-43A5-B919-0C65F1B98091} = {830CFD0B-1D73-430B-950D-E8FBFFD3B41A}
+		{51B596E7-CC99-4062-9887-84D38442E5C2} = {830CFD0B-1D73-430B-950D-E8FBFFD3B41A}
 	EndGlobalSection
 EndGlobal

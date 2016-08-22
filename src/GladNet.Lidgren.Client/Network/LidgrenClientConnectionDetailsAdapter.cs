@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Threading;
+using Lidgren.Network;
 
 namespace GladNet.Lidgren.Client
 {
