@@ -1,18 +1,17 @@
 ﻿using GladNet.Lidgren.Engine.Common;
-using Lidgren.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Lidgren.Network;
 using GladNet.Common;
 using GladNet.Message;
-using GladNet.Payload;
-using GladNet.Serializer;
 using GladNet.Common.Extensions;
+using GladNet.Serializer;
 
-namespace GladNet.Lidgren.Client
+namespace GladNet.Lidgren.Server.Unity
 {
-	public class LidgrenClientNetworkMessageRouterService : LidgrenNetworkMessageRouterService
+	public class LidgrenServerNetworkMessageRouterService : LidgrenNetworkMessageRouterService
 	{
 		/// <summary>
 		/// Serialization strategy.
@@ -25,29 +24,21 @@ namespace GladNet.Lidgren.Client
 		/// <param name="messageFactory">The network message factory.</param>
 		/// <param name="peerObj">The <see cref="NetPeer"/> object.</param>
 		/// <param name="serializerStrategy">Serialization strategy.</param>
-		public LidgrenClientNetworkMessageRouterService(INetworkMessageFactory messageFactory, NetConnection connection, ISerializerStrategy serializerStrategy)
+		public LidgrenServerNetworkMessageRouterService(INetworkMessageFactory messageFactory, NetConnection connection, ISerializerStrategy serializerStrategy)
 			: base(messageFactory, connection)
 		{
 			if (serializerStrategy == null)
-				throw new ArgumentNullException(nameof(serializerStrategy), $"Cannot provide a null {nameof(ISerializerStrategy)} to {nameof(LidgrenClientNetworkMessageRouterService)}.");
+				throw new ArgumentNullException(nameof(serializerStrategy), $"Cannot provide a null {nameof(ISerializerStrategy)} to {nameof(LidgrenServerNetworkMessageRouterService)}.");
 
 			serializer = serializerStrategy;
 		}
 
 		public override bool CanSend(OperationType opType)
 		{
-			//Clients can only send requests.
-			return opType == OperationType.Request;
+			//Can only send events or responses on a server.
+			return opType == OperationType.Event || opType == OperationType.Response;
 		}
 
-		/// <summary>
-		/// Child implemented sending functionality. Sends a provided <see cref="INetworkMessage"/> strategy
-		/// </summary>
-		/// <param name="message">Network message to send.</param>
-		/// <param name="deliveryMethod">Delivery method to send.</param>
-		/// <param name="encrypt">Indicates if the message should be encrypted before being sent.</param>
-		/// <param name="channel"></param>
-		/// <returns></returns>
 		protected override NetSendResult SendMessage(INetworkMessage message, DeliveryMethod deliveryMethod, bool encrypt, byte channel)
 		{
 			if (this.lidgrenNetworkConnection.Peer.Status != NetPeerStatus.Running)

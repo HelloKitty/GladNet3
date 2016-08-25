@@ -23,7 +23,7 @@ namespace GladNet.Lidgren.Engine.Common
 		/// <summary>
 		/// Indicates the unique indentifier
 		/// </summary>
-		public long ConnectionId { get; }
+		public int ConnectionId { get; }
 
 		/// <summary>
 		/// Delivery method used.
@@ -40,8 +40,11 @@ namespace GladNet.Lidgren.Engine.Common
 		/// </summary>
 		public byte Channel { get; }
 
+		public NetIncomingMessage IncomingMessage { get; }
+
 		public LidgrenMessageContext(NetIncomingMessage incomingMessage)
 		{
+			IncomingMessage = incomingMessage;
 			ConnectionId = incomingMessage.SenderConnection.RemoteUniqueIdentifier; //this is a sha hash of some stuff that Lidgren does; don't cast to int.
 			DeliveryMethod = incomingMessage.DeliveryMethod.ToGladNet();
 			Encrypted = false; //TODO: Handle encryption

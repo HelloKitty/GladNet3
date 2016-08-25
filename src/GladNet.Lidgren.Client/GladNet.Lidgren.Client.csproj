@@ -79,7 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Network\ClientSendServiceSelectionStrategy.cs" />
-    <Compile Include="Network\LidgrenClientConnectionDetailsAdapter.cs" />
     <Compile Include="Network\LidgrenClientNetworkMessageRouterService.cs" />
     <Compile Include="Network\LidgrenClientPeer.cs" />
     <Compile Include="Network\Message\LidgrenClientMessageContextFactory.cs" />

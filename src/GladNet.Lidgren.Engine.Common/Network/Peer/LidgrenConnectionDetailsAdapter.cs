@@ -1,19 +1,19 @@
-﻿using GladNet.Engine.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
 using System.Threading;
 using Lidgren.Network;
+using GladNet.Engine.Common;
 
-namespace GladNet.Lidgren.Client
+namespace GladNet.Lidgren.Engine.Common
 {
 	//Basically the same as the PhotonServer details adapter.
 	/// <summary>
 	/// Lidgren details adapter for the <see cref="IConnectionDetails"/> interface.
 	/// </summary>
-	public class LidgrenClientConnectionDetailsAdapter : IConnectionDetails
+	public class LidgrenConnectionDetailsAdapter : IConnectionDetails
 	{
 		/// <summary>
 		/// IPAddress of the remote peer.
@@ -42,7 +42,7 @@ namespace GladNet.Lidgren.Client
 		/// <param name="remotePort">Remote port of the connection.</param>
 		/// <param name="localPort">Local port of the connection.</param>
 		/// <param name="connectionID">Unique (port-wise) ID of the connection.</param>
-		public LidgrenClientConnectionDetailsAdapter(string remoteIP, int remotePort, int localPort, int uniqueIdentifier)
+		public LidgrenConnectionDetailsAdapter(string remoteIP, int remotePort, int localPort, int uniqueIdentifier)
 		{
 			RemoteIP = IPAddress.Parse(remoteIP);
 			RemotePort = remotePort;

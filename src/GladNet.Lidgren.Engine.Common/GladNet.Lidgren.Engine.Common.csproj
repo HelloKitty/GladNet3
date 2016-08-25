@@ -87,6 +87,7 @@
     <Compile Include="Network\Message\LidgrenNetworkMessageRouterService.cs" />
     <Compile Include="Network\Message\LidgrenStatusMessage.cs" />
     <Compile Include="Network\Peer\ISendServiceSelectionStrategy.cs" />
+    <Compile Include="Network\Peer\LidgrenConnectionDetailsAdapter.cs" />
     <Compile Include="Network\Threading\INetworkThread.cs" />
     <Compile Include="Network\Threading\IThreadedQueue.cs" />
     <Compile Include="Network\Threading\ManagedLidgrenNetworkThread.cs" />

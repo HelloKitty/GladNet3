@@ -59,8 +59,7 @@ namespace GladNet.Lidgren.Client.Unity
 		{
 			//Initialize basic services
 			internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(connectionInfo.ApplicationIdentifier) { AcceptIncomingConnections = false });
-			NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), internalLidgrenNetworkClient, serializer);
-			PeerDetails = new LidgrenClientConnectionDetailsAdapter(connectionInfo.ServerIp, connectionInfo.RemotePort, 0, 0); //we don't know port and id is not important on client
+			PeerDetails = new LidgrenConnectionDetailsAdapter(connectionInfo.ServerIp, connectionInfo.RemotePort, 0, 0); //we don't know port and id is not important on client
 			RegisterPayloadTypes(this.serializerRegister);
 
 			//Subscribe to the messages.
@@ -91,7 +90,7 @@ namespace GladNet.Lidgren.Client.Unity
 
 			//Reinit
 			internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(connectionInfo.ApplicationIdentifier) { AcceptIncomingConnections = false });
-			NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), internalLidgrenNetworkClient, serializer);
+			//NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), internalLidgrenNetworkClient, serializer);
 		}
 
 		public bool Connect()
@@ -102,9 +101,12 @@ namespace GladNet.Lidgren.Client.Unity
 				Disconnect();
 			}
 
-			NetConnection c = internalLidgrenNetworkClient.Connect(new IPEndPoint(IPAddress.Parse(connectionInfo.ServerIp), connectionInfo.RemotePort));
+			NetConnection connection = internalLidgrenNetworkClient.Connect(new IPEndPoint(IPAddress.Parse(connectionInfo.ServerIp), connectionInfo.RemotePort));
 
-			if (c == null)
+			//Now that we have the netconnection we can initialize the sendservice
+			NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), connection, serializer);
+
+			if (connection == null)
 				return false;
 
 			//Create a new managed thread
