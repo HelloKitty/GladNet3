@@ -89,6 +89,7 @@
     <Compile Include="Network\IClientSessionFactory.cs" />
     <Compile Include="Network\Message\LidgrenServerMessageContextFactory.cs" />
     <Compile Include="Network\Message\LidgrenServerNetworkMessageRouterService.cs" />
+    <Compile Include="Network\Message\PeerSendServiceSelectionStrategy.cs" />
     <Compile Include="Network\Peer\AUIDNetPeerServiceDecorator.cs" />
     <Compile Include="Network\Peer\ClientSessionServiceContext.cs" />
     <Compile Include="Network\UnityServerApplicationBase.cs" />

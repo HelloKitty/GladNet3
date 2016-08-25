@@ -69,10 +69,11 @@ namespace GladNet.Lidgren.Server.Unity
 
 			sessionlessHandler = new SessionlessMessageHandler(this);
 
-			managedNetworkThread = new ManagedLidgrenNetworkThread(serializer, new LidgrenServerMessageContextFactory(deserializer), null);
-
+			//Create these first; thread needs them
 			peerServiceCollection = new AUIDServiceCollection<ClientSessionServiceContext>(50);
 			netPeerAUIDService = new AUIDNetPeerServiceDecorator(peerServiceCollection);
+
+			managedNetworkThread = new ManagedLidgrenNetworkThread(serializer, new LidgrenServerMessageContextFactory(deserializer), new PeerSendServiceSelectionStrategy(peerServiceCollection));
 		}
 
 		public abstract void RegisterPayloadTypes(ISerializerRegistry registry);
@@ -96,7 +97,7 @@ namespace GladNet.Lidgren.Server.Unity
 			}
 			finally
 			{
-				managedNetworkThread.IncomingMessageQueue.syncRoot.ExitReadLock();
+				managedNetworkThread.IncomingMessageQueue.syncRoot.ExitWriteLock();
 			}
 
 			if (messages == null || messages.Count() == 0)
@@ -130,6 +131,10 @@ namespace GladNet.Lidgren.Server.Unity
 			LidgrenNetworkMessageRouterService routerService = new LidgrenServerNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), connection, serializer);
 			NetworkMessagePublisher basicMessagePublisher = new NetworkMessagePublisher();
 			DefaultNetworkMessageRouteBackService routebackService = new DefaultNetworkMessageRouteBackService(this.netPeerAUIDService, Logger);
+			DefaultDisconnectionServiceHandler disconnectionHandler = new DefaultDisconnectionServiceHandler();
+
+			//TODO: Clean this up
+			disconnectionHandler.DisconnectionEventHandler += () => peerServiceCollection.Remove(connectionDetails.ConnectionID);
 
 			//Try to create the incoming peer; consumers of the library may reject the connection.
 			ClientPeerSession session = CreateIncomingPeerSession(routerService, connectionDetails, basicMessagePublisher, null, routebackService);

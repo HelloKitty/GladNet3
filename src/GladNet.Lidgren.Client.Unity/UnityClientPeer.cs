@@ -101,7 +101,13 @@ namespace GladNet.Lidgren.Client.Unity
 				Disconnect();
 			}
 
+			//Must call start first
+			internalLidgrenNetworkClient.Start();
+
 			NetConnection connection = internalLidgrenNetworkClient.Connect(new IPEndPoint(IPAddress.Parse(connectionInfo.ServerIp), connectionInfo.RemotePort));
+
+			if (connection == null)
+				throw new InvalidOperationException($"Could not connect and create a {nameof(NetConnection)}.");
 
 			//Now that we have the netconnection we can initialize the sendservice
 			NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), connection, serializer);
@@ -138,7 +144,7 @@ namespace GladNet.Lidgren.Client.Unity
 			}
 			finally
 			{
-				managedNetworkThread.IncomingMessageQueue.syncRoot.ExitReadLock();
+				managedNetworkThread.IncomingMessageQueue.syncRoot.ExitWriteLock();
 			}
 
 			if (messages == null || messages.Count() == 0)
