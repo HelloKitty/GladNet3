@@ -32,6 +32,9 @@ namespace GladNet.Lidgren.Server.Unity
 				//TODO: Do error messages
 				//case NetIncomingMessageType.Error:
 				//	break;
+				case NetIncomingMessageType.ErrorMessage:
+				case NetIncomingMessageType.Error:
+					throw new Exception("Error recieved.");
 				case NetIncomingMessageType.StatusChanged:
 					return new LidgrenStatusChangeMessageContext(message); //returns a new status message context
 				case NetIncomingMessageType.Data:

@@ -54,7 +54,7 @@ namespace GladNet.Lidgren.Server.Unity
 
 		public void StartServer()
 		{
-			NetPeerConfiguration config = new NetPeerConfiguration(connectionInfo.ApplicationIdentifier) { Port = connectionInfo.Port, AcceptIncomingConnections = true, UseMessageRecycling = true };
+			NetPeerConfiguration config = new NetPeerConfiguration(connectionInfo.ApplicationIdentifier) { Port = connectionInfo.Port, AcceptIncomingConnections = true, UseMessageRecycling = true,   };
 
 			//Server needs a much larger than default buffer size because corruption can happen otherwise
 			config.ReceiveBufferSize = 500000;
@@ -67,13 +67,16 @@ namespace GladNet.Lidgren.Server.Unity
 			//Register the server payloads
 			RegisterPayloadTypes(this.serializerRegister);
 
-			sessionlessHandler = new SessionlessMessageHandler(this);
+			sessionlessHandler = new SessionlessMessageHandler(this, Logger);
 
 			//Create these first; thread needs them
 			peerServiceCollection = new AUIDServiceCollection<ClientSessionServiceContext>(50);
 			netPeerAUIDService = new AUIDNetPeerServiceDecorator(peerServiceCollection);
 
-			managedNetworkThread = new ManagedLidgrenNetworkThread(serializer, new LidgrenServerMessageContextFactory(deserializer), new PeerSendServiceSelectionStrategy(peerServiceCollection));
+			managedNetworkThread = new ManagedLidgrenNetworkThread(serializer, new LidgrenServerMessageContextFactory(deserializer), new PeerSendServiceSelectionStrategy(peerServiceCollection), e => Logger.Fatal($"{e.Message} StackTrace: {e.StackTrace}"));
+
+			//Do not forget to start network thread
+			managedNetworkThread.Start(this.internalLidgrenServer);
 		}
 
 		public abstract void RegisterPayloadTypes(ISerializerRegistry registry);
@@ -108,14 +111,16 @@ namespace GladNet.Lidgren.Server.Unity
 
 		private void HandleMessages(IEnumerable<LidgrenMessageContext> messages)
 		{
+			Logger.Debug($"Handling Messages. Count: {messages.Count()}");
 			//We have to check for messages that don't have an available peer.
 			foreach(LidgrenMessageContext message in messages)
 			{
-				if (message.ConnectionId == 0) //If connection ID is 0 then it's a message without a session
+				Logger.Debug($"In handler loop. Seeing ConnectionId: {message.ConnectionId}");
+
+				if (!peerServiceCollection.ContainsKey(message.ConnectionId)) //If it's unconnected we'll likely recieve a Connect/Establish event and the connection ID will be assigned at that point
 					sessionlessHandler.HandleMessage(message);
 				else
-					if (peerServiceCollection.ContainsKey(message.ConnectionId))
-						message.TryDispatch(peerServiceCollection[message.ConnectionId].MessageReceiver); //TODO: Checking
+					message.TryDispatch(peerServiceCollection[message.ConnectionId].MessageReceiver); //TODO: Checking
 
 				//TODO: Logging on no handler		
 			}
@@ -137,7 +142,7 @@ namespace GladNet.Lidgren.Server.Unity
 			disconnectionHandler.DisconnectionEventHandler += () => peerServiceCollection.Remove(connectionDetails.ConnectionID);
 
 			//Try to create the incoming peer; consumers of the library may reject the connection.
-			ClientPeerSession session = CreateIncomingPeerSession(routerService, connectionDetails, basicMessagePublisher, null, routebackService);
+			ClientPeerSession session = CreateIncomingPeerSession(routerService, connectionDetails, basicMessagePublisher, disconnectionHandler, routebackService);
 
 			if (session == null)
 				return null;

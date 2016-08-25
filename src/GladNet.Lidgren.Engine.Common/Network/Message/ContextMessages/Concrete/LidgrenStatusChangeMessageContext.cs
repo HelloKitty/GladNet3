@@ -18,11 +18,14 @@ namespace GladNet.Lidgren.Engine.Common
 		/// </summary>
 		public IStatusMessage GeneratedStatusMessage { get; }
 
+		public NetConnectionStatus LidgrenStatus { get; }
+
 		public LidgrenStatusChangeMessageContext(NetIncomingMessage incomingMessage) 
 			: base(incomingMessage)
 		{
+			LidgrenStatus = (NetConnectionStatus)incomingMessage.ReadByte();
 			//Generate a Lidgren status message for dispatching
-			GeneratedStatusMessage = new LidgrenStatusMessage((NetConnectionStatus)incomingMessage.ReadByte());
+			GeneratedStatusMessage = new LidgrenStatusMessage(LidgrenStatus);
 		}
 
 		public override bool TryDispatch(INetworkMessageReceiver reciever)

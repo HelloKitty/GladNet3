@@ -33,11 +33,13 @@ namespace GladNet.Lidgren.Engine.Common
 
 		private ReaderWriterLockSlim lockObj { get; }  = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion); //Unity requires norecursion
 
-		private Thread managedNetworkThread { get; set; }
+		private List<Thread> managedNetworkThreads { get; }
 
 		public bool isAlive { get; private set; }
 
 		private ISerializerStrategy serializer { get; }
+
+		private Action<Exception> OnException { get; }
 
 		/// <summary>
 		/// Strategy used to select the sending service for a message.
@@ -46,7 +48,7 @@ namespace GladNet.Lidgren.Engine.Common
 
 		private ILidgrenMessageContextFactory messageContextFactory { get; }
 
-		public ManagedLidgrenNetworkThread(ISerializerStrategy serializerStrategy, ILidgrenMessageContextFactory lidgrenMessageContextFactory, ISendServiceSelectionStrategy sendStrategy)
+		public ManagedLidgrenNetworkThread(ISerializerStrategy serializerStrategy, ILidgrenMessageContextFactory lidgrenMessageContextFactory, ISendServiceSelectionStrategy sendStrategy, Action<Exception> onException = null)
 		{
 			if (serializerStrategy == null)
 				throw new ArgumentNullException(nameof(serializerStrategy), $"Provided {nameof(ISerializerStrategy)} cannot be null.");
@@ -57,9 +59,13 @@ namespace GladNet.Lidgren.Engine.Common
 			if (sendStrategy == null)
 				throw new ArgumentNullException(nameof(sendStrategy), $"Provided {nameof(ISendServiceSelectionStrategy)} cannot be null.");
 
+			OnException = onException;
+
 			sendServiceStrategy = sendStrategy;
 			messageContextFactory = lidgrenMessageContextFactory;
 			serializer = serializerStrategy;
+
+			managedNetworkThreads = new List<Thread>();
 		}
 
 		public NetSendResult EnqueueMessage(OperationType opType, PacketPayload payload, DeliveryMethod method, bool encrypt, byte channel, int connectionId)
@@ -89,66 +95,96 @@ namespace GladNet.Lidgren.Engine.Common
 			return NetSendResult.Queued;
 		}
 
-		private void HandleOutgoingMessageActionsThreadMethod(NetPeer peer)
+		private void HandleIncomingMessageThreadMethod(NetPeer peer)
 		{
-			//Register on this thread so the callback occurs on this thread
-			peer.RegisterReceivedCallback(new SendOrPostCallback(p => OnMessageRecievedCallback(p as NetPeer)));
-			peer = null;
-
-			while (isAlive)
+			try
 			{
-				if (!outgoingMessageQueue.QueueSemaphore.WaitOne())
-					throw new InvalidOperationException("Should never happen. WaitOne returned false.");
-
-				IEnumerable<Action> dequeuedActions = null;
-
-				outgoingMessageQueue.syncRoot.EnterWriteLock();
-				try
+				while(isAlive)
 				{
-					//TODO: Single message optimizations
-					dequeuedActions = outgoingMessageQueue.ToList(); //tolist is more memory efficient
+					if (!peer.MessageReceivedEvent.WaitOne())
+						throw new InvalidOperationException("Should never happen. WaitOne returned false.");
 
-					//Reset the waithandle
-					//Make sure to do this in the lock to prevent race coniditons
-					outgoingMessageQueue.Clear();
-					outgoingMessageQueue.QueueSemaphore.Reset();
-				}
-				finally
+					OnMessageRecievedCallback(peer);
+				}				
+			}
+			catch(Exception e)
+			{
+				OnException?.Invoke(e);
+			}
+		}
+
+		private void HandleOutgoingMessageActionsThreadMethod()
+		{
+			try
+			{
+				while (isAlive)
 				{
-					outgoingMessageQueue.syncRoot.ExitWriteLock();
+					if (!outgoingMessageQueue.QueueSemaphore.WaitOne())
+						throw new InvalidOperationException("Should never happen. WaitOne returned false.");
+
+					IEnumerable<Action> dequeuedActions = null;
+
+					outgoingMessageQueue.syncRoot.EnterWriteLock();
+					try
+					{
+						//TODO: Single message optimizations
+						dequeuedActions = outgoingMessageQueue.ToList(); //tolist is more memory efficient
+
+						//Reset the waithandle
+						//Make sure to do this in the lock to prevent race coniditons
+						outgoingMessageQueue.Clear();
+						outgoingMessageQueue.QueueSemaphore.Reset();
+					}
+					finally
+					{
+						outgoingMessageQueue.syncRoot.ExitWriteLock();
+					}
+
+					if (dequeuedActions == null)
+						throw new InvalidOperationException($"Outgoing message queue produced a null collection of messages. Expected non-null and non-empty.");
+
+					//Invoke all outgoing message actions
+					foreach (Action outgoingMessageAction in dequeuedActions)
+						outgoingMessageAction();
 				}
-
-				if (dequeuedActions == null)
-					throw new InvalidOperationException($"Outgoing message queue produced a null collection of messages. Expected non-null and non-empty.");
-
-				//Invoke all outgoing message actions
-				foreach (Action outgoingMessageAction in dequeuedActions)
-					outgoingMessageAction();
+			}
+			catch(Exception e)
+			{
+				OnException?.Invoke(e);
 			}
 		}
 
 		//Make sure this runs on the reading thread
 		private void OnMessageRecievedCallback(NetPeer peer)
 		{
-			NetIncomingMessage message = peer.ReadMessage();
+			//Read the entire chunk of messages; not just one
+			//The wait handle has been consumed so we have no choice.
+			//Can't do one at a time.
+			List<NetIncomingMessage> messages = new List<NetIncomingMessage>(10);
 
-			//If the context factory cannot create a context for this
-			//message type then we should not enter the lock and attempt to create a context for it.
-			if (!messageContextFactory.CanCreateContext(message.MessageType))
+			if (peer.ReadMessages(messages) == 0)
 				return;
 
-			incomingMessageQueue.syncRoot.EnterWriteLock();
-			try
+			foreach(NetIncomingMessage message in messages)
 			{
-				//enqueues the message including the meaningful context with which it was recieved.
-				incomingMessageQueue.Enqueue(messageContextFactory.CreateContext(message));
+				//If the context factory cannot create a context for this
+				//message type then we should not enter the lock and attempt to create a context for it.
+				if (!messageContextFactory.CanCreateContext(message.MessageType))
+					return;
 
-				//Signal the incoming message handling thread that there is a message to recieve.
-				incomingMessageQueue.QueueSemaphore.Release(1);
-			}
-			finally
-			{
-				incomingMessageQueue.syncRoot.ExitWriteLock();
+				incomingMessageQueue.syncRoot.EnterWriteLock();
+				try
+				{
+					//enqueues the message including the meaningful context with which it was recieved.
+					incomingMessageQueue.Enqueue(messageContextFactory.CreateContext(message));
+
+					//Signal the incoming message handling thread that there is a message to recieve.
+					incomingMessageQueue.QueueSemaphore.Release(1);
+				}
+				finally
+				{
+					incomingMessageQueue.syncRoot.ExitWriteLock();
+				}
 			}
 		}
 
@@ -161,9 +197,18 @@ namespace GladNet.Lidgren.Engine.Common
 			try
 			{
 				isAlive = true;
-				managedNetworkThread = new Thread(new ThreadStart(() => HandleOutgoingMessageActionsThreadMethod(incomingPeerContext)));
-				managedNetworkThread.IsBackground = true;
-				managedNetworkThread.Start();	
+				Thread outgoingThread = new Thread(new ThreadStart(HandleOutgoingMessageActionsThreadMethod));
+				outgoingThread.IsBackground = true;
+				outgoingThread.Start();
+
+				managedNetworkThreads.Add(outgoingThread);
+
+				//Create incoming thread
+				Thread incomingThread = new Thread(new ThreadStart(() => HandleIncomingMessageThreadMethod(incomingPeerContext)));
+				incomingThread.IsBackground = true;
+				incomingThread.Start();
+
+				managedNetworkThreads.Add(incomingThread);
 			}
 			finally
 			{
@@ -210,7 +255,7 @@ namespace GladNet.Lidgren.Engine.Common
 					incomingMessageQueue.Dispose();
 
 					//Do not Thread.Abort. Unity will throwup
-					managedNetworkThread = null;
+					managedNetworkThreads.Clear();
 
 					lockObj.EnterWriteLock();
 					try

@@ -71,6 +71,9 @@ namespace GladNet.Lidgren.Client.Unity
 
 			publisher.SubscribeTo<StatusMessage>()
 				.With(new OnNetworkStatusMessage( (m, p) => this.OnStatusChanged(m.Status)));
+
+			//Register the payloads
+			RegisterPayloadTypes(serializerRegister);
 		}
 
 		public abstract void RegisterPayloadTypes(ISerializerRegistry registry);
@@ -116,7 +119,7 @@ namespace GladNet.Lidgren.Client.Unity
 				return false;
 
 			//Create a new managed thread
-			managedNetworkThread = new ManagedLidgrenNetworkThread(serializer, new LidgrenClientMessageContextFactory(deserializer), new ClientSendServiceSelectionStrategy(this.NetworkSendService));
+			managedNetworkThread = new ManagedLidgrenNetworkThread(serializer, new LidgrenClientMessageContextFactory(deserializer), new ClientSendServiceSelectionStrategy(this.NetworkSendService), e => Debug.LogError(e.Message + "StackTrace: " + e.StackTrace));
 
 			//Start the thread and give the peer the context
 			managedNetworkThread.Start(internalLidgrenNetworkClient);
@@ -156,7 +159,8 @@ namespace GladNet.Lidgren.Client.Unity
 		private void HandleMessages(IEnumerable<LidgrenMessageContext> messages)
 		{
 			foreach (LidgrenMessageContext m in messages)
-				m.TryDispatch(publisher);
+				if (!m.TryDispatch(publisher))
+					throw new InvalidOperationException($"Unable to dispatch {m.GetType().Name}.");
 		}
 
 		/// <summary>
