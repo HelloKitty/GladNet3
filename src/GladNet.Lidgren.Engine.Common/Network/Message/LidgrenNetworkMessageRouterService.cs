@@ -25,7 +25,7 @@ namespace GladNet.Lidgren.Engine.Common
 			if (messageFactory == null)
 				throw new ArgumentNullException(nameof(messageFactory), $"Cannot provide a null {nameof(INetworkMessageFactory)} service.");
 
-			if (lidgrenNetworkConnection == null)
+			if (connection == null)
 				throw new ArgumentNullException(nameof(connection), $"Cannot provide a null {nameof(NetConnection)} service.");
 
 			lidgrenNetworkConnection = connection;

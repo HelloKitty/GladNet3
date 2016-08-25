@@ -104,7 +104,7 @@ namespace GladNet.Lidgren.Client.Unity
 			//Must call start first
 			internalLidgrenNetworkClient.Start();
 
-			NetConnection connection = internalLidgrenNetworkClient.Connect(new IPEndPoint(IPAddress.Parse(connectionInfo.ServerIp), connectionInfo.RemotePort));
+			NetConnection connection = internalLidgrenNetworkClient.Connect(connectionInfo.ServerIp, connectionInfo.RemotePort);
 
 			if (connection == null)
 				throw new InvalidOperationException($"Could not connect and create a {nameof(NetConnection)}.");
