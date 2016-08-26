@@ -39,8 +39,9 @@
       <HintPath>..\..\packages\GladNet.Common.2.0.33\lib\net35\GladNet.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Lidgren.Network">
-      <HintPath>..\..\lib\Temp\Lidgren\Lidgren.Network.dll</HintPath>
+    <Reference Include="Lidgren.Network, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Lidgren.Network.1.0.3\lib\net35\Lidgren.Network.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>

@@ -70,8 +70,9 @@
       <HintPath>..\..\packages\GladNet.Serializer.2.0.33\lib\net35\GladNet.Serializer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Lidgren.Network">
-      <HintPath>..\..\lib\Temp\Lidgren\Lidgren.Network.dll</HintPath>
+    <Reference Include="Lidgren.Network, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Lidgren.Network.1.0.3\lib\net35\Lidgren.Network.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
