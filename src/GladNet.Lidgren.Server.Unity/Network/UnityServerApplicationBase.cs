@@ -81,6 +81,27 @@ namespace GladNet.Lidgren.Server.Unity
 
 		public abstract void RegisterPayloadTypes(ISerializerRegistry registry);
 
+		/// <summary>
+		/// Called internally by Unity3D when the application is terminating.
+		/// Overriders MUST call base.
+		/// </summary>
+		protected virtual void OnApplicationQuit()
+		{
+			managedNetworkThread?.Stop();
+			managedNetworkThread?.Dispose();
+			managedNetworkThread = null;
+
+			foreach (NetConnection connection in internalLidgrenServer.Connections)
+				connection.Disconnect("Server shutdown");
+		}
+
+		protected virtual void OnDestroy()
+		{
+			managedNetworkThread?.Stop();
+			managedNetworkThread?.Dispose();
+			managedNetworkThread = null;
+		}
+
 		public void Poll()
 		{
 			if (managedNetworkThread == null)

@@ -169,17 +169,20 @@ namespace GladNet.Lidgren.Client.Unity
 		/// </summary>
 		protected virtual void OnApplicationQuit()
 		{
-			if (managedNetworkThread != null)
-			{
-				//Clean up thread
-				managedNetworkThread.Stop();
-				managedNetworkThread.Dispose();
-				managedNetworkThread = null;
-			}
+			managedNetworkThread?.Stop();
+			managedNetworkThread?.Dispose();
+			managedNetworkThread = null;
 
 			//Disconnect if connected
 			if (internalLidgrenNetworkClient.ConnectionStatus == NetConnectionStatus.Connected)
 				internalLidgrenNetworkClient.Disconnect("");
+		}
+
+		protected virtual void OnDestroy()
+		{
+			managedNetworkThread?.Stop();
+			managedNetworkThread?.Dispose();
+			managedNetworkThread = null;
 		}
 
 		/// <summary>
