@@ -35,7 +35,13 @@ namespace GladNet.Lidgren.Engine.Common
 
 		private List<Thread> managedNetworkThreads { get; }
 
-		public bool isAlive { get; private set; }
+		//A lot of debate in .NET/C# space about when, if ever to use volatile, but from what I gather
+		//when using a polling thread it's not safe to not mark a bool flag volatile since the CLR
+		//makes no promise that changes to this value, which are 100% atomic, may propagate soon or ever (can the JIT/CLR make such a mistake though?)
+		//Anyway, this should likely be done but someone smarter than myself should provide input on this one day.
+		private volatile bool _isAlive;
+
+		public bool isAlive { get { return _isAlive; } }
 
 		private ISerializerStrategy serializer { get; }
 
@@ -99,10 +105,11 @@ namespace GladNet.Lidgren.Engine.Common
 		{
 			try
 			{
-				while(isAlive)
+				while(_isAlive)
 				{
-					if (!peer.MessageReceivedEvent.WaitOne())
-						throw new InvalidOperationException("Should never happen. WaitOne returned false.");
+					//Don't wait forever; if you do you could encounter a hanging thread during disconnection
+					if (!peer.MessageReceivedEvent.WaitOne(500))
+						continue;
 
 					OnMessageRecievedCallback(peer);
 				}				
@@ -117,10 +124,11 @@ namespace GladNet.Lidgren.Engine.Common
 		{
 			try
 			{
-				while (isAlive)
+				while (_isAlive)
 				{
-					if (!outgoingMessageQueue.QueueSemaphore.WaitOne())
-						throw new InvalidOperationException("Should never happen. WaitOne returned false.");
+					//Don't wait forever; if you do you could encounter a hanging thread during disconnection
+					if (!outgoingMessageQueue.QueueSemaphore.WaitOne(500))
+						continue;
 
 					IEnumerable<Action> dequeuedActions = null;
 
@@ -190,13 +198,13 @@ namespace GladNet.Lidgren.Engine.Common
 
 		public void Start(NetPeer incomingPeerContext)
 		{
-			if (isAlive)
+			if (_isAlive)
 				throw new InvalidOperationException("A network thread should only be started once.");
 
 			lockObj.EnterWriteLock();
 			try
 			{
-				isAlive = true;
+				_isAlive = true;
 				Thread outgoingThread = new Thread(new ThreadStart(HandleOutgoingMessageActionsThreadMethod));
 				outgoingThread.IsBackground = true;
 				outgoingThread.Start();
@@ -221,7 +229,7 @@ namespace GladNet.Lidgren.Engine.Common
 			lockObj.EnterWriteLock();
 			try
 			{
-				isAlive = false;
+				_isAlive = false;
 			}
 			finally
 			{
@@ -239,39 +247,52 @@ namespace GladNet.Lidgren.Engine.Common
 			if (disposedValue)
 				return;
 
+			Stop();
+
+			//At this point the threads should be finished and we can finish disposing
 			lockObj.EnterUpgradeableReadLock();
 			try
 			{
-				if (!disposedValue)
+				if (disposing)
 				{
-					if (disposing)
-					{
-						// TODO: dispose managed state (managed objects)
-					}
+					// TODO: dispose managed state (managed objects)
+				}
 
-					// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-					// TODO: set large fields to null.
-					outgoingMessageQueue.Dispose();
-					incomingMessageQueue.Dispose();
+				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+				// TODO: set large fields to null.
 
+				lockObj.EnterWriteLock();
+				try
+				{
 					//Do not Thread.Abort. Unity will throwup
 					managedNetworkThreads.Clear();
 
-					lockObj.EnterWriteLock();
+					//TODO: How can we dispose the locks?
+					IncomingMessageQueue.syncRoot.EnterWriteLock();
 					try
 					{
-						disposedValue = true;
+						incomingMessageQueue.Clear();
 					}
 					finally
 					{
-						lockObj.ExitWriteLock();
+						IncomingMessageQueue.syncRoot.ExitWriteLock();
+						
+						//TODO: Technically we should try to dispose the locking objects. Abit complex to coordinate that though.
 					}
+
+					outgoingMessageQueue.Clear();
 				}
+				finally
+				{
+					lockObj.ExitWriteLock();
+				}
+
+				//set disposed
+				disposedValue = true;
 			}
 			finally
 			{
 				lockObj.ExitUpgradeableReadLock();
-
 				lockObj.Dispose();
 			}
 			

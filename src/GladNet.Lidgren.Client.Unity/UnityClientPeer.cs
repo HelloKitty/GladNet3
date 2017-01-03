@@ -86,14 +86,14 @@ namespace GladNet.Lidgren.Client.Unity
 
 		public void Disconnect()
 		{
-			//Clean up thread
-			managedNetworkThread.Stop();
-			managedNetworkThread.Dispose();
-			managedNetworkThread = null;
+				//Clean up thread
+				managedNetworkThread.Stop();
+				managedNetworkThread.Dispose();
+				managedNetworkThread = null;
 
-			//Reinit
-			internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(connectionInfo.ApplicationIdentifier) { AcceptIncomingConnections = false });
-			//NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), internalLidgrenNetworkClient, serializer);
+				//Reinit
+				internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(connectionInfo.ApplicationIdentifier) { AcceptIncomingConnections = false });
+				//NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), internalLidgrenNetworkClient, serializer);
 		}
 
 		public bool Connect()
@@ -163,26 +163,21 @@ namespace GladNet.Lidgren.Client.Unity
 					throw new InvalidOperationException($"Unable to dispatch {m.GetType().Name}.");
 		}
 
-		/// <summary>
-		/// Called internally by Unity3D when the application is terminating.
-		/// Overriders MUST call base.
-		/// </summary>
 		protected virtual void OnApplicationQuit()
 		{
-			managedNetworkThread?.Stop();
-			managedNetworkThread?.Dispose();
-			managedNetworkThread = null;
-
-			//Disconnect if connected
-			if (internalLidgrenNetworkClient.ConnectionStatus == NetConnectionStatus.Connected)
-				internalLidgrenNetworkClient.Disconnect("");
+			OnDestroy();
 		}
 
 		protected virtual void OnDestroy()
 		{
+			//Disconnect if connected
+			if (internalLidgrenNetworkClient?.ConnectionStatus == NetConnectionStatus.Connected)
+				internalLidgrenNetworkClient?.Disconnect("");
+
 			managedNetworkThread?.Stop();
 			managedNetworkThread?.Dispose();
 			managedNetworkThread = null;
+			internalLidgrenNetworkClient = null;
 		}
 
 		/// <summary>

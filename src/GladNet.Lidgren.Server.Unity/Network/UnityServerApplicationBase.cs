@@ -87,19 +87,23 @@ namespace GladNet.Lidgren.Server.Unity
 		/// </summary>
 		protected virtual void OnApplicationQuit()
 		{
+			//Disconnects and shutsdown server
+			internalLidgrenServer?.Shutdown("Server shutdown");
+
 			managedNetworkThread?.Stop();
 			managedNetworkThread?.Dispose();
 			managedNetworkThread = null;
-
-			foreach (NetConnection connection in internalLidgrenServer.Connections)
-				connection.Disconnect("Server shutdown");
+			internalLidgrenServer = null;
 		}
 
 		protected virtual void OnDestroy()
 		{
+			//Disconnects and shutsdown server
+			internalLidgrenServer?.Shutdown("Server shutdown");
 			managedNetworkThread?.Stop();
 			managedNetworkThread?.Dispose();
 			managedNetworkThread = null;
+			internalLidgrenServer = null;
 		}
 
 		public void Poll()
