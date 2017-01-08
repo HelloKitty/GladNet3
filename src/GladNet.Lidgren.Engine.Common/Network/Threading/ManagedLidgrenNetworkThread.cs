@@ -178,7 +178,7 @@ namespace GladNet.Lidgren.Engine.Common
 				//If the context factory cannot create a context for this
 				//message type then we should not enter the lock and attempt to create a context for it.
 				if (!messageContextFactory.CanCreateContext(message.MessageType))
-					return;
+					continue; //make sure to continue; not return. Major fault if you return.
 
 				incomingMessageQueue.syncRoot.EnterWriteLock();
 				try
