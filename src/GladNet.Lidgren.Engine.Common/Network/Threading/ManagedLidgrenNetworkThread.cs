@@ -29,7 +29,7 @@ namespace GladNet.Lidgren.Engine.Common
 		/// <summary>
 		/// Ordered collection of incoming messages.
 		/// </summary>
-		public IThreadedQueue<LidgrenMessageContext> IncomingMessageQueue { get { return incomingMessageQueue; } }
+		public IThreadedQueue<LidgrenMessageContext> IncomingMessageQueue => incomingMessageQueue;
 
 		private ReaderWriterLockSlim lockObj { get; }  = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion); //Unity requires norecursion
 
@@ -41,7 +41,7 @@ namespace GladNet.Lidgren.Engine.Common
 		//Anyway, this should likely be done but someone smarter than myself should provide input on this one day.
 		private volatile bool _isAlive;
 
-		public bool isAlive { get { return _isAlive; } }
+		public bool isAlive => _isAlive;
 
 		private ISerializerStrategy serializer { get; }
 
@@ -76,7 +76,7 @@ namespace GladNet.Lidgren.Engine.Common
 
 		public NetSendResult EnqueueMessage(OperationType opType, PacketPayload payload, DeliveryMethod method, bool encrypt, byte channel, int connectionId)
 		{
-			outgoingMessageQueue.syncRoot.EnterWriteLock();
+			outgoingMessageQueue.SyncRoot.EnterWriteLock();
 			try
 			{
 				//This is similar to how Photon works on the Unity client.
@@ -95,7 +95,7 @@ namespace GladNet.Lidgren.Engine.Common
 			}
 			finally
 			{
-				outgoingMessageQueue.syncRoot.ExitWriteLock();
+				outgoingMessageQueue.SyncRoot.ExitWriteLock();
 			}
 
 			return NetSendResult.Queued;
@@ -132,7 +132,7 @@ namespace GladNet.Lidgren.Engine.Common
 
 					IEnumerable<Action> dequeuedActions = null;
 
-					outgoingMessageQueue.syncRoot.EnterWriteLock();
+					outgoingMessageQueue.SyncRoot.EnterWriteLock();
 					try
 					{
 						//TODO: Single message optimizations
@@ -145,7 +145,7 @@ namespace GladNet.Lidgren.Engine.Common
 					}
 					finally
 					{
-						outgoingMessageQueue.syncRoot.ExitWriteLock();
+						outgoingMessageQueue.SyncRoot.ExitWriteLock();
 					}
 
 					if (dequeuedActions == null)
@@ -180,7 +180,7 @@ namespace GladNet.Lidgren.Engine.Common
 				if (!messageContextFactory.CanCreateContext(message.MessageType))
 					continue; //make sure to continue; not return. Major fault if you return.
 
-				incomingMessageQueue.syncRoot.EnterWriteLock();
+				incomingMessageQueue.SyncRoot.EnterWriteLock();
 				try
 				{
 					//enqueues the message including the meaningful context with which it was recieved.
@@ -191,7 +191,7 @@ namespace GladNet.Lidgren.Engine.Common
 				}
 				finally
 				{
-					incomingMessageQueue.syncRoot.ExitWriteLock();
+					incomingMessageQueue.SyncRoot.ExitWriteLock();
 				}
 			}
 		}
@@ -268,14 +268,14 @@ namespace GladNet.Lidgren.Engine.Common
 					managedNetworkThreads.Clear();
 
 					//TODO: How can we dispose the locks?
-					IncomingMessageQueue.syncRoot.EnterWriteLock();
+					IncomingMessageQueue.SyncRoot.EnterWriteLock();
 					try
 					{
 						incomingMessageQueue.Clear();
 					}
 					finally
 					{
-						IncomingMessageQueue.syncRoot.ExitWriteLock();
+						IncomingMessageQueue.SyncRoot.ExitWriteLock();
 						
 						//TODO: Technically we should try to dispose the locking objects. Abit complex to coordinate that though.
 					}

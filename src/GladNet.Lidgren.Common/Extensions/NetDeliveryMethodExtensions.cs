@@ -3,21 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GladNet.Message;
 
 namespace GladNet.Common.Extensions
 {
 	/// <summary>
-	/// Provides extension methods for the <see cref="GladNet.Common.NetworkMessage"/> Type as well as its various enums.
+	/// Provides extension methods for the <see cref="NetworkMessage"/> Type as well as its various enums.
 	/// </summary>
 	public static class NetDeliveryMethodExtensions
 	{
 		/// <summary>
-		/// This translates <see cref="NetDeliveryMethod"/> to GladNet <see cref="PacketPayload.DeliveryMethod"/>
+		/// This translates <see cref="NetDeliveryMethod"/> to GladNet <see cref="DeliveryMethod"/>
 		/// Information related to this translation can be found here https://code.google.com/p/lidgren-network-gen3/wiki/Basics
 		/// </summary>
 		/// <param name="deliveryMethod">The instance to be used for translation.</param>
 		/// <exception cref="ArgumentException">Throws an exception if the <see cref="NetDeliveryMethod"/> is undefined.</exception>
-		/// <returns>The equivalent <see cref="NetDeliveryMethodExtensions.DeliveryMethod"/> for the given <see cref="NetDeliveryMethod"/></returns>
+		/// <returns>The equivalent <see cref="DeliveryMethod"/> for the given <see cref="NetDeliveryMethod"/></returns>
 		public static NetDeliveryMethod ToLidgren(this DeliveryMethod deliveryMethod)
 		{
 			switch (deliveryMethod)
@@ -56,12 +57,12 @@ namespace GladNet.Common.Extensions
 		}
 
 		/// <summary>
-		/// This translates <see cref="NetDeliveryMethod"/> to GladNet <see cref="PacketPayload.DeliveryMethod"/>
+		/// This translates <see cref="NetDeliveryMethod"/> to GladNet <see cref="DeliveryMethod"/>
 		/// Information related to this translation can be found here https://code.google.com/p/lidgren-network-gen3/wiki/Basics
 		/// </summary>
 		/// <param name="deliveryMethod">The instance to be used for translation.</param>
 		/// <exception cref="ArgumentException">Throws an exception if the <see cref="NetDeliveryMethod"/> is undefined.</exception>
-		/// <returns>The equivalent <see cref="NetDeliveryMethodExtensions.DeliveryMethod"/> for the given <see cref="NetDeliveryMethod"/></returns>
+		/// <returns>The equivalent <see cref="DeliveryMethod"/> for the given <see cref="NetDeliveryMethod"/></returns>
 		public static DeliveryMethod ToGladNet(this NetDeliveryMethod deliveryMethod)
 		{
 			switch (deliveryMethod)

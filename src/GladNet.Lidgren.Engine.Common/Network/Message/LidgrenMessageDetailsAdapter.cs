@@ -11,14 +11,19 @@ namespace GladNet.Lidgren.Engine.Common
 {
 	public class LidgrenMessageDetailsAdapter : IMessageParameters
 	{
+		/// <inheritdoc />
 		public byte Channel { get; }
 
+		/// <inheritdoc />
 		public DeliveryMethod DeliveryMethod { get; }
 
+		/// <inheritdoc />
 		public bool Encrypted { get; }
 
 		public LidgrenMessageDetailsAdapter(NetIncomingMessage message, bool wasEncrypted)
 		{
+			if (message == null) throw new ArgumentNullException(nameof(message));
+
 			Channel = (byte)message.SequenceChannel;
 			DeliveryMethod = message.DeliveryMethod.ToGladNet();
 

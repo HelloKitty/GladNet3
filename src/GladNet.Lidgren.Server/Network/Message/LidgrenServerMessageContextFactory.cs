@@ -6,25 +6,29 @@ using Lidgren.Network;
 using GladNet.Lidgren.Engine.Common;
 using GladNet.Serializer;
 
-namespace GladNet.Lidgren.Server.Unity
+namespace GladNet.Lidgren.Server
 {
 	public class LidgrenServerMessageContextFactory : ILidgrenMessageContextFactory
 	{
+		/// <summary>
+		/// The deserialization service.
+		/// </summary>
 		private IDeserializerStrategy deserializer { get; }
 
 		public LidgrenServerMessageContextFactory(IDeserializerStrategy deserializationStrategy)
 		{
-			if (deserializationStrategy == null)
-				throw new ArgumentNullException(nameof(deserializationStrategy), $"Provided {nameof(IDeserializerStrategy)} cannot be null.");
+			if (deserializationStrategy == null) throw new ArgumentNullException(nameof(deserializationStrategy));
 
 			deserializer = deserializationStrategy;
 		}
 
+		/// <inheritdoc />
 		public bool CanCreateContext(NetIncomingMessageType messageType)
 		{
 			return messageType == NetIncomingMessageType.StatusChanged || messageType == NetIncomingMessageType.Data;
 		}
 
+		/// <inheritdoc />
 		public LidgrenMessageContext CreateContext(NetIncomingMessage message)
 		{
 			switch (message.MessageType)

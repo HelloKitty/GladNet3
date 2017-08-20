@@ -87,13 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Network\ConnectionInfo.cs" />
-    <Compile Include="Network\Handler\SessionlessMessageHandler.cs" />
-    <Compile Include="Network\IClientSessionFactory.cs" />
-    <Compile Include="Network\Message\LidgrenServerMessageContextFactory.cs" />
-    <Compile Include="Network\Message\LidgrenServerNetworkMessageRouterService.cs" />
-    <Compile Include="Network\Message\PeerSendServiceSelectionStrategy.cs" />
-    <Compile Include="Network\Peer\AUIDNetPeerServiceDecorator.cs" />
-    <Compile Include="Network\Peer\ClientSessionServiceContext.cs" />
+    <Compile Include="Network\InternalUnityApplicationBase.cs" />
     <Compile Include="Network\UnityServerApplicationBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

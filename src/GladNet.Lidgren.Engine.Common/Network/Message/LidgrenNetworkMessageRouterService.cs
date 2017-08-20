@@ -20,7 +20,7 @@ namespace GladNet.Lidgren.Engine.Common
 
 		protected NetConnection lidgrenNetworkConnection { get; } //protected so child can handle sending
 
-		public LidgrenNetworkMessageRouterService(INetworkMessageFactory messageFactory, NetConnection connection)
+		protected LidgrenNetworkMessageRouterService(INetworkMessageFactory messageFactory, NetConnection connection)
 		{
 			if (messageFactory == null)
 				throw new ArgumentNullException(nameof(messageFactory), $"Cannot provide a null {nameof(INetworkMessageFactory)} service.");
@@ -39,6 +39,8 @@ namespace GladNet.Lidgren.Engine.Common
 		public SendResult TryRouteMessage<TMessageType>(TMessageType message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0) 
 			where TMessageType : INetworkMessage, IRoutableMessage, IOperationTypeMappable
 		{
+			if (message == null) throw new ArgumentNullException(nameof(message));
+
 			if (!CanSend(message.OperationTypeMappedValue))
 				throw new InvalidOperationException($"Cannot send {message.OperationTypeMappedValue} with the {this.GetType().Name} because the service cannot handle that {nameof(OperationType)}.");
 			
@@ -47,6 +49,8 @@ namespace GladNet.Lidgren.Engine.Common
 
 		public SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
+
 			if (!CanSend(opType))
 				throw new InvalidOperationException($"Cannot send {opType} with the {this.GetType().Name} because the service cannot handle that {nameof(OperationType)}.");
 
@@ -64,6 +68,8 @@ namespace GladNet.Lidgren.Engine.Common
 		public SendResult TrySendMessage<TPacketType>(OperationType opType, TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
+
 			return TrySendMessage(opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel);
 		}
 	}

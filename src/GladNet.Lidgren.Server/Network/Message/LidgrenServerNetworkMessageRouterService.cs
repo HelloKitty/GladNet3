@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using Lidgren.Network;
 using GladNet.Common;
-using GladNet.Message;
 using GladNet.Common.Extensions;
+using GladNet.Message;
 using GladNet.Serializer;
 
-namespace GladNet.Lidgren.Server.Unity
+namespace GladNet.Lidgren.Server
 {
 	public class LidgrenServerNetworkMessageRouterService : LidgrenNetworkMessageRouterService
 	{
@@ -27,8 +27,7 @@ namespace GladNet.Lidgren.Server.Unity
 		public LidgrenServerNetworkMessageRouterService(INetworkMessageFactory messageFactory, NetConnection connection, ISerializerStrategy serializerStrategy)
 			: base(messageFactory, connection)
 		{
-			if (serializerStrategy == null)
-				throw new ArgumentNullException(nameof(serializerStrategy), $"Cannot provide a null {nameof(ISerializerStrategy)} to {nameof(LidgrenServerNetworkMessageRouterService)}.");
+			if (serializerStrategy == null) throw new ArgumentNullException(nameof(serializerStrategy));
 
 			serializer = serializerStrategy;
 		}
@@ -41,6 +40,8 @@ namespace GladNet.Lidgren.Server.Unity
 
 		protected override NetSendResult SendMessage(INetworkMessage message, DeliveryMethod deliveryMethod, bool encrypt, byte channel)
 		{
+			if (message == null) throw new ArgumentNullException(nameof(message));
+
 			if (this.lidgrenNetworkConnection.Peer.Status != NetPeerStatus.Running)
 #if DEBUG || DEBUGBUILD
 				throw new InvalidOperationException($"The {this.lidgrenNetworkConnection.GetType().Name} is not currently running.");

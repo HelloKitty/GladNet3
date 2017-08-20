@@ -44,6 +44,10 @@ namespace GladNet.Lidgren.Engine.Common
 		/// <param name="connectionID">Unique (port-wise) ID of the connection.</param>
 		public LidgrenConnectionDetailsAdapter(string remoteIP, int remotePort, int localPort, int uniqueIdentifier)
 		{
+			if (string.IsNullOrEmpty(remoteIP)) throw new ArgumentException("Value cannot be null or empty.", nameof(remoteIP));
+			if (remotePort <= 0) throw new ArgumentOutOfRangeException(nameof(remotePort));
+			if (localPort <= 0) throw new ArgumentOutOfRangeException(nameof(localPort));
+
 			RemoteIP = IPAddress.Parse(remoteIP);
 			RemotePort = remotePort;
 			LocalPort = localPort;

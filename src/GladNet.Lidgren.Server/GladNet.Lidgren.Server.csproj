@@ -30,6 +30,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net35\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Common.Logging.Core.3.3.1\lib\net35\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
+    </Reference>
+    <Reference Include="GladNet.Common, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Common.2.0.34\lib\net35\GladNet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="GladNet.Encryption, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Encryption.2.0.34\lib\net35\GladNet.Encryption.dll</HintPath>
+    </Reference>
+    <Reference Include="GladNet.Engine.Common, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Engine.Common.2.0.34\lib\net35\GladNet.Engine.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="GladNet.Engine.Server, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Engine.Server.2.0.34\lib\net35\GladNet.Engine.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="GladNet.Message, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Message.2.0.34\lib\net35\GladNet.Message.dll</HintPath>
+    </Reference>
+    <Reference Include="GladNet.Payload, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Payload.2.0.34\lib\net35\GladNet.Payload.dll</HintPath>
+    </Reference>
+    <Reference Include="GladNet.Serializer, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GladNet.Serializer.2.0.34\lib\net35\GladNet.Serializer.dll</HintPath>
+    </Reference>
     <Reference Include="Lidgren.Network, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Lidgren.Network.1.0.3\lib\net35\Lidgren.Network.dll</HintPath>
       <Private>True</Private>
@@ -42,14 +72,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\ApplicationBase.cs" />
+    <Compile Include="Network\Handler\SessionlessMessageHandler.cs" />
+    <Compile Include="Network\Services\IApplicationBase.cs" />
+    <Compile Include="Network\Services\IClientSessionFactory.cs" />
+    <Compile Include="Network\Services\ILidgrenMessageDispatcher.cs" />
+    <Compile Include="Network\Services\ILidgrenMessagePollable.cs" />
+    <Compile Include="Network\Services\IManagedClientSessionFactory.cs" />
+    <Compile Include="Network\Message\LidgrenServerMessageContextFactory.cs" />
+    <Compile Include="Network\Message\LidgrenServerNetworkMessageRouterService.cs" />
+    <Compile Include="Network\Message\PeerSendServiceSelectionStrategy.cs" />
+    <Compile Include="Network\Services\InternalClientSessionFactory.cs" />
+    <Compile Include="Network\Peer\AUIDNetPeerServiceDecorator.cs" />
+    <Compile Include="Network\Peer\ClientSessionServiceContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Network\" />
+    <ProjectReference Include="..\GladNet.Lidgren.Common\GladNet.Lidgren.Common.csproj">
+      <Project>{651156cd-de54-4f5a-99bd-290460eb57fb}</Project>
+      <Name>GladNet.Lidgren.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Lidgren.Engine.Common\GladNet.Lidgren.Engine.Common.csproj">
+      <Project>{3f4e7114-c269-43a5-b919-0c65f1b98091}</Project>
+      <Name>GladNet.Lidgren.Engine.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

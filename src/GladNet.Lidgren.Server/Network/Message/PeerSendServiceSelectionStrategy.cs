@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using GladNet.Engine.Common;
 
-namespace GladNet.Lidgren.Server.Unity
+namespace GladNet.Lidgren.Server
 {
 	public class PeerSendServiceSelectionStrategy : ISendServiceSelectionStrategy
 	{

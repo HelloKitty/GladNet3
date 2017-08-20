@@ -16,7 +16,7 @@ namespace GladNet.Lidgren.Engine.Common
 		/// <summary>
 		/// A read/write optimized syncronization queue.
 		/// </summary>
-		public ReaderWriterLockSlim syncRoot { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion); //Unity requires no recursion
+		public ReaderWriterLockSlim SyncRoot { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion); //Unity requires no recursion
 
 		WaitHandle IThreadedQueue<T>.QueueSemaphore { get { return QueueSemaphore; } }
 
@@ -31,8 +31,8 @@ namespace GladNet.Lidgren.Engine.Common
 		public IEnumerable<T> DequeueAll()
 		{
 #if DEBUG || DEBUGBUILD
-			if (!syncRoot.IsWriteLockHeld && !syncRoot.IsReadLockHeld)
-				throw new InvalidOperationException($"Cannot {nameof(DequeueAll)} objects in {nameof(WaitableQueue<T>)} without locking with {nameof(syncRoot)}.");
+			if (!SyncRoot.IsWriteLockHeld && !SyncRoot.IsReadLockHeld)
+				throw new InvalidOperationException($"Cannot {nameof(DequeueAll)} objects in {nameof(WaitableQueue<T>)} without locking with {nameof(SyncRoot)}.");
 #endif
 
 			IEnumerable<T> dequeued = this.ToList();
@@ -45,8 +45,8 @@ namespace GladNet.Lidgren.Engine.Common
 		public new void Enqueue(T item)
 		{
 			//We could get false positives, in the opposite sense, but it's better than no debug protection
-			if (!syncRoot.IsWriteLockHeld && !syncRoot.IsReadLockHeld)
-				throw new InvalidOperationException($"Cannot {nameof(Enqueue)} objects in {nameof(WaitableQueue<T>)} without locking with {nameof(syncRoot)}.");
+			if (!SyncRoot.IsWriteLockHeld && !SyncRoot.IsReadLockHeld)
+				throw new InvalidOperationException($"Cannot {nameof(Enqueue)} objects in {nameof(WaitableQueue<T>)} without locking with {nameof(SyncRoot)}.");
 
 			base.Enqueue(item);
 		}
@@ -57,8 +57,8 @@ namespace GladNet.Lidgren.Engine.Common
 		public new T Dequeue()
 		{
 			//We could get false positives, in the opposite sense, but it's better than no debug protection
-			if (!syncRoot.IsWriteLockHeld && !syncRoot.IsReadLockHeld)
-				throw new InvalidOperationException($"Cannot {nameof(Dequeue)} objects in {nameof(WaitableQueue<T>)} without locking with {nameof(syncRoot)}.");
+			if (!SyncRoot.IsWriteLockHeld && !SyncRoot.IsReadLockHeld)
+				throw new InvalidOperationException($"Cannot {nameof(Dequeue)} objects in {nameof(WaitableQueue<T>)} without locking with {nameof(SyncRoot)}.");
 
 			return base.Dequeue();
 		}
@@ -77,7 +77,7 @@ namespace GladNet.Lidgren.Engine.Common
 					this.Clear();
 				}
 
-				this.syncRoot.Dispose();
+				this.SyncRoot.Dispose();
 				this.QueueSemaphore.Close();
 
 				disposedValue = true;

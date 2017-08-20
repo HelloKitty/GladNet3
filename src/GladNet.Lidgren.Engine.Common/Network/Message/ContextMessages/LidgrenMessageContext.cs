@@ -42,8 +42,10 @@ namespace GladNet.Lidgren.Engine.Common
 
 		public NetIncomingMessage IncomingMessage { get; }
 
-		public LidgrenMessageContext(NetIncomingMessage incomingMessage)
+		protected LidgrenMessageContext(NetIncomingMessage incomingMessage)
 		{
+			if (incomingMessage == null) throw new ArgumentNullException(nameof(incomingMessage));
+
 			IncomingMessage = incomingMessage;
 			ConnectionId = incomingMessage.SenderConnection.RemoteUniqueIdentifier; //this is a sha hash of some stuff that Lidgren does; don't cast to int.
 			DeliveryMethod = incomingMessage.DeliveryMethod.ToGladNet();
@@ -53,10 +55,5 @@ namespace GladNet.Lidgren.Engine.Common
 		}
 
 		public abstract bool TryDispatch(INetworkMessageReceiver reciever);
-
-		public virtual void ClearToMessageParametersOnly()
-		{
-
-		}
 	}
 }

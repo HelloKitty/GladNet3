@@ -12,11 +12,11 @@ namespace GladNet.Lidgren.Server.Unity
 		[SerializeField]
 		private string applicationIdentifier;
 
-		public string ApplicationIdentifier { get { return applicationIdentifier; } }
+		public string ApplicationIdentifier => applicationIdentifier;
 
 		[SerializeField]
 		private int port;
 
-		public int Port { get { return port; } }
+		public int Port => port;
 	}
 }

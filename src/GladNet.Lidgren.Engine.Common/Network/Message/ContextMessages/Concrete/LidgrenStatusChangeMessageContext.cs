@@ -23,6 +23,8 @@ namespace GladNet.Lidgren.Engine.Common
 		public LidgrenStatusChangeMessageContext(NetIncomingMessage incomingMessage) 
 			: base(incomingMessage)
 		{
+			if (incomingMessage == null) throw new ArgumentNullException(nameof(incomingMessage));
+
 			LidgrenStatus = (NetConnectionStatus)incomingMessage.ReadByte();
 			//Generate a Lidgren status message for dispatching
 			GeneratedStatusMessage = new LidgrenStatusMessage(LidgrenStatus);
@@ -30,6 +32,7 @@ namespace GladNet.Lidgren.Engine.Common
 
 		public override bool TryDispatch(INetworkMessageReceiver reciever)
 		{
+			if (reciever == null) throw new ArgumentNullException(nameof(reciever));
 			if (GeneratedStatusMessage == null)
 				return false;
 

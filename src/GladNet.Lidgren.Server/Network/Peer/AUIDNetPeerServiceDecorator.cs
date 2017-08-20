@@ -1,15 +1,21 @@
-﻿using GladNet.Engine.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Threading;
+using GladNet.Engine.Common;
 
-namespace GladNet.Lidgren.Server.Unity
+namespace GladNet.Lidgren.Server
 {
+	/// <summary>
+	/// Decorates the <see cref="IAUIDService{TAUIDMapType}"/> service for accessing the <see cref="INetPeer"/> behind it.
+	/// </summary>
 	public class AUIDNetPeerServiceDecorator : IAUIDService<INetPeer>
 	{
+		/// <summary>
+		/// Decorated AUID service.
+		/// </summary>
 		private IAUIDService<ClientSessionServiceContext> lidgrenServiceContextAUIDService { get; }
 
 		public AUIDNetPeerServiceDecorator(IAUIDService<ClientSessionServiceContext> auidServiceContext)
@@ -22,56 +28,20 @@ namespace GladNet.Lidgren.Server.Unity
 
 		public INetPeer this[int key]
 		{
-			get
-			{
-				return lidgrenServiceContextAUIDService[key]?.ClientNetPeer;
-			}
+			get => lidgrenServiceContextAUIDService[key]?.ClientNetPeer;
 
-			set
-			{
-				throw new InvalidOperationException("Cannot set netpeer through netpeer decoractor.");
-			}
+			set => throw new InvalidOperationException("Cannot set netpeer through netpeer decoractor.");
 		}
 
-		public int Count
-		{
-			get
-			{
-				return lidgrenServiceContextAUIDService.Count;
-			}
-		}
+		public int Count => lidgrenServiceContextAUIDService.Count;
 
-		public bool IsReadOnly
-		{
-			get
-			{
-				return lidgrenServiceContextAUIDService.IsReadOnly;
-			}
-		}
+		public bool IsReadOnly => lidgrenServiceContextAUIDService.IsReadOnly;
 
-		public ICollection<int> Keys
-		{
-			get
-			{
-				return lidgrenServiceContextAUIDService.Keys;
-			}
-		}
+		public ICollection<int> Keys => lidgrenServiceContextAUIDService.Keys;
 
-		public ReaderWriterLockSlim syncObj
-		{
-			get
-			{
-				return lidgrenServiceContextAUIDService.syncObj;
-			}
-		}
+		public ReaderWriterLockSlim syncObj => lidgrenServiceContextAUIDService.syncObj;
 
-		public ICollection<INetPeer> Values
-		{
-			get
-			{
-				return lidgrenServiceContextAUIDService.Values.Select(x => x.ClientNetPeer).ToList();
-			}
-		}
+		public ICollection<INetPeer> Values => lidgrenServiceContextAUIDService.Values.Select(x => x.ClientNetPeer).ToList();
 
 		public void Add(KeyValuePair<int, INetPeer> item)
 		{
@@ -124,10 +94,7 @@ namespace GladNet.Lidgren.Server.Unity
 
 		public bool TryGetValue(int key, out INetPeer value)
 		{
-			if (ContainsKey(key))
-				value = lidgrenServiceContextAUIDService[key]?.ClientNetPeer;
-			else
-				value = null;
+			value = ContainsKey(key) ? lidgrenServiceContextAUIDService[key]?.ClientNetPeer : null;
 
 			return value != null;
 		}

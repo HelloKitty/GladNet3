@@ -22,6 +22,9 @@ namespace GladNet.Lidgren.Engine.Common
 		public LidgrenNetworkMessageMessageContext(NetIncomingMessage incomingMessage, IDeserializerStrategy deserializer)
 			: base(incomingMessage)
 		{
+			if (incomingMessage == null) throw new ArgumentNullException(nameof(incomingMessage));
+			if (deserializer == null) throw new ArgumentNullException(nameof(deserializer));
+
 			//The message.LengthBytes - message.PositionInBytes is from GladNet1
 			//We need to read the byte[] chunk that is from the current position to the end.
 			//For why we do this read this old exerp from GladNet2:

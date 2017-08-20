@@ -140,14 +140,14 @@ namespace GladNet.Lidgren.Client.Unity
 
 			//TODO: Maybe read to check count first.
 			//Lock only as short as we need to.
-			managedNetworkThread.IncomingMessageQueue.syncRoot.EnterWriteLock();
+			managedNetworkThread.IncomingMessageQueue.SyncRoot.EnterWriteLock();
 			try
 			{
 				messages = managedNetworkThread.IncomingMessageQueue.DequeueAll();
 			}
 			finally
 			{
-				managedNetworkThread.IncomingMessageQueue.syncRoot.ExitWriteLock();
+				managedNetworkThread.IncomingMessageQueue.SyncRoot.ExitWriteLock();
 			}
 
 			if (messages == null || messages.Count() == 0)

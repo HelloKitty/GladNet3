@@ -6,26 +6,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GladNet.Lidgren.Server.Unity
+namespace GladNet.Lidgren.Server
 {
 	public class SessionlessMessageHandler : IClassLogger
 	{
-		private IClientSessionFactory sessionFactory { get; }
+		/// <summary>
+		/// The factory that creates client sessions.
+		/// </summary>
+		private IClientSessionFactory SessionFactory { get; }
 
+		/// <inheritdoc />
 		public ILog Logger { get; }
 
 		public SessionlessMessageHandler(IClientSessionFactory factory, ILog logger)
 		{
-			if (factory == null)
-				throw new ArgumentNullException(nameof(factory), $"Provided {nameof(IClientSessionFactory)} cannot be null.");
+			if (factory == null) throw new ArgumentNullException(nameof(factory));
+			if (logger == null) throw new ArgumentNullException(nameof(logger));
 
 			Logger = logger;
-			sessionFactory = factory;
+			SessionFactory = factory;
 		}
 
 		public void HandleMessage(LidgrenMessageContext messageContext)
 		{
-			Logger.Debug($"Recieved unconnected message of Type: {messageContext.GetType().Name} ConnectionId: {messageContext.ConnectionId}.");
+			if (messageContext == null) throw new ArgumentNullException(nameof(messageContext));
+
+			if (Logger.IsDebugEnabled)
+				Logger.Debug($"Recieved unconnected message of Type: {messageContext.GetType().Name} ConnectionId: {messageContext.ConnectionId}.");
 
 			//Messages with no connection ID assigned aren't handlable
 			//IDs are only assigned when connection has been fully established
@@ -38,7 +45,8 @@ namespace GladNet.Lidgren.Server.Unity
 				return;
 
 			//We only care about status messages
-			Logger.Debug($"Recieved StatusChange: {message.GeneratedStatusMessage.Status.ToString()} LidgrenStatus: {message.LidgrenStatus.ToString()}");
+			if(Logger.IsDebugEnabled)
+				Logger.Debug($"Recieved StatusChange: {message.GeneratedStatusMessage.Status.ToString()} LidgrenStatus: {message.LidgrenStatus.ToString()}");
 
 			switch (message.GeneratedStatusMessage.Status)
 			{
@@ -51,7 +59,7 @@ namespace GladNet.Lidgren.Server.Unity
 
 			//create the connection details and then create the peer
 			//We don't really need to do anything with the session created
-			sessionFactory.Create(new LidgrenConnectionDetailsAdapter(message.IncomingMessage.SenderConnection.RemoteEndPoint.Address.ToString(), message.IncomingMessage.SenderConnection.RemoteEndPoint.Port, 0, message.ConnectionId), message.IncomingMessage.SenderConnection);
+			SessionFactory.Create(new LidgrenConnectionDetailsAdapter(message.IncomingMessage.SenderConnection.RemoteEndPoint.Address.ToString(), message.IncomingMessage.SenderConnection.RemoteEndPoint.Port, 0, message.ConnectionId), message.IncomingMessage.SenderConnection);
 		}
 	}
 }

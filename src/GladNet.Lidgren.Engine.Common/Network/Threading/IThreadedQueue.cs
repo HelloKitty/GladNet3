@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace GladNet.Lidgren.Engine.Common
 {
-	public interface IThreadedQueue<T, TWaitHandleType> : IThreadedQueue<T>, IDisposable
+	public interface IThreadedQueue<T, out TWaitHandleType> : IThreadedQueue<T>, IDisposable
 		where TWaitHandleType : WaitHandle
 	{
 		new TWaitHandleType QueueSemaphore { get; }
@@ -16,7 +16,7 @@ namespace GladNet.Lidgren.Engine.Common
 	{
 		WaitHandle QueueSemaphore { get; }
 
-		ReaderWriterLockSlim syncRoot { get; }
+		ReaderWriterLockSlim SyncRoot { get; }
 
 		T Dequeue();
 
