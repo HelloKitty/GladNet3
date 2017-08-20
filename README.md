@@ -6,9 +6,11 @@ Come chat: [![https://gitter.im/HelloKitty/GladNet2.0y](https://badges.gitter.im
 
 ## Implementations
 
-Lidgren's: https://github.com/HelloKitty/GladNet2-Lidgren
+Lidgren implementation is now within this repository.
+~~Lidgren's: https://github.com/HelloKitty/GladNet2-Lidgren~~
 
-Photon Server's: https://github.com/HelloKitty/GladNet.PhotonServer
+Photon Server is being deprecated and abandoned.
+~~Photon Server's: https://github.com/HelloKitty/GladNet.PhotonServer~~
 
 ## Setup
 
