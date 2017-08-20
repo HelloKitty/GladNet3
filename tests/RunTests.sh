@@ -4,3 +4,4 @@ mono ./testrunner/NUnit.Console.3.0.1/tools/nunit3-console.exe ./GladNet.Seriali
 mono ./testrunner/NUnit.Console.3.0.1/tools/nunit3-console.exe ./GladNet.Message.Tests/bin/Debug/GladNet.Message.Tests.dll
 mono ./testrunner/NUnit.Console.3.0.1/tools/nunit3-console.exe ./GladNet.Message.Handlers.Tests/bin/Debug/GladNet.Message.Handlers.Tests.dll
 mono ./testrunner/NUnit.Console.3.0.1/tools/nunit3-console.exe ./GladNet.Message.Handlers.Tests/bin/Debug/GladNet.Message.Handlers.Tests.dll
+mono ./testrunner/NUnit.Console.3.0.1/tools/nunit3-console.exe ./GladNet.Message.Handlers.Tests/bin/Debug/GladNet.Message.Handlers.Tests.dll
