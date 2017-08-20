@@ -54,7 +54,6 @@
     <Compile Include="Message\IPayloadContainer.cs" />
     <Compile Include="Message\NetSendable.cs" />
     <Compile Include="Message\Recievers\INetworkMessageReceiver.cs" />
-    <Compile Include="Message\Routing\IRoutableMessage.cs" />
     <Compile Include="Parameters\IMessageParameters.cs" />
     <Compile Include="Parameters\IStaticPayloadParameters.cs" />
     <Compile Include="Payload\Concrete Payloads\StatusChangePayload.cs" />

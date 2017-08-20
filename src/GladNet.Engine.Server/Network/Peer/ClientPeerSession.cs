@@ -11,18 +11,12 @@ using GladNet.Message;
 
 namespace GladNet.Engine.Server
 {
-	public abstract class ClientPeerSession : Peer, IClientSessionNetworkMessageSender, IClientSessionNetworkMessageRouter
+	public abstract class ClientPeerSession : Peer, IClientSessionNetworkMessageSender
 	{
-		private INetworkMessageRouteBackService messageRoutebackService { get; }
-
-		public ClientPeerSession(ILog logger, INetworkMessageRouterService sender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
-			IDisconnectionServiceHandler disconnectHandler, INetworkMessageRouteBackService routebackService)
+		public ClientPeerSession(ILog logger, INetworkMessagePayloadSenderService sender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+			IDisconnectionServiceHandler disconnectHandler)
 				: base(logger, sender, details, subService, disconnectHandler)
 		{
-			if (routebackService == null) throw new ArgumentNullException(nameof(routebackService));
-
-			messageRoutebackService = routebackService;
-
 			//Subscribe to request messages
 			subService.SubscribeTo<RequestMessage>()
 				.With(OnInternalReceiveRequest);
@@ -110,18 +104,6 @@ namespace GladNet.Engine.Server
 		/// <param name="parameters">Parameters the message was sent with.</param>
 		private void OnInternalReceiveRequest(IRequestMessage requestMessage, IMessageParameters parameters)
 		{
-			//We should check if the message is routing back.
-			//This is suggested in the GladNet2 routing specification
-			//Under "Route-back Outside Userspace": https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
-			if (requestMessage.isRoutingBack)
-			{
-				messageRoutebackService.Route(requestMessage, parameters);
-			}
-
-			//GladNet2 routing specification dictates that we should push the AUID
-			//into the routing stack:https://github.com/HelloKitty/GladNet2.Specifications/blob/master/Routing/RoutingSpecification.md
-			requestMessage.Push(PeerDetails.ConnectionID);
-
 			OnReceiveRequest(requestMessage, parameters);
 		}
 
@@ -131,20 +113,5 @@ namespace GladNet.Engine.Server
 		/// <param name="requestMessage"><see cref="IRequestMessage"/> sent by the peer.</param>
 		/// <param name="parameters">Parameters the message was sent with.</param>
 		protected abstract void OnReceiveRequest(IRequestMessage requestMessage, IMessageParameters parameters);
-
-		/// <summary>
-		/// Routes a <see cref="IResponseMessage"/> message.
-		/// </summary>
-		/// <param name="message"><see cref="IResponseMessage"/> to route.</param>
-		/// <param name="deliveryMethod">Desired <see cref="DeliveryMethod"/> for the response. See documentation for more information.</param>
-		/// <param name="encrypt">Optional: Indicates if the message should be encrypted. Default: false</param>
-		/// <param name="channel">Optional: Inidicates the channel the network message should be sent on. Default: 0</param>
-		/// <returns>Indication of the message send state.</returns>
-		public SendResult RouteResponse(IResponseMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			if (message == null) throw new ArgumentNullException(nameof(message));
-
-			return NetworkSendService.TryRouteMessage(message, deliveryMethod, encrypt, channel);
-		}
 	}
 }

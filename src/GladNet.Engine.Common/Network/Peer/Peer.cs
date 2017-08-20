@@ -14,13 +14,11 @@ namespace GladNet.Engine.Common
 	/// </summary>
 	public abstract class Peer : INetPeer, IClassLogger, IDisconnectable
 	{
-		private readonly INetworkMessageSubscriptionService _subService;
-
 		/// <summary>
 		/// Peer's service for sending network messages.
 		/// Use Extension methods or specific types for an neater API.
 		/// </summary>
-		public INetworkMessageRouterService NetworkSendService { get; private set; }
+		public INetworkMessagePayloadSenderService NetworkSendService { get; private set; }
 
 		/// <summary>
 		/// Indicates the Network Status of the current <see cref="INetPeer"/>.
@@ -43,18 +41,17 @@ namespace GladNet.Engine.Common
 		/// </summary>
 		protected IDisconnectionServiceHandler disconnectionHandler { get; private set; }
 
-		protected Peer(ILog logger, INetworkMessageRouterService messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+		protected Peer(ILog logger, INetworkMessagePayloadSenderService networkSendService, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
 		{
-			_subService = subService;
 			if (logger == null) throw new ArgumentNullException(nameof(logger));
-			if (messageSender == null) throw new ArgumentNullException(nameof(messageSender));
+			if (networkSendService == null) throw new ArgumentNullException(nameof(networkSendService));
 			if (details == null) throw new ArgumentNullException(nameof(details));
 			if (disconnectHandler == null) throw new ArgumentNullException(nameof(disconnectHandler));
 
 			PeerDetails = details;
-			NetworkSendService = messageSender;
 			Logger = logger;
+			NetworkSendService = networkSendService;
 			disconnectionHandler = disconnectHandler;
 
 			//All peers should care about status changes so we subscribe

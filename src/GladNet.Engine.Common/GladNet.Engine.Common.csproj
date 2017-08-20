@@ -68,13 +68,9 @@
     <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionFluentBuilder.cs" />
-    <Compile Include="Network\Message\Routing\DefaultNetworkMessageRouteBackService.cs" />
-    <Compile Include="Network\Message\Routing\INetworkMessageRouteBackService.cs" />
-    <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageRouter.cs" />
     <Compile Include="Network\Message\Senders\IClientPeerPayloadSender.cs" />
     <Compile Include="Network\Message\Senders\INetSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessagePayloadSenderService.cs" />
-    <Compile Include="Network\Message\Senders\INetworkMessageRouterService.cs" />
     <Compile Include="Network\Peer\ClientPeer.cs" />
     <Compile Include="Network\Peer\Connection\DefaultDisconnectionServiceHandler.cs" />
     <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />

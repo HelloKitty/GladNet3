@@ -58,7 +58,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\Message\Senders\IClientSessionNetworkMessageRouter.cs" />
     <Compile Include="Network\Message\Senders\IClientSessionNetworkMessageSender.cs" />
     <Compile Include="Network\Message\Senders\IEventPayloadSender.cs" />
     <Compile Include="Network\Message\Senders\IResponsePayloadSender.cs" />
