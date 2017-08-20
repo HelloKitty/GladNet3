@@ -12,9 +12,6 @@ namespace GladNet.Message
 	/// Subtypes for such a thing.
 	/// </summary>
 	public interface IRequestMessage : INetworkMessage, IOperationTypeMappable
-#if !ENDUSER
-		, IRoutableMessage
-#endif
 	{
 
 	}

@@ -1,5 +1,4 @@
-﻿using Easyception;
-using GladNet.Common;
+﻿using GladNet.Common;
 using GladNet.Message;
 using GladNet.Payload;
 using System;
@@ -15,8 +14,7 @@ namespace GladNet.Engine.Common
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public static SendResult TrySendMessage(this INetPeer peer, OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)
-				?.Now(nameof(Payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			//TODO: Implement logging.
 			if (!peer.CanSend(opType))
@@ -28,8 +26,7 @@ namespace GladNet.Engine.Common
 		public static SendResult TrySendMessage<TPacketType>(this INetPeer peer, OperationType opType, TPacketType payload) where TPacketType 
 			: PacketPayload, IStaticPayloadParameters
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)
-				?.Now(nameof(Payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return TrySendMessage(peer, opType, payload, payload.DeliveryMethod, payload.Encrypted, payload.Channel);
 		}

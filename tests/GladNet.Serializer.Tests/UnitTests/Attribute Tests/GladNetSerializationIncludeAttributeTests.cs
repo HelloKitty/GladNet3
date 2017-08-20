@@ -20,7 +20,8 @@ namespace GladNet.Serializer.Tests
 			Assert.IsTrue(typeof(TestClass).GetCustomAttribute<GladNetSerializationIncludeAttribute>().GetType() == typeof(TestClindAttribute));
 		}
 
-		[TestClindAttribute(GladNetIncludeIndex.Index1, typeof(PacketPayload), false)]
+		//DO NOT USE ONE
+		[TestClindAttribute(2, typeof(PacketPayload), false)]
 		public class TestClass
 		{
 
@@ -28,7 +29,7 @@ namespace GladNet.Serializer.Tests
 
 		public class TestClindAttribute : GladNetSerializationIncludeAttribute
 		{
-			public TestClindAttribute(GladNetIncludeIndex includeIndex, Type type, bool isForDerived = true) 
+			public TestClindAttribute(int includeIndex, Type type, bool isForDerived = true) 
 				: base(includeIndex, type, isForDerived)
 			{
 			}

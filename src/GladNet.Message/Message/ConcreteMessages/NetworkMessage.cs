@@ -1,5 +1,4 @@
-﻿using Easyception;
-using GladNet.Common;
+﻿using GladNet.Common;
 using GladNet.Payload;
 using GladNet.Serializer;
 using System;
@@ -15,10 +14,10 @@ namespace GladNet.Message
 	/// Contains various network message related Enums.
 	/// </summary>
 	[GladNetSerializationContract]
-	[GladNetSerializationInclude(1, typeof(EventMessage))]
-	[GladNetSerializationInclude(2, typeof(ResponseMessage))]
-	[GladNetSerializationInclude(3, typeof(RequestMessage))]
-	[GladNetSerializationInclude(4, typeof(StatusMessage))]
+	[GladNetSerializationInclude(2, typeof(EventMessage))] //1 is reserved. Don't use 1.
+	[GladNetSerializationInclude(3, typeof(ResponseMessage))]
+	[GladNetSerializationInclude(4, typeof(RequestMessage))]
+	[GladNetSerializationInclude(5, typeof(StatusMessage))]
 	public abstract class NetworkMessage : INetworkMessage, IDeepCloneable<NetworkMessage>
 	{
 		/// <summary>
@@ -31,7 +30,7 @@ namespace GladNet.Message
 		/// The payload of a <see cref="INetworkMessage"/>. Can be sent accross a network.
 		/// <see cref="NetSendable"/> enforces its wire readyness.
 		/// </summary>
-		[GladNetMember(GladNetDataIndex.Index5, IsRequired = true)]
+		[GladNetMember(6, IsRequired = true)]
 		public NetSendable<PacketPayload> Payload { get; private set; }
 
 		/// <summary>
@@ -56,8 +55,7 @@ namespace GladNet.Message
 
 		protected NetworkMessage(NetSendable<PacketPayload> sendPayload)
 		{
-			Throw<ArgumentNullException>.If.IsNull(sendPayload)
-				?.Now(nameof(sendPayload), $"A null {nameof(NetSendable<PacketPayload>)} was passed for {nameof(NetworkMessage)} creation.");
+			if (sendPayload == null) throw new ArgumentNullException(nameof(sendPayload), $"A null {nameof(NetSendable<PacketPayload>)} was passed for {nameof(NetworkMessage)} creation.");
 
 			Payload = sendPayload;
 		}

@@ -1,5 +1,4 @@
-﻿using Easyception;
-using GladNet.Engine.Common;
+﻿using GladNet.Engine.Common;
 using GladNet.Payload;
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,7 @@ namespace GladNet.Message.Handlers
 
 		public ResponseMessageHandlerService(IMessageHandlerStrategy<TPeerType, IResponseMessage> strat)
 		{
-			Throw<ArgumentNullException>.If.IsNull(strat)?.Now(nameof(strat), $"Service must have non-null handler strategy.");
+			if (strat == null) throw new ArgumentNullException(nameof(strat), $"Service must have non-null handler strategy.");
 
 			handlerStrat = strat;
 		}

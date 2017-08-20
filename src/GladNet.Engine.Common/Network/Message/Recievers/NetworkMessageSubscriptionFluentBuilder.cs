@@ -1,5 +1,4 @@
-﻿using Easyception;
-using GladNet.Message;
+﻿using GladNet.Message;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +20,7 @@ namespace GladNet.Engine.Common
 
 		public NetworkMessageSubscriptionFluentBuilder(INetworkMessageSubscriptionService service)
 		{
-			Throw<ArgumentNullException>.If.IsNull(service)
-				?.Now(nameof(service));
+			if (service == null) throw new ArgumentNullException(nameof(service));
 
 			Service = service;
 		}

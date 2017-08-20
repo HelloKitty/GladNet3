@@ -1,5 +1,4 @@
 ﻿using Common.Logging;
-using Easyception;
 using GladNet.Common;
 using GladNet.Message;
 using System;
@@ -19,7 +18,7 @@ namespace GladNet.Engine.Common
 		/// Peer's service for sending network messages.
 		/// Use Extension methods or specific types for an neater API.
 		/// </summary>
-		public INetworkMessageRouterService NetworkSendService { get; private set; }
+		public INetworkMessagePayloadSenderService NetworkSendService { get; private set; }
 
 		/// <summary>
 		/// Indicates the Network Status of the current <see cref="INetPeer"/>.
@@ -42,18 +41,17 @@ namespace GladNet.Engine.Common
 		/// </summary>
 		protected IDisconnectionServiceHandler disconnectionHandler { get; private set; }
 
-		protected Peer(ILog logger, INetworkMessageRouterService messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
+		protected Peer(ILog logger, INetworkMessagePayloadSenderService networkSendService, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
 		{
-			Throw<ArgumentNullException>.If.IsNull(logger)?.Now(nameof(logger));
-			Throw<ArgumentNullException>.If.IsNull(messageSender)?.Now(nameof(messageSender));
-			Throw<ArgumentNullException>.If.IsNull(details)?.Now(nameof(details));
-			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
-			Throw<ArgumentNullException>.If.IsNull(disconnectHandler)?.Now(nameof(disconnectHandler));
+			if (logger == null) throw new ArgumentNullException(nameof(logger));
+			if (networkSendService == null) throw new ArgumentNullException(nameof(networkSendService));
+			if (details == null) throw new ArgumentNullException(nameof(details));
+			if (disconnectHandler == null) throw new ArgumentNullException(nameof(disconnectHandler));
 
 			PeerDetails = details;
-			NetworkSendService = messageSender;
 			Logger = logger;
+			NetworkSendService = networkSendService;
 			disconnectionHandler = disconnectHandler;
 
 			//All peers should care about status changes so we subscribe
@@ -101,7 +99,7 @@ namespace GladNet.Engine.Common
 		/// <param name="parameters"><see cref="IMessageParameters"/> the <see cref="IStatusMessage"/> was sent with.</param>
 		private void OnReceiveStatus(IStatusMessage message, IMessageParameters parameters)
 		{
-			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
+			if (message == null) throw new ArgumentNullException(nameof(message));
 
 			//I know I cast here so let's only call this once for efficiency
 			NetStatus s = message.Status;

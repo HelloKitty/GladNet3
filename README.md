@@ -6,9 +6,11 @@ Come chat: [![https://gitter.im/HelloKitty/GladNet2.0y](https://badges.gitter.im
 
 ## Implementations
 
-Lidgren's: https://github.com/HelloKitty/GladNet2-Lidgren
+Lidgren implementation is now within this repository.
+~~Lidgren's: https://github.com/HelloKitty/GladNet2-Lidgren~~
 
-Photon Server's: https://github.com/HelloKitty/GladNet.PhotonServer
+Photon Server is being deprecated and abandoned.
+~~Photon Server's: https://github.com/HelloKitty/GladNet.PhotonServer~~
 
 ## Setup
 
@@ -20,18 +22,18 @@ To use this project you'll first need a couple of things:
 
 Available on a Nuget Feed: https://www.myget.org/F/hellokitty/api/v2 [![hellokitty MyGet Build Status](https://www.myget.org/BuildSource/Badge/hellokitty?identifier=a8048ae0-adcd-4997-8862-c3f5fc6adf34)](https://www.myget.org/feed/Packages/hellokitty)
 
-##Tests
+## Tests
 
 #### Linux/Mono - Unit Tests
-||Debug x86|Debug x64|Release x86|Release x64|
-|:--:|:--:|:--:|:--:|:--:|:--:|
-|**master**| N/A | N/A | N/A | [![Build Status](https://travis-ci.org/HelloKitty/GladNet2.svg?branch=master)](https://travis-ci.org/HelloKitty/GladNet2) |
-|**dev**| N/A | N/A | N/A | [![Build Status](https://travis-ci.org/HelloKitty/GladNet2.svg?branch=dev)](https://travis-ci.org/HelloKitty/GladNet2)|
+|    | Linux Mono Release | Windows .NET Release |
+|:---|----------------:|------------------:|
+|**master**| [![Build Status](https://travis-ci.org/HelloKitty/GladNet2.svg?branch=master)](https://travis-ci.org/HelloKitty/GladNet2) | TODO |
+|**dev**| [![Build Status](https://travis-ci.org/HelloKitty/GladNet2.svg?branch=dev)](https://travis-ci.org/HelloKitty/GladNet2) | TODO |
 
 #### Windows - Unit Tests
 
 (Done locally)
 
-##Licensing
+## Licensing
 
 This project is licensed under the MIT license.

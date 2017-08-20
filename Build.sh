@@ -6,6 +6,7 @@ xbuild ./src/GladNet.Message/GladLive.Message.csproj /p:DebugSymbols=False
 xbuild ./src/GladNet.Message.Handlers/GladNet.Message.Handlers.csproj /p:DebugSymbols=False
 xbuild ./src/GladNet.Payload/GladLive.Payload.csproj /p:DebugSymbols=False
 xbuild ./src/GladNet.Serializer/GladNet.Serializer.csproj /p:DebugSymbols=False
+xbuild ./tests/GladNet.Serializer.Tests/GladNet.Serializer.Tests.csproj /p:DebugSymbols=False
 
 xbuild ./tests/GladNet.Engine.Common.Tests/GladNet.Engine.Common.Tests.csproj /p:DebugSymbols=False
 xbuild ./tests/GladNet.Engine.Server.Tests/GladNet.Engine.Server.Tests.csproj /p:DebugSymbols=False

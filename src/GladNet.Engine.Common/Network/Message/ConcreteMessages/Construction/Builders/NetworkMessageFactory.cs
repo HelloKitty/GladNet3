@@ -1,5 +1,4 @@
-﻿using Easyception;
-using GladNet.Message;
+﻿using GladNet.Message;
 using GladNet.Payload;
 using System;
 using System.Collections.Generic;
@@ -12,32 +11,28 @@ namespace GladNet.Engine.Common
 	{
 		public EventMessage CreateEventMessage(PacketPayload payload)
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)
-				?.Now(nameof(Payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return new EventMessage(payload);
 		}
 
 		public RequestMessage CreateRequestMessage(PacketPayload payload)
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)
-				?.Now(nameof(Payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return new RequestMessage(payload);
 		}
 
 		public ResponseMessage CreateResponseMessage(PacketPayload payload)
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)
-				?.Now(nameof(Payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return new ResponseMessage(payload);
 		}
 
 		public StatusMessage CreateStatusMessage(StatusChangePayload payload)
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)
-				?.Now(nameof(Payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return new StatusMessage(payload);
 		}

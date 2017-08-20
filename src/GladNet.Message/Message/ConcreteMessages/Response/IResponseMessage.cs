@@ -11,9 +11,6 @@ namespace GladNet.Message
 	/// It contains additional fields/properties compared to <see cref="INetworkMessage"/> that provide information on the response.
 	/// </summary>
 	public interface IResponseMessage : INetworkMessage, IOperationTypeMappable
-#if !ENDUSER
-		, IRoutableMessage
-#endif
 	{
 
 	}

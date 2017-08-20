@@ -25,6 +25,6 @@ namespace GladNet.Engine.Common
 		/// <summary>
 		/// Peer's service for sending network messages.
 		/// </summary>
-		INetworkMessageRouterService NetworkSendService { get; }
+		INetworkMessagePayloadSenderService NetworkSendService { get; }
 	}
 }

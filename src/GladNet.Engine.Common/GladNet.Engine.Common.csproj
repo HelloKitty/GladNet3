@@ -34,15 +34,9 @@
   <ItemGroup>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net35\Common.Logging.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.Core.3.3.1\lib\net35\Common.Logging.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,13 +66,9 @@
     <Compile Include="Network\Message\Recievers\NetworkMessageDelegates.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessagePublisher.cs" />
     <Compile Include="Network\Message\Recievers\NetworkMessageSubscriptionFluentBuilder.cs" />
-    <Compile Include="Network\Message\Routing\DefaultNetworkMessageRouteBackService.cs" />
-    <Compile Include="Network\Message\Routing\INetworkMessageRouteBackService.cs" />
-    <Compile Include="Network\Message\Senders\IClientPeerNetworkMessageRouter.cs" />
     <Compile Include="Network\Message\Senders\IClientPeerPayloadSender.cs" />
     <Compile Include="Network\Message\Senders\INetSender.cs" />
     <Compile Include="Network\Message\Senders\INetworkMessagePayloadSenderService.cs" />
-    <Compile Include="Network\Message\Senders\INetworkMessageRouterService.cs" />
     <Compile Include="Network\Peer\ClientPeer.cs" />
     <Compile Include="Network\Peer\Connection\DefaultDisconnectionServiceHandler.cs" />
     <Compile Include="Network\Peer\Connection\IConnectionDetails.cs" />

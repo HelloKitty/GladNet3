@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>GladNet.Lidgren.Engine.Common</id>
+    <version>$version$</version>
+    <title>GladNet.Lidgren.Engine.Common</title>
+    <authors>www.github.com/HelloKitty</authors>
+    <owners>www.github.com/HelloKitty</owners>
+    <licenseUrl>https://github.com/HelloKitty/GladNet.Lidgren/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/HelloKitty/GladNet.Lidgren</projectUrl>
+    <description>GladNet.Lidgren engine common library..</description>
+    <copyright>Copyright 2015-2016</copyright>
+    <tags>GladNet Glad GladNet2 Glad2 GladNet.Engine.Server GladNet2.Engine Engine Lidgren</tags>
+    <dependencies>
+       <dependency id="GladNet.Engine.Common" version="2.0.33" />
+       <dependency id="Lidgren.Network" version="1.0.3" />
+       <dependency id="GladNet.Lidgren.Common" version="$version$" />
+    </dependencies>
+  </metadata>
+</package>

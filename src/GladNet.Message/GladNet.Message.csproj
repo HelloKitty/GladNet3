@@ -32,10 +32,6 @@
     <DocumentationFile>bin\Release\GladNet.Message.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,7 +54,6 @@
     <Compile Include="Message\IPayloadContainer.cs" />
     <Compile Include="Message\NetSendable.cs" />
     <Compile Include="Message\Recievers\INetworkMessageReceiver.cs" />
-    <Compile Include="Message\Routing\IRoutableMessage.cs" />
     <Compile Include="Parameters\IMessageParameters.cs" />
     <Compile Include="Parameters\IStaticPayloadParameters.cs" />
     <Compile Include="Payload\Concrete Payloads\StatusChangePayload.cs" />
@@ -81,9 +76,6 @@
       <Project>{ddeb13bb-c96d-4192-b2fd-2d0ca467075c}</Project>
       <Name>GladNet.Serializer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Message\ConcreteMessages\Construction\" />
