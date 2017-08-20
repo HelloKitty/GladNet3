@@ -17,7 +17,7 @@ namespace GladNet.Message
 		/// <summary>
 		/// Indicates the <see cref="NetStats"/> of the change.
 		/// </summary>
-		[GladNetMember(GladNetDataIndex.Index1, IsRequired = true)]
+		[GladNetMember(1, IsRequired = true)]
 		public NetStatus Status { get; private set; }
 
 		/// <summary>

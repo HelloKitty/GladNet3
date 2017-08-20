@@ -6,7 +6,6 @@ using System.Text;
 using Common.Logging;
 using System.Diagnostics.CodeAnalysis;
 using GladNet.Payload;
-using Easyception;
 using GladNet.Message;
 
 namespace GladNet.Engine.Common
@@ -26,9 +25,10 @@ namespace GladNet.Engine.Common
 #endif
 				: base(logger, messageSender, details, subService, disconnectHandler)
 		{
-			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
+			if (subService == null) throw new ArgumentNullException(nameof(subService));
+			
 
-//Enduser clients shouldn't be routing messages so we don't need to call internal method
+			//Enduser clients shouldn't be routing messages so we don't need to call internal method
 //Example: A gameclient for a player. These sorts of clients do NOT need to route messages they recieve.
 #if !ENDUSER
 			//ClientPeers should be interested in events and responses from the server they are a peer of
@@ -38,7 +38,7 @@ namespace GladNet.Engine.Common
 			subService.SubscribeTo<ResponseMessage>()
 				.With(OnInternalReceiveResponse);
 
-			Throw<ArgumentNullException>.If.IsNull(routebackService)?.Now(nameof(routebackService));
+			if (routebackService == null) throw new ArgumentNullException(nameof(routebackService));
 			messageRoutebackService = routebackService;
 #else
 			//ClientPeers should be interested in events and responses from the server they are a peer of
@@ -71,7 +71,7 @@ namespace GladNet.Engine.Common
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public SendResult SendRequest(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Request, payload, deliveryMethod, encrypt, channel);
 		}
@@ -86,7 +86,7 @@ namespace GladNet.Engine.Common
 		public SendResult SendRequest<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Request, payload);
 		}

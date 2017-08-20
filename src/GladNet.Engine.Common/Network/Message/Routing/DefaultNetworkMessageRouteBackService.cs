@@ -1,5 +1,4 @@
 ﻿using Common.Logging;
-using Easyception;
 using GladNet.Common;
 using GladNet.Message;
 using GladNet.Payload;
@@ -26,8 +25,8 @@ namespace GladNet.Engine.Common
 
 		public DefaultNetworkMessageRouteBackService(IAUIDService<INetPeer> peerCollection, ILog logger)
 		{
-			Throw<ArgumentNullException>.If.IsNull(peerCollection)?.Now(nameof(peerCollection));
-			Throw<ArgumentNullException>.If.IsNull(logger)?.Now(nameof(logger));
+			if (peerCollection == null) throw new ArgumentNullException(nameof(peerCollection));
+			if (logger == null) throw new ArgumentNullException(nameof(logger));
 
 			peerAUIDMapCollection = peerCollection;
 			Logger = logger;

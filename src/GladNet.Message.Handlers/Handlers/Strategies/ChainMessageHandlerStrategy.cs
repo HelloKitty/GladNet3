@@ -1,5 +1,4 @@
-﻿using Easyception;
-using GladNet.Engine.Common;
+﻿using GladNet.Engine.Common;
 using GladNet.Payload;
 using System;
 using System.Collections.Generic;
@@ -28,7 +27,7 @@ namespace GladNet.Message.Handlers
 
 		public ChainMessageHandlerStrategy(IEnumerable<IMessageHandler<TPeerType, TNetworkMessageType>> handlersToChain)
 		{
-			Throw<ArgumentNullException>.If.IsNull(handlersToChain)?.Now(nameof(handlersToChain), $"Chain handler must have non-null collection of handlers to chain over.");
+			if (handlersToChain == null) throw new ArgumentNullException(nameof(handlersToChain), $"Chain handler must have non-null collection of handlers to chain over.");
 
 			handlers = new List<IMessageHandler<TPeerType, TNetworkMessageType>>(handlersToChain);
 		}

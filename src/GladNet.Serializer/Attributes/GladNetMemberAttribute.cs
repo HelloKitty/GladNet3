@@ -1,6 +1,6 @@
-﻿using Easyception;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -34,29 +34,13 @@ namespace GladNet.Serializer
 		/// <param name="tagID">A positive integer (non-zero)</param>
 		/// An integer from Z^+: http://mathworld.wolfram.com/Z-Plus.html </param>
 		/// <exception cref="ArgumentOutOfRangeException">Throws if tagID is 0 or negative.</exception>
-		[Obsolete("This has been marked obsolete because we need to abstract the indicies of the payload data slots. The reason is we must not collide with internally defined slots that may come to exist in the future.", true)]
 		public GladNetMemberAttribute(int tagID)
 		{
 			//uint is not CLS compliant. We have no reason to use uint in .Net
 			if (tagID <= 0)
-				throw new ArgumentOutOfRangeException("tagID", "tagID must be a positive non-zero integer. See revelant documentation.");
+				throw new ArgumentOutOfRangeException(nameof(tagID), "tagID must be a positive non-zero integer. See revelant documentation.");
 
 			TagID = tagID;
-		}
-
-		/// <summary>
-		/// Create a new member attribute for a target data.
-		/// </summary>
-		/// <param name="dataIndex">A valid unique <see cref="GladNetDataIndex"/> for this type.</param>
-		/// <exception cref="ArgumentException">Throws if <paramref name="dataIndex"/> is outside of the range of valid <see cref="GladNetDataIndex"/>s.</exception>
-		public GladNetMemberAttribute(GladNetDataIndex dataIndex)
-		{
-			//Check if it's defined. Users may try to cheat the system by casting an int
-			//Me must assert that this is an issue as if we don't they'll encounter odd issues in the future when
-			//it collides with internal indicies
-			Throw<ArgumentException>.If.IsTrue(!Enum.IsDefined(typeof(GladNetDataIndex), dataIndex))?.Now();
-
-			TagID = (int)dataIndex;
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using Easyception;
-using GladNet.Engine.Common;
+﻿using GladNet.Engine.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +21,14 @@ namespace GladNet.Message.Handlers
 
 		public MultipleChainResponsbilityMessageHandlerStrategy(IEnumerable<IMessageHandlerStrategy<TPeerType, TNetworkMessageType>> strategies)
 		{
-			Throw<ArgumentNullException>.If.IsNull(strategies)?.Now(nameof(strategies), $"Chain handler must have non-null collection of strategies to chain over.");
+			if (strategies == null) throw new ArgumentNullException(nameof(strategies), $"Chain handler must have non-null collection of strategies to chain over.");
 
 			strategyChain = strategies;
 		}
 
 		public MultipleChainResponsbilityMessageHandlerStrategy(params IMessageHandlerStrategy<TPeerType, TNetworkMessageType>[] strategies)
 		{
-			Throw<ArgumentNullException>.If.IsNull(strategies)?.Now(nameof(strategies), $"Chain handler must have non-null collection of strategies to chain over.");
+			if (strategies == null) throw new ArgumentNullException(nameof(strategies), $"Chain handler must have non-null collection of strategies to chain over.");
 
 			strategyChain = strategies;
 		}

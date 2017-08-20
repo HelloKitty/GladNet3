@@ -6,7 +6,6 @@ using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using GladNet.Common;
 using GladNet.Serializer;
-using Easyception;
 using GladNet.Encryption;
 
 namespace GladNet.Message
@@ -38,7 +37,7 @@ namespace GladNet.Message
 		/// <summary>
 		/// Indicates the state the object is currently in.
 		/// </summary>
-		[GladNetMember(GladNetDataIndex.Index1, IsRequired = true)]
+		[GladNetMember(1, IsRequired = true)]
 		public NetSendableState DataState { get; private set; }
 
 		//This should never be serialized over the network.
@@ -51,7 +50,7 @@ namespace GladNet.Message
 		/// <summary>
 		/// The wire-ready byte[] that represents the TData in the corressponding <see cref="State"/>
 		/// </summary>
-		[GladNetMember(GladNetDataIndex.Index2, IsRequired = true)]
+		[GladNetMember(2, IsRequired = true)]
 		private byte[] byteData = null;
 
 		/// <summary>
@@ -60,8 +59,7 @@ namespace GladNet.Message
 		/// <param name="data">Instance of TData to be wire-ready prepared.</param>
 		public NetSendable(TData data)
 		{
-			Throw<ArgumentNullException>.If.IsNull(data)
-				?.Now(nameof(data), $"{nameof(data)} of Type: {typeof(TData).Name} cannot be null in construction.");
+			if (data == null) throw new ArgumentNullException(nameof(data), $"{nameof(data)} of Type: {typeof(TData).Name} cannot be null in construction.");
 
 			Data = data;
 			DataState = NetSendableState.Default;
@@ -87,8 +85,7 @@ namespace GladNet.Message
 		/// <returns>Indicates if encryption was successful</returns>
 		public bool Encrypt(IEncryptorStrategy encryptor)
 		{
-			Throw<ArgumentNullException>.If.IsNull(encryptor)
-				?.Now(nameof(encryptor), $"{nameof(encryptor)} of Type: {typeof(IEncryptorStrategy).Name} cannot be null in {nameof(Encrypt)}.");
+			if (encryptor == null) throw new ArgumentNullException(nameof(encryptor), $"{nameof(encryptor)} of Type: {typeof(IEncryptorStrategy).Name} cannot be null in {nameof(Encrypt)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
@@ -127,8 +124,7 @@ namespace GladNet.Message
 		/// <returns>Indicates if decryption was successful.</returns>
 		public bool Decrypt(IDecryptorStrategy decryptor)
 		{
-			Throw<ArgumentNullException>.If.IsNull(decryptor)
-				?.Now(nameof(decryptor), $"{nameof(decryptor)} of Type: {typeof(IDecryptorStrategy).Name} cannot be null in {nameof(Decrypt)}.");
+			if (decryptor == null) throw new ArgumentNullException(nameof(decryptor), $"{nameof(decryptor)} of Type: {typeof(IDecryptorStrategy).Name} cannot be null in {nameof(Decrypt)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
@@ -167,8 +163,7 @@ namespace GladNet.Message
 		/// <returns>Inidicates if serialization was successful</returns>
 		public bool Serialize(ISerializerStrategy serializer)
 		{
-			Throw<ArgumentNullException>.If.IsNull(serializer)
-				?.Now(nameof(serializer), $"{nameof(serializer)} of Type: {typeof(ISerializerStrategy).Name} cannot be null in {nameof(Serialize)}.");
+			if (serializer == null) throw new ArgumentNullException(nameof(serializer), $"{nameof(serializer)} of Type: {typeof(ISerializerStrategy).Name} cannot be null in {nameof(Serialize)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
@@ -202,8 +197,7 @@ namespace GladNet.Message
 		/// <returns>Indicates if deserialization was successful</returns>
 		public bool Deserialize(IDeserializerStrategy deserializer)
 		{
-			Throw<ArgumentNullException>.If.IsNull(deserializer)
-				?.Now(nameof(deserializer), $"{nameof(deserializer)} of Type: {typeof(IDeserializerStrategy).Name} cannot be null in {nameof(Deserialize)}.");
+			if (deserializer == null) throw new ArgumentNullException(nameof(deserializer), $"{nameof(deserializer)} of Type: {typeof(IDeserializerStrategy).Name} cannot be null in {nameof(Deserialize)}.");
 
 			//We must lock the entire process
 			//Why? Because state could change before the lock and things would be invalid
@@ -234,7 +228,8 @@ namespace GladNet.Message
 		[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "byteData")]
 		private void ThrowIfInvalidState(NetSendableState expectedState)
 		{
-			Throw<InvalidOperationException>.If.IsTrue(DataState != expectedState)?.Now();
+			if(DataState != expectedState)
+				throw new InvalidOperationException("The datatstate does not match the expected state.");
 		}
 
 		/// <summary>

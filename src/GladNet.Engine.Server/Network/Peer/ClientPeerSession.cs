@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using GladNet.Payload;
-using Easyception;
 using GladNet.Engine.Common;
 using GladNet.Message;
 
@@ -20,8 +19,7 @@ namespace GladNet.Engine.Server
 			IDisconnectionServiceHandler disconnectHandler, INetworkMessageRouteBackService routebackService)
 				: base(logger, sender, details, subService, disconnectHandler)
 		{
-			Throw<ArgumentNullException>.If.IsNull(subService)?.Now(nameof(subService));
-			Throw<ArgumentNullException>.If.IsNull(routebackService)?.Now(nameof(routebackService));
+			if (routebackService == null) throw new ArgumentNullException(nameof(routebackService));
 
 			messageRoutebackService = routebackService;
 
@@ -53,7 +51,7 @@ namespace GladNet.Engine.Server
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public virtual SendResult SendResponse(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Response, payload, deliveryMethod, encrypt, channel);
 		}
@@ -69,7 +67,7 @@ namespace GladNet.Engine.Server
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
 		public virtual SendResult SendEvent(PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return NetworkSendService.TrySendMessage(OperationType.Event, payload, deliveryMethod, encrypt, channel);
 		}
@@ -84,7 +82,7 @@ namespace GladNet.Engine.Server
 		public virtual SendResult SendEvent<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return NetworkSendService.TrySendMessage<TPacketType>(OperationType.Event, payload);
 		}
@@ -99,7 +97,7 @@ namespace GladNet.Engine.Server
 		public virtual SendResult SendResponse<TPacketType>(TPacketType payload) 
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
-			Throw<ArgumentNullException>.If.IsNull(payload)?.Now(nameof(payload));
+			if (payload == null) throw new ArgumentNullException(nameof(payload));
 
 			return NetworkSendService.TrySendMessage<TPacketType>(OperationType.Response, payload);
 		}
@@ -144,7 +142,7 @@ namespace GladNet.Engine.Server
 		/// <returns>Indication of the message send state.</returns>
 		public SendResult RouteResponse(IResponseMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{
-			Throw<ArgumentNullException>.If.IsNull(message)?.Now(nameof(message));
+			if (message == null) throw new ArgumentNullException(nameof(message));
 
 			return NetworkSendService.TryRouteMessage(message, deliveryMethod, encrypt, channel);
 		}

@@ -42,10 +42,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,8 +53,6 @@
     <Compile Include="Attributes\GladNetMemberAttribute.cs" />
     <Compile Include="Attributes\GladNetSerializationContractAttribute.cs" />
     <Compile Include="Attributes\GladNetSerializationIncludeAttribute.cs" />
-    <Compile Include="Enums\GladNetPayloadDataIndex.cs" />
-    <Compile Include="Enums\GladNetIncludeIndex.cs" />
     <Compile Include="Interfaces\IDeserializable.cs" />
     <Compile Include="Interfaces\ISerializationVisitable.cs" />
     <Compile Include="Interfaces\ISerializerRegistry.cs" />
@@ -68,7 +62,7 @@
     <Compile Include="Interfaces\ISerializerStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

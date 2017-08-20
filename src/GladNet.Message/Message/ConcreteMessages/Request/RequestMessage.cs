@@ -1,5 +1,4 @@
-﻿using Easyception;
-using GladNet.Common;
+﻿using GladNet.Common;
 using GladNet.Payload;
 using GladNet.Serializer;
 using System;
@@ -50,7 +49,7 @@ namespace GladNet.Message
 		/// This can help indicate to GladNet2 internals whether we should let
 		/// the message even reach userspace.
 		/// </summary>
-		[GladNetMember(GladNetDataIndex.Index1, IsRequired = true)]
+		[GladNetMember(1, IsRequired = true)]
 		public bool isRoutingBack { get; set; }
 
 		//We should manage this structure internally as there is no reason to expose it
@@ -60,7 +59,7 @@ namespace GladNet.Message
 		/// Internally managed wire-ready routing code stack.
 		/// This carries critical information about how a message should be routed through the server.
 		/// </summary>
-		[GladNetMember(GladNetDataIndex.Index2)]
+		[GladNetMember(2)]
 		internal Stack<int> _routingCodeStack = null;
 #endif
 
@@ -101,11 +100,8 @@ namespace GladNet.Message
 		/// <param name="parameters">The <see cref="IMessageParameters"/> of the <see cref="RequestMessage"/>.</param>
 		public override void Dispatch(INetworkMessageReceiver receiver, IMessageParameters parameters)
 		{
-			Throw<ArgumentNullException>.If.IsNull(receiver)
-				?.Now(nameof(receiver), $"{nameof(INetworkMessageReceiver)} parameter is null in {this.GetType().Name}");
-
-			Throw<ArgumentNullException>.If.IsNull(parameters)
-				?.Now(nameof(parameters), $"{nameof(IMessageParameters)} parameter is null in {this.GetType().Name}");
+			if (receiver == null) throw new ArgumentNullException(nameof(receiver), $"{nameof(INetworkMessageReceiver)} parameter is null in {this.GetType().Name}");
+			if (parameters == null) throw new ArgumentNullException(nameof(parameters), $"{nameof(IMessageParameters)} parameter is null in {this.GetType().Name}");
 
 			receiver.OnNetworkMessageReceive(this, parameters);
 		}
