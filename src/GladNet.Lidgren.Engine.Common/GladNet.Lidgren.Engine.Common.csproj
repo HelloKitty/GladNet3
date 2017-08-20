@@ -2,6 +2,32 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35</TargetFrameworks>
+    <Authors>Andrew Blakely</Authors>
+    <Description>Common library for the Lidgren engine of GladNet2.</Description>
+    <Company />
+    <Product />
+    <Copyright>Andrew Blakely</Copyright>
+    <PackageLicenseUrl>https://github.com/HelloKitty/GladNet2/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/HelloKitty/GladNet2</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HelloKitty/GladNet2</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>gladnet gladnet2 networking unity lidgren glader andrew blakely hellokitty</PackageTags>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net35|AnyCPU'">
+    <DocumentationFile>bin\Release\net35\GladNet.Lidgren.Engine.Common.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lidgren.Network" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GladNet.Common\GladNet.Common.csproj" />
+    <ProjectReference Include="..\GladNet.Engine.Common\GladNet.Engine.Common.csproj" />
+    <ProjectReference Include="..\GladNet.Lidgren.Common\GladNet.Lidgren.Common.csproj" />
+    <ProjectReference Include="..\GladNet.Message\GladNet.Message.csproj" />
+    <ProjectReference Include="..\GladNet.Serializer\GladNet.Serializer.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -6,8 +6,10 @@ using System.Text;
 using Lidgren.Network;
 using GladNet.Common;
 using GladNet.Common.Extensions;
+using GladNet.Engine.Common;
 using GladNet.Message;
 using GladNet.Serializer;
+using INetworkMessageFactory = GladNet.Lidgren.Engine.Common.INetworkMessageFactory;
 
 namespace GladNet.Lidgren.Server
 {

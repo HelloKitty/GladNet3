@@ -2,6 +2,20 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35</TargetFrameworks>
+    <Authors>Andrew Blakely</Authors>
+    <Description>Serializer library for GladNet2.</Description>
+    <Company />
+    <Product />
+    <Copyright>Andrew Blakely</Copyright>
+    <PackageLicenseUrl>https://github.com/HelloKitty/GladNet2/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/HelloKitty/GladNet2</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HelloKitty/GladNet2</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>gladnet gladnet2 networking unity lidgren glader andrew blakely hellokitty</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net35|AnyCPU'">
+    <DocumentationFile>bin\Release\net35\GladNet.Serializer.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net35</TargetFrameworks>
     <Authors>Andrew Blakely</Authors>
-    <Description>Lidgren common library for GladNet2.</Description>
+    <Description>Encryption API for GladNet2.</Description>
     <Company />
     <Product />
     <Copyright>Andrew Blakely</Copyright>
@@ -15,15 +15,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net35|AnyCPU'">
-    <DocumentationFile>bin\Release\net35\GladNet.Lidgren.Common.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net35\GladNet.Encryption.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Lidgren.Network" Version="1.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\GladNet.Common\GladNet.Common.csproj" />
-  </ItemGroup>
 
 </Project>
