@@ -1,1 +1,1 @@
-msbuild GladNet.Lidgren.sln /p:Configuration=Release
+msbuild GladNetV2.sln /p:Configuration=Release
