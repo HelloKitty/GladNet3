@@ -33,43 +33,12 @@
   <ItemGroup>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net35\Common.Logging.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.Core.3.3.1\lib\net35\Common.Logging.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Easyception, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Easyception.2.0.0\lib\net35\Easyception.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GladNet.Common, Version=2.0.33.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GladNet.Common.2.0.33\lib\net35\GladNet.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GladNet.Encryption, Version=2.0.33.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GladNet.Encryption.2.0.33\lib\net35\GladNet.Encryption.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GladNet.Engine.Common, Version=2.0.33.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GladNet.Engine.Common.2.0.33\lib\net35\GladNet.Engine.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GladNet.Message, Version=2.0.33.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GladNet.Message.2.0.33\lib\net35\GladNet.Message.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GladNet.Payload, Version=2.0.33.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GladNet.Payload.2.0.33\lib\net35\GladNet.Payload.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GladNet.Serializer, Version=2.0.33.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GladNet.Serializer.2.0.33\lib\net35\GladNet.Serializer.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Lidgren.Network, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Lidgren.Network.1.0.3\lib\net35\Lidgren.Network.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -86,9 +55,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GladNet.Common\GladNet.Common.csproj">
+      <Project>{9603bbaf-5f68-4176-a032-3e8beaf8f9e2}</Project>
+      <Name>GladNet.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Engine.Common\GladNet.Engine.Common.csproj">
+      <Project>{17c60530-5a42-429e-9b88-6273552c7913}</Project>
+      <Name>GladNet.Engine.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GladNet.Lidgren.Common\GladNet.Lidgren.Common.csproj">
       <Project>{651156cd-de54-4f5a-99bd-290460eb57fb}</Project>
       <Name>GladNet.Lidgren.Common</Name>
@@ -96,6 +74,14 @@
     <ProjectReference Include="..\GladNet.Lidgren.Engine.Common\GladNet.Lidgren.Engine.Common.csproj">
       <Project>{3f4e7114-c269-43a5-b919-0c65f1b98091}</Project>
       <Name>GladNet.Lidgren.Engine.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Message\GladNet.Message.csproj">
+      <Project>{0fa4728f-7096-4996-8385-5bf5cc00b6fc}</Project>
+      <Name>GladNet.Message</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GladNet.Serializer\GladNet.Serializer.csproj">
+      <Project>{DDEB13BB-C96D-4192-B2FD-2D0CA467075C}</Project>
+      <Name>GladNet.Serializer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

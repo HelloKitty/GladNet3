@@ -15,7 +15,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GladNet.Lidgren.Client.Unity
 {
-	public abstract class UnityClientPeer<TSerializationStrategy, TDeserializationStrategy, TSerializerRegistry> : MonoBehaviour, INetPeer, IClientPeerNetworkMessageRouter, IClientPeerPayloadSender, IClientNetworkMessageReciever
+	public abstract class UnityClientPeer<TSerializationStrategy, TDeserializationStrategy, TSerializerRegistry> : MonoBehaviour, INetPeer, IClientPeerPayloadSender, IClientNetworkMessageReciever
 		where TSerializationStrategy : ISerializerStrategy, new() where TDeserializationStrategy : IDeserializerStrategy, new() where TSerializerRegistry : ISerializerRegistry, new()
 	{
 		//Contraining new() for generic type params in .Net 3.5 is very slow
@@ -43,7 +43,7 @@ namespace GladNet.Lidgren.Client.Unity
 		[SerializeField]
 		private ConnectionInfo connectionInfo;
 
-		public INetworkMessageRouterService NetworkSendService { get; private set; }
+		public INetworkMessagePayloadSenderService NetworkSendService { get; private set; }
 
 		public IConnectionDetails PeerDetails { get; private set; }
 
@@ -115,9 +115,6 @@ namespace GladNet.Lidgren.Client.Unity
 			//Now that we have the netconnection we can initialize the sendservice
 			NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), connection, serializer);
 
-			if (connection == null)
-				return false;
-
 			//Create a new managed thread
 			managedNetworkThread = new ManagedLidgrenNetworkThread(serializer, new LidgrenClientMessageContextFactory(deserializer), new ClientSendServiceSelectionStrategy(this.NetworkSendService), e => Debug.LogError(e.Message + "StackTrace: " + e.StackTrace));
 
@@ -150,7 +147,7 @@ namespace GladNet.Lidgren.Client.Unity
 				managedNetworkThread.IncomingMessageQueue.SyncRoot.ExitWriteLock();
 			}
 
-			if (messages == null || messages.Count() == 0)
+			if (messages == null || !messages.Any())
 				return;
 
 			HandleMessages(messages);
@@ -205,11 +202,6 @@ namespace GladNet.Lidgren.Client.Unity
 			where TPacketType : PacketPayload, IStaticPayloadParameters
 		{
 			return NetworkSendService.TrySendMessage(OperationType.Request, payload);
-		}
-
-		public SendResult RouteRequest(IRequestMessage message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
-		{
-			return NetworkSendService.TryRouteMessage(message, deliveryMethod, encrypt, channel);
 		}
 
 		/// <summary>

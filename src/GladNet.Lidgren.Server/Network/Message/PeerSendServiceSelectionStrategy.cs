@@ -19,7 +19,8 @@ namespace GladNet.Lidgren.Server
 			contextService = contextAuidService;
 		}
 
-		public INetworkMessageRouterService GetRouterService(int connectionId)
+		/// <inheritdoc />
+		public INetworkMessagePayloadSenderService GetSendingService(int connectionId)
 		{
 			contextService.syncObj.EnterReadLock();
 			try

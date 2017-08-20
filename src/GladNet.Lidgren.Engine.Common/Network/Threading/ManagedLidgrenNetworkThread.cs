@@ -83,7 +83,7 @@ namespace GladNet.Lidgren.Engine.Common
 				//They enqueue actions
 				outgoingMessageQueue.Enqueue(() =>
 				{
-					INetworkMessageRouterService sender = sendServiceStrategy.GetRouterService(connectionId);
+					INetworkMessagePayloadSenderService sender = sendServiceStrategy.GetSendingService(connectionId);
 
 					sender.TrySendMessage(opType, payload, method, encrypt, channel);
 				});

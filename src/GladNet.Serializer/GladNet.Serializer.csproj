@@ -61,9 +61,7 @@
     <Compile Include="Interfaces\ISerializable.cs" />
     <Compile Include="Interfaces\ISerializerStrategy.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

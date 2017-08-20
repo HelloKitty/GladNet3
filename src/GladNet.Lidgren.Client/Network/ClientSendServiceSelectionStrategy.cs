@@ -9,20 +9,20 @@ namespace GladNet.Lidgren.Client
 {
 	public class ClientSendServiceSelectionStrategy : ISendServiceSelectionStrategy
 	{
-		private INetworkMessageRouterService clientMessageRouterService { get; }
+		private INetworkMessagePayloadSenderService ClientMessageSender { get; }
 
-		public ClientSendServiceSelectionStrategy(INetworkMessageRouterService routerService)
+		public ClientSendServiceSelectionStrategy(INetworkMessagePayloadSenderService clientMessageSender)
 		{
-			if (routerService == null)
-				throw new ArgumentNullException(nameof(routerService), $"Provided {nameof(INetworkMessageRouterService)} cannot be null.");
+			if (clientMessageSender == null) throw new ArgumentNullException(nameof(clientMessageSender));
 
-			clientMessageRouterService = routerService; 
+			ClientMessageSender = clientMessageSender;
 		}
 
-		public INetworkMessageRouterService GetRouterService(int connectionId)
+		/// <inheritdoc />
+		public INetworkMessagePayloadSenderService GetSendingService(int connectionId)
 		{
 			//Doesn't matter what the connection id is. A client only has one send service
-			return clientMessageRouterService;
+			return ClientMessageSender;
 		}
 	}
 }

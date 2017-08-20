@@ -32,7 +32,6 @@ namespace GladNet.Serializer
 		/// Create a new member attribute for a target data.
 		/// </summary>
 		/// <param name="tagID">A positive integer (non-zero)</param>
-		/// An integer from Z^+: http://mathworld.wolfram.com/Z-Plus.html </param>
 		/// <exception cref="ArgumentOutOfRangeException">Throws if tagID is 0 or negative.</exception>
 		public GladNetMemberAttribute(int tagID)
 		{

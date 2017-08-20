@@ -50,14 +50,13 @@ namespace GladNet.Lidgren.Server
 			//Build the message router service
 			LidgrenNetworkMessageRouterService routerService = new LidgrenServerNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), connection, Serializer);
 			NetworkMessagePublisher basicMessagePublisher = new NetworkMessagePublisher();
-			DefaultNetworkMessageRouteBackService routebackService = new DefaultNetworkMessageRouteBackService(NetPeerAUIDService, PeerLogger);
 			DefaultDisconnectionServiceHandler disconnectionHandler = new DefaultDisconnectionServiceHandler();
 
 			//TODO: Clean this up
 			disconnectionHandler.DisconnectionEventHandler += () => PeerServiceCollection.Remove(connectionDetails.ConnectionID);
 
 			//Try to create the incoming peer; consumers of the library may reject the connection.
-			ClientPeerSession session = ManagedSessionFactory.CreateIncomingPeerSession(routerService, connectionDetails, basicMessagePublisher, disconnectionHandler, routebackService);
+			ClientPeerSession session = ManagedSessionFactory.CreateIncomingPeerSession(routerService, connectionDetails, basicMessagePublisher, disconnectionHandler);
 
 			if (session == null)
 				return null;

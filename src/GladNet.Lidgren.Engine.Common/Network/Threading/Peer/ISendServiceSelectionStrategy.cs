@@ -12,6 +12,6 @@ namespace GladNet.Lidgren.Engine.Common
 	/// </summary>
 	public interface ISendServiceSelectionStrategy
 	{
-		INetworkMessageRouterService GetRouterService(int connectionId);
+		INetworkMessagePayloadSenderService GetSendingService(int connectionId);
 	}
 }

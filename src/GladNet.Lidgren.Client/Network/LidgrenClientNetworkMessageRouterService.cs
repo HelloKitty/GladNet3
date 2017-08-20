@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using GladNet.Common;
 using GladNet.Message;
-using GladNet.Payload;
 using GladNet.Serializer;
 using GladNet.Common.Extensions;
 

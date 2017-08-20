@@ -14,7 +14,7 @@ namespace GladNet.Lidgren.Engine.Common
 	/// <summary>
 	/// Abstract contract for message routing/sending service for Lidgren peers/connections.
 	/// </summary>
-	public abstract class LidgrenNetworkMessageRouterService : INetworkMessageRouterService
+	public abstract class LidgrenNetworkMessageRouterService : INetworkMessagePayloadSenderService
 	{
 		private INetworkMessageFactory networkMessageFactory { get; }
 
@@ -35,17 +35,6 @@ namespace GladNet.Lidgren.Engine.Common
 		protected abstract NetSendResult SendMessage(INetworkMessage message, DeliveryMethod deliveryMethod, bool encrypt, byte channel);
 
 		public abstract bool CanSend(OperationType opType);
-
-		public SendResult TryRouteMessage<TMessageType>(TMessageType message, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0) 
-			where TMessageType : INetworkMessage, IRoutableMessage, IOperationTypeMappable
-		{
-			if (message == null) throw new ArgumentNullException(nameof(message));
-
-			if (!CanSend(message.OperationTypeMappedValue))
-				throw new InvalidOperationException($"Cannot send {message.OperationTypeMappedValue} with the {this.GetType().Name} because the service cannot handle that {nameof(OperationType)}.");
-			
-			return SendValidMessage(message, deliveryMethod, encrypt, channel);
-		}
 
 		public SendResult TrySendMessage(OperationType opType, PacketPayload payload, DeliveryMethod deliveryMethod, bool encrypt = false, byte channel = 0)
 		{

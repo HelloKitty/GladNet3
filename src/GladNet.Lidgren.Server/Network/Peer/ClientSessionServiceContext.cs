@@ -9,13 +9,13 @@ namespace GladNet.Lidgren.Server
 {
 	public class ClientSessionServiceContext
 	{
-		public INetworkMessageRouterService SendService { get; }
+		public INetworkMessagePayloadSenderService SendService { get; }
 
 		public INetworkMessageReceiver MessageReceiver { get; }
 
 		public INetPeer ClientNetPeer { get; }
 
-		public ClientSessionServiceContext(INetworkMessageRouterService sendService, INetworkMessageReceiver messageReceiver, INetPeer client)
+		public ClientSessionServiceContext(INetworkMessagePayloadSenderService sendService, INetworkMessageReceiver messageReceiver, INetPeer client)
 		{
 			if (sendService == null) throw new ArgumentNullException(nameof(sendService));
 			if (messageReceiver == null) throw new ArgumentNullException(nameof(messageReceiver));

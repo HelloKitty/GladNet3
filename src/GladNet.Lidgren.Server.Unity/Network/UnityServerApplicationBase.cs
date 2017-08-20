@@ -43,7 +43,7 @@ namespace GladNet.Lidgren.Server.Unity
 
 		public abstract void RegisterTypes(ISerializerRegistry registry);
 
-		public abstract ClientPeerSession CreateIncomingPeerSession(INetworkMessageRouterService sender, IConnectionDetails details, INetworkMessageSubscriptionService subService, IDisconnectionServiceHandler disconnectHandler, INetworkMessageRouteBackService routebackService);
+		public abstract ClientPeerSession CreateIncomingPeerSession(INetworkMessagePayloadSenderService sender, IConnectionDetails details, INetworkMessageSubscriptionService subService, IDisconnectionServiceHandler disconnectHandler);
 
 		/// <summary>
 		/// Called internally by Unity3D when the application is terminating.
