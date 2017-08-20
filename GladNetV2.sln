@@ -36,6 +36,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Message.Handlers", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Message.Handlers.Tests", "tests\GladNet.Message.Handlers.Tests\GladNet.Message.Handlers.Tests.csproj", "{E93EDACE-E222-4680-A080-9AE2F0C5A966}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Serializers", "Serializers", "{6B99C269-B4DC-49A5-8A34-271CFACAB289}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Serializer.Protobuf", "src\GladNet.Serializer.Protobuf\GladNet.Serializer.Protobuf.csproj", "{7CE4020C-9052-48D8-AB62-686D701D2554}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Serializer.Protobuf.Tests", "tests\GladNet.Serializer.Protobuf.Tests\GladNet.Serializer.Protobuf.Tests.csproj", "{0898E624-4FA0-4F2F-BBD6-82BF470F427B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +127,18 @@ Global
 		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.EndUser|Any CPU.Build.0 = Release|Any CPU
 		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E93EDACE-E222-4680-A080-9AE2F0C5A966}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CE4020C-9052-48D8-AB62-686D701D2554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CE4020C-9052-48D8-AB62-686D701D2554}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CE4020C-9052-48D8-AB62-686D701D2554}.EndUser|Any CPU.ActiveCfg = Release|Any CPU
+		{7CE4020C-9052-48D8-AB62-686D701D2554}.EndUser|Any CPU.Build.0 = Release|Any CPU
+		{7CE4020C-9052-48D8-AB62-686D701D2554}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CE4020C-9052-48D8-AB62-686D701D2554}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0898E624-4FA0-4F2F-BBD6-82BF470F427B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0898E624-4FA0-4F2F-BBD6-82BF470F427B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0898E624-4FA0-4F2F-BBD6-82BF470F427B}.EndUser|Any CPU.ActiveCfg = Release|Any CPU
+		{0898E624-4FA0-4F2F-BBD6-82BF470F427B}.EndUser|Any CPU.Build.0 = Release|Any CPU
+		{0898E624-4FA0-4F2F-BBD6-82BF470F427B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0898E624-4FA0-4F2F-BBD6-82BF470F427B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,5 +157,8 @@ Global
 		{8FBC282E-2C52-4963-BAB3-7C1A11C4FDE7} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 		{F386635D-0C22-4666-AD39-3DDD9B62B72F} = {0955E7B1-0BFB-4058-9469-29FF5FF4AA28}
 		{E93EDACE-E222-4680-A080-9AE2F0C5A966} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
+		{6B99C269-B4DC-49A5-8A34-271CFACAB289} = {0955E7B1-0BFB-4058-9469-29FF5FF4AA28}
+		{7CE4020C-9052-48D8-AB62-686D701D2554} = {6B99C269-B4DC-49A5-8A34-271CFACAB289}
+		{0898E624-4FA0-4F2F-BBD6-82BF470F427B} = {B973C665-3190-46EE-BFB6-811CD75ACC07}
 	EndGlobalSection
 EndGlobal
