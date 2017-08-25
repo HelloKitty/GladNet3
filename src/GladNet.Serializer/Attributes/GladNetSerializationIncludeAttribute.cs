@@ -30,6 +30,7 @@ namespace GladNet.Serializer
 		/// </summary>
 		public int TagID { get; private set; }
 
+		//TODO: Document
 		public bool IncludeForDerived { get; private set; }
 
 		/// <summary>
@@ -42,8 +43,10 @@ namespace GladNet.Serializer
 		public GladNetSerializationIncludeAttribute(int tagID, Type type, bool isForDerived = true)
 			: base()
 		{
+			//int.MaxValue and int.MaxValue - 1 are reserved values.
 			//uint is not CLS compliant. We have no reason to use uint in .Net
-			if (tagID <= 1) throw new ArgumentOutOfRangeException(nameof(tagID), "tagID must be a positive greater than 1 integer. 1 is reserved. See revelant documentation.");
+			if (tagID <= 0) throw new ArgumentOutOfRangeException(nameof(tagID), $"{nameof(tagID)} must be a positive greater than 0 integer.");
+			if (tagID >= int.MaxValue) throw new ArgumentOutOfRangeException(nameof(tagID), $"{nameof(tagID)} must be a positive less than {int.MaxValue - 1}.");
 			if (type == null) throw new ArgumentNullException(nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
 
 			IncludeForDerived = isForDerived;
