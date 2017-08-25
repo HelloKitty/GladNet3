@@ -13,7 +13,7 @@ using JetBrains.Annotations;
 
 namespace GladNet.Lidgren.Server.Unity
 {
-	public abstract class UnityServerApplicationBase<TSerializationStrategy, TDeserializationStrategy, TSerializerRegistry> : MonoBehaviour, IClassLogger, IManagedClientSessionFactory , IApplicationBase
+	public abstract class UnityServerApplicationBase<TSerializationStrategy, TDeserializationStrategy, TSerializerRegistry> : MonoBehaviour, IClassLogger, IManagedClientSessionFactory, IApplicationBase
 		where TSerializationStrategy : ISerializerStrategy, new() 
 		where TDeserializationStrategy : IDeserializerStrategy, new() 
 		where TSerializerRegistry : ISerializerRegistry, new()
@@ -25,6 +25,9 @@ namespace GladNet.Lidgren.Server.Unity
 		public abstract ILog Logger { get; }
 
 		private InternalUnityApplicationBase ManagedApplicationBase { get; set; }
+
+		/// <inheritdoc />
+		public bool isRunning => ManagedApplicationBase.isRunning;
 
 		[SerializeField]
 		private ConnectionInfo connectionInfo;
@@ -77,6 +80,15 @@ namespace GladNet.Lidgren.Server.Unity
 			ManagedApplicationBase.RegisterTypes(serializerRegistry);
 
 			RegisterTypes(serializerRegistry);
+		}
+
+		public void Poll()
+		{
+			if(ManagedApplicationBase == null)
+				throw new InvalidOperationException("The internal Lidgren server is uninitialized.");
+
+			if(ManagedApplicationBase.isRunning)
+				ManagedApplicationBase.DispatchMessages(ManagedApplicationBase.Poll());
 		}
 
 		/// <inheritdoc />

@@ -25,5 +25,10 @@ namespace GladNet.Lidgren.Server
 		/// </summary>
 		/// <param name="registry"></param>
 		void RegisterTypes(ISerializerRegistry registry);
+
+		/// <summary>
+		/// Indicates if the application server is running.
+		/// </summary>
+		bool isRunning { get; }
 	}
 }

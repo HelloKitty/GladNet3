@@ -26,6 +26,9 @@ namespace GladNet.Lidgren.Server
 		/// <inheritdoc />
 		public ILog Logger { get; }
 
+		/// <inheritdoc />
+		public bool isRunning => internalLidgrenServer != null && (internalLidgrenServer.Status == NetPeerStatus.Running || internalLidgrenServer.Status == NetPeerStatus.Starting);
+
 		protected ApplicationBase(IDeserializerStrategy deserializer, ISerializerStrategy serializer, ILog logger, IManagedClientSessionFactory sessionManagedFactory)
 		{
 			if (deserializer == null) throw new ArgumentNullException(nameof(deserializer));
