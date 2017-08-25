@@ -46,7 +46,7 @@ namespace GladNet.Serializer
 			//int.MaxValue and int.MaxValue - 1 are reserved values.
 			//uint is not CLS compliant. We have no reason to use uint in .Net
 			if (tagID <= 0) throw new ArgumentOutOfRangeException(nameof(tagID), $"{nameof(tagID)} must be a positive greater than 0 integer.");
-			if (tagID >= int.MaxValue) throw new ArgumentOutOfRangeException(nameof(tagID), $"{nameof(tagID)} must be a positive less than {int.MaxValue - 1}.");
+			if (tagID >= int.MaxValue - 1) throw new ArgumentOutOfRangeException(nameof(tagID), $"{nameof(tagID)} must be a positive less than {int.MaxValue - 1}.");
 			if (type == null) throw new ArgumentNullException(nameof(type), $"DerivedType cannot be null in {nameof(GladNetSerializationIncludeAttribute)}.ctor(...).");
 
 			IncludeForDerived = isForDerived;
