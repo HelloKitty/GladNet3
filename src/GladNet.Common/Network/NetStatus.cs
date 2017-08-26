@@ -19,6 +19,9 @@ namespace GladNet.Common
 		Connected,
 		EncryptionEstablished,
 		Disconnecting,
-		Disconnected
+		Disconnected,
+		
+		//TODO: Is this the best way to handle sending information about exceptions to peers?
+		EncounteredException,
 	}
 }

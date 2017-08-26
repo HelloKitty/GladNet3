@@ -45,7 +45,7 @@ namespace GladNet.Lidgren.Engine.Common
 
 		private ISerializerStrategy serializer { get; }
 
-		private Action<Exception> OnException { get; }
+		private Action<GladNetLidgrenNetworkException> OnException { get; }
 
 		/// <summary>
 		/// Strategy used to select the sending service for a message.
@@ -54,7 +54,7 @@ namespace GladNet.Lidgren.Engine.Common
 
 		private ILidgrenMessageContextFactory messageContextFactory { get; }
 
-		public ManagedLidgrenNetworkThread(ISerializerStrategy serializerStrategy, ILidgrenMessageContextFactory lidgrenMessageContextFactory, ISendServiceSelectionStrategy sendStrategy, Action<Exception> onException = null)
+		public ManagedLidgrenNetworkThread(ISerializerStrategy serializerStrategy, ILidgrenMessageContextFactory lidgrenMessageContextFactory, ISendServiceSelectionStrategy sendStrategy, Action<GladNetLidgrenNetworkException> onException = null)
 		{
 			if (serializerStrategy == null)
 				throw new ArgumentNullException(nameof(serializerStrategy), $"Provided {nameof(ISerializerStrategy)} cannot be null.");
@@ -103,62 +103,45 @@ namespace GladNet.Lidgren.Engine.Common
 
 		private void HandleIncomingMessageThreadMethod(NetPeer peer)
 		{
-			try
+			while (_isAlive)
 			{
-				while(_isAlive)
-				{
-					//Don't wait forever; if you do you could encounter a hanging thread during disconnection
-					if (!peer.MessageReceivedEvent.WaitOne(500))
-						continue;
+				//Don't wait forever; if you do you could encounter a hanging thread during disconnection
+				if (!peer.MessageReceivedEvent.WaitOne(500))
+					continue;
 
-					OnMessageRecievedCallback(peer);
-				}				
-			}
-			catch(Exception e)
-			{
-				OnException?.Invoke(e);
+				OnMessageRecievedCallback(peer);
 			}
 		}
 
 		private void HandleOutgoingMessageActionsThreadMethod()
 		{
-			try
+			while (_isAlive)
 			{
-				while (_isAlive)
+				//Don't wait forever; if you do you could encounter a hanging thread during disconnection
+				if (!outgoingMessageQueue.QueueSemaphore.WaitOne(500))
+					continue;
+
+				IEnumerable<Action> dequeuedActions = null;
+
+				outgoingMessageQueue.SyncRoot.EnterWriteLock();
+				try
 				{
-					//Don't wait forever; if you do you could encounter a hanging thread during disconnection
-					if (!outgoingMessageQueue.QueueSemaphore.WaitOne(500))
-						continue;
+					//TODO: Single message optimizations
+					dequeuedActions = outgoingMessageQueue.ToList(); //tolist is more memory efficient
 
-					IEnumerable<Action> dequeuedActions = null;
-
-					outgoingMessageQueue.SyncRoot.EnterWriteLock();
-					try
-					{
-						//TODO: Single message optimizations
-						dequeuedActions = outgoingMessageQueue.ToList(); //tolist is more memory efficient
-
-						//Reset the waithandle
-						//Make sure to do this in the lock to prevent race coniditons
-						outgoingMessageQueue.Clear();
-						outgoingMessageQueue.QueueSemaphore.Reset();
-					}
-					finally
-					{
-						outgoingMessageQueue.SyncRoot.ExitWriteLock();
-					}
-
-					if (dequeuedActions == null)
-						throw new InvalidOperationException($"Outgoing message queue produced a null collection of messages. Expected non-null and non-empty.");
-
-					//Invoke all outgoing message actions
-					foreach (Action outgoingMessageAction in dequeuedActions)
-						outgoingMessageAction();
+					//Reset the waithandle
+					//Make sure to do this in the lock to prevent race coniditons
+					outgoingMessageQueue.Clear();
+					outgoingMessageQueue.QueueSemaphore.Reset();
 				}
-			}
-			catch(Exception e)
-			{
-				OnException?.Invoke(e);
+				finally
+				{
+					outgoingMessageQueue.SyncRoot.ExitWriteLock();
+				}
+
+				//Invoke all outgoing message actions
+				foreach (Action outgoingMessageAction in dequeuedActions)
+					outgoingMessageAction();
 			}
 		}
 
@@ -175,24 +158,45 @@ namespace GladNet.Lidgren.Engine.Common
 
 			foreach(NetIncomingMessage message in messages)
 			{
-				//If the context factory cannot create a context for this
-				//message type then we should not enter the lock and attempt to create a context for it.
-				if (!messageContextFactory.CanCreateContext(message.MessageType))
-					continue; //make sure to continue; not return. Major fault if you return.
-
-				incomingMessageQueue.SyncRoot.EnterWriteLock();
 				try
 				{
-					//enqueues the message including the meaningful context with which it was recieved.
-					incomingMessageQueue.Enqueue(messageContextFactory.CreateContext(message));
+					//If the context factory cannot create a context for this
+					//message type then we should not enter the lock and attempt to create a context for it.
+					if (!messageContextFactory.CanCreateContext(message.MessageType))
+						continue; //make sure to continue; not return. Major fault if you return.
 
-					//Signal the incoming message handling thread that there is a message to recieve.
-					incomingMessageQueue.QueueSemaphore.Release(1);
+					EnqueueIncomingMessage(messageContextFactory.CreateContext(message));
 				}
-				finally
+				catch (Exception e) //catch all types of exceptions so we can rethrow with information
 				{
-					incomingMessageQueue.SyncRoot.ExitWriteLock();
+					//Push an exception indcator to the peer
+					//TODO: This is kinda hacky, but its the best way to do it without changing anything major
+					message.Data = new byte[1];
+					message.Write((byte)NetStatus.EncounteredException);
+
+					EnqueueIncomingMessage(new LidgrenStatusChangeMessageContext(message));
+
+					//Also dispatch the exception to the general OnException handler
+					OnException?.Invoke(new GladNetLidgrenNetworkException($"Exception encountered handling message from Peer: {message.SenderConnection.RemoteUniqueIdentifier} IP: {message.SenderConnection.RemoteEndPoint.Address}",
+						message.SenderConnection, e));
 				}
+			}
+		}
+
+		private void EnqueueIncomingMessage(LidgrenMessageContext context)
+		{
+			incomingMessageQueue.SyncRoot.EnterWriteLock();
+			try
+			{
+				//enqueues the message including the meaningful context with which it was recieved.
+				incomingMessageQueue.Enqueue(context);
+
+				//Signal the incoming message handling thread that there is a message to recieve.
+				incomingMessageQueue.QueueSemaphore.Release(1);
+			}
+			finally
+			{
+				incomingMessageQueue.SyncRoot.ExitWriteLock();
 			}
 		}
 
