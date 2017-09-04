@@ -12,7 +12,6 @@ namespace GladNet.Engine.Common
 {
 	public abstract class ClientPeer : Peer, IClientPeerPayloadSender
 	{
-
 		protected ClientPeer(ILog logger, INetworkMessagePayloadSenderService messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService,
 			IDisconnectionServiceHandler disconnectHandler)
 				: base(logger, messageSender, details, subService, disconnectHandler)

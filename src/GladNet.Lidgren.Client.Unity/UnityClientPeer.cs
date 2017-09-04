@@ -40,11 +40,15 @@ namespace GladNet.Lidgren.Client.Unity
 		/// </summary>
 		private ISerializerRegistry serializerRegister { get; } = new TSerializerRegistry();
 
+		//TODO: This is can be technically overriden by the derived class in an unobvious way
 		[SerializeField]
 		private ConnectionInfo connectionInfo;
 
+		protected virtual ConnectionInfo ConnectionEndpointDetails => connectionInfo;
+
 		public INetworkMessagePayloadSenderService NetworkSendService { get; private set; }
 
+		//TODO: This is can be technically overriden by the derived class in an unobvious way
 		public IConnectionDetails PeerDetails { get; private set; }
 
 		public NetStatus Status { get; private set; } = NetStatus.Disconnected; //initial state should be disconnected
@@ -58,8 +62,8 @@ namespace GladNet.Lidgren.Client.Unity
 		public void Awake()
 		{
 			//Initialize basic services
-			internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(connectionInfo.ApplicationIdentifier) { AcceptIncomingConnections = false });
-			PeerDetails = new LidgrenConnectionDetailsAdapter(connectionInfo.ServerIp, connectionInfo.RemotePort, 0, 0); //we don't know port and id is not important on client
+			internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(ConnectionEndpointDetails.ApplicationIdentifier) { AcceptIncomingConnections = false });
+			PeerDetails = new LidgrenConnectionDetailsAdapter(ConnectionEndpointDetails.ServerIp, ConnectionEndpointDetails.RemotePort, 0, 0); //we don't know port and id is not important on client
 			RegisterPayloadTypes(this.serializerRegister);
 
 			//Subscribe to the messages.
@@ -92,8 +96,7 @@ namespace GladNet.Lidgren.Client.Unity
 				managedNetworkThread = null;
 
 				//Reinit
-				internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(connectionInfo.ApplicationIdentifier) { AcceptIncomingConnections = false });
-				//NetworkSendService = new LidgrenClientNetworkMessageRouterService(new LidgrenNetworkMessageFactory(), internalLidgrenNetworkClient, serializer);
+				internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(ConnectionEndpointDetails.ApplicationIdentifier) { AcceptIncomingConnections = false });
 		}
 
 		public bool Connect()
@@ -107,7 +110,7 @@ namespace GladNet.Lidgren.Client.Unity
 			//Must call start first
 			internalLidgrenNetworkClient.Start();
 
-			NetConnection connection = internalLidgrenNetworkClient.Connect(connectionInfo.ServerIp, connectionInfo.RemotePort);
+			NetConnection connection = internalLidgrenNetworkClient.Connect(ConnectionEndpointDetails.ServerIp, ConnectionEndpointDetails.RemotePort);
 
 			if (connection == null)
 				throw new InvalidOperationException($"Could not connect and create a {nameof(NetConnection)}.");
@@ -147,6 +150,7 @@ namespace GladNet.Lidgren.Client.Unity
 				managedNetworkThread.IncomingMessageQueue.SyncRoot.ExitWriteLock();
 			}
 
+			//TODO: Optomize this
 			if (messages == null || !messages.Any())
 				return;
 

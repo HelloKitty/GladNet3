@@ -14,7 +14,7 @@ namespace GladNet.Lidgren.Client
 		//Right now there isn't anything extra in a Lidgren peer. It needs to be used so that it
 		//can be a future vector for delivering features to lidgren peers.
 
-		public LidgrenClientPeer(ILog logger, INetworkMessagePayloadSenderService messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService, IDisconnectionServiceHandler disconnectHandler)
+		protected LidgrenClientPeer(ILog logger, INetworkMessagePayloadSenderService messageSender, IConnectionDetails details, INetworkMessageSubscriptionService subService, IDisconnectionServiceHandler disconnectHandler)
 			: base(logger, messageSender, details, subService, disconnectHandler)
 		{
 
