@@ -48,11 +48,19 @@ namespace GladNet.Lidgren.Client.Unity
 
 		public INetworkMessagePayloadSenderService NetworkSendService { get; private set; }
 
+		//TODO: maybe default value?
+		/// <summary>
+		/// Is null if there is no connection.
+		/// </summary>
 		//TODO: This is can be technically overriden by the derived class in an unobvious way
 		public IConnectionDetails PeerDetails { get; private set; }
 
 		public NetStatus Status { get; private set; } = NetStatus.Disconnected; //initial state should be disconnected
 
+		//TODO: Maybe default value?
+		/// <summary>
+		/// Is null if there is no connection attempt.
+		/// </summary>
 		private NetClient internalLidgrenNetworkClient { get; set; }
 
 		private ManagedLidgrenNetworkThread managedNetworkThread { get; set; }
@@ -61,9 +69,6 @@ namespace GladNet.Lidgren.Client.Unity
 
 		public void Awake()
 		{
-			//Initialize basic services
-			internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(ConnectionEndpointDetails.ApplicationIdentifier) { AcceptIncomingConnections = false });
-			PeerDetails = new LidgrenConnectionDetailsAdapter(ConnectionEndpointDetails.ServerIp, ConnectionEndpointDetails.RemotePort, 0, 0); //we don't know port and id is not important on client
 			RegisterPayloadTypes(this.serializerRegister);
 
 			//Subscribe to the messages.
@@ -94,13 +99,17 @@ namespace GladNet.Lidgren.Client.Unity
 				managedNetworkThread.Stop();
 				managedNetworkThread.Dispose();
 				managedNetworkThread = null;
-
-				//Reinit
-				internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(ConnectionEndpointDetails.ApplicationIdentifier) { AcceptIncomingConnections = false });
 		}
 
 		public bool Connect()
 		{
+			//Reinit
+			internalLidgrenNetworkClient = new NetClient(new NetPeerConfiguration(ConnectionEndpointDetails.ApplicationIdentifier) { AcceptIncomingConnections = false });
+
+			//TODO: Verify the details are valid/set
+			//At this point we should initialize the connection details
+			PeerDetails = new LidgrenConnectionDetailsAdapter(ConnectionEndpointDetails.ServerIp, ConnectionEndpointDetails.RemotePort, 0, 0); //we don't know port and id is not important on client
+
 			if (internalLidgrenNetworkClient.Status != NetPeerStatus.NotRunning)
 			{
 				//call disconnection to cleanup the current running session
