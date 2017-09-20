@@ -1,5 +1,7 @@
 # GladNet2
 
+[![Join the chat at https://gitter.im/HelloKitty/GladNet2.0](https://badges.gitter.im/HelloKitty/GladNet2.0.svg)](https://gitter.im/HelloKitty/GladNet2.0?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Message based networking API library for for Unity3D/.Net developers. Defines an API from which other lowerlevel network libraries can be adapted to.
 
 Come chat: [![https://gitter.im/HelloKitty/GladNet2.0y](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/HelloKitty/GladNet2.0?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
