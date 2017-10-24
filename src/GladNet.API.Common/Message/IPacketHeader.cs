@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Booma.Proxy
+namespace GladNet
 {
 	/// <summary>
 	/// Contract for packet headers.
