@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GladNet;
 
-namespace Booma.Proxy
+namespace GladNet
 {
 	/// <summary>
 	/// Contract for the context of a message.
