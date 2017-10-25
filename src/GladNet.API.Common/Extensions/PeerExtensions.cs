@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GladNet
 {
-	public static class PeerSendExtensions
+	public static class PeerExtensions
 	{
 		//This extension exists mostly to support the old TCP only API
 		/// <summary>
@@ -46,6 +46,28 @@ namespace GladNet
 
 			//Since no delivry or cancel was provided we should default to reliable and also make sure there is no cancel
 			return await sendService.SendRequestAsync<TResponseType>(request, DeliveryMethod.ReliableOrdered, CancellationToken.None);
+		}
+
+		/// <summary>
+		/// Attempts to read a <see cref="IPacketHeader"/> from
+		/// the client.
+		/// </summary>
+		/// <returns>A PSOBBPacketHeader.</returns>
+		public static async Task<IPacketHeader> ReadHeaderAsync(this IPacketHeaderReadable packetHeaderReadable)
+		{
+			if(packetHeaderReadable == null) throw new ArgumentNullException(nameof(packetHeaderReadable));
+
+			return await packetHeaderReadable.ReadHeaderAsync(CancellationToken.None);
+		}
+
+		/// <summary>
+		/// Attempts to read a <see cref="IPacketHeader"/> from
+		/// the client.
+		/// </summary>
+		/// <returns>A PSOBBPacketHeader.</returns>
+		public static IPacketHeader ReadHeader(this IPacketHeaderReadable packetHeaderReadable)
+		{
+			return packetHeaderReadable.ReadHeaderAsync().Result;
 		}
 	}
 }
