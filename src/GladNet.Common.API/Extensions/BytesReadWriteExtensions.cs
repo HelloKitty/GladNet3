@@ -14,7 +14,7 @@ namespace GladNet
 		/// <param name="readable"></param>
 		/// <param name="count">How many bytes to read.</param>
 		/// <returns>The read bytes.</returns>
-		public static byte[] Read(this IBytesReadable readable, int count)
+		public static int Read(this IBytesReadable readable, int count)
 		{
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
@@ -28,7 +28,7 @@ namespace GladNet
 		/// <param name="count">How many bytes to read.</param>
 		/// <param name="timeoutInMilliseconds">How many milliseconds to wait before canceling the operation.</param>
 		/// <returns>A future for the read bytes.</returns>
-		public static async Task<byte[]> ReadAsync(this IBytesReadable readable, int count, int timeoutInMilliseconds)
+		public static async Task<int> ReadAsync(this IBytesReadable readable, int count, int timeoutInMilliseconds)
 		{
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
@@ -45,7 +45,7 @@ namespace GladNet
 		/// <param name="count">How many bytes to read.</param>
 		/// <param name="timeoutInMilliseconds">How many milliseconds to wait before canceling the operation.</param>
 		/// <returns>A future for the read bytes.</returns>
-		public static async Task<byte[]> ReadAsync(this IBytesReadable readable, byte[] buffer, int start, int count, int timeoutInMilliseconds)
+		public static async Task<int> ReadAsync(this IBytesReadable readable, byte[] buffer, int start, int count, int timeoutInMilliseconds)
 		{
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
