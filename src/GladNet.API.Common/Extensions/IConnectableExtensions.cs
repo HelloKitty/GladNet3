@@ -39,5 +39,21 @@ namespace GladNet
 
 			return await connectable.ConnectAsync(address.ToString(), port);
 		}
+
+		/// <summary>
+		/// Connects to the provided <see cref="ip"/> with on the given <see cref="port"/>.
+		/// </summary>
+		/// <param name="connectable"></param>
+		/// <param name="ip">The ip.</param>
+		/// <param name="port">The port.</param>
+		/// <returns>True if connection was successful.</returns>
+		public static bool Connect(this IConnectable connectable, string ip, int port)
+		{
+			if(connectable == null) throw new ArgumentNullException(nameof(connectable));
+			if(string.IsNullOrWhiteSpace(ip)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(ip));
+			if(port < 0) throw new ArgumentOutOfRangeException(nameof(port));
+
+			return connectable.ConnectAsync(ip, port).Result;
+		}
 	}
 }
