@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GladNet.API.Common\GladNet.API.Common.csproj" />
+    <ProjectReference Include="..\GladNet.Common.API\GladNet.Common.API.csproj" />
   </ItemGroup>
 
 </Project>
