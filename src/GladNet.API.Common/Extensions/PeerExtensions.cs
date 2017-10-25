@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Booma.Proxy;
 
 namespace GladNet
 {
@@ -94,6 +93,20 @@ namespace GladNet
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
 			return await readable.ReadAsync(CancellationToken.None);
+		}
+
+		/// <summary>
+		/// Writes the provided <see cref="payload"/>.
+		/// </summary>
+		/// <param name="writer"></param>
+		/// <param name="payload">The payload to write.</param>
+		public static void Write<TPayloadBaseType>(this IPacketPayloadWritable<TPayloadBaseType> writer, TPayloadBaseType payload)
+			where TPayloadBaseType : class
+		{
+			if(writer == null) throw new ArgumentNullException(nameof(writer));
+
+			//Don't await the task.
+			writer.WriteAsync(payload);
 		}
 	}
 }
