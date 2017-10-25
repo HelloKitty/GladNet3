@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Booma.Proxy;
 
 namespace GladNet
 {
@@ -68,6 +69,31 @@ namespace GladNet
 		public static IPacketHeader ReadHeader(this IPacketHeaderReadable packetHeaderReadable)
 		{
 			return packetHeaderReadable.ReadHeaderAsync().Result;
+		}
+
+		/// <summary>
+		/// Reads an incoming message syncronously and blocks until it recieves one.
+		/// </summary>
+		/// <returns>The resulting incoming message.</returns>
+		public static NetworkIncomingMessage<TPayloadBaseType> Read<TPayloadBaseType>(this IPacketPayloadReadable<TPayloadBaseType> readable) 
+			where TPayloadBaseType : class
+		{
+			if(readable == null) throw new ArgumentNullException(nameof(readable));
+
+			return readable.ReadAsync().Result;
+		}
+
+		/// <summary>
+		/// Reads an incoming message asyncronously.
+		/// The task will complete when an incomding message can be built.
+		/// </summary>
+		/// <returns>A future for the resulting incoming message.</returns>
+		public static async Task<NetworkIncomingMessage<TPayloadBaseType>> ReadAsync<TPayloadBaseType>(this IPacketPayloadReadable<TPayloadBaseType> readable) 
+			where TPayloadBaseType : class
+		{
+			if(readable == null) throw new ArgumentNullException(nameof(readable));
+
+			return await readable.ReadAsync(CancellationToken.None);
 		}
 	}
 }

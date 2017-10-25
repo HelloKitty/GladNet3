@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GladNet;
 
-namespace Booma.Proxy
+namespace GladNet
 {
 	/// <summary>
 	/// Contract for types that can produce network messages.
