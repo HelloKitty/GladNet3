@@ -19,6 +19,7 @@ namespace GladNet
 		/// </summary>
 		/// <typeparam name="TResponseType">The payload type to intercept.</typeparam>
 		/// <returns>An awaitable for the next recieved payload of the speified type.</returns>
-		Task<TResponseType> InterceptPayload<TResponseType>();
+		Task<TResponseType> InterceptPayload<TResponseType>()
+			where TResponseType : IPacketPayload;
 	}
 }
