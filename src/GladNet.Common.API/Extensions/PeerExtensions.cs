@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -119,6 +120,64 @@ namespace GladNet
 		public static async Task<TResponseType> InterceptPayload<TResponseType>(this IPayloadInterceptable interceptable)
 		{
 			return await interceptable.InterceptPayload<TResponseType>(CancellationToken.None);
+		}
+
+		/// <summary>
+		/// Connects to the provided <see cref="address"/> with on the given <see cref="port"/>.
+		/// </summary>
+		/// <param name="connectable"></param>
+		/// <param name="address">The ip.</param>
+		/// <param name="port">The port.</param>
+		/// <returns>True if connection was successful.</returns>
+		public static bool Connect(this IConnectable connectable, IPAddress address, int port)
+		{
+			if(connectable == null) throw new ArgumentNullException(nameof(connectable));
+			if(address == null) throw new ArgumentNullException(nameof(address));
+			if(port < 0) throw new ArgumentOutOfRangeException(nameof(port));
+
+			return connectable.Connect(address.ToString(), port);
+		}
+
+		/// <summary>
+		/// Connects to the provided <see cref="address"/> with on the given <see cref="port"/>.
+		/// </summary>
+		/// <param name="connectable"></param>
+		/// <param name="address">The ip.</param>
+		/// <param name="port">The port.</param>
+		/// <returns>True if connection was successful.</returns>
+		public static async Task<bool> ConnectAsync(this IConnectable connectable, IPAddress address, int port)
+		{
+			if(connectable == null) throw new ArgumentNullException(nameof(connectable));
+			if(address == null) throw new ArgumentNullException(nameof(address));
+			if(port < 0) throw new ArgumentOutOfRangeException(nameof(port));
+
+			return await connectable.ConnectAsync(address.ToString(), port);
+		}
+
+		/// <summary>
+		/// Connects to the provided <see cref="ip"/> with on the given <see cref="port"/>.
+		/// </summary>
+		/// <param name="connectable"></param>
+		/// <param name="ip">The ip.</param>
+		/// <param name="port">The port.</param>
+		/// <returns>True if connection was successful.</returns>
+		public static bool Connect(this IConnectable connectable, string ip, int port)
+		{
+			if(connectable == null) throw new ArgumentNullException(nameof(connectable));
+			if(string.IsNullOrWhiteSpace(ip)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(ip));
+			if(port < 0) throw new ArgumentOutOfRangeException(nameof(port));
+
+			return connectable.ConnectAsync(ip, port).Result;
+		}
+
+		/// <summary>
+		/// Disconnects the object from it's connected source.
+		/// </summary>
+		public static void Disconnect(this IDisconnectable disconnectable)
+		{
+			if(disconnectable == null) throw new ArgumentNullException(nameof(disconnectable));
+
+			disconnectable.DisconnectAsync(0).Wait();
 		}
 	}
 }

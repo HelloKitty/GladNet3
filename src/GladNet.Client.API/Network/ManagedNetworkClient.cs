@@ -212,9 +212,6 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public void Disconnect() => DisconnectAsync(0).Wait();
-
-		/// <inheritdoc />
 		public async Task DisconnectAsync(int delay)
 		{
 			//Before disconnecting the managed client we should cancel all the tokens used for

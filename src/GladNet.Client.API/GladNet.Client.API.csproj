@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GladNet.Common.API\GladNet.Common.API.csproj" />
+    <ProjectReference Include="..\GladNet.Crypto.API\GladNet.Crypto.API.csproj" />
   </ItemGroup>
 
 </Project>

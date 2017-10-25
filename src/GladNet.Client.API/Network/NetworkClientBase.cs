@@ -15,29 +15,7 @@ namespace GladNet
 		IBytesWrittable, IBytesReadable
 	{
 		/// <inheritdoc />
-		public bool Connect(string ip, int port)
-		{
-			return ConnectAsync(IPAddress.Parse(ip), port).Result;
-		}
-
-		/// <inheritdoc />
-		public bool Connect(IPAddress address, int port)
-		{
-			return ConnectAsync(address, port).Result;
-		}
-
-		/// <inheritdoc />
-		public async Task<bool> ConnectAsync(string ip, int port)
-		{
-			return await ConnectAsync(IPAddress.Parse(ip), port)
-				.ConfigureAwait(false);
-		}
-
-		/// <inheritdoc />
-		public void Disconnect()
-		{
-			DisconnectAsync(0);
-		}
+		public abstract Task<bool> ConnectAsync(string ip, int port);
 
 		/// <inheritdoc />
 		public void Write(byte[] bytes)
@@ -76,9 +54,6 @@ namespace GladNet
 		//Clients need only to implement the async subset methods
 		//for the client to function. This will save a lot of duplication for potential
 		//consumers of this base type
-
-		/// <inheritdoc />
-		public abstract Task<bool> ConnectAsync(IPAddress address, int port);
 
 		/// <inheritdoc />
 		public abstract Task DisconnectAsync(int delay);

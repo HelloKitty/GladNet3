@@ -10,11 +10,6 @@ namespace GladNet
 	public interface IDisconnectable
 	{
 		/// <summary>
-		/// Disconnects the object from it's connected source.
-		/// </summary>
-		void Disconnect();
-
-		/// <summary>
 		/// Disconnects asyncronously and allows the client <see cref="delay"/> many milliseconds
 		/// to send or recieve remaining data.
 		/// </summary>
