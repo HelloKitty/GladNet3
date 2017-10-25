@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GladNet
@@ -65,9 +66,9 @@ namespace GladNet
 			return false;
 		}
 
+		//TODO: Handle cancellation tokens
 		/// <inheritdoc />
-		public Task<TResponseType> InterceptPayload<TResponseType>() 
-			where TResponseType : IPacketPayload
+		public Task<TResponseType> InterceptPayload<TResponseType>(CancellationToken cancellationToken)
 		{
 			//To allow us to catch the incoming payloads and redirect them to the awaiting context
 			//we need to create a source we manually control and provide an awaitable to the caller
