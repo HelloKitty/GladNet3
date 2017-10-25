@@ -19,7 +19,7 @@ namespace GladNet
 		/// </summary>
 		/// <typeparam name="TPayloadBaseType">The payload basetype.</typeparam>
 		/// <returns>A new message context.</returns>
-		IPeerMessageContext<TPayloadBaseType> Create<TPayloadBaseType>(IConnectionService connectionService, IPeerRequestSendService<TPayloadBaseType> sendService, IPeerRequestSendService<TPayloadBaseType> requestService)
+		IPeerMessageContext<TPayloadBaseType> Create<TPayloadBaseType>(IConnectionService connectionService, IPeerPayloadSendService<TPayloadBaseType> sendService, IPeerRequestSendService<TPayloadBaseType> requestService)
 			where TPayloadBaseType : class;
 	}
 }

@@ -11,7 +11,7 @@ namespace GladNet
 	/// Implements <see cref="IPeerMessageContext{TPayloadBaseType}"/>.
 	/// </summary>
 	/// <typeparam name="TPayloadBaseType">The type of the base payload.</typeparam>
-	public sealed class DefaultClientMessageContext<TPayloadBaseType> : IPeerMessageContext<TPayloadBaseType>
+	public sealed class DefaultPeerMessageContext<TPayloadBaseType> : IPeerMessageContext<TPayloadBaseType>
 		where TPayloadBaseType : class
 	{
 		/// <inheritdoc />
@@ -24,7 +24,7 @@ namespace GladNet
 		public IPeerRequestSendService<TPayloadBaseType> RequestSendService { get; }
 
 		/// <inheritdoc />
-		public DefaultClientMessageContext(IConnectionService connectionService, IPeerPayloadSendService<TPayloadBaseType> payloadSendService, IPeerRequestSendService<TPayloadBaseType> requestSendService)
+		public DefaultPeerMessageContext(IConnectionService connectionService, IPeerPayloadSendService<TPayloadBaseType> payloadSendService, IPeerRequestSendService<TPayloadBaseType> requestSendService)
 		{
 			if(connectionService == null) throw new ArgumentNullException(nameof(connectionService));
 			if(payloadSendService == null) throw new ArgumentNullException(nameof(payloadSendService));
