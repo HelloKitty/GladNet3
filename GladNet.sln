@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FCFAE99C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.API.Common", "src\GladNet.API.Common\GladNet.API.Common.csproj", "{F39C7A58-ABC6-462A-B571-FA862DE7B08A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Client", "src\GladNet.Client\GladNet.Client.csproj", "{68DE4750-7F08-44D3-B4C3-C86A6772236F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,12 +21,17 @@ Global
 		{F39C7A58-ABC6-462A-B571-FA862DE7B08A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F39C7A58-ABC6-462A-B571-FA862DE7B08A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F39C7A58-ABC6-462A-B571-FA862DE7B08A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68DE4750-7F08-44D3-B4C3-C86A6772236F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68DE4750-7F08-44D3-B4C3-C86A6772236F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68DE4750-7F08-44D3-B4C3-C86A6772236F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68DE4750-7F08-44D3-B4C3-C86A6772236F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F39C7A58-ABC6-462A-B571-FA862DE7B08A} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
+		{68DE4750-7F08-44D3-B4C3-C86A6772236F} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}

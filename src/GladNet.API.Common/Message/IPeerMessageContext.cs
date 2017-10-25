@@ -34,6 +34,6 @@ namespace GladNet
 		/// The request service that registers a response and returns a task
 		/// that can be awaited on for when/if the response is recieved.
 		/// </summary>
-		IPeerPayloadSendService<TPayloadBaseType> RequestSendService { get; }
+		IPeerRequestSendService<TPayloadBaseType> RequestSendService { get; }
 	}
 }
