@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 
 namespace GladNet
 {
@@ -41,8 +42,20 @@ namespace GladNet
 		private byte[] CryptoBuffer { get; }
 
 		/// <summary>
-		/// Creates a new crypto decorator for the <see cref="PSOBBNetworkClient"/>.
-		/// Extends the <see cref="Read"/> and <see cref="Write"/> implementations to pass
+		/// This is a buffer that can hold the overflow for som,e
+		/// </summary>
+		private byte[] CryptoBlockOverflow { get; }
+
+		private int CryptoBlockOverflowReadIndex { get; set; }
+
+		/// <summary>
+		/// The async locking object.
+		/// </summary>
+		private readonly AsyncLock asyncObj = new AsyncLock();
+
+		/// <summary>
+		/// Creates a new crypto decorator for the <see cref="NetworkClientBase"/>.
+		/// Extends the <see cref="ReadAsync"/> and <see cref="WriteAsync"/> implementations to pass
 		/// all bytes through the corresponding incoming and outgoing ciphers.
 		/// </summary>
 		/// <param name="decoratedClient">The client to decorate.</param>
@@ -62,6 +75,7 @@ namespace GladNet
 
 			//One of the lobby packets is 14,000 bytes. We may even need bigger.
 			CryptoBuffer = new byte[30000]; //TODO: Is this size good? Bigger? Smaller?
+			CryptoBlockOverflow = new byte[Math.Max(blockSize - 1, 0)]; //we only need
 		}
 
 		public override async Task<bool> ConnectAsync(string ip, int port)
@@ -77,6 +91,7 @@ namespace GladNet
 				.ConfigureAwait(false);
 		}
 
+		//TODO: Refactor this
 		/// <summary>
 		/// Reads asyncronously <see cref="count"/> many bytes from the reader.
 		/// </summary>
@@ -85,28 +100,105 @@ namespace GladNet
 		/// <param name="count">How many bytes to read.</param>
 		/// <param name="token">The cancel token to check during the async operation.</param>
 		/// <returns>A future for the read bytes.</returns>
-		public override async Task<byte[]> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
+		public override async Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
 			if(start < 0) throw new ArgumentOutOfRangeException(nameof(start));
 			if(count < 0) throw new ArgumentOutOfRangeException(nameof(count), $"Cannot read less than 0 bytes. Can't read: {count} many bytes");
 
+			//We read this outside of the lock to reduce locking time
 			//If the above caller requested an invalid count of bytes to read
 			//We should try to correct for it and read afew more bytes.
-			count = ConvertToBlocksizeCount(count);
+			int extendedCount = ConvertToBlocksizeCount(count);
+			int cryptoOverflowSize =  CryptoBlockOverflow.Length - CryptoBlockOverflowReadIndex;
 
 			if(token.IsCancellationRequested)
-				return Enumerable.Empty<byte>().ToArray();
+				return 0;
 
-			await DecoratedClient.ReadAsync(buffer, start, count, token)
+			//We should lock incase there are multiple calls
+			using(await asyncObj.LockAsync())
+			{
+				//If the overflow size is the exact size asked for then
+				//we don't need to do anything but copy the buffer and return
+				if(cryptoOverflowSize >= count)
+				{
+					//Read from the crypto overflow and move the read index forward
+					Buffer.BlockCopy(CryptoBlockOverflow, CryptoBlockOverflowReadIndex, buffer, start, count);
+					CryptoBlockOverflowReadIndex = CryptoBlockOverflowReadIndex + count;
+					return count;
+				}
+				else if(cryptoOverflowSize == 0)
+				{
+					bool result = await ReadAndDecrypt(buffer, start, token, extendedCount);
+
+					//if the read/decrypt failed then return 0
+					if(!result)
+						return 0;
+
+					FillCryptoOverflowWithExcess(buffer, count, extendedCount);
+				}
+				else if(cryptoOverflowSize < count)
+				{
+					//This case is more complex, and computationaly costly
+					//because we have some overflow but they want more than the overflow
+
+					Buffer.BlockCopy(CryptoBlockOverflow, CryptoBlockOverflowReadIndex, buffer, start, count);
+					CryptoBlockOverflowReadIndex = CryptoBlockOverflow.Length; //set it to last index so we know we have no overflow anymore
+
+					//Recompute the extended count, since we read some of the cryptooverflow it will have changed potentially
+					int newCount = count - cryptoOverflowSize;
+					extendedCount = ConvertToBlocksizeCount(newCount);
+
+					//Read into buffer starting at the start requested + the overflow size
+					bool result = await ReadAndDecrypt(buffer, start + cryptoOverflowSize, token, extendedCount);
+
+					//if the read/decrypt failed then return 0
+					if(!result)
+						return 0;
+
+					FillCryptoOverflowWithExcess(buffer, newCount, extendedCount);
+				}
+			}
+
+			//never return the extended count, callers above shouldn't have to deal
+			//with more than they asked for
+			return count;
+		}
+
+		private void FillCryptoOverflowWithExcess(byte[] buffer, int count, int extendedCount)
+		{
+			//If the original count asked for is not the same as the blocksize adjusted count
+			//we need to buffer the extra bytes
+			if(count != extendedCount)
+			{
+				int overflowSize = extendedCount - count;
+				int readIndex = CryptoBlockOverflow.Length - overflowSize;
+
+				//We should read the overflow into starting index OverflowLength - overflowSize index and not starting at 0
+				//This allows us to know how many and what index to starting reading at all at the same time
+				Buffer.BlockCopy(buffer, extendedCount - overflowSize, CryptoBlockOverflow, readIndex, overflowSize);
+				CryptoBlockOverflowReadIndex = readIndex;
+			}
+		}
+
+		private async Task<bool> ReadAndDecrypt(byte[] buffer, int start, CancellationToken token, int extendedCount)
+		{
+			//We don't need to know the amount read, I think.
+			await DecoratedClient.ReadAsync(buffer, start, extendedCount, token)
 				.ConfigureAwait(false);
 
 			//Check cancel again, we want to fail quick
 			if(token.IsCancellationRequested)
-				return Enumerable.Empty<byte>().ToArray();
+				return false;
 
 			//We throw above if we have an invalid size that can't be decrypted once read.
 			//That means callers will need to be careful in what they request to read.
-			return DecryptionServiceProvider.Crypt(buffer, start, count);
+			DecryptionServiceProvider.Crypt(buffer, start, extendedCount);
+
+			//Check cancel again, we want to fail quick
+			if(token.IsCancellationRequested)
+				return false;
+
+			return true;
 		}
 
 		public override async Task WriteAsync(byte[] bytes, int offset, int count)
@@ -121,22 +213,26 @@ namespace GladNet
 					.ConfigureAwait(false);
 			else
 			{
-				try
+				//Lock because we use the crypto buffer for this
+				using(await asyncObj.LockAsync())
 				{
-					//We copy to the thread local buffer so we can use it as an extended buffer by "neededBytes" many more bytes.
-					//So the buffer is very large but we'll tell it to write bytes.length + neededBytes.
-					Buffer.BlockCopy(bytes, offset, CryptoBuffer, 0, count); //dont copy full array, might only need less with count
-				}
-				catch(Exception e)
-				{
-					throw new InvalidOperationException($"Failed to copy bytes to crypto buffer. Bytes Length: {bytes.Length} Offset: {offset} Count: {count} BlocksizeAdjustedCount: {blocksizeAdjustedCount}", e);
-				}
+					try
+					{
+						//We copy to the thread local buffer so we can use it as an extended buffer by "neededBytes" many more bytes.
+						//So the buffer is very large but we'll tell it to write bytes.length + neededBytes.
+						Buffer.BlockCopy(bytes, offset, CryptoBuffer, 0, count); //dont copy full array, might only need less with count
+					}
+					catch(Exception e)
+					{
+						throw new InvalidOperationException($"Failed to copy bytes to crypto buffer. Bytes Length: {bytes.Length} Offset: {offset} Count: {count} BlocksizeAdjustedCount: {blocksizeAdjustedCount}", e);
+					}
 
-				EncryptionServiceProvider.Crypt(CryptoBuffer, 0, blocksizeAdjustedCount);
+					EncryptionServiceProvider.Crypt(CryptoBuffer, 0, blocksizeAdjustedCount);
 
-				//recurr to write the bytes with the now properly sized buffer.
-				await DecoratedClient.WriteAsync(CryptoBuffer, 0, blocksizeAdjustedCount)
-					.ConfigureAwait(false);
+					//recurr to write the bytes with the now properly sized buffer.
+					await DecoratedClient.WriteAsync(CryptoBuffer, 0, blocksizeAdjustedCount)
+						.ConfigureAwait(false);
+				}
 			}
 		}
 
