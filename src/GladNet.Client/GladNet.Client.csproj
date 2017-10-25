@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Common.Logging" Version="3.4.1" />
+    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.0.0-pre-05" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GladNet.API.Common\GladNet.API.Common.csproj" />
   </ItemGroup>
 
