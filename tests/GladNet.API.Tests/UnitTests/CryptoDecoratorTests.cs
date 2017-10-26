@@ -20,7 +20,7 @@ namespace GladNet.API.Tests
 			ICryptoServiceProvider encryptProvider = Mock.Of<ICryptoServiceProvider>();
 			ICryptoServiceProvider decryptProvider = Mock.Of<ICryptoServiceProvider>();
 
-			NetworkClientCryptoDecorator decorator = new NetworkClientCryptoDecorator(mockedClient, encryptProvider, decryptProvider, 1);
+			NetworkClientFixedBlockSizeCryptoDecorator decorator = new NetworkClientFixedBlockSizeCryptoDecorator(mockedClient, encryptProvider, decryptProvider, 1);
 		}
 
 		[Test]
@@ -111,7 +111,7 @@ namespace GladNet.API.Tests
 					return bytes;
 				});
 
-			return new NetworkClientCryptoDecorator(mockedClient.Object, encryptProvider, decryptProvider.Object, blockSize);
+			return new NetworkClientFixedBlockSizeCryptoDecorator(mockedClient.Object, encryptProvider, decryptProvider.Object, blockSize);
 		}
 	}
 }

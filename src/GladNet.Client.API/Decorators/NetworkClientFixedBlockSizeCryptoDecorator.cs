@@ -13,9 +13,10 @@ namespace GladNet
 {
 	/// <summary>
 	/// Crypto decroator for the <see cref="NetworkClientBase"/> that extends the <see cref="ReadAsync"/> and
-	/// <see cref="WriteAsync"/> methods with an encryption implementation.
+	/// <see cref="WriteAsync"/> methods with an encryption implementation. It will use a fixed
+	/// blocksize for reading and writing data.
 	/// </summary>
-	public sealed class NetworkClientCryptoDecorator : NetworkClientBase, IConnectable, IDisconnectable, IDisposable,
+	public sealed class NetworkClientFixedBlockSizeCryptoDecorator : NetworkClientBase, IConnectable, IDisconnectable, IDisposable,
 		IBytesWrittable, IBytesReadable
 	{
 		/// <summary>
@@ -61,7 +62,7 @@ namespace GladNet
 		/// <param name="decoratedClient">The client to decorate.</param>
 		/// <param name="encryptionServiceProvider">The encryption service.</param>
 		/// <param name="decryptionServiceProvider">The decryption service.</param>
-		public NetworkClientCryptoDecorator(NetworkClientBase decoratedClient, ICryptoServiceProvider encryptionServiceProvider, ICryptoServiceProvider decryptionServiceProvider, int blockSize)
+		public NetworkClientFixedBlockSizeCryptoDecorator(NetworkClientBase decoratedClient, ICryptoServiceProvider encryptionServiceProvider, ICryptoServiceProvider decryptionServiceProvider, int blockSize)
 		{
 			if(decoratedClient == null) throw new ArgumentNullException(nameof(decoratedClient));
 			if(encryptionServiceProvider == null) throw new ArgumentNullException(nameof(encryptionServiceProvider));
