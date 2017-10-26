@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FreecraftCore.Serializer
+namespace GladNet
 {
 	public interface INetworkSerializationService
 	{
