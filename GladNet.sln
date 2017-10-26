@@ -13,6 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.Client.API", "src\G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.Crypto.API", "src\GladNet.Crypto.API\GladNet.Crypto.API.csproj", "{5670C10B-2B94-4F7D-B360-6430CC2E7421}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.Serializer.API", "src\GladNet.Serializer.API\GladNet.Serializer.API.csproj", "{9388DDF7-E87E-4208-8322-4FB08499917F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.API.Tests", "tests\GladNet.API.Tests\GladNet.API.Tests.csproj", "{F32AAA31-0360-462C-A350-A08F9616BC91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +39,10 @@ Global
 		{9388DDF7-E87E-4208-8322-4FB08499917F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9388DDF7-E87E-4208-8322-4FB08499917F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9388DDF7-E87E-4208-8322-4FB08499917F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F32AAA31-0360-462C-A350-A08F9616BC91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F32AAA31-0360-462C-A350-A08F9616BC91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F32AAA31-0360-462C-A350-A08F9616BC91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F32AAA31-0360-462C-A350-A08F9616BC91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,6 +52,7 @@ Global
 		{C1BEA325-ACC8-411E-85A4-E99AA88A58B7} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{5670C10B-2B94-4F7D-B360-6430CC2E7421} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{9388DDF7-E87E-4208-8322-4FB08499917F} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
+		{F32AAA31-0360-462C-A350-A08F9616BC91} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}

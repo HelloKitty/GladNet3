@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GladNet.Common.API\GladNet.Common.API.csproj" />
     <ProjectReference Include="..\GladNet.Crypto.API\GladNet.Crypto.API.csproj" />
+    <ProjectReference Include="..\GladNet.Serializer.API\GladNet.Serializer.API.csproj" />
   </ItemGroup>
 
 </Project>

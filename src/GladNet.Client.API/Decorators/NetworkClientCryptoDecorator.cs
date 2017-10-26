@@ -76,6 +76,7 @@ namespace GladNet
 			//One of the lobby packets is 14,000 bytes. We may even need bigger.
 			CryptoBuffer = new byte[30000]; //TODO: Is this size good? Bigger? Smaller?
 			CryptoBlockOverflow = new byte[Math.Max(blockSize - 1, 0)]; //we only need
+			CryptoBlockOverflowReadIndex = CryptoBlockOverflow.Length; //set this to last index to indicate empty initially
 		}
 
 		public override async Task<bool> ConnectAsync(string ip, int port)
@@ -102,6 +103,7 @@ namespace GladNet
 		/// <returns>A future for the read bytes.</returns>
 		public override async Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
+			if(buffer == null) throw new ArgumentNullException(nameof(buffer));
 			if(start < 0) throw new ArgumentOutOfRangeException(nameof(start));
 			if(count < 0) throw new ArgumentOutOfRangeException(nameof(count), $"Cannot read less than 0 bytes. Can't read: {count} many bytes");
 
@@ -114,6 +116,7 @@ namespace GladNet
 			if(token.IsCancellationRequested)
 				return 0;
 
+			//TODO: Optimize for when the buffer is large enough. Right now it does needless BlockCopy even if there is room in the buffer
 			//We should lock incase there are multiple calls
 			using(await asyncObj.LockAsync())
 			{
@@ -121,6 +124,8 @@ namespace GladNet
 				//we don't need to do anything but copy the buffer and return
 				if(cryptoOverflowSize >= count)
 				{
+					Console.WriteLine("First case");
+
 					//Read from the crypto overflow and move the read index forward
 					Buffer.BlockCopy(CryptoBlockOverflow, CryptoBlockOverflowReadIndex, buffer, start, count);
 					CryptoBlockOverflowReadIndex = CryptoBlockOverflowReadIndex + count;
@@ -128,34 +133,89 @@ namespace GladNet
 				}
 				else if(cryptoOverflowSize == 0)
 				{
-					bool result = await ReadAndDecrypt(buffer, start, token, extendedCount);
+					Console.WriteLine("Second case");
 
-					//if the read/decrypt failed then return 0
-					if(!result)
-						return 0;
+					//Since the buffer MAY be large enough we check to avoid a potential BlockCopy
+					if(buffer.Length > extendedCount)
+					{
+						Console.WriteLine("Buffer is large enough");
 
-					FillCryptoOverflowWithExcess(buffer, count, extendedCount);
+						//Since the provider may not give a buffer large enough we should use the crypto buffer
+						bool result = await ReadAndDecrypt(buffer, start, token, extendedCount)
+							.ConfigureAwait(false);
+
+						//if the read/decrypt failed then return 0
+						if(!result)
+							return 0;
+
+						FillCryptoOverflowWithExcess(buffer, 0, count, extendedCount);
+					}
+					else
+					{
+						//Since the provider may not give a buffer large enough we should use the crypto buffer
+						bool result = await ReadAndDecrypt(CryptoBuffer, 0, token, extendedCount)
+							.ConfigureAwait(false);
+
+						//Now we must BlockCopy the requested amount into the buffer
+						Buffer.BlockCopy(CryptoBuffer, 0, buffer, start, count);
+
+						//if the read/decrypt failed then return 0
+						if(!result)
+							return 0;
+
+						FillCryptoOverflowWithExcess(CryptoBuffer, 0, count, extendedCount);
+					}
 				}
 				else if(cryptoOverflowSize < count)
 				{
+					Console.WriteLine($"Third case values OverflowIndex: {CryptoBlockOverflowReadIndex} OverflowSize: {cryptoOverflowSize} Start: {start} Count: {count} BufferLenght: {buffer.Length}");
+
 					//This case is more complex, and computationaly costly
 					//because we have some overflow but they want more than the overflow
 
-					Buffer.BlockCopy(CryptoBlockOverflow, CryptoBlockOverflowReadIndex, buffer, start, count);
+					Buffer.BlockCopy(CryptoBlockOverflow, CryptoBlockOverflowReadIndex, buffer, start, cryptoOverflowSize);
 					CryptoBlockOverflowReadIndex = CryptoBlockOverflow.Length; //set it to last index so we know we have no overflow anymore
+
+					Console.WriteLine("Done with third's first blockcopy");
 
 					//Recompute the extended count, since we read some of the cryptooverflow it will have changed potentially
 					int newCount = count - cryptoOverflowSize;
 					extendedCount = ConvertToBlocksizeCount(newCount);
 
-					//Read into buffer starting at the start requested + the overflow size
-					bool result = await ReadAndDecrypt(buffer, start + cryptoOverflowSize, token, extendedCount);
+					//We can't directly read this into the buffer provided
+					//it may not be large enough to handle the blocksize shift
+					//So we must read with the cryptobuffer and then blockcopy the result
+					if(buffer.Length > extendedCount + cryptoOverflowSize)
+					{
+						//Read into buffer starting at the start requested + the overflow size
+						bool result = await ReadAndDecrypt(buffer, start + cryptoOverflowSize, token, extendedCount)
+							.ConfigureAwait(false);
 
-					//if the read/decrypt failed then return 0
-					if(!result)
-						return 0;
+						//if the read/decrypt failed then return 0
+						if(!result)
+							return 0;
 
-					FillCryptoOverflowWithExcess(buffer, newCount, extendedCount);
+						Console.WriteLine("Done with third's read and decrypt");
+
+						FillCryptoOverflowWithExcess(buffer, start + cryptoOverflowSize, newCount, extendedCount);
+					}
+					else
+					{
+						//Read into buffer starting at the start requested + the overflow size
+						bool result = await ReadAndDecrypt(CryptoBuffer, 0, token, extendedCount)
+							.ConfigureAwait(false);
+
+						//if the read/decrypt failed then return 0
+						if(!result)
+							return 0;
+
+						//Now we must BlockCopy the requested amount into the buffer
+						Buffer.BlockCopy(CryptoBuffer, 0, buffer, start + cryptoOverflowSize, newCount);
+
+						Console.WriteLine("Done with third's read and decrypt");
+
+						FillCryptoOverflowWithExcess(CryptoBuffer, 0, newCount, extendedCount);
+					}
 				}
 			}
 
@@ -164,18 +224,18 @@ namespace GladNet
 			return count;
 		}
 
-		private void FillCryptoOverflowWithExcess(byte[] buffer, int count, int extendedCount)
+		private void FillCryptoOverflowWithExcess(byte[] buffer, int start, int initialCount, int extendedCount)
 		{
 			//If the original count asked for is not the same as the blocksize adjusted count
 			//we need to buffer the extra bytes
-			if(count != extendedCount)
+			if(initialCount != extendedCount)
 			{
-				int overflowSize = extendedCount - count;
+				int overflowSize = extendedCount - initialCount;
 				int readIndex = CryptoBlockOverflow.Length - overflowSize;
 
 				//We should read the overflow into starting index OverflowLength - overflowSize index and not starting at 0
 				//This allows us to know how many and what index to starting reading at all at the same time
-				Buffer.BlockCopy(buffer, extendedCount - overflowSize, CryptoBlockOverflow, readIndex, overflowSize);
+				Buffer.BlockCopy(buffer, start + (extendedCount - overflowSize), CryptoBlockOverflow, readIndex, overflowSize);
 				CryptoBlockOverflowReadIndex = readIndex;
 			}
 		}
