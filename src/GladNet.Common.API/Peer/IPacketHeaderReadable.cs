@@ -9,17 +9,17 @@ using GladNet;
 namespace GladNet
 {
 	/// <summary>
-	/// Contract for client that exposed <see cref="IPacketHeader"/> writing
+	/// Contract for client that exposed <see cref="IPacketHeader"/> reading
 	/// capabilities.
 	/// </summary>
-	public interface IPacketHeaderWritable
+	public interface IPacketHeaderReadable
 	{
 		/// <summary>
-		/// Attempts to write a <see cref="IPacketHeader"/> to the
-		/// client.
+		/// Attempts to read a <see cref="IPacketHeader"/> from
+		/// the client.
 		/// </summary>
-		/// <param name="header">The packet header to write.</param>
-		/// <returns>An awaitable future that completes when the header has been written.</returns>
-		Task WriteHeaderAsync(IPacketHeader header);
+		/// <param name="token">Token that can be used to cancel the operation.</param>
+		/// <returns>A PSOBBPacketHeader.</returns>
+		Task<IPacketHeader> ReadHeaderAsync(CancellationToken token);
 	}
 }
