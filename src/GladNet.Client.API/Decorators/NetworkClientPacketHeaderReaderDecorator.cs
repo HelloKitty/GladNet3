@@ -33,10 +33,13 @@ namespace GladNet
 		/// <summary>
 		/// </summary>
 		/// <param name="decoratedClient">The client to decorate.</param>
+		/// <param name="serializer"></param>
+		/// <param name="headerSize"></param>
 		public NetworkClientPacketHeaderReaderDecorator(NetworkClientBase decoratedClient, INetworkSerializationService serializer, int headerSize)
 		{
 			if(decoratedClient == null) throw new ArgumentNullException(nameof(decoratedClient));
 			if(serializer == null) throw new ArgumentNullException(nameof(serializer));
+			if(headerSize < 0) throw new ArgumentOutOfRangeException(nameof(headerSize));
 
 			//We need to support up to the maximum block
 			PacketHeaderBuffer = new byte[headerSize];
@@ -77,7 +80,6 @@ namespace GladNet
 			if(token.IsCancellationRequested)
 				return null;
 
-			//The header we know is 4 bytes.
 			//If we had access to the stream we could wrap it in a reader and use it
 			//without knowing the size. Since we don't have access we must manually read
 			await DecoratedClient.ReadAsync(PacketHeaderBuffer, 0, PacketHeaderBuffer.Length, token)
