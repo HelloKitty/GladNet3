@@ -18,7 +18,8 @@ namespace GladNet
 	/// <typeparam name="TClientType">The type of decorated client.</typeparam>
 	/// <typeparam name="TWritePayloadBaseType"></typeparam>
 	/// <typeparam name="TReadPayloadBaseType"></typeparam>
-	/// <typeparam name="TPayloadConstraintType"></typeparam>
+	/// <typeparam name="TPayloadConstraintType">The constraint requirement for </typeparam>
+	/// <typeparam name="THeaderReaderWriterType"></typeparam>
 	public sealed class NetworkClientPacketPayloadReaderWriterDecorator<TClientType, THeaderReaderWriterType, TReadPayloadBaseType, TWritePayloadBaseType, TPayloadConstraintType> : NetworkClientBase,
 		INetworkMessageClient<TReadPayloadBaseType, TWritePayloadBaseType>
 		where THeaderReaderWriterType : IPacketHeaderReadable, IPacketHeaderWritable

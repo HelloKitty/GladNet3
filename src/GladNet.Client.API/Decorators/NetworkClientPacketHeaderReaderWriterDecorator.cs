@@ -11,7 +11,7 @@ namespace GladNet
 	/// <summary>
 	/// Decorator that adds header reading functionality to the <see cref="NetworkClientBase"/>.
 	/// </summary>
-	public sealed class NetworkClientPacketHeaderReaderDecorator<TPacketHeaderType> : NetworkClientBase, IPacketHeaderReadable
+	public sealed class NetworkClientPacketHeaderReaderWriterDecorator<TPacketHeaderType> : NetworkClientBase, IPacketHeaderReadable, IPacketHeaderWritable
 		where TPacketHeaderType : IPacketHeader
 	{
 		/// <summary>
@@ -35,7 +35,7 @@ namespace GladNet
 		/// <param name="decoratedClient">The client to decorate.</param>
 		/// <param name="serializer"></param>
 		/// <param name="headerSize"></param>
-		public NetworkClientPacketHeaderReaderDecorator(NetworkClientBase decoratedClient, INetworkSerializationService serializer, int headerSize)
+		public NetworkClientPacketHeaderReaderWriterDecorator(NetworkClientBase decoratedClient, INetworkSerializationService serializer, int headerSize)
 		{
 			if(decoratedClient == null) throw new ArgumentNullException(nameof(decoratedClient));
 			if(serializer == null) throw new ArgumentNullException(nameof(serializer));
@@ -91,6 +91,16 @@ namespace GladNet
 
 			//This will deserialize
 			return Serializer.Deserialize<TPacketHeaderType>(PacketHeaderBuffer);
+		}
+
+		/// <inheritdoc />
+		public async Task WriteHeaderAsync(IPacketHeader header)
+		{
+			//We only need to serialize and then write
+			byte[] bytes = Serializer.Serialize(header);
+
+			await DecoratedClient.WriteAsync(bytes)
+				.ConfigureAwait(false);
 		}
 	}
 }
