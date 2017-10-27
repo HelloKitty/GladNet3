@@ -7,6 +7,7 @@ namespace GladNet
 	/// <summary>
 	/// Contract for a type that can construct
 	/// packets.
+	/// <typeparam name="TPayloadConstraintType">This is the contraint type required by the factory to act on the payload.</typeparam>
 	/// </summary>
 	public interface IPacketHeaderFactory<in TPayloadConstraintType>
 	{
