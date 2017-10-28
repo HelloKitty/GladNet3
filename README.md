@@ -1,6 +1,6 @@
 # GladNet3 (Glader's Library of Advanced Development for Network Emulation Technologies)
 
-GladNet3 is the 3rd generation of the .NET/C# GladNet networking library. The library evolved overtime to support the niche of server/client emulation for game development. The implementation supports already two major emulation implementations such as [World of Warcraft](https://www.github.com/FreecraftCore) and [Phantasy Star Online](https://www.github.com/HelloKitty/Booma.Proxy). In short GladNet3 is a library that contains a collection of APIs that allow you to quickly assemble a client that can connect to game servers. It has extendable support for multiple cryptography schemes and serializers. The recommended serialization for custom binary protocols is the [FreecraftCore.Serializer](https://www.github.com/FreecraftCore) which already supports Phantasy Star Online, World of Warcraft and many other custom binary protocols.
+GladNet3 is the 3rd generation of the .NET/C# GladNet networking library. The library evolved overtime to support the niche of server/client emulation for game development. The implementation supports already two major emulation implementations such as [World of Warcraft](https://www.github.com/FreecraftCore) and [Phantasy Star Online](https://www.github.com/HelloKitty/Booma.Proxy). In short GladNet3 is a library that contains a collection of APIs that allow you to quickly assemble a client that can connect to game servers or a server that can accept the connections of existing game clients. It has extendable API that can support multiple cryptography schemes and serializers. The recommended serialization for custom binary protocols is the [FreecraftCore.Serializer](https://www.github.com/FreecraftCore) which already supports Phantasy Star Online, World of Warcraft and many other custom binary protocols.
 
 ## Why
 
@@ -12,6 +12,7 @@ Just as ASP.NET has provided a common framework for .NET web development GladNet
 
 ## Features
 
+**Client**
 - [x] Async
 - [x] .NET TcpClient
 - [ ] HTTP Client
@@ -22,6 +23,9 @@ Just as ASP.NET has provided a common framework for .NET web development GladNet
 - [ ] JSON
 - [ ] Protobuf
 - [ ] XML
+
+**Server**
+Not yet implemented
 
 ## Builds
 
