@@ -20,18 +20,9 @@ namespace GladNet
 		/// </summary>
 		private int CurrentIndex { get; set; } = -1;
 
-		/// <summary>
-		/// Buffer that will temporarily hold the data if it's
-		/// smaller than the buffered size.
-		/// </summary>
-		private byte[] BufferedData { get; }
+		private AsyncLockableBuffer BufferedData { get; }
 
-		/// <summary>
-		/// Buffer to be copied into from the buffered data and the newly written data.
-		/// </summary>
-		private byte[] BufferCombinedBuffer { get; }
-
-		private readonly AsyncLock writeSyncObj = new AsyncLock();
+		private AsyncLockableBuffer CombinedBuffer { get; }
 
 		public NetworkClientBufferWriteUntilSizeReachedDecorator(NetworkClientBase decoratedClient, int bufferedWaitSize, int bufferedCombinedSize = 30000)
 		{
@@ -39,8 +30,8 @@ namespace GladNet
 			if(bufferedWaitSize <= 1) throw new ArgumentOutOfRangeException(nameof(bufferedWaitSize), "Do not use this decorator if you don't need buffered data.");
 
 			DecoratedClient = decoratedClient;
-			BufferedData = new byte[bufferedWaitSize];
-			BufferCombinedBuffer = new byte[bufferedCombinedSize];
+			BufferedData = new AsyncLockableBuffer(bufferedWaitSize);
+			CombinedBuffer = new AsyncLockableBuffer(bufferedCombinedSize);
 		}
 
 		/// <inheritdoc />
@@ -63,25 +54,26 @@ namespace GladNet
 			//If we have more bytes than we require buffering till
 			//we should just write
 			//We have to lock to prevent anything from touching the combined or buffer inbetween
-			using(await writeSyncObj.LockAsync())
+			using(await BufferedData.BufferLock.LockAsync())
+			using(await CombinedBuffer.BufferLock.LockAsync())
 			{
-				if(count > BufferedData.Length && CurrentIndex == -1)
+				if(count > BufferedData.Buffer.Length && CurrentIndex == -1)
 				{
 					await DecoratedClient.WriteAsync(bytes, offset, count);
 				}
-				else if(count + CurrentIndex + 1 > BufferedData.Length && CurrentIndex != -1)
+				else if(count + CurrentIndex + 1 > BufferedData.Buffer.Length && CurrentIndex != -1)
 				{
 					//TODO: Do this somehow without copying
-					Buffer.BlockCopy(BufferedData, 0, BufferCombinedBuffer, 0, CurrentIndex + 1);
-					Buffer.BlockCopy(bytes, offset, BufferCombinedBuffer, CurrentIndex + 1, count);
+					BufferUtil.QuickUnsafeCopy(BufferedData.Buffer, 0, CombinedBuffer.Buffer, 0, CurrentIndex + 1);
+					BufferUtil.QuickUnsafeCopy(bytes, offset, CombinedBuffer.Buffer, CurrentIndex + 1, count);
 
-					await DecoratedClient.WriteAsync(BufferCombinedBuffer, 0, count + CurrentIndex + 1);
+					await DecoratedClient.WriteAsync(CombinedBuffer.Buffer, 0, count + CurrentIndex + 1);
 					CurrentIndex = -1;
 				}
 				else
 				{
 					//At this point we know that the buffer isn't large enough to write so we need to buffer it
-					Buffer.BlockCopy(bytes, offset, BufferedData, CurrentIndex + 1, count);
+					BufferUtil.QuickUnsafeCopy(bytes, offset, BufferedData.Buffer, CurrentIndex + 1, count);
 					CurrentIndex += count;
 				}
 			}
