@@ -12,14 +12,16 @@ Just as ASP.NET has provided a common framework for .NET web development GladNet
 
 ## Features
 
-[x] Async
-[x] .NET TcpClient
-[] HTTP Client
-[] (R)UDP Client
-[] [FreecraftCore.Serializer](https://www.github.com/FreecraftCore) (Attribute-based custom binary protocol serializer)
-[] JSON
-[] Protobuf
-[] XML
+- [x] Async
+- [x] .NET TcpClient
+- [ ] HTTP Client
+- [ ] (R)UDP Client
+- [ ] Lidgren
+- [ ] PhotonServer Standalone
+- [ ] [FreecraftCore.Serializer](https://www.github.com/FreecraftCore) (Attribute-based custom binary protocol serializer)
+- [ ] JSON
+- [ ] Protobuf
+- [ ] XML
 
 ## Builds
 
