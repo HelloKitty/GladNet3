@@ -11,7 +11,7 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TIncomingPayloadType"></typeparam>
 	/// <typeparam name="TOutgoingPayloadType"></typeparam>
-	public interface IClientMessageHandler<TIncomingPayloadType, out TOutgoingPayloadType>
+	public interface IPeerMessageHandler<TIncomingPayloadType, out TOutgoingPayloadType>
 		where TIncomingPayloadType : class
 		where TOutgoingPayloadType : class
 	{
