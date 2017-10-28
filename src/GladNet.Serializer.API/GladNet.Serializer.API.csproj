@@ -2,6 +2,20 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
+    <Authors>Andrew Blakely, HelloKitty</Authors>
+    <Company />
+    <Product>GladNet</Product>
+    <Description>GladNet3's (Glader's Library for Advanced Development of Network Emulation Technologies) serializer API library. Install this package if you need to implement adapters for the serializer to be used in the GladNet3 networking.</Description>
+    <Copyright>Andrew Blakely</Copyright>
+    <PackageLicenseUrl>https://github.com/HelloKitty/GladNet3/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/HelloKitty/GladNet3</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HelloKitty/GladNet3</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>GladNet Emulation Emulator WoW PSO Network Unity3D Network Networking Netlib</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.3|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.3\GladNet.Serializer.API.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>
