@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{BCA471
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Client.DotNetTcpClient", "src\GladNet.Client.DotNetTcpClient\GladNet.Client.DotNetTcpClient.csproj", "{8F565E9D-75F6-4EBD-A349-3990700186F3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Serializers", "Serializers", "{B9A965D0-0A06-458C-8386-F2E8566F0354}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Serializer.FreecraftCore", "src\GladNet.Serializer.FreecraftCore\GladNet.Serializer.FreecraftCore.csproj", "{4341BE36-CCFB-4D40-BD51-6016FED107DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,10 @@ Global
 		{8F565E9D-75F6-4EBD-A349-3990700186F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F565E9D-75F6-4EBD-A349-3990700186F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F565E9D-75F6-4EBD-A349-3990700186F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4341BE36-CCFB-4D40-BD51-6016FED107DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4341BE36-CCFB-4D40-BD51-6016FED107DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4341BE36-CCFB-4D40-BD51-6016FED107DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4341BE36-CCFB-4D40-BD51-6016FED107DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +71,8 @@ Global
 		{F32AAA31-0360-462C-A350-A08F9616BC91} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}
 		{BCA47162-D2D9-4D42-B465-2F8BF07725C8} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{8F565E9D-75F6-4EBD-A349-3990700186F3} = {BCA47162-D2D9-4D42-B465-2F8BF07725C8}
+		{B9A965D0-0A06-458C-8386-F2E8566F0354} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
+		{4341BE36-CCFB-4D40-BD51-6016FED107DE} = {B9A965D0-0A06-458C-8386-F2E8566F0354}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
