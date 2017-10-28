@@ -40,4 +40,4 @@ TODO
 
 Contributions including pull requests, commits, notes, dumps, gists or anything else in the repository are licensed under the below licensing terms.
 
-AGPL with the exception that an unrestricted perpetual non-exclusive license is granted to [HelloKitty](www.github.com/HelloKitty) (Andrew Blakely)
+AGPL with the exception that an unrestricted perpetual non-exclusive license is granted to [HelloKitty](https://www.github.com/HelloKitty) (Andrew Blakely)
