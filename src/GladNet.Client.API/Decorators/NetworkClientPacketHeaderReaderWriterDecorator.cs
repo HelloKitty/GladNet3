@@ -94,13 +94,15 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task WriteHeaderAsync(IPacketHeader header)
+		public async Task<int> WriteHeaderAsync(IPacketHeader header)
 		{
 			//We only need to serialize and then write
 			byte[] bytes = Serializer.Serialize(header);
 
 			await DecoratedClient.WriteAsync(bytes)
 				.ConfigureAwait(false);
+
+			return bytes.Length;
 		}
 	}
 }

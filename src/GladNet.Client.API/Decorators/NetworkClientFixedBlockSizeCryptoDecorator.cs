@@ -125,8 +125,6 @@ namespace GladNet
 				//we don't need to do anything but copy the buffer and return
 				if(cryptoOverflowSize >= count)
 				{
-					Console.WriteLine("First case");
-
 					//Read from the crypto overflow and move the read index forward
 					Buffer.BlockCopy(CryptoBlockOverflow, CryptoBlockOverflowReadIndex, buffer, start, count);
 					CryptoBlockOverflowReadIndex = CryptoBlockOverflowReadIndex + count;
@@ -134,13 +132,9 @@ namespace GladNet
 				}
 				else if(cryptoOverflowSize == 0)
 				{
-					Console.WriteLine("Second case");
-
 					//Since the buffer MAY be large enough we check to avoid a potential BlockCopy
 					if(buffer.Length > extendedCount)
 					{
-						Console.WriteLine("Buffer is large enough");
-
 						//Since the provider may not give a buffer large enough we should use the crypto buffer
 						bool result = await ReadAndDecrypt(buffer, start, token, extendedCount)
 							.ConfigureAwait(false);
@@ -169,15 +163,11 @@ namespace GladNet
 				}
 				else if(cryptoOverflowSize < count)
 				{
-					Console.WriteLine($"Third case values OverflowIndex: {CryptoBlockOverflowReadIndex} OverflowSize: {cryptoOverflowSize} Start: {start} Count: {count} BufferLenght: {buffer.Length}");
-
 					//This case is more complex, and computationaly costly
 					//because we have some overflow but they want more than the overflow
 
 					Buffer.BlockCopy(CryptoBlockOverflow, CryptoBlockOverflowReadIndex, buffer, start, cryptoOverflowSize);
 					CryptoBlockOverflowReadIndex = CryptoBlockOverflow.Length; //set it to last index so we know we have no overflow anymore
-
-					Console.WriteLine("Done with third's first blockcopy");
 
 					//Recompute the extended count, since we read some of the cryptooverflow it will have changed potentially
 					int newCount = count - cryptoOverflowSize;
@@ -196,8 +186,6 @@ namespace GladNet
 						if(!result)
 							return 0;
 
-						Console.WriteLine("Done with third's read and decrypt");
-
 						FillCryptoOverflowWithExcess(buffer, start + cryptoOverflowSize, newCount, extendedCount);
 					}
 					else
@@ -212,8 +200,6 @@ namespace GladNet
 
 						//Now we must BlockCopy the requested amount into the buffer
 						Buffer.BlockCopy(CryptoBuffer, 0, buffer, start + cryptoOverflowSize, newCount);
-
-						Console.WriteLine("Done with third's read and decrypt");
 
 						FillCryptoOverflowWithExcess(CryptoBuffer, 0, newCount, extendedCount);
 					}

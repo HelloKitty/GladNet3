@@ -28,11 +28,15 @@ namespace GladNet
 		private TVectorType InitializationVector { get; set; }
 
 		/// <inheritdoc />
-		public EncryptionLazyWithoutKeyDecorator(Func<TVectorType, ICryptoServiceProvider> creationFunc)
+		public int BlockSize { get; }
+
+		/// <inheritdoc />
+		public EncryptionLazyWithoutKeyDecorator(Func<TVectorType, ICryptoServiceProvider> creationFunc, int blockSize)
 		{
 			if(creationFunc == null) throw new ArgumentNullException(nameof(creationFunc));
 
 			CreationFunc = creationFunc;
+			BlockSize = blockSize;
 			CryptoProvider = new Lazy<ICryptoServiceProvider>(InitializeCryptoProvider, true);
 		}
 

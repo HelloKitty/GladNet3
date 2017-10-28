@@ -19,7 +19,7 @@ namespace GladNet
 		/// client.
 		/// </summary>
 		/// <param name="header">The packet header to write.</param>
-		/// <returns>An awaitable future that completes when the header has been written.</returns>
-		Task WriteHeaderAsync(IPacketHeader header);
+		/// <returns>An awaitable future that indicates the written/serialized size of the provided <see cref="header"/>.</returns>
+		Task<int> WriteHeaderAsync(IPacketHeader header);
 	}
 }

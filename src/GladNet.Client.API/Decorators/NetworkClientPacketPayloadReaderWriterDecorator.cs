@@ -42,18 +42,22 @@ namespace GladNet
 		/// </summary>
 		private INetworkSerializationService Serializer { get; }
 
-		//TODO: Thread safety
 		/// <summary>
 		/// Thread specific buffer used to deserialize the packet header bytes into.
 		/// </summary>
-		private byte[] PacketPayloadBuffer { get; }
+		private byte[] PacketPayloadReadBuffer { get; }
 
 		private IPacketHeaderFactory<TPayloadConstraintType> PacketHeaderFactory { get; }
 
 		/// <summary>
-		/// Async syncronization object.
+		/// Async read syncronization object.
 		/// </summary>
-		private readonly AsyncLock synObj = new AsyncLock();
+		private readonly AsyncLock readSynObj = new AsyncLock();
+
+		/// <summary>
+		/// Async write syncronization object.
+		/// </summary>
+		private readonly AsyncLock writeSynObj = new AsyncLock();
 
 		public NetworkClientPacketPayloadReaderWriterDecorator(TClientType decoratedClient, THeaderReaderWriterType headerReaderWriter, INetworkSerializationService serializer, IPacketHeaderFactory<TPayloadConstraintType> packetHeaderFactory, int payloadBufferSize = 30000)
 		{
@@ -68,7 +72,7 @@ namespace GladNet
 			HeaderReaderWriter = headerReaderWriter;
 
 			//One of the lobby packets is 14,000 bytes. We may even need bigger.
-			PacketPayloadBuffer = new byte[payloadBufferSize]; //TODO: Do we need a larger buffer for any packets?
+			PacketPayloadReadBuffer = new byte[payloadBufferSize]; //TODO: Do we need a larger buffer for any packets?
 		}
 
 		/// <inheritdoc />
@@ -108,7 +112,7 @@ namespace GladNet
 			IPacketHeader header = PacketHeaderFactory.Create(payload, payloadData);
 
 			//VERY critical we lock here otherwise we could write a header and then another unrelated body could be written inbetween
-			using(await synObj.LockAsync())
+			using(await writeSynObj.LockAsync())
 			{
 				//It's important to always write the header first
 				await HeaderReaderWriter.WriteHeaderAsync(header)
@@ -131,7 +135,7 @@ namespace GladNet
 		{
 			IPacketHeader header = null;
 
-			using(await synObj.LockAsync(token))
+			using(await readSynObj.LockAsync(token))
 			{
 				//Read the header first
 				header = await HeaderReaderWriter.ReadHeaderAsync(token)
@@ -142,7 +146,7 @@ namespace GladNet
 					return null;
 
 				//We need to read enough bytes to deserialize the payload
-				await ReadAsync(PacketPayloadBuffer, 0, header.PayloadSize, token)
+				await ReadAsync(PacketPayloadReadBuffer, 0, header.PayloadSize, token)
 					.ConfigureAwait(false);//TODO: Should we timeout?
 			}
 
@@ -152,7 +156,7 @@ namespace GladNet
 
 			//Deserialize the bytes starting from the begining but ONLY read up to the payload size. We reuse this buffer and it's large
 			//so if we don't specify the length we could end up with an issue.
-			TReadPayloadBaseType payload = Serializer.Deserialize<TReadPayloadBaseType>(PacketPayloadBuffer, 0, header.PayloadSize);
+			TReadPayloadBaseType payload = Serializer.Deserialize<TReadPayloadBaseType>(PacketPayloadReadBuffer, 0, header.PayloadSize);
 
 			return new NetworkIncomingMessage<TReadPayloadBaseType>(header, payload);
 		}
