@@ -39,8 +39,9 @@ namespace GladNet
 		/// </summary>
 		private int BlockSize { get; }
 
-		//TODO: Threadsafety
-		private byte[] CryptoBuffer { get; }
+		private byte[] CryptoWriteBuffer { get; }
+
+		private byte[] CryptoReadBuffer { get; }
 
 		/// <summary>
 		/// This is a buffer that can hold the overflow for som,e
@@ -50,9 +51,14 @@ namespace GladNet
 		private int CryptoBlockOverflowReadIndex { get; set; }
 
 		/// <summary>
-		/// The async locking object.
+		/// Async read syncronization object.
 		/// </summary>
-		private readonly AsyncLock asyncObj = new AsyncLock();
+		private readonly AsyncLock readSynObj = new AsyncLock();
+
+		/// <summary>
+		/// Async write syncronization object.
+		/// </summary>
+		private readonly AsyncLock writeSynObj = new AsyncLock();
 
 		/// <summary>
 		/// Creates a new crypto decorator for the <see cref="NetworkClientBase"/>.
@@ -62,7 +68,7 @@ namespace GladNet
 		/// <param name="decoratedClient">The client to decorate.</param>
 		/// <param name="encryptionServiceProvider">The encryption service.</param>
 		/// <param name="decryptionServiceProvider">The decryption service.</param>
-		public NetworkClientFixedBlockSizeCryptoDecorator(NetworkClientBase decoratedClient, ICryptoServiceProvider encryptionServiceProvider, ICryptoServiceProvider decryptionServiceProvider, int blockSize)
+		public NetworkClientFixedBlockSizeCryptoDecorator(NetworkClientBase decoratedClient, ICryptoServiceProvider encryptionServiceProvider, ICryptoServiceProvider decryptionServiceProvider, int blockSize, int cryptoBufferSize = 30000)
 		{
 			if(decoratedClient == null) throw new ArgumentNullException(nameof(decoratedClient));
 			if(encryptionServiceProvider == null) throw new ArgumentNullException(nameof(encryptionServiceProvider));
@@ -75,7 +81,8 @@ namespace GladNet
 			BlockSize = blockSize;
 
 			//One of the lobby packets is 14,000 bytes. We may even need bigger.
-			CryptoBuffer = new byte[30000]; //TODO: Is this size good? Bigger? Smaller?
+			CryptoWriteBuffer = new byte[cryptoBufferSize]; //TODO: Is this size good? Bigger? Smaller?
+			CryptoReadBuffer = new byte[cryptoBufferSize];
 			CryptoBlockOverflow = new byte[Math.Max(blockSize - 1, 0)]; //we only need
 			CryptoBlockOverflowReadIndex = CryptoBlockOverflow.Length; //set this to last index to indicate empty initially
 		}
@@ -119,7 +126,7 @@ namespace GladNet
 
 			//TODO: Optimize for when the buffer is large enough. Right now it does needless BlockCopy even if there is room in the buffer
 			//We should lock incase there are multiple calls
-			using(await asyncObj.LockAsync())
+			using(await readSynObj.LockAsync())
 			{
 				//If the overflow size is the exact size asked for then
 				//we don't need to do anything but copy the buffer and return
@@ -148,17 +155,17 @@ namespace GladNet
 					else
 					{
 						//Since the provider may not give a buffer large enough we should use the crypto buffer
-						bool result = await ReadAndDecrypt(CryptoBuffer, 0, token, extendedCount)
+						bool result = await ReadAndDecrypt(CryptoReadBuffer, 0, token, extendedCount)
 							.ConfigureAwait(false);
 
 						//Now we must BlockCopy the requested amount into the buffer
-						Buffer.BlockCopy(CryptoBuffer, 0, buffer, start, count);
+						Buffer.BlockCopy(CryptoReadBuffer, 0, buffer, start, count);
 
 						//if the read/decrypt failed then return 0
 						if(!result)
 							return 0;
 
-						FillCryptoOverflowWithExcess(CryptoBuffer, 0, count, extendedCount);
+						FillCryptoOverflowWithExcess(CryptoReadBuffer, 0, count, extendedCount);
 					}
 				}
 				else if(cryptoOverflowSize < count)
@@ -191,7 +198,7 @@ namespace GladNet
 					else
 					{
 						//Read into buffer starting at the start requested + the overflow size
-						bool result = await ReadAndDecrypt(CryptoBuffer, 0, token, extendedCount)
+						bool result = await ReadAndDecrypt(CryptoReadBuffer, 0, token, extendedCount)
 							.ConfigureAwait(false);
 
 						//if the read/decrypt failed then return 0
@@ -199,9 +206,9 @@ namespace GladNet
 							return 0;
 
 						//Now we must BlockCopy the requested amount into the buffer
-						Buffer.BlockCopy(CryptoBuffer, 0, buffer, start + cryptoOverflowSize, newCount);
+						Buffer.BlockCopy(CryptoReadBuffer, 0, buffer, start + cryptoOverflowSize, newCount);
 
-						FillCryptoOverflowWithExcess(CryptoBuffer, 0, newCount, extendedCount);
+						FillCryptoOverflowWithExcess(CryptoReadBuffer, 0, newCount, extendedCount);
 					}
 				}
 			}
@@ -261,23 +268,23 @@ namespace GladNet
 			else
 			{
 				//Lock because we use the crypto buffer for this
-				using(await asyncObj.LockAsync())
+				using(await writeSynObj.LockAsync())
 				{
 					try
 					{
 						//We copy to the thread local buffer so we can use it as an extended buffer by "neededBytes" many more bytes.
 						//So the buffer is very large but we'll tell it to write bytes.length + neededBytes.
-						Buffer.BlockCopy(bytes, offset, CryptoBuffer, 0, count); //dont copy full array, might only need less with count
+						Buffer.BlockCopy(bytes, offset, CryptoWriteBuffer, 0, count); //dont copy full array, might only need less with count
 					}
 					catch(Exception e)
 					{
 						throw new InvalidOperationException($"Failed to copy bytes to crypto buffer. Bytes Length: {bytes.Length} Offset: {offset} Count: {count} BlocksizeAdjustedCount: {blocksizeAdjustedCount}", e);
 					}
 
-					EncryptionServiceProvider.Crypt(CryptoBuffer, 0, blocksizeAdjustedCount);
+					EncryptionServiceProvider.Crypt(CryptoWriteBuffer, 0, blocksizeAdjustedCount);
 
 					//recurr to write the bytes with the now properly sized buffer.
-					await DecoratedClient.WriteAsync(CryptoBuffer, 0, blocksizeAdjustedCount)
+					await DecoratedClient.WriteAsync(CryptoWriteBuffer, 0, blocksizeAdjustedCount)
 						.ConfigureAwait(false);
 				}
 			}
