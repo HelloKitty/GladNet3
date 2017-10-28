@@ -15,13 +15,13 @@ namespace GladNet
 	/// It is built around the <see cref="TcpClient"/> provided in .NET and manages, destroys
 	/// and creates them depending on the externally provided API.
 	/// </summary>
-	public sealed class PSOBBNetworkClient : NetworkClientBase, IConnectable, IDisconnectable, IDisposable,
+	public sealed class DotNetTcpClientNetworkClient : NetworkClientBase, IConnectable, IDisconnectable, IDisposable,
 		IBytesWrittable, IBytesReadable
 	{
 		//Can't be readonly because clients may want to reconnect
 		private TcpClient InternalTcpClient { get; set; }
 
-		public PSOBBNetworkClient()
+		public DotNetTcpClientNetworkClient()
 		{
 			InternalTcpClient = new TcpClient();
 		}
