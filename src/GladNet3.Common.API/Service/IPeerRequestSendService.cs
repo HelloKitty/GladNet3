@@ -25,6 +25,6 @@ namespace GladNet
 		/// <param name="method">The delivery method to use for sending. (Should probably use reliable since we expect a response)</param>
 		/// <param name="cancellationToken">The cancellation token to use for sending the request. (A timeout)</param>
 		/// <returns>A future that contains the response.</returns>
-		Task<TResponseType> SendRequestAsync<TResponseType>(TPayloadBaseType request, DeliveryMethod method, CancellationToken cancellationToken);
+		Task<TResponseType> SendRequestAsync<TResponseType>(TPayloadBaseType request, DeliveryMethod method = DeliveryMethod.ReliableOrdered, CancellationToken cancellationToken = default(CancellationToken));
 	}
 }
