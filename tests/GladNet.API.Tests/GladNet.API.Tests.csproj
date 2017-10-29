@@ -57,25 +57,21 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GladNet.Client.API\GladNet.Client.API.csproj">
-      <Project>{c1bea325-acc8-411e-85a4-e99aa88a58b7}</Project>
-      <Name>GladNet.Client.API</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\GladNet.Common.API\GladNet.Common.API.csproj">
-      <Project>{73d89ba6-a1f7-46a3-8b2d-2635bebecaad}</Project>
-      <Name>GladNet.Common.API</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\GladNet.Crypto.API\GladNet.Crypto.API.csproj">
-      <Project>{5670c10b-2b94-4f7d-b360-6430cc2e7421}</Project>
-      <Name>GladNet.Crypto.API</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\GladNet.Serializer.API\GladNet.Serializer.API.csproj">
-      <Project>{9388ddf7-e87e-4208-8322-4fb08499917f}</Project>
-      <Name>GladNet.Serializer.API</Name>
-    </ProjectReference>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <ProjectReference Include="..\..\src\GladNet3.Client.API\GladNet3.Client.API.csproj">
+      <Project>{5f2cc244-b9c0-4d08-aca8-c48909bd131a}</Project>
+      <Name>GladNet3.Client.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\GladNet3.Common.API\GladNet3.Common.API.csproj">
+      <Project>{e5497de9-4a38-41ec-bd37-757a6d1d35f1}</Project>
+      <Name>GladNet3.Common.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\GladNet3.Crypto.API\GladNet3.Crypto.API.csproj">
+      <Project>{21c478b1-a44e-49b0-ac1c-ddb9a5c50b56}</Project>
+      <Name>GladNet3.Crypto.API</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

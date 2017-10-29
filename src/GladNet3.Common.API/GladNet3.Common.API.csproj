@@ -5,7 +5,7 @@
     <Authors>Andrew Blakely, HelloKitty</Authors>
     <Company />
     <Product>GladNet</Product>
-    <Description>GladNet3's (Glader's Library for Advanced Development of Network Emulation Technologies) handler API. Install this if you want to create message handlers that can handle GladNet3 messages.</Description>
+    <Description>GladNet3's (Glader's Library for Advanced Development of Network Emulation Technologies) common API library that provides shared API for both client and server.</Description>
     <Copyright>Andrew Blakely</Copyright>
     <PackageLicenseUrl>https://github.com/HelloKitty/GladNet3/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/HelloKitty/GladNet3</PackageProjectUrl>
@@ -14,12 +14,8 @@
     <PackageTags>GladNet Emulation Emulator WoW PSO Network Unity3D Network Networking Netlib</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.3|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.3\GladNet.Handler.API.xml</DocumentationFile>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DocumentationFile>bin\Release\netstandard1.3\GladNet3.Common.API.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\GladNet.Common.API\GladNet.Common.API.csproj" />
-  </ItemGroup>
 
 </Project>

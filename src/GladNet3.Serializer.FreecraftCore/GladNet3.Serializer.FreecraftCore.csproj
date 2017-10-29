@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
+    <TargetFrameworks>netstandard1.5;net46</TargetFrameworks>
     <Authors>Andrew Blakely, HelloKitty</Authors>
     <Company />
     <Product>GladNet</Product>
-    <Description>GladNet3's (Glader's Library for Advanced Development of Network Emulation Technologies) serializer API library. Install this package if you need to implement adapters for the serializer to be used in the GladNet3 networking.</Description>
+    <Description>GladNet3's (Glader's Library for Advanced Development of Network Emulation Technologies) FreecratCore.Serializer implementation of the GladNet.Serializer.API.</Description>
     <Copyright>Andrew Blakely</Copyright>
     <PackageLicenseUrl>https://github.com/HelloKitty/GladNet3/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/HelloKitty/GladNet3</PackageProjectUrl>
@@ -14,8 +14,16 @@
     <PackageTags>GladNet Emulation Emulator WoW PSO Network Unity3D Network Networking Netlib</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.3|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.3\GladNet.Serializer.API.xml</DocumentationFile>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DocumentationFile>bin\Release\netstandard1.5\GladNet3.Serializer.FreecraftCore.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FreecraftCore.Serializer" Version="3.0.16" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GladNet3.Serializer.API\GladNet3.Serializer.API.csproj" />
+  </ItemGroup>
 
 </Project>
