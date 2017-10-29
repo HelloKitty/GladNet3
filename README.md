@@ -29,12 +29,13 @@ Not yet implemented
 
 ## Builds
 
-MyGet: TODO
+MyGet: [![hellokitty MyGet Build Status](https://www.myget.org/BuildSource/Badge/hellokitty?identifier=54edfe3f-1866-4631-83a2-45babc94dc08)](https://www.myget.org/)
+
 NuGet: TODO
 
 ## Tests
 
-TODO
+AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/gltvbgh5o4h91fo8?svg=true)](https://ci.appveyor.com/project/HelloKitty/gladnet3)
 
 ## License
 
