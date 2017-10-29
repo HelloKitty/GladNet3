@@ -23,7 +23,7 @@ namespace GladNet
 		/// <param name="payload">The payload to send.</param>
 		/// <param name="method">The delivery method for sending the message.</param>
 		/// <returns>Indicates the result of the send message operation.</returns>
-		Task<SendResult> SendMessage<TPayloadType>(TPayloadType payload, DeliveryMethod method)
+		Task<SendResult> SendMessage<TPayloadType>(TPayloadType payload, DeliveryMethod method = DeliveryMethod.ReliableOrdered)
 			where TPayloadType : class, TPayloadBaseType;
 	}
 }
