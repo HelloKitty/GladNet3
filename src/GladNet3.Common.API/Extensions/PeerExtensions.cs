@@ -26,7 +26,8 @@ namespace GladNet
 			if(payload == null) throw new ArgumentNullException(nameof(payload));
 
 			//We default to reliable ordered as if this is TCP
-			return await sendService.SendMessage(payload, DeliveryMethod.ReliableOrdered);
+			return await sendService.SendMessage(payload, DeliveryMethod.ReliableOrdered)
+				.ConfigureAwait(false);
 		}
 
 		//This extension mostly exists for the old TCP-only API
@@ -46,7 +47,8 @@ namespace GladNet
 			if(request == null) throw new ArgumentNullException(nameof(request));
 
 			//Since no delivry or cancel was provided we should default to reliable and also make sure there is no cancel
-			return await sendService.SendRequestAsync<TResponseType>(request, DeliveryMethod.ReliableOrdered, CancellationToken.None);
+			return await sendService.SendRequestAsync<TResponseType>(request, DeliveryMethod.ReliableOrdered, CancellationToken.None)
+				.ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -58,7 +60,8 @@ namespace GladNet
 		{
 			if(packetHeaderReadable == null) throw new ArgumentNullException(nameof(packetHeaderReadable));
 
-			return await packetHeaderReadable.ReadHeaderAsync(CancellationToken.None);
+			return await packetHeaderReadable.ReadHeaderAsync(CancellationToken.None)
+				.ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -93,7 +96,8 @@ namespace GladNet
 		{
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
-			return await readable.ReadAsync(CancellationToken.None);
+			return await readable.ReadAsync(CancellationToken.None)
+				.ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -107,7 +111,8 @@ namespace GladNet
 			if(writer == null) throw new ArgumentNullException(nameof(writer));
 
 			//Don't await the task.
-			writer.WriteAsync(payload);
+			writer.WriteAsync(payload)
+				.ConfigureAwait(false);
 		}
 
 		//TODO: Add cancellation token support
@@ -119,7 +124,8 @@ namespace GladNet
 		/// <returns>An awaitable for the next recieved payload of the speified type.</returns>
 		public static async Task<TResponseType> InterceptPayload<TResponseType>(this IPayloadInterceptable interceptable)
 		{
-			return await interceptable.InterceptPayload<TResponseType>(CancellationToken.None);
+			return await interceptable.InterceptPayload<TResponseType>(CancellationToken.None)
+				.ConfigureAwait(false);
 		}
 
 		/// <summary>

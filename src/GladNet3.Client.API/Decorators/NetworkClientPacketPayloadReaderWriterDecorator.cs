@@ -86,7 +86,8 @@ namespace GladNet
 		public override async Task ClearReadBuffers()
 		{
 			using(await readSynObj.LockAsync().ConfigureAwait(false))
-				await DecoratedClient.ClearReadBuffers();
+				await DecoratedClient.ClearReadBuffers()
+					.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />

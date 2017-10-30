@@ -37,13 +37,15 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
-			return await DecoratedClient.ReadAsync(buffer, start, count, token);
+			return await DecoratedClient.ReadAsync(buffer, start, count, token)
+				.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
 		public override async Task ClearReadBuffers()
 		{
-			await DecoratedClient.ClearReadBuffers();
+			await DecoratedClient.ClearReadBuffers()
+				.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
@@ -66,7 +68,8 @@ namespace GladNet
 			{
 				if(count > BufferedData.Buffer.Length && CurrentIndex == -1)
 				{
-					await DecoratedClient.WriteAsync(bytes, offset, count);
+					await DecoratedClient.WriteAsync(bytes, offset, count)
+						.ConfigureAwait(false);
 				}
 				else if(count + CurrentIndex + 1 > BufferedData.Buffer.Length && CurrentIndex != -1)
 				{
@@ -74,7 +77,8 @@ namespace GladNet
 					BufferUtil.QuickUnsafeCopy(BufferedData.Buffer, 0, CombinedBuffer.Buffer, 0, CurrentIndex + 1);
 					BufferUtil.QuickUnsafeCopy(bytes, offset, CombinedBuffer.Buffer, CurrentIndex + 1, count);
 
-					await DecoratedClient.WriteAsync(CombinedBuffer.Buffer, 0, count + CurrentIndex + 1);
+					await DecoratedClient.WriteAsync(CombinedBuffer.Buffer, 0, count + CurrentIndex + 1)
+						.ConfigureAwait(false);
 					CurrentIndex = -1;
 				}
 				else

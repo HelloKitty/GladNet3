@@ -50,13 +50,15 @@ namespace GladNet
 		//TODO: This is copy-pasted from above, to avoid creating tokens when we don't need them. Should we refactor?
 		public override async Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
-			return await DecoratedClient.ReadAsync(buffer, start, count, token);
+			return await DecoratedClient.ReadAsync(buffer, start, count, token)
+				.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
-		public override Task ClearReadBuffers()
+		public override async Task ClearReadBuffers()
 		{
-			return DecoratedClient.ClearReadBuffers();
+			await DecoratedClient.ClearReadBuffers()
+				.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />

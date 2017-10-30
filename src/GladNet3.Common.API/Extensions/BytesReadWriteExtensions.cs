@@ -34,7 +34,8 @@ namespace GladNet
 
 			byte[] bytes = new byte[count];
 
-			int resultCount = await readable.ReadAsync(bytes, 0, count, timeoutInMilliseconds);
+			int resultCount = await readable.ReadAsync(bytes, 0, count, timeoutInMilliseconds)
+				.ConfigureAwait(false);
 
 			if(resultCount != count)
 				throw new InvalidOperationException($"Failed to read {count} many bytes form {nameof(IBytesReadable)}. Read {resultCount} many bytes.");
@@ -54,7 +55,8 @@ namespace GladNet
 		{
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
-			return await readable.ReadAsync(buffer, 0, count, new CancellationTokenSource(timeoutInMilliseconds).Token);
+			return await readable.ReadAsync(buffer, 0, count, new CancellationTokenSource(timeoutInMilliseconds).Token)
+				.ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -94,7 +96,8 @@ namespace GladNet
 		{
 			if(writable == null) throw new ArgumentNullException(nameof(writable));
 
-			await writable.WriteAsync(bytes, 0, bytes.Length);
+			await writable.WriteAsync(bytes, 0, bytes.Length)
+				.ConfigureAwait(false);
 		}
 	}
 }

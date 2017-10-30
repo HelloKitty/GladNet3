@@ -97,7 +97,8 @@ namespace GladNet
 			{
 				//Reset the crypto buffer
 				CryptoBlockOverflowReadIndex = CryptoBlockOverflow.Length;
-				await DecoratedClient.ClearReadBuffers();
+				await DecoratedClient.ClearReadBuffers()
+					.ConfigureAwait(false);
 			}
 		}
 

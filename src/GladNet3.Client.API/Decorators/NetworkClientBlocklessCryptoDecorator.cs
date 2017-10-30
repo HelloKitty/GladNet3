@@ -61,7 +61,8 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task ClearReadBuffers()
 		{
-			await DecoratedClient.ClearReadBuffers();
+			await DecoratedClient.ClearReadBuffers()
+				.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
@@ -87,7 +88,8 @@ namespace GladNet
 			if(count < 0) throw new ArgumentOutOfRangeException(nameof(count), $"Cannot read less than 0 bytes. Can't read: {count} many bytes");
 			if(buffer.Length < count) throw new ArgumentException($"Buffer must have a length that is at least the Count: {count}.", nameof(buffer));
 
-			bool result = await ReadAndDecrypt(buffer, start, count, token);
+			bool result = await ReadAndDecrypt(buffer, start, count, token)
+				.ConfigureAwait(false);
 
 			if(!result)
 				return 0;

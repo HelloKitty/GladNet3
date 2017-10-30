@@ -18,7 +18,8 @@ namespace GladNet
 		{
 			if(producer == null) throw new ArgumentNullException(nameof(producer));
 
-			return await producer.ReadMessageAsync(CancellationToken.None);
+			return await producer.ReadMessageAsync(CancellationToken.None)
+				.ConfigureAwait(false);
 		}
 	}
 }
