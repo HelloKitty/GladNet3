@@ -46,6 +46,13 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
+		public override Task ClearReadBuffers()
+		{
+			//We can't do anything, there is no buffer
+			return Task.CompletedTask;
+		}
+
+		/// <inheritdoc />
 		public override Task DisconnectAsync(int delay)
 		{
 			if(InternalTcpClient == null)
