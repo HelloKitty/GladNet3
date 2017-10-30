@@ -52,11 +52,74 @@ namespace GladNet
 		/// </summary>
 		/// <typeparam name="TPayloadType">The payload type.</typeparam>
 		/// <returns>A network message client.</returns>
-		public NetworkClientPacketPayloadReaderWriterDecorator<TNetworkType, THeaderReaderWriterType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType> For<TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(IPacketHeaderFactory<TPayloadConstraintType> packetHeaderFactory) 
+		public NetworkClientPacketPayloadReaderWriterDecorator<TNetworkType, THeaderReaderWriterType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType> Build<TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(IPacketHeaderFactory<TPayloadConstraintType> packetHeaderFactory) 
 			where TReadPayloadType : class, TPayloadConstraintType 
 			where TWritePayloadType : class, TPayloadConstraintType
 		{
 			return new NetworkClientPacketPayloadReaderWriterDecorator<TNetworkType, THeaderReaderWriterType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(Client, HeaderReaderWriter, Serializer, packetHeaderFactory);
+		}
+
+		/// <summary>
+		/// Creates a <see cref="NetworkClientBase"/> client that can handle read and writing 
+		/// the specified generic <typeparamref name="TPayloadType"/>.
+		/// </summary>
+		/// <typeparam name="TPayloadType">The payload type.</typeparam>
+		/// <returns>A network message client.</returns>
+		public NetworkMessageClientBuilder<NetworkClientPacketPayloadReaderWriterDecorator<TNetworkType, THeaderReaderWriterType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>, TReadPayloadType, TWritePayloadType> For<TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(IPacketHeaderFactory<TPayloadConstraintType> packetHeaderFactory)
+			where TReadPayloadType : class, TPayloadConstraintType
+			where TWritePayloadType : class, TPayloadConstraintType
+		{
+			return new NetworkMessageClientBuilder<NetworkClientPacketPayloadReaderWriterDecorator<TNetworkType, THeaderReaderWriterType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>, TReadPayloadType, TWritePayloadType>(new NetworkClientPacketPayloadReaderWriterDecorator<TNetworkType, THeaderReaderWriterType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(Client, HeaderReaderWriter, Serializer, packetHeaderFactory));
+		}
+	}
+
+	public sealed class NetworkMessageClientBuilder<TNetworkType, TReadPayloadType, TWritePayloadType>
+		where TNetworkType : NetworkClientBase, INetworkMessageClient<TReadPayloadType, TWritePayloadType>
+		where TReadPayloadType : class
+		where TWritePayloadType : class
+	{
+		/// <summary>
+		/// The network client to decorate.
+		/// </summary>
+		public TNetworkType Client { get; }
+
+		public NetworkMessageClientBuilder(TNetworkType client)
+		{
+			if(client == null) throw new ArgumentNullException(nameof(client));
+
+			Client = client;
+		}
+
+		//Hack: Use obsolete to warn user.
+		/// <summary>
+		/// Allows the fallback for not calling <see cref="For{TPayloadType}"/>.
+		/// </summary>
+		/// <param name="builder">The builder.</param>
+		[Obsolete("Did you mean to call Build?")]
+		public static implicit operator TNetworkType(NetworkMessageClientBuilder<TNetworkType, TReadPayloadType, TWritePayloadType> builder)
+		{
+			if(builder == null) throw new ArgumentNullException(nameof(builder));
+
+			return builder.Client;
+		}
+
+		/// <summary>
+		/// Builds and returns the network message client.
+		/// </summary>
+		/// <returns></returns>
+		public TNetworkType Build()
+		{
+			return Client;
+		}
+
+		/// <summary>
+		/// Decorates the network client with read buffer clearing
+		/// after message reads.
+		/// </summary>
+		/// <returns>A new builder to continue building from.</returns>
+		public NetworkMessageClientBuilder<NetworkClientNetworkMessageReadingClearBuffersAfterReadDecorator<TNetworkType, TReadPayloadType, TWritePayloadType>, TReadPayloadType, TWritePayloadType> AddReadBufferClearing()
+		{
+			return new NetworkMessageClientBuilder<NetworkClientNetworkMessageReadingClearBuffersAfterReadDecorator<TNetworkType, TReadPayloadType, TWritePayloadType>, TReadPayloadType, TWritePayloadType>(new NetworkClientNetworkMessageReadingClearBuffersAfterReadDecorator<TNetworkType, TReadPayloadType, TWritePayloadType>(Client));
 		}
 	}
 }
