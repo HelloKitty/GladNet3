@@ -85,7 +85,7 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task ClearReadBuffers()
 		{
-			using(await readSynObj.LockAsync())
+			using(await readSynObj.LockAsync().ConfigureAwait(false))
 				await DecoratedClient.ClearReadBuffers();
 		}
 
@@ -119,7 +119,7 @@ namespace GladNet
 			IPacketHeader header = PacketHeaderFactory.Create(payload, payloadData);
 
 			//VERY critical we lock here otherwise we could write a header and then another unrelated body could be written inbetween
-			using(await writeSynObj.LockAsync())
+			using(await writeSynObj.LockAsync().ConfigureAwait(false))
 			{
 				//It's important to always write the header first
 				await HeaderReaderWriter.WriteHeaderAsync(header)
@@ -142,7 +142,7 @@ namespace GladNet
 		{
 			IPacketHeader header = null;
 
-			using(await readSynObj.LockAsync(token))
+			using(await readSynObj.LockAsync(token).ConfigureAwait(false))
 			{
 				//Read the header first
 				header = await HeaderReaderWriter.ReadHeaderAsync(token)

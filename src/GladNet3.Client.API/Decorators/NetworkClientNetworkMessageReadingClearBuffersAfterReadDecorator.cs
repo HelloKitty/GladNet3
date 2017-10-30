@@ -38,21 +38,22 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
-			using(await ReadLock.LockAsync())
+			using(await ReadLock.LockAsync(token).ConfigureAwait(false))
 				return await DecoratedClient.ReadAsync(buffer, start, count, token);
 		}
 
 		/// <inheritdoc />
 		public override async Task ClearReadBuffers()
 		{
-			using(await ReadLock.LockAsync())
+			using(await ReadLock.LockAsync().ConfigureAwait(false))
 				await DecoratedClient.ClearReadBuffers();
 		}
 
 		/// <inheritdoc />
 		public override async Task DisconnectAsync(int delay)
 		{
-			await DecoratedClient.DisconnectAsync(delay);
+			await DecoratedClient.DisconnectAsync(delay)
+				.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
@@ -64,13 +65,14 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task<bool> ConnectAsync(string ip, int port)
 		{
-			return await DecoratedClient.ConnectAsync(ip, port);
+			return await DecoratedClient.ConnectAsync(ip, port)
+				.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
 		public async Task<NetworkIncomingMessage<TReadPayloadBaseType>> ReadAsync(CancellationToken token)
 		{
-			using(await ReadLock.LockAsync(token))
+			using(await ReadLock.LockAsync(token).ConfigureAwait(false))
 			{
 				//We want to clear the read buffers after reaiding a full message.
 				NetworkIncomingMessage<TReadPayloadBaseType> message = await DecoratedClient.ReadAsync(token);

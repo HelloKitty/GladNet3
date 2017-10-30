@@ -93,7 +93,7 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task ClearReadBuffers()
 		{
-			using(await ReadBuffer.BufferLock.LockAsync())
+			using(await ReadBuffer.BufferLock.LockAsync().ConfigureAwait(false))
 			{
 				//Reset the crypto buffer
 				CryptoBlockOverflowReadIndex = CryptoBlockOverflow.Length;
@@ -133,7 +133,7 @@ namespace GladNet
 
 			//TODO: Optimize for when the buffer is large enough. Right now it does needless BlockCopy even if there is room in the buffer
 			//We should lock incase there are multiple calls
-			using(await ReadBuffer.BufferLock.LockAsync())
+			using(await ReadBuffer.BufferLock.LockAsync(token).ConfigureAwait(false))
 			{
 				int cryptoOverflowSize = CryptoBlockOverflow.Length - CryptoBlockOverflowReadIndex;
 
@@ -274,7 +274,7 @@ namespace GladNet
 			else
 			{
 				//Lock because we use the crypto buffer for this
-				using(await WriteBuffer.BufferLock.LockAsync())
+				using(await WriteBuffer.BufferLock.LockAsync().ConfigureAwait(false))
 				{
 					try
 					{

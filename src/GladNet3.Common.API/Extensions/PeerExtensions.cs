@@ -151,7 +151,8 @@ namespace GladNet
 			if(address == null) throw new ArgumentNullException(nameof(address));
 			if(port < 0) throw new ArgumentOutOfRangeException(nameof(port));
 
-			return await connectable.ConnectAsync(address.ToString(), port);
+			return await connectable.ConnectAsync(address.ToString(), port)
+				.ConfigureAwait(false);
 		}
 
 		/// <summary>

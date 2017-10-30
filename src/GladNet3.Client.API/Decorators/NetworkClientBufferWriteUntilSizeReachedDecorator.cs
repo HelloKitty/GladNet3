@@ -49,7 +49,8 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task DisconnectAsync(int delay)
 		{
-			await DecoratedClient.DisconnectAsync(delay);
+			await DecoratedClient.DisconnectAsync(delay)
+				.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />
@@ -60,8 +61,8 @@ namespace GladNet
 			//If we have more bytes than we require buffering till
 			//we should just write
 			//We have to lock to prevent anything from touching the combined or buffer inbetween
-			using(await BufferedData.BufferLock.LockAsync())
-			using(await CombinedBuffer.BufferLock.LockAsync())
+			using(await BufferedData.BufferLock.LockAsync().ConfigureAwait(false))
+			using(await CombinedBuffer.BufferLock.LockAsync().ConfigureAwait(false))
 			{
 				if(count > BufferedData.Buffer.Length && CurrentIndex == -1)
 				{
@@ -88,7 +89,8 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task<bool> ConnectAsync(string ip, int port)
 		{
-			return await DecoratedClient.ConnectAsync(ip, port);
+			return await DecoratedClient.ConnectAsync(ip, port)
+				.ConfigureAwait(false);
 		}
 	}
 }
