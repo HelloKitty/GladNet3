@@ -100,5 +100,20 @@ namespace GladNet
 			//New netmessage client builder
 			return new NetworkMessageClientBuilder<TNetworkClientType, TNetworkClientType>(serializer, client, client);
 		}
+
+		/// <summary>
+		/// Enables bufferred writing functionality. This means that the actual writing won't begin until the
+		/// provided buffer threshold <see cref="bufferedCount"/> is reached.
+		/// </summary>
+		/// <param name="client">The client to decorate.</param>
+		/// <param name="bufferedCount">The amount to wait for before writing.</param>
+		/// <returns>The client decorated with buffered write functionality</returns>
+		public static NetworkClientBufferWriteUntilSizeReachedDecorator AddBufferredWrite(this NetworkClientBase client, int bufferedCount)
+		{
+			if(client == null) throw new ArgumentNullException(nameof(client));
+			if(bufferedCount <= 0) throw new ArgumentOutOfRangeException(nameof(bufferedCount));
+
+			return new NetworkClientBufferWriteUntilSizeReachedDecorator(client, bufferedCount);
+		}
 	}
 }
