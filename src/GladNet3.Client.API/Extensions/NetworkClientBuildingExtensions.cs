@@ -115,5 +115,23 @@ namespace GladNet
 
 			return new NetworkClientBufferWriteUntilSizeReachedDecorator(client, bufferedCount);
 		}
+
+		/// <summary>
+		/// Enables clearing the read buffer after a full message has been read.
+		/// </summary>
+		/// <typeparam name="TClientType"></typeparam>
+		/// <typeparam name="TReadPayloadBaseType"></typeparam>
+		/// <typeparam name="TWritePayloadBaseType"></typeparam>
+		/// <param name="client"></param>
+		/// <returns></returns>
+		public static NetworkClientNetworkMessageReadingClearBuffersAfterReadDecorator<TClientType, TReadPayloadBaseType, TWritePayloadBaseType> AddReadBufferClearingOnMessageRead<TClientType, TReadPayloadBaseType, TWritePayloadBaseType>(this TClientType client)
+			where TClientType : NetworkClientBase, INetworkMessageClient<TReadPayloadBaseType, TWritePayloadBaseType> 
+			where TWritePayloadBaseType : class
+			where TReadPayloadBaseType : class
+		{
+			if(client == null) throw new ArgumentNullException(nameof(client));
+
+			return new NetworkClientNetworkMessageReadingClearBuffersAfterReadDecorator<TClientType, TReadPayloadBaseType, TWritePayloadBaseType>(client);
+		}
 	}
 }
