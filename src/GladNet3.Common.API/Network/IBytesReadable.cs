@@ -18,5 +18,10 @@ namespace GladNet
 		/// <param name="token">The cancel token to check during the async operation.</param>
 		/// <returns>A future for how many bytes were read.</returns>
 		Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token);
+
+		/// <summary>
+		/// Calling will clear any reading buffers if they exist.
+		/// </summary>
+		Task ClearReadBuffers();
 	}
 }

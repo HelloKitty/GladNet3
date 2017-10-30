@@ -83,6 +83,13 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
+		public override async Task ClearReadBuffers()
+		{
+			using(await readSynObj.LockAsync())
+				await DecoratedClient.ClearReadBuffers();
+		}
+
+		/// <inheritdoc />
 		public override async Task DisconnectAsync(int delay)
 		{
 			await DecoratedClient.DisconnectAsync(delay)

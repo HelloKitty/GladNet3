@@ -29,6 +29,9 @@ namespace GladNet
 		public abstract Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token);
 
 		/// <inheritdoc />
+		public abstract Task ClearReadBuffers();
+
+		/// <inheritdoc />
 		public abstract Task DisconnectAsync(int delay);
 
 		/// <inheritdoc />

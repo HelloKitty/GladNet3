@@ -41,6 +41,12 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
+		public override async Task ClearReadBuffers()
+		{
+			await DecoratedClient.ClearReadBuffers();
+		}
+
+		/// <inheritdoc />
 		public override async Task DisconnectAsync(int delay)
 		{
 			await DecoratedClient.DisconnectAsync(delay);

@@ -54,6 +54,12 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
+		public override Task ClearReadBuffers()
+		{
+			return DecoratedClient.ClearReadBuffers();
+		}
+
+		/// <inheritdoc />
 		public override async Task<bool> ConnectAsync(string address, int port)
 		{
 			return await DecoratedClient.ConnectAsync(address, port)

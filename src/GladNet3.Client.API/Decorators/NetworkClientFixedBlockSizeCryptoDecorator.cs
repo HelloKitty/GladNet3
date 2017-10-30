@@ -91,6 +91,17 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
+		public override async Task ClearReadBuffers()
+		{
+			using(await ReadBuffer.BufferLock.LockAsync())
+			{
+				//Reset the crypto buffer
+				CryptoBlockOverflowReadIndex = CryptoBlockOverflow.Length;
+				await DecoratedClient.ClearReadBuffers();
+			}
+		}
+
+		/// <inheritdoc />
 		public override async Task DisconnectAsync(int delay)
 		{
 			await DecoratedClient.DisconnectAsync(delay)
