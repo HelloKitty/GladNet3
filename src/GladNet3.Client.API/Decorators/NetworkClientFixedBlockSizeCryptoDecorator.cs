@@ -116,7 +116,6 @@ namespace GladNet
 			//If the above caller requested an invalid count of bytes to read
 			//We should try to correct for it and read afew more bytes.
 			int extendedCount = ConvertToBlocksizeCount(count);
-			int cryptoOverflowSize =  CryptoBlockOverflow.Length - CryptoBlockOverflowReadIndex;
 
 			if(token.IsCancellationRequested)
 				return 0;
@@ -125,6 +124,8 @@ namespace GladNet
 			//We should lock incase there are multiple calls
 			using(await ReadBuffer.BufferLock.LockAsync())
 			{
+				int cryptoOverflowSize = CryptoBlockOverflow.Length - CryptoBlockOverflowReadIndex;
+
 				//If the overflow size is the exact size asked for then
 				//we don't need to do anything but copy the buffer and return
 				if(cryptoOverflowSize >= count)
@@ -177,7 +178,7 @@ namespace GladNet
 					//We can't directly read this into the buffer provided
 					//it may not be large enough to handle the blocksize shift
 					//So we must read with the cryptobuffer and then blockcopy the result
-					if(buffer.Length > extendedCount + cryptoOverflowSize)
+					if(buffer.Length > extendedCount + start + cryptoOverflowSize)
 					{
 						//Read into buffer starting at the start requested + the overflow size
 						bool result = await ReadAndDecrypt(buffer, start + cryptoOverflowSize, token, extendedCount)
