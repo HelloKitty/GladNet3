@@ -65,11 +65,37 @@ namespace GladNet
 		/// </summary>
 		/// <typeparam name="TPayloadType">The payload type.</typeparam>
 		/// <returns>A network message client.</returns>
+		public NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType> Build<TReadPayloadType, TWritePayloadType, TPayloadConstraintType>()
+			where TReadPayloadType : class, TPayloadConstraintType
+			where TWritePayloadType : class, TPayloadConstraintType
+		{
+			return new NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(Client, Serializer);
+		}
+
+		/// <summary>
+		/// Creates a <see cref="NetworkClientBase"/> client that can handle read and writing 
+		/// the specified generic <typeparamref name="TPayloadType"/>.
+		/// </summary>
+		/// <typeparam name="TPayloadType">The payload type.</typeparam>
+		/// <returns>A network message client.</returns>
 		public NetworkMessageClientBuilder<NetworkClientPacketPayloadReaderWriterDecorator<TNetworkType, THeaderReaderWriterType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>, TReadPayloadType, TWritePayloadType> For<TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(IPacketHeaderFactory<TPayloadConstraintType> packetHeaderFactory)
 			where TReadPayloadType : class, TPayloadConstraintType
 			where TWritePayloadType : class, TPayloadConstraintType
 		{
 			return new NetworkMessageClientBuilder<NetworkClientPacketPayloadReaderWriterDecorator<TNetworkType, THeaderReaderWriterType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>, TReadPayloadType, TWritePayloadType>(new NetworkClientPacketPayloadReaderWriterDecorator<TNetworkType, THeaderReaderWriterType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(Client, HeaderReaderWriter, Serializer, packetHeaderFactory));
+		}
+
+		/// <summary>
+		/// Creates a <see cref="NetworkClientBase"/> client that can handle read and writing 
+		/// the specified generic <typeparamref name="TPayloadType"/>.
+		/// </summary>
+		/// <typeparam name="TPayloadType">The payload type.</typeparam>
+		/// <returns>A network message client.</returns>
+		public NetworkMessageClientBuilder<NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>, TReadPayloadType, TWritePayloadType> For<TReadPayloadType, TWritePayloadType, TPayloadConstraintType>()
+			where TReadPayloadType : class, TPayloadConstraintType
+			where TWritePayloadType : class, TPayloadConstraintType
+		{
+			return new NetworkMessageClientBuilder<NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>, TReadPayloadType, TWritePayloadType>(new NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(Client, Serializer));
 		}
 	}
 

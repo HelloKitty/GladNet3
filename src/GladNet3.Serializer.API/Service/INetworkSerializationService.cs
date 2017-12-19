@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GladNet
 {
@@ -26,5 +28,15 @@ namespace GladNet
 		/// <param name="count"></param>
 		/// <returns>An instance of <typeparamref name="TTypeToDeserializeTo"/> or null if failed.</returns>
 		TTypeToDeserializeTo Deserialize<TTypeToDeserializeTo>(byte[] buffer, int start, int count);
+
+		//That is a serialization implementation detail.
+		/// <summary>
+		/// Attempts to deserialize to <typeparamref name="TTypeToDeserializeTo"/> from the provided <see cref="IBytesReadable"/>.
+		/// </summary>
+		/// <typeparam name="TTypeToDeserializeTo"></typeparam>
+		/// <param name="bytesReadable">Byte readable object containing <typeparamref name="TTypeToDeserializeTo"/>.</param>
+		/// <param name="token">Cancel token.</param>
+		/// <returns>An instance of <typeparamref name="TTypeToDeserializeTo"/> or null if failed.</returns>
+		Task<TTypeToDeserializeTo> DeserializeAsync<TTypeToDeserializeTo>(IBytesReadable bytesReadable, CancellationToken token);
 	}
 }

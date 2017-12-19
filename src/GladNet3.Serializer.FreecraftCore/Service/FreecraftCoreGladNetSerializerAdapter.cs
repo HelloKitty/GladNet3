@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using FreecraftCore.Serializer;
 using JetBrains.Annotations;
 
@@ -33,6 +35,14 @@ namespace GladNet
 		public TTypeToDeserializeTo Deserialize<TTypeToDeserializeTo>(byte[] buffer, int start, int count)
 		{
 			return Serializer.Deserialize<TTypeToDeserializeTo>(new FixedBufferWireReaderStrategy(buffer, start, count));
+		}
+
+		/// <inheritdoc />
+		public async Task<TTypeToDeserializeTo> DeserializeAsync<TTypeToDeserializeTo>(IBytesReadable bytesReadable, CancellationToken token)
+		{
+			//We have to manually add peek buffering 
+			return await Serializer.DeserializeAsync<TTypeToDeserializeTo>(new AsyncWireReaderBytesReadableAdapter(bytesReadable)
+				.PeekWithBufferingAsync());
 		}
 	}
 }

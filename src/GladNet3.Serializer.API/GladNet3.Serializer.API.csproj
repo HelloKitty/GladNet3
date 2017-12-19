@@ -18,4 +18,8 @@
     <DocumentationFile>bin\Release\netstandard1.3\GladNet3.Serializer.API.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GladNet3.Common.API\GladNet3.Common.API.csproj" />
+  </ItemGroup>
+
 </Project>
