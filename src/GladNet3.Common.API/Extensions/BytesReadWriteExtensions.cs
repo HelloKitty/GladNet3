@@ -55,7 +55,8 @@ namespace GladNet
 		{
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
-			return await readable.ReadAsync(buffer, 0, count, new CancellationTokenSource(timeoutInMilliseconds).Token)
+			//TODO: DO we need to check the timeout?
+			return await readable.ReadAsync(buffer, 0, count, timeoutInMilliseconds > 0 ? new CancellationTokenSource(timeoutInMilliseconds).Token : CancellationToken.None)
 				.ConfigureAwait(false);
 		}
 

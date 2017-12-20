@@ -28,7 +28,7 @@ namespace GladNet
 		/// <inheritdoc />
 		public byte ReadByte()
 		{
-			return BytesReadWriteExtensions.Read(BytesReadableSource, 1)[0];
+			return BytesReadableSource.Read(1)[0];
 		}
 
 		/// <inheritdoc />
@@ -46,7 +46,7 @@ namespace GladNet
 		/// <inheritdoc />
 		public byte[] ReadBytes(int count)
 		{
-			return BytesReadWriteExtensions.Read(BytesReadableSource, count);
+			return BytesReadableSource.Read(count);
 		}
 
 		/// <inheritdoc />
