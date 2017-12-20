@@ -102,6 +102,22 @@ namespace GladNet
 		}
 
 		/// <summary>
+		/// Enables header reading functionality to a client.
+		/// </summary>
+		/// <typeparam name="TNetworkClientType">The client type.</typeparam>
+		/// <param name="client">The client to add header reading to.</param>
+		/// <returns>A client that can read headers from the network.</returns>
+		public static HeaderlessNetworkMessageClientBuilder<TNetworkClientType> AddHeaderlessNetworkMessageReading<TNetworkClientType>(this TNetworkClientType client, INetworkSerializationService serializer)
+			where TNetworkClientType : NetworkClientBase
+		{
+			if(client == null) throw new ArgumentNullException(nameof(client));
+			if(serializer == null) throw new ArgumentNullException(nameof(serializer));
+
+			//New netmessage client builder
+			return new HeaderlessNetworkMessageClientBuilder<TNetworkClientType>(serializer, client);
+		}
+
+		/// <summary>
 		/// Enables bufferred writing functionality. This means that the actual writing won't begin until the
 		/// provided buffer threshold <see cref="bufferedCount"/> is reached.
 		/// </summary>

@@ -99,6 +99,59 @@ namespace GladNet
 		}
 	}
 
+	/// <summary>
+	/// Builder for a network message client.
+	/// </summary>
+	/// <typeparam name="TNetworkType">The decorated network client type.</typeparam>
+	public sealed class HeaderlessNetworkMessageClientBuilder<TNetworkType>
+		where TNetworkType : NetworkClientBase
+	{
+		/// <summary>
+		/// Serializer dependency for the net message client.
+		/// </summary>
+		public INetworkSerializationService Serializer { get; }
+
+		/// <summary>
+		/// The network client to decorate.
+		/// </summary>
+		public TNetworkType Client { get; }
+
+		public HeaderlessNetworkMessageClientBuilder(INetworkSerializationService serializer, TNetworkType client)
+		{
+			if(serializer == null) throw new ArgumentNullException(nameof(serializer));
+			if(client == null) throw new ArgumentNullException(nameof(client));
+
+			Serializer = serializer;
+			Client = client;
+		}
+
+		/// <summary>
+		/// Creates a <see cref="NetworkClientBase"/> client that can handle read and writing 
+		/// the specified generic <typeparamref name="TPayloadType"/>.
+		/// </summary>
+		/// <typeparam name="TPayloadType">The payload type.</typeparam>
+		/// <returns>A network message client.</returns>
+		public NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType> Build<TReadPayloadType, TWritePayloadType, TPayloadConstraintType>()
+			where TReadPayloadType : class, TPayloadConstraintType
+			where TWritePayloadType : class, TPayloadConstraintType
+		{
+			return new NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(Client, Serializer);
+		}
+
+		/// <summary>
+		/// Creates a <see cref="NetworkClientBase"/> client that can handle read and writing 
+		/// the specified generic <typeparamref name="TPayloadType"/>.
+		/// </summary>
+		/// <typeparam name="TPayloadType">The payload type.</typeparam>
+		/// <returns>A network message client.</returns>
+		public NetworkMessageClientBuilder<NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>, TReadPayloadType, TWritePayloadType> For<TReadPayloadType, TWritePayloadType, TPayloadConstraintType>()
+			where TReadPayloadType : class, TPayloadConstraintType
+			where TWritePayloadType : class, TPayloadConstraintType
+		{
+			return new NetworkMessageClientBuilder<NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>, TReadPayloadType, TWritePayloadType>(new NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TNetworkType, TReadPayloadType, TWritePayloadType, TPayloadConstraintType>(Client, Serializer));
+		}
+	}
+
 	public sealed class NetworkMessageClientBuilder<TNetworkType, TReadPayloadType, TWritePayloadType>
 		where TNetworkType : NetworkClientBase, INetworkMessageClient<TReadPayloadType, TWritePayloadType>
 		where TReadPayloadType : class
