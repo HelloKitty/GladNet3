@@ -59,7 +59,8 @@ namespace GladNet
 		/// <inheritdoc />
 		public async Task<byte> ReadByteAsync()
 		{
-			return (await ReadBytesAsync(1))[0];
+			return (await ReadBytesAsync(1)
+				.ConfigureAwait(false))[0];
 		}
 
 		/// <inheritdoc />
@@ -79,7 +80,8 @@ namespace GladNet
 		{
 			byte[] bytes = new byte[count];
 
-			int i = await BytesReadableSource.ReadAsync(bytes, 0, count, CancellationToken.None);
+			int i = await BytesReadableSource.ReadAsync(bytes, 0, count, CancellationToken.None)
+				.ConfigureAwait(false);
 
 			if(i != count)
 				throw new InvalidOperationException($"Failed to read {count} many bytes from {nameof(IBytesReadable)}. Read: {i}");

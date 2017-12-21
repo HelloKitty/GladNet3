@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Nito.AsyncEx.Synchronous;
 
 namespace GladNet
 {
@@ -18,7 +19,7 @@ namespace GladNet
 		{
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
-			return readable.ReadAsync(count, 0).Result;
+			return readable.ReadAsync(count, 0).WaitAndUnwrapException();
 		}
 
 		/// <summary>
@@ -84,6 +85,7 @@ namespace GladNet
 		{
 			if(writable == null) throw new ArgumentNullException(nameof(writable));
 
+			//TODO: Should we block here?
 			writable.WriteAsync(bytes, offset, count);
 		}
 

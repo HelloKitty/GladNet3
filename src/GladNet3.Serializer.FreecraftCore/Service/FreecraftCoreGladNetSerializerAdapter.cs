@@ -42,7 +42,8 @@ namespace GladNet
 		{
 			//We have to manually add peek buffering 
 			return await Serializer.DeserializeAsync<TTypeToDeserializeTo>(new AsyncWireReaderBytesReadableAdapter(bytesReadable)
-				.PeekWithBufferingAsync());
+					.PeekWithBufferingAsync())
+				.ConfigureAwait(false);
 		}
 	}
 }

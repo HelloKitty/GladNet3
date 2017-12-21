@@ -33,6 +33,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FreecraftCore.Serializer">
+      <HintPath>..\..\..\..\..\.nuget\packages\freecraftcore.serializer\3.0.17\lib\net46\FreecraftCore.Serializer.dll</HintPath>
+    </Reference>
+    <Reference Include="FreecraftCore.Serializer.Metadata">
+      <HintPath>..\..\..\..\..\.nuget\packages\freecraftcore.serializer.metadata\3.0.17\lib\net46\FreecraftCore.Serializer.Metadata.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,10 +48,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTests\AsyncFreecraftCoreSerializationTests.cs" />
     <Compile Include="UnitTests\BufferWriteUntilSizeReachedDecoratorTests.cs" />
     <Compile Include="UnitTests\CryptoDecoratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FreecraftCore.Serializer">
+      <Version>3.0.21</Version>
+    </PackageReference>
     <PackageReference Include="Moq">
       <Version>4.7.142</Version>
     </PackageReference>
@@ -71,6 +81,10 @@
     <ProjectReference Include="..\..\src\GladNet3.Crypto.API\GladNet3.Crypto.API.csproj">
       <Project>{21c478b1-a44e-49b0-ac1c-ddb9a5c50b56}</Project>
       <Name>GladNet3.Crypto.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\GladNet3.Serializer.FreecraftCore\GladNet3.Serializer.FreecraftCore.csproj">
+      <Project>{b58859d4-4777-41cd-a40b-1eba97c88b83}</Project>
+      <Name>GladNet3.Serializer.FreecraftCore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

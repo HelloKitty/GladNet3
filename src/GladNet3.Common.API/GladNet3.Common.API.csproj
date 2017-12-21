@@ -18,4 +18,8 @@
     <DocumentationFile>bin\Release\netstandard1.3\GladNet3.Common.API.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Nito.AsyncEx.Coordination" Version="1.0.2" />
+  </ItemGroup>
+
 </Project>
