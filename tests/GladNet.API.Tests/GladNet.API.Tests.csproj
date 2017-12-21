@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FreecraftCore.Serializer">
-      <Version>3.0.21</Version>
+      <Version>3.0.22</Version>
     </PackageReference>
     <PackageReference Include="Moq">
       <Version>4.7.142</Version>
