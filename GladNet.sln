@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{82223BC2-FD46-45B7-8714-A1BBB6FACC0E}"
 EndProject
@@ -26,6 +26,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet3.Serializer.API", "src\GladNet3.Serializer.API\GladNet3.Serializer.API.csproj", "{E52A1C2B-FF43-4220-B027-E78CD05ECB77}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet3.Serializer.FreecraftCore", "src\GladNet3.Serializer.FreecraftCore\GladNet3.Serializer.FreecraftCore.csproj", "{B58859D4-4777-41CD-A40B-1EBA97C88B83}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet3.Serializer.ProtobufNet", "src\GladNet3.Serializer.ProtobufNet\GladNet3.Serializer.ProtobufNet.csproj", "{3D0B7AC4-3A1F-4716-B89F-657F3B6E5ADD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +67,10 @@ Global
 		{B58859D4-4777-41CD-A40B-1EBA97C88B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B58859D4-4777-41CD-A40B-1EBA97C88B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B58859D4-4777-41CD-A40B-1EBA97C88B83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D0B7AC4-3A1F-4716-B89F-657F3B6E5ADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D0B7AC4-3A1F-4716-B89F-657F3B6E5ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D0B7AC4-3A1F-4716-B89F-657F3B6E5ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D0B7AC4-3A1F-4716-B89F-657F3B6E5ADD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{6BD3245B-C3F8-4166-8089-1E7E23650CD6} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{E52A1C2B-FF43-4220-B027-E78CD05ECB77} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{B58859D4-4777-41CD-A40B-1EBA97C88B83} = {B9A965D0-0A06-458C-8386-F2E8566F0354}
+		{3D0B7AC4-3A1F-4716-B89F-657F3B6E5ADD} = {B9A965D0-0A06-458C-8386-F2E8566F0354}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}

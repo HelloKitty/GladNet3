@@ -9,6 +9,7 @@ namespace GladNet
 {
 	public interface INetworkSerializationService
 	{
+		//TODO: Should we provide a buffer to write into?
 		/// <summary>
 		/// Attempts to serialize the provided <paramref name="data"/>.
 		/// </summary>

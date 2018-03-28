@@ -51,6 +51,7 @@
     <Compile Include="UnitTests\AsyncFreecraftCoreSerializationTests.cs" />
     <Compile Include="UnitTests\BufferWriteUntilSizeReachedDecoratorTests.cs" />
     <Compile Include="UnitTests\CryptoDecoratorTests.cs" />
+    <Compile Include="UnitTests\ProtobufAdapterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FreecraftCore.Serializer">
@@ -82,9 +83,17 @@
       <Project>{21c478b1-a44e-49b0-ac1c-ddb9a5c50b56}</Project>
       <Name>GladNet3.Crypto.API</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\GladNet3.Serializer.API\GladNet3.Serializer.API.csproj">
+      <Project>{e52a1c2b-ff43-4220-b027-e78cd05ecb77}</Project>
+      <Name>GladNet3.Serializer.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\GladNet3.Serializer.FreecraftCore\GladNet3.Serializer.FreecraftCore.csproj">
       <Project>{b58859d4-4777-41cd-a40b-1eba97c88b83}</Project>
       <Name>GladNet3.Serializer.FreecraftCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\GladNet3.Serializer.ProtobufNet\GladNet3.Serializer.ProtobufNet.csproj">
+      <Project>{3d0b7ac4-3a1f-4716-b89f-657f3b6e5add}</Project>
+      <Name>GladNet3.Serializer.ProtobufNet</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
