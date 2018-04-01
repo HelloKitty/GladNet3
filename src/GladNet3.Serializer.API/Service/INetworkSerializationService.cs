@@ -38,6 +38,7 @@ namespace GladNet
 		/// <param name="bytesReadable">Byte readable object containing <typeparamref name="TTypeToDeserializeTo"/>.</param>
 		/// <param name="token">Cancel token.</param>
 		/// <returns>An instance of <typeparamref name="TTypeToDeserializeTo"/> or null if failed.</returns>
+		[Obsolete("Most serializers do not support async deserialization. This feature may be removed in future versions.")]
 		Task<TTypeToDeserializeTo> DeserializeAsync<TTypeToDeserializeTo>(IBytesReadable bytesReadable, CancellationToken token);
 	}
 }

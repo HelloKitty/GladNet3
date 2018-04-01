@@ -21,9 +21,27 @@ namespace GladNet
 		//Can't be readonly because clients may want to reconnect
 		private TcpClient InternalTcpClient { get; set; }
 
+		/// <summary>
+		/// Creates a new <see cref="DotNetTcpClientNetworkClient"/> with an intialized
+		/// internal <see cref="InternalTcpClient"/>. If you want to supply your own
+		/// <see cref="TcpClient"/> then call the ctor overload.
+		/// </summary>
 		public DotNetTcpClientNetworkClient()
 		{
 			InternalTcpClient = new TcpClient();
+		}
+
+		/// <summary>
+		/// Creates a new <see cref="DotNetTcpClientNetworkClient"/> with the provided
+		/// non-null <see cref="tcpClient"/>. This overload should be used if you for some reason
+		/// want to use an externally created <see cref="TcpClient"/>.
+		/// </summary>
+		/// <param name="tcpClient">The <see cref="TcpClient"/> to use.</param>
+		public DotNetTcpClientNetworkClient(TcpClient tcpClient)
+		{
+			if(tcpClient == null) throw new ArgumentNullException(nameof(tcpClient));
+
+			InternalTcpClient = tcpClient;
 		}
 
 		/// <inheritdoc />

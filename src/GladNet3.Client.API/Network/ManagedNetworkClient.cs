@@ -224,8 +224,18 @@ namespace GladNet
 			isConnected = false;
 		}
 
-		private void StartNetworkIncomingOutgoingTasks()
+		//TODO: Is it safe to make this method public? We made it public for the server stuff
+		/// <summary>
+		/// Starts the network read and write queues.
+		/// Optional <see cref="shouldSetConnected"/> indicates if the method
+		/// should force set <see cref="isConnected"/> to true.
+		/// </summary>
+		/// <param name="shouldSetConnected"></param>
+		public void StartNetworkIncomingOutgoingTasks(bool shouldSetConnected = false)
 		{
+			if(shouldSetConnected)
+				isConnected = true;
+
 			//Create both a read and write thread
 			Task.Factory.StartNew(DispatchOutgoingMessages, TaskCreationOptions.LongRunning);
 			Task.Factory.StartNew(EnqueueIncomingMessages, TaskCreationOptions.LongRunning);
