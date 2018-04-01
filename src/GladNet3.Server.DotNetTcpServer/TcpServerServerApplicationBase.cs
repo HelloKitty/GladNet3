@@ -51,7 +51,8 @@ namespace GladNet3
 			while(true)
 			{
 
-				TcpClient client = await ManagedTcpServer.Value.AcceptTcpClientAsync();
+				TcpClient client = await ManagedTcpServer.Value.AcceptTcpClientAsync()
+					.ConfigureAwait(false);
 
 				//TODO: Add some info/debug logging
 				//We should ask the implementer if this client should be accepted
@@ -87,7 +88,8 @@ namespace GladNet3
 
 						await HandleIncomingNetworkMessage(networkClient, message);
 					}
-				}, TaskCreationOptions.LongRunning);
+				}, TaskCreationOptions.LongRunning)
+					.ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 			}
 		}

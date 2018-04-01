@@ -117,8 +117,16 @@ namespace GladNet
 			{
 				int end = count + start;
 				for(i = start; i < end && !token.IsCancellationRequested;)
-					i += await stream.ReadAsync(buffer, i, end - i, token)
+				{
+					int countRead = await stream.ReadAsync(buffer, i, end - i, token)
 						.ConfigureAwait(false);
+
+					if(countRead == 0)
+						throw new InvalidOperationException($"Encounted possible one-way shutdown from network. Read 0 bytes.");
+
+					i += countRead;
+				}
+					
 			}
 			catch(Exception e)
 			{
