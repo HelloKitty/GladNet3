@@ -9,8 +9,7 @@ using GladNet;
 namespace GladNet3
 {
 	//TODO: Add logging
-	public abstract class TcpServerServerApplicationBase<TClientType, TPayloadWriteType, TPayloadReadType> 
-		where TClientType : class, IDisconnectable, IConnectable, IPacketPayloadWritable<TPayloadWriteType>, IPacketPayloadReadable<TPayloadReadType> 
+	public abstract class TcpServerServerApplicationBase<TPayloadWriteType, TPayloadReadType> 
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
@@ -76,7 +75,7 @@ namespace GladNet3
 					throw new InvalidOperationException($"Created an invalid client from {nameof(CreateIncomingClientPipeline)}.");
 
 				//TODO: We may not make this public for long. There should be a better way.
-				networkClient.StartNetworkIncomingOutgoingTasks();
+				networkClient.StartNetwork();
 
 				//TODO: Refactor
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -103,7 +102,7 @@ namespace GladNet3
 		/// <param name="networkClient">The network client that sent the message.</param>
 		/// <param name="message">The incoming message.</param>
 		/// <returns>An awaitable that finishes when the message has been fully handled.</returns>
-		protected abstract Task HandleIncomingNetworkMessage(ManagedNetworkClient<TClientType, TPayloadWriteType, TPayloadReadType> networkClient, NetworkIncomingMessage<TPayloadReadType> message);
+		protected abstract Task HandleIncomingNetworkMessage(IManagedNetworkClient<TPayloadWriteType, TPayloadReadType> networkClient, NetworkIncomingMessage<TPayloadReadType> message);
 
 		/// <summary>
 		/// Indicates if the provided <see cref="TcpClient"/> is acceptable.
@@ -122,7 +121,7 @@ namespace GladNet3
 		/// </summary>
 		/// <param name="client"></param>
 		/// <returns></returns>
-		protected abstract ManagedNetworkClient<TClientType, TPayloadWriteType, TPayloadReadType> CreateIncomingClientPipeline(TcpClient client);
+		protected abstract IManagedNetworkClient<TPayloadWriteType, TPayloadReadType> CreateIncomingClientPipeline(TcpClient client);
 
 		/// <summary>
 		/// Called internally to create the server's <see cref="TcpListener"/>.

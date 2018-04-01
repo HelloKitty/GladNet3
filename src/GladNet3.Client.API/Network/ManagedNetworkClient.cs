@@ -191,13 +191,18 @@ namespace GladNet
 			isConnected = await UnmanagedClient.ConnectAsync(address, port)
 				.ConfigureAwait(false);
 
+			//TODO: We should remove this. We need to seperate connecting and starting the network handling.
 			if(isConnected)
-				StartNetworkIncomingOutgoingTasks();
+				StartNetwork();
 
 			return isConnected;
 		}
 
-		private void StopAllNetworkTasks()
+		//TODO: Is it safe to make this method public? We made it public for the server stuff
+		/// <summary>
+		/// Stops the network tasks for the client.
+		/// </summary>
+		public void StopNetwork()
 		{
 			//Before disconnecting the managed client we should cancel all the tokens used for
 			//running the tasks
@@ -216,7 +221,7 @@ namespace GladNet
 		{
 			//Before disconnecting the managed client we should cancel all the tokens used for
 			//running the tasks
-			StopAllNetworkTasks();
+			StopNetwork();
 
 			await UnmanagedClient.DisconnectAsync(delay)
 				.ConfigureAwait(false);
@@ -227,14 +232,11 @@ namespace GladNet
 		//TODO: Is it safe to make this method public? We made it public for the server stuff
 		/// <summary>
 		/// Starts the network read and write queues.
-		/// Optional <see cref="shouldSetConnected"/> indicates if the method
-		/// should force set <see cref="isConnected"/> to true.
 		/// </summary>
-		/// <param name="shouldSetConnected"></param>
-		public void StartNetworkIncomingOutgoingTasks(bool shouldSetConnected = false)
+		public void StartNetwork()
 		{
-			if(shouldSetConnected)
-				isConnected = true;
+			//TODO: This is a hack. We need to redo this somehow
+			isConnected = true;
 
 			//Create both a read and write thread
 			Task.Factory.StartNew(DispatchOutgoingMessages, TaskCreationOptions.LongRunning);
@@ -251,7 +253,7 @@ namespace GladNet
 				if(disposing)
 				{
 					// TODO: dispose managed state (managed objects).
-					StopAllNetworkTasks();
+					StopNetwork();
 					//IncomingMessageQueue.Dispose();
 					//OutgoingMessageQueue.Dispose();
 				}
