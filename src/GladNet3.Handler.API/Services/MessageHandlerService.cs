@@ -20,7 +20,7 @@ namespace GladNet
 		/// <summary>
 		/// The handlers this service will try to dispatch to.
 		/// </summary>
-		private IEnumerable<IPeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType>> ManagedHandlers { get; }
+		private IPeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType>[] ManagedHandlers { get; }
 
 		/// <summary>
 		/// The optional default message handler to fall back on
@@ -33,7 +33,7 @@ namespace GladNet
 		{
 			if(managedHandlers == null) throw new ArgumentNullException(nameof(managedHandlers));
 
-			ManagedHandlers = managedHandlers;
+			ManagedHandlers = managedHandlers.ToArray();
 
 			//Default handler can be null.
 			DefaultMessageHandler = defaultMessageHandler;
