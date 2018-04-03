@@ -17,9 +17,6 @@ namespace GladNet
 		where TPayloadWriteType : class
 		where TPayloadReadType : class
 	{
-		//TODO: Document
-		void StartNetwork();
 
-		void StopNetwork();
 	}
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
+using Common.Logging.Simple;
 
 namespace GladNet
 {
@@ -25,7 +26,7 @@ namespace GladNet
 			if(client == null) throw new ArgumentNullException(nameof(client));
 
 			//Adapt the provided network client to the managed network client interfaces.
-			return new ManagedNetworkClient<INetworkMessageClient<TReadPayloadBaseType, TWritePayloadBaseType>, TWritePayloadBaseType, TReadPayloadBaseType>(client);
+			return AsManaged(client, new NoOpLogger());
 		}
 
 		/// <summary>

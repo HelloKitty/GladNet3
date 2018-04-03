@@ -8,5 +8,7 @@
 	{
 		//TODO: Implement
 		Enqueued = 0,
+
+		Sent = 1
 	}
 }

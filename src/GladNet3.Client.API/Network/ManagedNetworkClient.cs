@@ -15,16 +15,11 @@ namespace GladNet
 	/// High level client for consumption that manages the lower level networking.
 	/// Provides a high level, typesafe API with simple interactions.
 	/// </summary>
-	public sealed class ManagedNetworkClient<TClientType, TPayloadWriteType, TPayloadReadType> : IManagedNetworkClient<TPayloadWriteType, TPayloadReadType>, IDisposable
+	public sealed class ManagedNetworkClient<TClientType, TPayloadWriteType, TPayloadReadType> : ManagedNetworkClientBase<TClientType, TPayloadWriteType, TPayloadReadType>
 		where TPayloadWriteType : class
 		where TPayloadReadType : class
 		where TClientType : class, IDisconnectable, IConnectable, IPacketPayloadWritable<TPayloadWriteType>, IPacketPayloadReadable<TPayloadReadType>
 	{
-		//TODO: Syncronization maybe? Lots of issues could come up if connect or disconnect
-		//is called at the same time.
-		/// <inheritdoc />
-		public bool isConnected { get; private set; }
-
 		/// <summary>
 		/// The outgoing message queue.
 		/// </summary>
@@ -34,19 +29,6 @@ namespace GladNet
 		/// The incomding message queue.
 		/// </summary>
 		private AsyncProducerConsumerQueue<NetworkIncomingMessage<TPayloadReadType>> IncomingMessageQueue { get; }
-
-		//Not unmanaged in the C vs C# sense but unmanaged meaning that it doesn't really do anything
-		//Unless interacted with or managed.
-		/// <summary>
-		/// The network client.
-		/// </summary>
-		private TClientType UnmanagedClient { get; }
-
-		//TODO: Add indepth client logging.
-		/// <summary>
-		/// The client logger.
-		/// </summary>
-		private ILog Logger { get; }
 
 		//TODO: Do we need to syncronize these?
 		private List<CancellationTokenSource> TaskTokenSources { get; }
@@ -61,13 +43,8 @@ namespace GladNet
 		}
 
 		public ManagedNetworkClient(TClientType unmanagedClient, ILog logger)
+			: base(unmanagedClient, logger)
 		{
-			if(unmanagedClient == null) throw new ArgumentNullException(nameof(unmanagedClient));
-			if(logger == null) throw new ArgumentNullException(nameof(logger));
-
-			UnmanagedClient = unmanagedClient;
-			Logger = logger;
-			isConnected = false;
 			TaskTokenSources = new List<CancellationTokenSource>(2);
 			OutgoingMessageQueue = new AsyncProducerConsumerQueue<TPayloadWriteType>(); //TODO: Should we constrain max count?
 			IncomingMessageQueue = new AsyncProducerConsumerQueue<NetworkIncomingMessage<TPayloadReadType>>(); //TODO: Should we constrain max count?
@@ -75,8 +52,7 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task<SendResult> SendMessage<TPayloadType>(TPayloadType payload, DeliveryMethod method)
-			where TPayloadType : class, TPayloadWriteType
+		public override async Task<SendResult> SendMessage<TPayloadType>(TPayloadType payload, DeliveryMethod method)
 		{
 			if(payload == null) throw new ArgumentNullException(nameof(payload));
 
@@ -88,7 +64,7 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token)
+		public override async Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token)
 		{
 			return await IncomingMessageQueue.DequeueAsync(token)
 				.ConfigureAwait(false);
@@ -180,19 +156,12 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task<bool> ConnectAsync(string address, int port)
+		public override async Task<bool> ConnectAsync(string address, int port)
 		{
-			//Disconnect if we're already connected
-			if(isConnected)
-				await DisconnectAsync(0)
-					.ConfigureAwait(false);
-
-			//This COULD return false, so we need to handle that
-			isConnected = await UnmanagedClient.ConnectAsync(address, port)
-				.ConfigureAwait(false);
+			bool result = await base.ConnectAsync(address, port);
 
 			//TODO: We should remove this. We need to seperate connecting and starting the network handling.
-			if(isConnected)
+			if(result)
 				StartNetwork();
 
 			return isConnected;
@@ -217,27 +186,20 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task DisconnectAsync(int delay)
+		public override async Task DisconnectAsync(int delay)
 		{
 			//Before disconnecting the managed client we should cancel all the tokens used for
 			//running the tasks
 			StopNetwork();
 
-			await UnmanagedClient.DisconnectAsync(delay)
-				.ConfigureAwait(false);
-
-			isConnected = false;
+			await base.DisconnectAsync(delay);
 		}
 
-		//TODO: Is it safe to make this method public? We made it public for the server stuff
 		/// <summary>
 		/// Starts the network read and write queues.
 		/// </summary>
-		public void StartNetwork()
+		private void StartNetwork()
 		{
-			//TODO: This is a hack. We need to redo this somehow
-			isConnected = true;
-
 			//Create both a read and write thread
 			Task.Factory.StartNew(DispatchOutgoingMessages, TaskCreationOptions.LongRunning);
 			Task.Factory.StartNew(EnqueueIncomingMessages, TaskCreationOptions.LongRunning);
@@ -246,7 +208,7 @@ namespace GladNet
 		#region IDisposable Support
 		private bool disposedValue = false; // To detect redundant calls
 
-		void Dispose(bool disposing)
+		public override void Dispose(bool disposing)
 		{
 			if(!disposedValue)
 			{
@@ -282,7 +244,7 @@ namespace GladNet
 		#endregion
 
 		/// <inheritdoc />
-		public Task<TResponseType> InterceptPayload<TResponseType>(CancellationToken cancellationToken)
+		public override Task<TResponseType> InterceptPayload<TResponseType>(CancellationToken cancellationToken)
 		{
 			//Just dispatch to the manager
 			return InterceptorManager.InterceptPayload<TResponseType>(cancellationToken);

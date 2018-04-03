@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace GladNet3
+namespace GladNet
 {
 	/// <summary>
 	/// Encapsulated object for a network address.
