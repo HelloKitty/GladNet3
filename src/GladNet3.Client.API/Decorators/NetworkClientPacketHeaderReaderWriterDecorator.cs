@@ -48,38 +48,35 @@ namespace GladNet
 		}
 
 		//TODO: This is copy-pasted from above, to avoid creating tokens when we don't need them. Should we refactor?
-		public override async Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
+		public override Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
-			return await DecoratedClient.ReadAsync(buffer, start, count, token)
-				.ConfigureAwait(false);
+			return DecoratedClient.ReadAsync(buffer, start, count, token)
+;
 		}
 
 		/// <inheritdoc />
-		public override async Task ClearReadBuffers()
+		public override Task ClearReadBuffers()
 		{
-			await DecoratedClient.ClearReadBuffers()
-				.ConfigureAwait(false);
+			return DecoratedClient.ClearReadBuffers();
 		}
 
 		/// <inheritdoc />
-		public override async Task<bool> ConnectAsync(string address, int port)
+		public override Task<bool> ConnectAsync(string address, int port)
 		{
-			return await DecoratedClient.ConnectAsync(address, port)
-				.ConfigureAwait(false);
+			return DecoratedClient.ConnectAsync(address, port)
+;
 		}
 
 		/// <inheritdoc />
-		public override async Task DisconnectAsync(int delay)
+		public override Task DisconnectAsync(int delay)
 		{
-			await DecoratedClient.DisconnectAsync(delay)
-				.ConfigureAwait(false);
+			return DecoratedClient.DisconnectAsync(delay);
 		}
 
 		/// <inheritdoc />
-		public override async Task WriteAsync(byte[] bytes, int offset, int count)
+		public override Task WriteAsync(byte[] bytes, int offset, int count)
 		{
-			await DecoratedClient.WriteAsync(bytes, offset, count)
-				.ConfigureAwait(false);
+			return DecoratedClient.WriteAsync(bytes, offset, count);
 		}
 
 		public async Task<IPacketHeader> ReadHeaderAsync(CancellationToken token)

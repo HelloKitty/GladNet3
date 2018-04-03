@@ -52,24 +52,22 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task DisconnectAsync(int delay)
+		public override Task DisconnectAsync(int delay)
 		{
-			await DecoratedClient.DisconnectAsync(delay)
-				.ConfigureAwait(false);
+			return DecoratedClient.DisconnectAsync(delay);
 		}
 
 		/// <inheritdoc />
-		public override async Task WriteAsync(byte[] bytes, int offset, int count)
+		public override Task WriteAsync(byte[] bytes, int offset, int count)
 		{
-			await DecoratedClient.WriteAsync(bytes, offset, count)
-				.ConfigureAwait(false);
+			return DecoratedClient.WriteAsync(bytes, offset, count);
 		}
 
 		/// <inheritdoc />
-		public override async Task<bool> ConnectAsync(string ip, int port)
+		public override Task<bool> ConnectAsync(string ip, int port)
 		{
-			return await DecoratedClient.ConnectAsync(ip, port)
-				.ConfigureAwait(false);
+			return DecoratedClient.ConnectAsync(ip, port)
+;
 		}
 
 		/// <inheritdoc />
@@ -90,10 +88,9 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task WriteAsync(TWritePayloadBaseType payload)
+		public Task WriteAsync(TWritePayloadBaseType payload)
 		{
-			await DecoratedClient.WriteAsync(payload)
-				.ConfigureAwait(false);
+			return DecoratedClient.WriteAsync(payload);
 		}
 	}
 }

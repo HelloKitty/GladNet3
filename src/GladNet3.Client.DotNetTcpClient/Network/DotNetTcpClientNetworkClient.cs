@@ -89,14 +89,13 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task WriteAsync(byte[] bytes, int offset, int count)
+		public override Task WriteAsync(byte[] bytes, int offset, int count)
 		{
 			if(!InternalTcpClient.Connected)
 				throw new InvalidOperationException($"The internal {nameof(TcpClient)}: {nameof(InternalTcpClient)} is not connected to an endpoint. You must call {nameof(ConnectAsync)} before writing any bytes.");
 
 			//We can just write the bytes to the stream if we're connected.
-			await InternalTcpClient.GetStream().WriteAsync(bytes, offset, count)
-				.ConfigureAwait(false);
+			return InternalTcpClient.GetStream().WriteAsync(bytes, offset, count);
 		}
 
 		/// <inheritdoc />

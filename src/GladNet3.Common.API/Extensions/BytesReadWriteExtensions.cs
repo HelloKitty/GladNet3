@@ -52,13 +52,12 @@ namespace GladNet
 		/// <param name="count">How many bytes to read.</param>
 		/// <param name="timeoutInMilliseconds">How many milliseconds to wait before canceling the operation.</param>
 		/// <returns>A future for the read bytes.</returns>
-		public static async Task<int> ReadAsync(this IBytesReadable readable, byte[] buffer, int start, int count, int timeoutInMilliseconds)
+		public static Task<int> ReadAsync(this IBytesReadable readable, byte[] buffer, int start, int count, int timeoutInMilliseconds)
 		{
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
 			//TODO: DO we need to check the timeout?
-			return await readable.ReadAsync(buffer, 0, count, timeoutInMilliseconds > 0 ? new CancellationTokenSource(timeoutInMilliseconds).Token : CancellationToken.None)
-				.ConfigureAwait(false);
+			return readable.ReadAsync(buffer, 0, count, timeoutInMilliseconds > 0 ? new CancellationTokenSource(timeoutInMilliseconds).Token : CancellationToken.None);
 		}
 
 		/// <summary>
@@ -95,12 +94,11 @@ namespace GladNet
 		/// <param name="writable"></param>
 		/// <param name="bytes">The bytes to write.</param>
 		/// <returns>An awaitable task.</returns>
-		public static async Task WriteAsync(this IBytesWrittable writable, byte[] bytes)
+		public static Task WriteAsync(this IBytesWrittable writable, byte[] bytes)
 		{
 			if(writable == null) throw new ArgumentNullException(nameof(writable));
 
-			await writable.WriteAsync(bytes, 0, bytes.Length)
-				.ConfigureAwait(false);
+			return writable.WriteAsync(bytes, 0, bytes.Length);
 		}
 	}
 }

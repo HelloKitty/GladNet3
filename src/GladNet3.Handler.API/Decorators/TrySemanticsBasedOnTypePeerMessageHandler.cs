@@ -54,7 +54,8 @@ namespace GladNet
 			{
 				//TODO: Should we not configureawait false here? Should we want to rejoin the context?
 				//No matter what happens in the handler we should indicate that it's consumed
-				await DecoratedPayloadHandler.HandleMessage(context, payload);
+				await DecoratedPayloadHandler.HandleMessage(context, payload)
+					.ConfigureAwait(false);
 
 				return true;
 			}

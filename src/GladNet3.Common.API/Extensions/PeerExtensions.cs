@@ -18,7 +18,7 @@ namespace GladNet
 		/// <param name="sendService">The extended send service.</param>
 		/// <param name="payload">The payload to send.</param>
 		/// <returns>Indicates the result of the send message operation.</returns>
-		public static async Task<SendResult> SendMessage<TPayloadBaseType, TPayloadType>(this IPeerPayloadSendService<TPayloadBaseType> sendService, TPayloadType payload)
+		public static Task<SendResult> SendMessage<TPayloadBaseType, TPayloadType>(this IPeerPayloadSendService<TPayloadBaseType> sendService, TPayloadType payload)
 			where TPayloadType : class, TPayloadBaseType 
 			where TPayloadBaseType : class
 		{
@@ -26,8 +26,7 @@ namespace GladNet
 			if(payload == null) throw new ArgumentNullException(nameof(payload));
 
 			//We default to reliable ordered as if this is TCP
-			return await sendService.SendMessage(payload, DeliveryMethod.ReliableOrdered)
-				.ConfigureAwait(false);
+			return sendService.SendMessage(payload, DeliveryMethod.ReliableOrdered);
 		}
 
 		//This extension mostly exists for the old TCP-only API
@@ -40,15 +39,14 @@ namespace GladNet
 		/// <param name="sendService"></param>
 		/// <param name="request">The request payload.</param>
 		/// <returns>A future that contains the response.</returns>
-		public static async Task<TResponseType> SendRequestAsync<TPayloadBaseType, TResponseType>(this IPeerRequestSendService<TPayloadBaseType> sendService, TPayloadBaseType request) 
+		public static Task<TResponseType> SendRequestAsync<TPayloadBaseType, TResponseType>(this IPeerRequestSendService<TPayloadBaseType> sendService, TPayloadBaseType request) 
 			where TPayloadBaseType : class
 		{
 			if(sendService == null) throw new ArgumentNullException(nameof(sendService));
 			if(request == null) throw new ArgumentNullException(nameof(request));
 
 			//Since no delivry or cancel was provided we should default to reliable and also make sure there is no cancel
-			return await sendService.SendRequestAsync<TResponseType>(request, DeliveryMethod.ReliableOrdered, CancellationToken.None)
-				.ConfigureAwait(false);
+			return sendService.SendRequestAsync<TResponseType>(request, DeliveryMethod.ReliableOrdered, CancellationToken.None);
 		}
 
 		/// <summary>
@@ -56,12 +54,11 @@ namespace GladNet
 		/// the client.
 		/// </summary>
 		/// <returns>A PSOBBPacketHeader.</returns>
-		public static async Task<IPacketHeader> ReadHeaderAsync(this IPacketHeaderReadable packetHeaderReadable)
+		public static Task<IPacketHeader> ReadHeaderAsync(this IPacketHeaderReadable packetHeaderReadable)
 		{
 			if(packetHeaderReadable == null) throw new ArgumentNullException(nameof(packetHeaderReadable));
 
-			return await packetHeaderReadable.ReadHeaderAsync(CancellationToken.None)
-				.ConfigureAwait(false);
+			return packetHeaderReadable.ReadHeaderAsync(CancellationToken.None);
 		}
 
 		/// <summary>
@@ -91,13 +88,12 @@ namespace GladNet
 		/// The task will complete when an incomding message can be built.
 		/// </summary>
 		/// <returns>A future for the resulting incoming message.</returns>
-		public static async Task<NetworkIncomingMessage<TPayloadBaseType>> ReadAsync<TPayloadBaseType>(this IPacketPayloadReadable<TPayloadBaseType> readable) 
+		public static Task<NetworkIncomingMessage<TPayloadBaseType>> ReadAsync<TPayloadBaseType>(this IPacketPayloadReadable<TPayloadBaseType> readable) 
 			where TPayloadBaseType : class
 		{
 			if(readable == null) throw new ArgumentNullException(nameof(readable));
 
-			return await readable.ReadAsync(CancellationToken.None)
-				.ConfigureAwait(false);
+			return readable.ReadAsync(CancellationToken.None);
 		}
 
 		/// <summary>
@@ -122,10 +118,9 @@ namespace GladNet
 		/// </summary>
 		/// <typeparam name="TResponseType">The payload type to intercept.</typeparam>
 		/// <returns>An awaitable for the next recieved payload of the speified type.</returns>
-		public static async Task<TResponseType> InterceptPayload<TResponseType>(this IPayloadInterceptable interceptable)
+		public static Task<TResponseType> InterceptPayload<TResponseType>(this IPayloadInterceptable interceptable)
 		{
-			return await interceptable.InterceptPayload<TResponseType>(CancellationToken.None)
-				.ConfigureAwait(false);
+			return interceptable.InterceptPayload<TResponseType>(CancellationToken.None);
 		}
 
 		/// <summary>
@@ -151,14 +146,13 @@ namespace GladNet
 		/// <param name="address">The ip.</param>
 		/// <param name="port">The port.</param>
 		/// <returns>True if connection was successful.</returns>
-		public static async Task<bool> ConnectAsync(this IConnectable connectable, IPAddress address, int port)
+		public static Task<bool> ConnectAsync(this IConnectable connectable, IPAddress address, int port)
 		{
 			if(connectable == null) throw new ArgumentNullException(nameof(connectable));
 			if(address == null) throw new ArgumentNullException(nameof(address));
 			if(port < 0) throw new ArgumentOutOfRangeException(nameof(port));
 
-			return await connectable.ConnectAsync(address.ToString(), port)
-				.ConfigureAwait(false);
+			return connectable.ConnectAsync(address.ToString(), port);
 		}
 
 		/// <summary>

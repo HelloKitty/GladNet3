@@ -17,12 +17,11 @@ namespace GladNet
 		where TPayloadReadType : class
 	{
 		/// <inheritdoc />
-		public async Task DispatchNetworkMessage(SessionMessageContext<TPayloadWriteType, TPayloadReadType> context)
+		public Task DispatchNetworkMessage(SessionMessageContext<TPayloadWriteType, TPayloadReadType> context)
 		{
 			//The default implementation (or in place implementation) dispatches the message asyncronously
 			//in the current context without any enqueueing or waiting.
-			await context.Session.OnNetworkMessageRecieved(context.Message)
-				.ConfigureAwait(false);
+			return context.Session.OnNetworkMessageRecieved(context.Message);
 		}
 	}
 }

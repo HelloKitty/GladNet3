@@ -13,13 +13,12 @@ namespace GladNet
 		/// The task will complete when a network message is available.
 		/// </summary>
 		/// <returns>Returns a future that will complete when a message is available.</returns>
-		public static async Task<NetworkIncomingMessage<TPayloadBaseType>> ReadMessageAsync<TPayloadBaseType>(this INetworkMessageProducer<TPayloadBaseType> producer) 
+		public static Task<NetworkIncomingMessage<TPayloadBaseType>> ReadMessageAsync<TPayloadBaseType>(this INetworkMessageProducer<TPayloadBaseType> producer) 
 			where TPayloadBaseType : class
 		{
 			if(producer == null) throw new ArgumentNullException(nameof(producer));
 
-			return await producer.ReadMessageAsync(CancellationToken.None)
-				.ConfigureAwait(false);
+			return producer.ReadMessageAsync(CancellationToken.None);
 		}
 	}
 }

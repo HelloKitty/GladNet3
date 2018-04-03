@@ -52,24 +52,22 @@ namespace GladNet
 			DecryptionServiceProvider = decryptionServiceProvider;
 		}
 
-		public override async Task<bool> ConnectAsync(string ip, int port)
+		public override Task<bool> ConnectAsync(string ip, int port)
 		{
-			return await DecoratedClient.ConnectAsync(ip, port)
-				.ConfigureAwait(false);
+			return DecoratedClient.ConnectAsync(ip, port)
+;
 		}
 
 		/// <inheritdoc />
-		public override async Task ClearReadBuffers()
+		public override Task ClearReadBuffers()
 		{
-			await DecoratedClient.ClearReadBuffers()
-				.ConfigureAwait(false);
+			return DecoratedClient.ClearReadBuffers();
 		}
 
 		/// <inheritdoc />
-		public override async Task DisconnectAsync(int delay)
+		public override Task DisconnectAsync(int delay)
 		{
-			await DecoratedClient.DisconnectAsync(delay)
-				.ConfigureAwait(false);
+			return DecoratedClient.DisconnectAsync(delay);
 		}
 
 		//TODO: Refactor this
@@ -118,13 +116,12 @@ namespace GladNet
 			return true;
 		}
 
-		public override async Task WriteAsync(byte[] bytes, int offset, int count)
+		public override Task WriteAsync(byte[] bytes, int offset, int count)
 		{
 			if(offset < 0) throw new ArgumentOutOfRangeException(nameof(offset));
 			if(count < 0) throw new ArgumentOutOfRangeException(nameof(count));
 
-			await DecoratedClient.WriteAsync(EncryptionServiceProvider.Crypt(bytes, offset, count), offset, count)
-				.ConfigureAwait(false);
+			return DecoratedClient.WriteAsync(EncryptionServiceProvider.Crypt(bytes, offset, count), offset, count);
 		}
 	}
 }

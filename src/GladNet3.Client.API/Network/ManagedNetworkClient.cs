@@ -64,10 +64,9 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token)
+		public override Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token)
 		{
-			return await IncomingMessageQueue.DequeueAsync(token)
-				.ConfigureAwait(false);
+			return IncomingMessageQueue.DequeueAsync(token);
 		}
 
 		private CancellationTokenSource CreateNewManagedCancellationTokenSource()
@@ -99,13 +98,19 @@ namespace GladNet
 				//This is an expected exception that happens when the token is canceled
 				if(Logger.IsDebugEnabled)
 					Logger.Debug($"Expected Task Canceled Exception: {e.Message}\n\n Stack: {e.StackTrace}");
-				throw;
+
+				//We cannot rethrow because this can cause application instability on threadpools
 			}
 			catch(Exception e)
 			{
 				if(Logger.IsErrorEnabled)
 					Logger.Error($"Error: {e.Message}\n\n Stack: {e.StackTrace}");
-				throw;
+
+				//We cannot rethrow because this can cause application instability on threadpools
+			}
+			finally
+			{
+				StopNetwork();
 			}
 
 			//TODO: Should we do anything after the dispatch has stopped?
@@ -143,13 +148,19 @@ namespace GladNet
 				//This is an expected exception that happens when the token is canceled
 				if(Logger.IsDebugEnabled)
 					Logger.Debug($"Expected Task Canceled Exception: {e.Message}\n\n Stack: {e.StackTrace}");
-				throw;
+
+				//We cannot rethrow because this can cause application instability on threadpools
 			}
 			catch(Exception e)
 			{
 				if(Logger.IsErrorEnabled)
 					Logger.Error($"Error: {e.Message}\n\n Stack: {e.StackTrace}");
-				throw;
+
+				//We cannot rethrow because this can cause application instability on threadpools
+			}
+			finally
+			{
+				StopNetwork();
 			}
 
 			//TODO: Should we do anything after the dispatch has stopped?
@@ -186,13 +197,13 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task DisconnectAsync(int delay)
+		public override Task DisconnectAsync(int delay)
 		{
 			//Before disconnecting the managed client we should cancel all the tokens used for
 			//running the tasks
 			StopNetwork();
 
-			await base.DisconnectAsync(delay);
+			return base.DisconnectAsync(delay);
 		}
 
 		/// <summary>

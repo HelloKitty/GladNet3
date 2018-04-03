@@ -61,9 +61,18 @@ namespace GladNet
 			//TODO: We should create a way to stop and throw if not started
 			while(true)
 			{
+				TcpClient client = null;
 
-				TcpClient client = await ManagedTcpServer.Value.AcceptTcpClientAsync()
-					.ConfigureAwait(false);
+				try
+				{
+					client = await ManagedTcpServer.Value.AcceptTcpClientAsync()
+						.ConfigureAwait(false);
+				}
+				catch(Exception e)
+				{
+					//TODO: Log
+					continue;
+				}
 
 				//TODO: Add some info/debug logging
 				//We should ask the implementer if this client should be accepted
@@ -97,16 +106,25 @@ namespace GladNet
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 				Task.Run(async () =>
 				{
-					while(client.Connected && internalNetworkClient.isConnected)
+					try
 					{
-						NetworkIncomingMessage<TPayloadReadType> message = await internalNetworkClient.ReadMessageAsync(CancellationToken.None);
+						while(client.Connected && internalNetworkClient.isConnected)
+						{
+							NetworkIncomingMessage<TPayloadReadType> message = await internalNetworkClient.ReadMessageAsync(CancellationToken.None)
+								.ConfigureAwait(false);
 
-						//TODO: This will work for World of Warcraft since it requires no more than one packet
-						//from the same client be handled at one time. However it limits throughput and maybe we should
-						//handle this at a different level instead. 
-						await HandleIncomingNetworkMessage(networkSession, message);
+							//TODO: This will work for World of Warcraft since it requires no more than one packet
+							//from the same client be handled at one time. However it limits throughput and maybe we should
+							//handle this at a different level instead. 
+							await HandleIncomingNetworkMessage(networkSession, message)
+								.ConfigureAwait(false);
+						}
+					}
+					catch(Exception)
+					{
 					}
 
+					client.Dispose();
 					//TODO: Should we tell the client something when it ends?
 				})
 					.ConfigureAwait(false);
@@ -123,12 +141,12 @@ namespace GladNet
 		/// <param name="session">The network session that sent the message.</param>
 		/// <param name="message">The incoming message.</param>
 		/// <returns>An awaitable that finishes when the session can continue handling messages.</returns>
-		protected async Task HandleIncomingNetworkMessage(ManagedClientSession<TPayloadWriteType, TPayloadReadType> session, NetworkIncomingMessage<TPayloadReadType> message)
+		protected Task HandleIncomingNetworkMessage(ManagedClientSession<TPayloadWriteType, TPayloadReadType> session, NetworkIncomingMessage<TPayloadReadType> message)
 		{
 			if(session == null) throw new ArgumentNullException(nameof(session));
 			if(message == null) throw new ArgumentNullException(nameof(message));
 
-			await MessageHandlingStrategy.DispatchNetworkMessage(new SessionMessageContext<TPayloadWriteType, TPayloadReadType>(session, message));
+			return MessageHandlingStrategy.DispatchNetworkMessage(new SessionMessageContext<TPayloadWriteType, TPayloadReadType>(session, message));
 		}
 
 		/// <summary>

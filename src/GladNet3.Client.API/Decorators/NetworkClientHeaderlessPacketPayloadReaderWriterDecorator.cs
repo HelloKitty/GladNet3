@@ -64,10 +64,9 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task<bool> ConnectAsync(string address, int port)
+		public override Task<bool> ConnectAsync(string address, int port)
 		{
-			return await DecoratedClient.ConnectAsync(address, port)
-				.ConfigureAwait(false);
+			return DecoratedClient.ConnectAsync(address, port);
 		}
 
 		/// <inheritdoc />
@@ -79,10 +78,9 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task DisconnectAsync(int delay)
+		public override Task DisconnectAsync(int delay)
 		{
-			await DecoratedClient.DisconnectAsync(delay)
-				.ConfigureAwait(false);
+			return DecoratedClient.DisconnectAsync(delay);
 		}
 
 		/// <inheritdoc />
@@ -93,10 +91,9 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task WriteAsync(byte[] bytes, int offset, int count)
+		public override Task WriteAsync(byte[] bytes, int offset, int count)
 		{
-			await DecoratedClient.WriteAsync(bytes, offset, count)
-				.ConfigureAwait(false);
+			return DecoratedClient.WriteAsync(bytes, offset, count);
 		}
 
 		/// <inheritdoc />
@@ -114,10 +111,9 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
+		public override Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
-			return await DecoratedClient.ReadAsync(buffer, start, count, token)
-				.ConfigureAwait(false);
+			return DecoratedClient.ReadAsync(buffer, start, count, token);
 		}
 
 		public async Task<NetworkIncomingMessage<TReadPayloadBaseType>> ReadAsync(CancellationToken token)

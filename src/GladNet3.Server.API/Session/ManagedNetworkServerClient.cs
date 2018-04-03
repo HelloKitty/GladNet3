@@ -50,10 +50,9 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token)
+		public override Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token)
 		{
-			return await UnmanagedClient.ReadAsync(token)
-				.ConfigureAwait(false);
+			return UnmanagedClient.ReadAsync(token);
 		}
 
 		/// <inheritdoc />

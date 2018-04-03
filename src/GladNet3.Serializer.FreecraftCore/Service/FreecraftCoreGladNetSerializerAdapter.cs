@@ -38,12 +38,12 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task<TTypeToDeserializeTo> DeserializeAsync<TTypeToDeserializeTo>(IBytesReadable bytesReadable, CancellationToken token)
+		public Task<TTypeToDeserializeTo> DeserializeAsync<TTypeToDeserializeTo>(IBytesReadable bytesReadable, CancellationToken token)
 		{
 			//We have to manually add peek buffering 
-			return await Serializer.DeserializeAsync<TTypeToDeserializeTo>(new AsyncWireReaderBytesReadableAdapter(bytesReadable)
+			return Serializer.DeserializeAsync<TTypeToDeserializeTo>(new AsyncWireReaderBytesReadableAdapter(bytesReadable)
 					.PeekWithBufferingAsync())
-				.ConfigureAwait(false);
+;
 		}
 	}
 }

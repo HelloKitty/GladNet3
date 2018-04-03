@@ -84,10 +84,9 @@ namespace GladNet
 			CryptoBlockOverflowReadIndex = CryptoBlockOverflow.Length; //set this to last index to indicate empty initially
 		}
 
-		public override async Task<bool> ConnectAsync(string ip, int port)
+		public override Task<bool> ConnectAsync(string ip, int port)
 		{
-			return await DecoratedClient.ConnectAsync(ip, port)
-				.ConfigureAwait(false);
+			return DecoratedClient.ConnectAsync(ip, port);
 		}
 
 		/// <inheritdoc />
@@ -103,10 +102,9 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task DisconnectAsync(int delay)
+		public override Task DisconnectAsync(int delay)
 		{
-			await DecoratedClient.DisconnectAsync(delay)
-				.ConfigureAwait(false);
+			return DecoratedClient.DisconnectAsync(delay);
 		}
 
 		//TODO: Refactor this
