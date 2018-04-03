@@ -99,13 +99,19 @@ namespace GladNet
 				//This is an expected exception that happens when the token is canceled
 				if(Logger.IsDebugEnabled)
 					Logger.Debug($"Expected Task Canceled Exception: {e.Message}\n\n Stack: {e.StackTrace}");
-				throw;
+
+				//We cannot rethrow because this can cause application instability on threadpools
 			}
 			catch(Exception e)
 			{
 				if(Logger.IsErrorEnabled)
 					Logger.Error($"Error: {e.Message}\n\n Stack: {e.StackTrace}");
-				throw;
+
+				//We cannot rethrow because this can cause application instability on threadpools
+			}
+			finally
+			{
+				StopNetwork();
 			}
 
 			//TODO: Should we do anything after the dispatch has stopped?
@@ -143,13 +149,19 @@ namespace GladNet
 				//This is an expected exception that happens when the token is canceled
 				if(Logger.IsDebugEnabled)
 					Logger.Debug($"Expected Task Canceled Exception: {e.Message}\n\n Stack: {e.StackTrace}");
-				throw;
+
+				//We cannot rethrow because this can cause application instability on threadpools
 			}
 			catch(Exception e)
 			{
 				if(Logger.IsErrorEnabled)
 					Logger.Error($"Error: {e.Message}\n\n Stack: {e.StackTrace}");
-				throw;
+
+				//We cannot rethrow because this can cause application instability on threadpools
+			}
+			finally
+			{
+				StopNetwork();
 			}
 
 			//TODO: Should we do anything after the dispatch has stopped?

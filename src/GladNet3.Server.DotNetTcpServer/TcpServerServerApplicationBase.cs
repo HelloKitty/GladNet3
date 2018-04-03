@@ -61,7 +61,6 @@ namespace GladNet
 			//TODO: We should create a way to stop and throw if not started
 			while(true)
 			{
-
 				TcpClient client = await ManagedTcpServer.Value.AcceptTcpClientAsync()
 					.ConfigureAwait(false);
 
@@ -95,20 +94,34 @@ namespace GladNet
 
 				//TODO: Refactor
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-				Task.Run(async () =>
+				Task.Factory.StartNew(async () =>
 				{
-					while(client.Connected && internalNetworkClient.isConnected)
+					try
 					{
-						NetworkIncomingMessage<TPayloadReadType> message = await internalNetworkClient.ReadMessageAsync(CancellationToken.None);
+						while(client.Connected && internalNetworkClient.isConnected)
+						{
+							//TODO: How should we handle cancels?
+							NetworkIncomingMessage<TPayloadReadType> message = await internalNetworkClient.ReadMessageAsync(new CancellationTokenSource(3000).Token)
+								.ConfigureAwait(false);
 
-						//TODO: This will work for World of Warcraft since it requires no more than one packet
-						//from the same client be handled at one time. However it limits throughput and maybe we should
-						//handle this at a different level instead. 
-						await HandleIncomingNetworkMessage(networkSession, message);
+							if(message == null)
+								continue;
+
+							//TODO: This will work for World of Warcraft since it requires no more than one packet
+							//from the same client be handled at one time. However it limits throughput and maybe we should
+							//handle this at a different level instead. 
+							await HandleIncomingNetworkMessage(networkSession, message)
+								.ConfigureAwait(false);
+						}
 					}
-
+					catch(Exception)
+					{
+						//TODO: Suppress for now. Figure out how to handle socket exceptions later
+						await internalNetworkClient.DisconnectAsync(0)
+							.ConfigureAwait(false);
+					}
 					//TODO: Should we tell the client something when it ends?
-				})
+				}, TaskCreationOptions.PreferFairness)
 					.ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 			}
@@ -128,7 +141,8 @@ namespace GladNet
 			if(session == null) throw new ArgumentNullException(nameof(session));
 			if(message == null) throw new ArgumentNullException(nameof(message));
 
-			await MessageHandlingStrategy.DispatchNetworkMessage(new SessionMessageContext<TPayloadWriteType, TPayloadReadType>(session, message));
+			await MessageHandlingStrategy.DispatchNetworkMessage(new SessionMessageContext<TPayloadWriteType, TPayloadReadType>(session, message))
+				.ConfigureAwait(false);
 		}
 
 		/// <summary>
