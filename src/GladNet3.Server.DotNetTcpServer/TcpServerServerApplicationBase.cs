@@ -97,7 +97,7 @@ namespace GladNet
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 				Task.Run(async () =>
 				{
-					while(internalNetworkClient.isConnected)
+					while(client.Connected && internalNetworkClient.isConnected)
 					{
 						NetworkIncomingMessage<TPayloadReadType> message = await internalNetworkClient.ReadMessageAsync(CancellationToken.None);
 
@@ -106,6 +106,8 @@ namespace GladNet
 						//handle this at a different level instead. 
 						await HandleIncomingNetworkMessage(networkSession, message);
 					}
+
+					//TODO: Should we tell the client something when it ends?
 				})
 					.ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
