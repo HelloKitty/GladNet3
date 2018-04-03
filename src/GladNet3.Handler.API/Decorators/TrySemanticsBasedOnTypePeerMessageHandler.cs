@@ -34,7 +34,7 @@ namespace GladNet
 		public bool CanHandle(NetworkIncomingMessage<TIncomingPayloadType> message)
 		{
 			//We can handle a message if it's the payload type
-			return message is TPayloadType;
+			return message?.Payload is TPayloadType;
 		}
 
 		/// <summary>

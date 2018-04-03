@@ -30,6 +30,7 @@ namespace GladNet
 		/// </summary>
 		IPeerPayloadSendService<TPayloadBaseType> PayloadSendService { get; }
 
+		//TODO: What should we do for servers? They can't do async/intercepts
 		/// <summary>
 		/// The request service that registers a response and returns a task
 		/// that can be awaited on for when/if the response is recieved.
