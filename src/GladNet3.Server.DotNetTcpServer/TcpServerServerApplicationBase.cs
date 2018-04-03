@@ -155,7 +155,7 @@ namespace GladNet
 		/// </summary>
 		/// <param name="client">The managed client.</param>
 		/// <returns>A non-null session.</returns>
-		protected abstract ManagedClientSession<TPayloadWriteType, TPayloadReadType> CreateIncomingSession(IManagedNetworkClient<TPayloadWriteType, TPayloadReadType> client);
+		protected abstract ManagedClientSession<TPayloadWriteType, TPayloadReadType> CreateIncomingSession(IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> client);
 
 		/// <summary>
 		/// Called internally to create the server's <see cref="TcpListener"/>.
