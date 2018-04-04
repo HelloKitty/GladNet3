@@ -149,7 +149,15 @@ namespace GladNet
 					//If the message is null then the connection is no longer valid
 					//The socket likely disconnected so we should stop the network thread
 					if(message == null)
+					{
+						//We have to publish a null so it can be consumed by the user
+						//to know that the socket is dead
+						await IncomingMessageQueue.EnqueueAsync(null, CancellationToken.None)
+							.ConfigureAwait(false);
+
 						StopNetwork();
+					}
+						
 
 					//if have to check the token again because the message may be null and may have been canceled mid-read
 					if(incomingCancellationToken.IsCancellationRequested)
