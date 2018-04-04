@@ -71,6 +71,8 @@ namespace GladNet
 				catch(Exception e)
 				{
 					//TODO: Log
+					//TODO: Remove this console log
+					Console.WriteLine($"[Error]: {e.Message}\n\nStack: {e.StackTrace}");
 					continue;
 				}
 
@@ -120,8 +122,10 @@ namespace GladNet
 								.ConfigureAwait(false);
 						}
 					}
-					catch(Exception)
+					catch(Exception e)
 					{
+						//TODO: Remove this console log
+						Console.WriteLine($"[Error]: {e.Message}\n\nStack: {e.StackTrace}");
 					}
 
 					client.Dispose();

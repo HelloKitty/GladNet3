@@ -50,8 +50,7 @@ namespace GladNet
 		//TODO: This is copy-pasted from above, to avoid creating tokens when we don't need them. Should we refactor?
 		public override Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
-			return DecoratedClient.ReadAsync(buffer, start, count, token)
-;
+			return DecoratedClient.ReadAsync(buffer, start, count, token);
 		}
 
 		/// <inheritdoc />
@@ -87,8 +86,12 @@ namespace GladNet
 
 			//If we had access to the stream we could wrap it in a reader and use it
 			//without knowing the size. Since we don't have access we must manually read
-			await DecoratedClient.ReadAsync(PacketHeaderBuffer, 0, PacketHeaderBuffer.Length, token)
+			int count = await DecoratedClient.ReadAsync(PacketHeaderBuffer, 0, PacketHeaderBuffer.Length, token)
 				.ConfigureAwait(false);//TODO: How long should the timeout be if any?
+
+			//This means the socket is disconnected
+			if(count == 0)
+				return null;
 
 			//If the token is canceled just return null;
 			if(token.IsCancellationRequested)

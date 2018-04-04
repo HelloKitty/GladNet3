@@ -63,14 +63,19 @@ namespace GladNet
 				throw new NotSupportedException("Protobuf-Net deserialization without length prefixing is not yet supported.");
 
 			//To do the async read operation with Protobuf-Net we need to do some manual buffering
-			int prefixSize = checked((int)await ReadLongLengthPrefix(bytesReadable, PrefixStyle, token));
+			int prefixSize = checked((int)await ReadLongLengthPrefix(bytesReadable, PrefixStyle, token).ConfigureAwait(false));
 
 			Console.WriteLine($"Prefix size: {prefixSize}");
 
 			//TODO: Reduce allocations somehow
 			byte[] bytes = new byte[prefixSize];
 
-			await bytesReadable.ReadAsync(bytes, 0, prefixSize, token);
+			int count = await bytesReadable.ReadAsync(bytes, 0, prefixSize, token)
+				.ConfigureAwait(false);
+
+			//0 means that the socket disconnected
+			if(count == 0)
+				return default(TTypeToDeserializeTo);
 
 			return Serializer.Deserialize<TTypeToDeserializeTo>(new MemoryStream(bytes));
 		}
@@ -90,7 +95,12 @@ namespace GladNet
 				case PrefixStyle.Fixed32:
 					{
 						//TODO: Figure out a way to reduce allocations
-						byte[] bytes = await ReadFixed4Byte(bytesReadable, style, token);
+						byte[] bytes = await ReadFixed4Byte(bytesReadable, style, token)
+							.ConfigureAwait(false);
+
+						//Means the socket disconnected
+						if(bytes == null)
+							return 0;
 
 						if(BitConverter.IsLittleEndian)
 						{
@@ -102,7 +112,12 @@ namespace GladNet
 				case PrefixStyle.Fixed32BigEndian:
 				{
 					//TODO: Figure out a way to reduce allocations
-					byte[] bytes = await ReadFixed4Byte(bytesReadable, style, token);
+					byte[] bytes = await ReadFixed4Byte(bytesReadable, style, token)
+						.ConfigureAwait(false);
+
+					//Means the socket disconnected
+					if(bytes == null)
+						return 0;
 					
 					//TODO: Improve efficiency
 					return (bytes[0] << 24)
@@ -127,7 +142,12 @@ namespace GladNet
 		private static async Task<byte[]> ReadFixed4Byte(IBytesReadable bytesReadable, PrefixStyle style, CancellationToken token)
 		{
 			byte[] bytes = new byte[4];
-			int count = await bytesReadable.ReadAsync(bytes, 0, 4, token);
+			int count = await bytesReadable.ReadAsync(bytes, 0, 4, token)
+				.ConfigureAwait(false);
+
+			//0 means the socket disconnected
+			if(count == 0)
+				return null;
 
 			if(count < 4)
 				throw new InvalidOperationException($"Protobuf-Net could not read length prefix: {style}");
@@ -142,7 +162,12 @@ namespace GladNet
 			byte[] tempBuffer = new byte[9];
 
 			ulong value = 0;
-			await bytesReadable.ReadAsync(tempBuffer, 0, 1, token);
+			int count = await bytesReadable.ReadAsync(tempBuffer, 0, 1, token)
+				.ConfigureAwait(false);
+
+			//0 means that the socket disconnected
+			if(count == 0)
+				return 0;
 
 			int b = tempBuffer[0];
 
@@ -158,7 +183,13 @@ namespace GladNet
 
 			while(bytesRead < 9)
 			{
-				await bytesReadable.ReadAsync(tempBuffer, bytesRead, 1, token);
+				count = await bytesReadable.ReadAsync(tempBuffer, bytesRead, 1, token)
+					.ConfigureAwait(false);
+
+				//0 means the underlying socket disconnected
+				if(count == 0)
+					return 0;
+
 				b = tempBuffer[bytesRead];
 
 				if(b < 0) throw EoF(null);
@@ -171,7 +202,12 @@ namespace GladNet
 				bytesRead++;
 			}
 
-			await bytesReadable.ReadAsync(tempBuffer, bytesRead, 1, token);
+			count = await bytesReadable.ReadAsync(tempBuffer, bytesRead, 1, token)
+				.ConfigureAwait(false);
+
+			if(count == 0)
+				return 0;
+
 			b = tempBuffer[bytesRead];
 
 			if(b < 0) throw EoF(null);

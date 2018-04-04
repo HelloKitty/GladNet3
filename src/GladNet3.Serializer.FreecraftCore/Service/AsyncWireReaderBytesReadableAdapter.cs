@@ -59,6 +59,7 @@ namespace GladNet
 		/// <inheritdoc />
 		public async Task<byte> ReadByteAsync()
 		{
+			//TODO: This will fail when the socket disconnects
 			return (await ReadBytesAsync(1)
 				.ConfigureAwait(false))[0];
 		}
@@ -82,6 +83,10 @@ namespace GladNet
 
 			int i = await BytesReadableSource.ReadAsync(bytes, 0, count, CancellationToken.None)
 				.ConfigureAwait(false);
+
+			//0 means the socket disconnected
+			if(i == 0)
+				return null;
 
 			if(i != count)
 				throw new InvalidOperationException($"Failed to read {count} many bytes from {nameof(IBytesReadable)}. Read: {i}");

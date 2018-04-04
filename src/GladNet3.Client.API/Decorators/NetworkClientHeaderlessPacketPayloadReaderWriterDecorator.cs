@@ -132,6 +132,10 @@ namespace GladNet
 				payload = await Serializer.DeserializeAsync<TReadPayloadBaseType>(this, token)
 					.ConfigureAwait(false);//TODO: Should we timeout?
 
+				//Null payload means the socket disconnected
+				if(payload == null)
+					return null;
+
 				//TODO: Any reasonable way to get the bytes read size so we can use it as the header?
 				//We need to create our own manual header since we aren't reading one
 				//However, we do not know the header size so we should just say it's 0

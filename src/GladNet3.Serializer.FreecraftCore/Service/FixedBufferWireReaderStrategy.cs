@@ -67,7 +67,10 @@ namespace GladNet
 
 			byte[] bytes = new byte[count];
 
-			ManagedStream.Read(bytes, 0, count);
+			int readCount = ManagedStream.Read(bytes, 0, count);
+
+			if(readCount == 0 && count != 0)
+				return null;
 
 			return bytes;
 		}
@@ -91,6 +94,9 @@ namespace GladNet
 				throw new InvalidOperationException("Failed to read a desired bytes from the stream.");
 
 			byte[] bytes = ReadBytes(count);
+
+			if(bytes == null)
+				return null;
 
 			//Now move the stream back
 			ManagedStream.Position = ManagedStream.Position - count;

@@ -83,6 +83,7 @@ namespace GladNet
 				await DecoratedClient.ClearReadBuffers()
 					.ConfigureAwait(false);
 
+				//Could be null if the socket disconnected
 				return message;
 			}
 		}

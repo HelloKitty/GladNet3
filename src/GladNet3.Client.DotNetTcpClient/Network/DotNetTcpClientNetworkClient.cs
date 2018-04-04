@@ -120,8 +120,11 @@ namespace GladNet
 					int countRead = await stream.ReadAsync(buffer, i, end - i, token)
 						.ConfigureAwait(false);
 
+					//If we encounter a 0 that means the socket closed most likely
+					//We should indicate we read nothing. This should be handled and propagated back up
+					//the pipeline
 					if(countRead == 0)
-						throw new InvalidOperationException($"Encounted possible one-way shutdown from network. Read 0 bytes.");
+						return 0;
 
 					i += countRead;
 				}

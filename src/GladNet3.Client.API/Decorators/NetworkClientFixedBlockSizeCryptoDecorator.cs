@@ -242,8 +242,12 @@ namespace GladNet
 		private async Task<bool> ReadAndDecrypt(byte[] buffer, int start, CancellationToken token, int extendedCount)
 		{
 			//We don't need to know the amount read, I think.
-			await DecoratedClient.ReadAsync(buffer, start, extendedCount, token)
+			int count = await DecoratedClient.ReadAsync(buffer, start, extendedCount, token)
 				.ConfigureAwait(false);
+
+			//IF we read nothing then that means the socket disconnected
+			if(count == 0)
+				return false;
 
 			//Check cancel again, we want to fail quick
 			if(token.IsCancellationRequested)

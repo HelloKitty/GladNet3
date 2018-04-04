@@ -90,8 +90,14 @@ namespace GladNet
 				CancellationToken dispatchCancelation = CreateNewManagedCancellationTokenSource().Token;
 
 				while(!dispatchCancelation.IsCancellationRequested)
-					await UnmanagedClient.WriteAsync(await OutgoingMessageQueue.DequeueAsync(dispatchCancelation).ConfigureAwait(false))
+				{
+					TPayloadWriteType payload = await OutgoingMessageQueue.DequeueAsync(dispatchCancelation)
 						.ConfigureAwait(false);
+
+					await UnmanagedClient.WriteAsync(payload)
+						.ConfigureAwait(false);
+				}
+					
 			}
 			catch(TaskCanceledException e)
 			{
@@ -110,7 +116,14 @@ namespace GladNet
 			}
 			finally
 			{
-				StopNetwork();
+				try
+				{
+					await DisconnectAsync(0);
+				}
+				catch(Exception)
+				{
+
+				}
 			}
 
 			//TODO: Should we do anything after the dispatch has stopped?
@@ -132,6 +145,11 @@ namespace GladNet
 				{
 					NetworkIncomingMessage<TPayloadReadType> message = await UnmanagedClient.ReadAsync(incomingCancellationToken)
 						.ConfigureAwait(false);
+
+					//If the message is null then the connection is no longer valid
+					//The socket likely disconnected so we should stop the network thread
+					if(message == null)
+						StopNetwork();
 
 					//if have to check the token again because the message may be null and may have been canceled mid-read
 					if(incomingCancellationToken.IsCancellationRequested)
@@ -160,7 +178,14 @@ namespace GladNet
 			}
 			finally
 			{
-				StopNetwork();
+				try
+				{
+					await DisconnectAsync(0);
+				}
+				catch(Exception)
+				{
+					
+				}
 			}
 
 			//TODO: Should we do anything after the dispatch has stopped?
@@ -211,9 +236,10 @@ namespace GladNet
 		/// </summary>
 		private void StartNetwork()
 		{
+			//TODO: Is it ok to not make these long-running?
 			//Create both a read and write thread
-			Task.Factory.StartNew(DispatchOutgoingMessages, TaskCreationOptions.LongRunning);
-			Task.Factory.StartNew(EnqueueIncomingMessages, TaskCreationOptions.LongRunning);
+			Task.Factory.StartNew(DispatchOutgoingMessages);
+			Task.Factory.StartNew(EnqueueIncomingMessages);
 		}
 
 		#region IDisposable Support

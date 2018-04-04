@@ -37,8 +37,7 @@ namespace GladNet
 		/// <inheritdoc />
 		public override Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
-			return DecoratedClient.ReadAsync(buffer, start, count, token)
-;
+			return DecoratedClient.ReadAsync(buffer, start, count, token);
 		}
 
 		/// <inheritdoc />
@@ -91,8 +90,7 @@ namespace GladNet
 		/// <inheritdoc />
 		public override Task<bool> ConnectAsync(string ip, int port)
 		{
-			return DecoratedClient.ConnectAsync(ip, port)
-;
+			return DecoratedClient.ConnectAsync(ip, port);
 		}
 	}
 }

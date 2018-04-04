@@ -145,6 +145,10 @@ namespace GladNet
 				header = await HeaderReaderWriter.ReadHeaderAsync(token)
 					.ConfigureAwait(false);
 
+				//If the header is null it means the socket disconnected
+				if(header == null)
+					return null;
+
 				//if was canceled the header reading probably returned null anyway
 				if(token.IsCancellationRequested)
 					return null;
