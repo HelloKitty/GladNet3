@@ -115,6 +115,13 @@ namespace GladNet
 							NetworkIncomingMessage<TPayloadReadType> message = await internalNetworkClient.ReadMessageAsync(CancellationToken.None)
 								.ConfigureAwait(false);
 
+							//Message can be null if the socket/connection stopped
+							if(message == null)
+							{
+								await internalNetworkClient.DisconnectAsync(0);
+								break;
+							}
+
 							//TODO: This will work for World of Warcraft since it requires no more than one packet
 							//from the same client be handled at one time. However it limits throughput and maybe we should
 							//handle this at a different level instead. 

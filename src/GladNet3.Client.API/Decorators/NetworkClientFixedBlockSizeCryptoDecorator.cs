@@ -166,12 +166,12 @@ namespace GladNet
 						bool result = await ReadAndDecrypt(ReadBuffer.Buffer, 0, token, extendedCount)
 							.ConfigureAwait(false);
 
-						//Now we must BlockCopy the requested amount into the buffer
-						BufferUtil.QuickUnsafeCopy(ReadBuffer.Buffer, 0, buffer, start, count);
-
 						//if the read/decrypt failed then return 0
 						if(!result)
 							return 0;
+
+						//Now we must BlockCopy the requested amount into the buffer
+						BufferUtil.QuickUnsafeCopy(ReadBuffer.Buffer, 0, buffer, start, count);
 
 						FillCryptoOverflowWithExcess(ReadBuffer.Buffer, 0, count, extendedCount);
 					}
