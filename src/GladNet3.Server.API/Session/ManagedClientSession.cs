@@ -32,18 +32,18 @@ namespace GladNet
 		public IConnectionService Connection => InternalManagedNetworkClient;
 
 		/// <summary>
-		/// The network address of the session.
+		/// The details of the session.
 		/// </summary>
-		public NetworkAddressInfo ClientAddress { get; }
+		public SessionDetails Details { get; }
 
 		/// <inheritdoc />
-		protected ManagedClientSession(IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> internalManagedNetworkClient, NetworkAddressInfo clientAddress)
+		protected ManagedClientSession(IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> internalManagedNetworkClient, SessionDetails details)
 		{
 			if(internalManagedNetworkClient == null) throw new ArgumentNullException(nameof(internalManagedNetworkClient));
-			if(clientAddress == null) throw new ArgumentNullException(nameof(clientAddress));
+			if(details == null) throw new ArgumentNullException(nameof(details));
 
 			InternalManagedNetworkClient = internalManagedNetworkClient;
-			ClientAddress = clientAddress;
+			Details = details;
 		}
 	
 		//TODO: We may also want to provide some message parameters when we add UDP support

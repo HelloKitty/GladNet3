@@ -124,17 +124,17 @@ namespace GladNet
 					//We should indicate we read nothing. This should be handled and propagated back up
 					//the pipeline
 					if(countRead == 0)
-						return 0;
+						throw new InvalidOperationException($"Socket read 0. Likely disconnection.");
 
 					i += countRead;
 				}
-					
+			}
+			catch(TaskCanceledException)
+			{
+				throw;
 			}
 			catch(Exception e)
 			{
-				if(token.IsCancellationRequested)
-					return 0;
-
 				//If it wasn't because of a cancelled token then we should throw
 				throw new InvalidOperationException($"Failed to read from network. Offset: {start} Count: {count}", e);
 			}

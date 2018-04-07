@@ -101,10 +101,7 @@ namespace GladNet
 			}
 			catch(TaskCanceledException e)
 			{
-				//This is an expected exception that happens when the token is canceled
-				if(Logger.IsDebugEnabled)
-					Logger.Debug($"Expected Task Canceled Exception: {e.Message}\n\n Stack: {e.StackTrace}");
-
+				//Supress this exception. We don't care about it. It's expected.
 				//We cannot rethrow because this can cause application instability on threadpools
 			}
 			catch(Exception e)
