@@ -11,7 +11,7 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public abstract class ManagedClientSession<TPayloadWriteType, TPayloadReadType> 
+	public abstract class ManagedClientSession<TPayloadWriteType, TPayloadReadType>  : IManagedClientSession
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
@@ -36,6 +36,14 @@ namespace GladNet
 		/// </summary>
 		public SessionDetails Details { get; }
 
+		public event StatusChangeEvent OnSessionDisconnection;
+
+		/// <summary>
+		/// Indicates if a disconnection has already been called.
+		/// We don't want to handle disconnection multiple times.
+		/// </summary>
+		private bool HasDisconnectedBeenCalled { get; set; } = false;
+
 		/// <inheritdoc />
 		protected ManagedClientSession(IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> internalManagedNetworkClient, SessionDetails details)
 		{
@@ -54,5 +62,26 @@ namespace GladNet
 		/// <param name="message">The network message recieved.</param>
 		/// <returns></returns>
 		public abstract Task OnNetworkMessageRecieved(NetworkIncomingMessage<TPayloadReadType> message);
+
+		/// <summary>
+		/// Invoked internally when the session disconnects.
+		/// </summary>
+		protected abstract void OnSessionDisconnected();
+
+		/// <summary>
+		/// Disconnects the session and invokes the
+		/// <see cref="OnSessionDisconnection"/> event.
+		/// </summary>
+		public void DisconnectClientSession()
+		{
+			//This prevents us from calling disconnected multiple times.
+			if(HasDisconnectedBeenCalled)
+				return;
+
+			HasDisconnectedBeenCalled = true;
+			OnSessionDisconnection?.Invoke(this, new DisconnectedSessionStatusChangeEventArgs(Details));
+			OnSessionDisconnection = null;
+			OnSessionDisconnected();
+		}
 	}
 }

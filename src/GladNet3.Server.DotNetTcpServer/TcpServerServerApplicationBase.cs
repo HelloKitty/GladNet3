@@ -121,6 +121,9 @@ namespace GladNet
 
 		private async Task ConnectionLoop(TcpClient client, IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> internalNetworkClient, ManagedClientSession<TPayloadWriteType, TPayloadReadType> networkSession)
 		{
+			//So that sessions invoking the disconnection can internally disconnect to
+			networkSession.OnSessionDisconnection += (source, args) => internalNetworkClient.Disconnect();
+
 			try
 			{
 				while(client.Connected && internalNetworkClient.isConnected)
@@ -142,7 +145,9 @@ namespace GladNet
 			}
 
 			client.Dispose();
+
 			//TODO: Should we tell the client something when it ends?
+			networkSession.DisconnectClientSession();
 		}
 
 		private void CreateInternalIncomingSession(TcpClient client, out IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> internalNetworkClient, out ManagedClientSession<TPayloadWriteType, TPayloadReadType> networkSession)
