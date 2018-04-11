@@ -4,6 +4,7 @@ using System.Text;
 
 namespace GladNet
 {
+	//TODO: We need better naming. Kinda conflicts with the existing message context for handlers
 	/// <summary>
 	/// The context for a network message.
 	/// </summary>

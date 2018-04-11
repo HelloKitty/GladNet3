@@ -8,12 +8,27 @@ namespace GladNet
 {
 	/// <summary>
 	/// Contract for types that provide message handling logic.
+	/// Uses the default peer context type.
 	/// </summary>
 	/// <typeparam name="TIncomingPayloadType"></typeparam>
 	/// <typeparam name="TOutgoingPayloadType"></typeparam>
-	public interface IPeerMessageHandler<TIncomingPayloadType, out TOutgoingPayloadType>
+	public interface IPeerMessageHandler<TIncomingPayloadType, out TOutgoingPayloadType> : IPeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType, IPeerMessageContext<TOutgoingPayloadType>>
 		where TIncomingPayloadType : class
 		where TOutgoingPayloadType : class
+	{
+		
+	}
+
+	/// <summary>
+	/// Contract for types that provide message handling logic.
+	/// </summary>
+	/// <typeparam name="TIncomingPayloadType"></typeparam>
+	/// <typeparam name="TOutgoingPayloadType"></typeparam>
+	/// <typeparam name="TMessageContextType"></typeparam>
+	public interface IPeerMessageHandler<TIncomingPayloadType, out TOutgoingPayloadType, in TMessageContextType>
+		where TIncomingPayloadType : class
+		where TOutgoingPayloadType : class
+		where TMessageContextType : IPeerMessageContext<TOutgoingPayloadType>
 	{
 		/// <summary>
 		/// Indicates if the handler can handle the provided <see cref="message"/>.
@@ -32,6 +47,6 @@ namespace GladNet
 		/// True indicates that the message was handled and consumed. 
 		/// False indicates that the handler couldn't handle the message.
 		/// </returns>
-		Task<bool> TryHandleMessage(IPeerMessageContext<TOutgoingPayloadType> context, NetworkIncomingMessage<TIncomingPayloadType> message);
+		Task<bool> TryHandleMessage(TMessageContextType context, NetworkIncomingMessage<TIncomingPayloadType> message);
 	}
 }

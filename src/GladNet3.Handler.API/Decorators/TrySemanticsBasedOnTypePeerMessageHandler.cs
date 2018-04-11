@@ -6,24 +6,49 @@ using System.Threading.Tasks;
 
 namespace GladNet
 {
+
 	/// <summary>
 	/// Handler that implements try semantics in attempting to handle a provided message.
 	/// It can indicate if the message is consumed/consumable.
 	/// </summary>
-	/// <typeparam name="TPayloadBaseType"></typeparam>
-	public sealed class TrySemanticsBasedOnTypePeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType, TPayloadType> : IPeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType>
+	/// <typeparam name="TIncomingPayloadType"></typeparam>
+	/// <typeparam name="TOutgoingPayloadType"></typeparam>
+	/// <typeparam name="TPayloadType"></typeparam>
+	public sealed class TrySemanticsBasedOnTypePeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType, TPayloadType> : TrySemanticsBasedOnTypePeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType, TPayloadType, IPeerMessageContext<TOutgoingPayloadType>>, IPeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType>
 		where TIncomingPayloadType : class
 		where TPayloadType : class, TIncomingPayloadType
 		where TOutgoingPayloadType : class
+	{
+		/// <inheritdoc />
+		public TrySemanticsBasedOnTypePeerMessageHandler(IPeerPayloadSpecificMessageHandler<TPayloadType, TOutgoingPayloadType, IPeerMessageContext<TOutgoingPayloadType>> decoratedPayloadHandler) 
+			: base(decoratedPayloadHandler)
+		{
+
+		}
+	}
+
+	/// <summary>
+	/// Handler that implements try semantics in attempting to handle a provided message.
+	/// It can indicate if the message is consumed/consumable.
+	/// </summary>
+	/// <typeparam name="TIncomingPayloadType"></typeparam>
+	/// <typeparam name="TOutgoingPayloadType"></typeparam>
+	/// <typeparam name="TPayloadType"></typeparam>
+	/// <typeparam name="TPeerContextType"></typeparam>
+	public class TrySemanticsBasedOnTypePeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType, TPayloadType, TPeerContextType> : IPeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType, TPeerContextType>
+		where TIncomingPayloadType : class
+		where TPayloadType : class, TIncomingPayloadType
+		where TOutgoingPayloadType : class
+		where TPeerContextType : IPeerMessageContext<TOutgoingPayloadType>
 	{
 		/// <summary>
 		/// Decorated payload handler that can handle
 		/// payloads of type <typeparamref name="TPayloadType"/>.
 		/// </summary>
-		private IPeerPayloadSpecificMessageHandler<TPayloadType, TOutgoingPayloadType> DecoratedPayloadHandler { get; }
+		private IPeerPayloadSpecificMessageHandler<TPayloadType, TOutgoingPayloadType, TPeerContextType> DecoratedPayloadHandler { get; }
 
 		/// <inheritdoc />
-		public TrySemanticsBasedOnTypePeerMessageHandler(IPeerPayloadSpecificMessageHandler<TPayloadType, TOutgoingPayloadType> decoratedPayloadHandler)
+		public TrySemanticsBasedOnTypePeerMessageHandler(IPeerPayloadSpecificMessageHandler<TPayloadType, TOutgoingPayloadType, TPeerContextType> decoratedPayloadHandler)
 		{
 			if(decoratedPayloadHandler == null) throw new ArgumentNullException(nameof(decoratedPayloadHandler));
 
@@ -45,7 +70,7 @@ namespace GladNet
 		/// <param name="context">The context of the message.</param>
 		/// <param name="message">The message.</param>
 		/// <returns>True if the message has been consumed.</returns>
-		public async Task<bool> TryHandleMessage(IPeerMessageContext<TOutgoingPayloadType> context, NetworkIncomingMessage<TIncomingPayloadType> message)
+		public async Task<bool> TryHandleMessage(TPeerContextType context, NetworkIncomingMessage<TIncomingPayloadType> message)
 		{
 			if(context == null) throw new ArgumentNullException(nameof(context));
 			if(message == null) throw new ArgumentNullException(nameof(message));
