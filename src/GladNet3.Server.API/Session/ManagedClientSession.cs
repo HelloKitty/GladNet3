@@ -11,7 +11,7 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public abstract class ManagedClientSession<TPayloadWriteType, TPayloadReadType>  : IManagedClientSession
+	public abstract class ManagedClientSession<TPayloadWriteType, TPayloadReadType>  : IManagedClientSession, INetworkMessageReceivable<TPayloadReadType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
@@ -53,15 +53,6 @@ namespace GladNet
 			InternalManagedNetworkClient = internalManagedNetworkClient;
 			Details = details;
 		}
-	
-		//TODO: We may also want to provide some message parameters when we add UDP support
-		/// <summary>
-		/// Called when a network message is recieved.
-		/// Can also be called to simulate the recieveing a network message.
-		/// </summary>
-		/// <param name="message">The network message recieved.</param>
-		/// <returns></returns>
-		public abstract Task OnNetworkMessageRecieved(NetworkIncomingMessage<TPayloadReadType> message);
 
 		/// <summary>
 		/// Invoked internally when the session disconnects.
@@ -83,5 +74,8 @@ namespace GladNet
 			OnSessionDisconnection = null;
 			OnSessionDisconnected();
 		}
+
+		/// <inheritdoc />
+		public abstract Task OnNetworkMessageRecieved(NetworkIncomingMessage<TPayloadReadType> message);
 	}
 }

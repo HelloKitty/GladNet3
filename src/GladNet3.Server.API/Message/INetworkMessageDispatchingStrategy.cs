@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 
 namespace GladNet
 {
+	//You may wonder why this exists. It exists because you may want to async route messages to other services/servers.
+	//The responses may be awaited asyncronouosly and then sent back to the client. This could be for microserivces or for
+	//load balancing reasons. This only exists on the server for that reason. Handler API is for clients too though, but this
+	//exists before the handler API for the reasoning above.
 	/// <summary>
 	/// Contract for strategies for dispatching network messages.
 	/// </summary>
