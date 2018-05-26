@@ -65,8 +65,6 @@ namespace GladNet
 			//To do the async read operation with Protobuf-Net we need to do some manual buffering
 			int prefixSize = checked((int)await ReadLongLengthPrefix(bytesReadable, PrefixStyle, token).ConfigureAwait(false));
 
-			Console.WriteLine($"Prefix size: {prefixSize}");
-
 			//TODO: Reduce allocations somehow
 			byte[] bytes = new byte[prefixSize];
 

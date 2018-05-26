@@ -138,6 +138,7 @@ namespace GladNet
 		public async Task<NetworkIncomingMessage<TReadPayloadBaseType>> ReadAsync(CancellationToken token)
 		{
 			IPacketHeader header = null;
+			TReadPayloadBaseType payload = null;
 
 			using(await readSynObj.LockAsync(token).ConfigureAwait(false))
 			{
@@ -156,15 +157,16 @@ namespace GladNet
 				//We need to read enough bytes to deserialize the payload
 				await ReadAsync(PacketPayloadReadBuffer, 0, header.PayloadSize, token)
 					.ConfigureAwait(false);//TODO: Should we timeout?
+
+				//If the token was canceled then the buffer isn't filled and we can't make a message
+				if(token.IsCancellationRequested)
+					return null;
+
+				//WARNING: We must do deserialization inside of the lock otherwise we can encounter a race condition
+				//Deserialize the bytes starting from the begining but ONLY read up to the payload size. We reuse this buffer and it's large
+				//so if we don't specify the length we could end up with an issue.
+				payload = Serializer.Deserialize<TReadPayloadBaseType>(PacketPayloadReadBuffer, 0, header.PayloadSize);
 			}
-
-			//If the token was canceled then the buffer isn't filled and we can't make a message
-			if(token.IsCancellationRequested)
-				return null;
-
-			//Deserialize the bytes starting from the begining but ONLY read up to the payload size. We reuse this buffer and it's large
-			//so if we don't specify the length we could end up with an issue.
-			TReadPayloadBaseType payload = Serializer.Deserialize<TReadPayloadBaseType>(PacketPayloadReadBuffer, 0, header.PayloadSize);
 
 			return new NetworkIncomingMessage<TReadPayloadBaseType>(header, payload);
 		}

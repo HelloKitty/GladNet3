@@ -56,20 +56,20 @@ namespace GladNet3
 					try
 					{
 						await OnNetworkMessageRecieved(message)
-							.ConfigureAwait(true);
+							.ConfigureAwait(false);
 					}
 					catch(Exception e)
 					{
-						if(Logger.IsDebugEnabled)
-							Logger.Debug($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
+						if(Logger.IsWarnEnabled)
+							Logger.Warn($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
 					}
 
 				}
 			}
 			catch(Exception e)
 			{
-				if(Logger.IsDebugEnabled)
-					Logger.Debug($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
+				if(Logger.IsWarnEnabled)
+					Logger.Warn($"Error: {e.Message}\n\n Stack Trace: {e.StackTrace}");
 
 				throw;
 			}
@@ -92,7 +92,8 @@ namespace GladNet3
 		public async Task<bool> ConnectAsync(string ip, int port)
 		{
 
-			bool result = await Client.ConnectAsync(ip, port);
+			bool result = await Client.ConnectAsync(ip, port)
+				.ConfigureAwait(false);
 
 			//TODO: How should we handle multiple connection requests? We may have a dispatching thread going
 			if(result)
