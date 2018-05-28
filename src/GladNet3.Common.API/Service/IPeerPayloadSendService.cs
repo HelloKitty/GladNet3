@@ -36,7 +36,7 @@ namespace GladNet
 		/// <param name="payload">The payload.</param>
 		/// <param name="method">The delivery method.</param>
 		/// <returns>Indicates the result of the send message operation.</returns>
-		Task<SendResult> SendMessageImmediately<TPayloadType>(TPayloadType payload, DeliveryMethod method)
+		Task<SendResult> SendMessageImmediately<TPayloadType>(TPayloadType payload, DeliveryMethod method = DeliveryMethod.ReliableOrdered)
 			where TPayloadType : class, TPayloadBaseType;
 	}
 }
