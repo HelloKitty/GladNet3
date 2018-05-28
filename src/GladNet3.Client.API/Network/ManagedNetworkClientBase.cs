@@ -58,6 +58,19 @@ namespace GladNet
 		public abstract Task<SendResult> SendMessage<TPayloadType>(TPayloadType payload, DeliveryMethod method)
 			where TPayloadType : class, TPayloadWriteType;
 
+		/// <summary>
+		/// Similar to <see cref="SendMessage{TPayloadType}"/> but will noy rely on any queuing mechanism
+		/// should one be implemented under <see cref="SendMessage{TPayloadType}"/>. It instead will
+		/// send the payload and message immediately and the awaited task will complete once the message is fully sent.
+		/// <see cref="SendMessage{TPayloadType}"/> does not make that promise. It may complete after queueing, potentially.
+		/// </summary>
+		/// <typeparam name="TPayloadType">The payload type to send. (Can be inferred)</typeparam>
+		/// <param name="payload">The payload.</param>
+		/// <param name="method">The delivery method.</param>
+		/// <returns></returns>
+		public abstract Task<SendResult> SendMessageImmediately<TPayloadType>(TPayloadType payload, DeliveryMethod method)
+			where TPayloadType : class, TPayloadWriteType;
+
 		/// <inheritdoc />
 		public abstract Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token);
 

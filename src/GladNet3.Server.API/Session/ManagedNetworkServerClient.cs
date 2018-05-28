@@ -49,6 +49,15 @@ namespace GladNet
 			return SendResult.Sent;
 		}
 
+		//ServerClient SendMessage already sends right away. So we can just call it
+		/// <inheritdoc />
+		public override Task<SendResult> SendMessageImmediately<TPayloadType>(TPayloadType payload, DeliveryMethod method)
+		{
+			//TODO: Handle delivery method
+			//TODO: What should we do when this is being called during a critical section? Won't we want to queue this up so serialization and encryption
+			return SendMessage(payload, method);
+		}
+
 		/// <inheritdoc />
 		public override Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token)
 		{

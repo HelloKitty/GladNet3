@@ -64,6 +64,15 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
+		public override async Task<SendResult> SendMessageImmediately<TPayloadType>(TPayloadType payload, DeliveryMethod method)
+		{
+			await UnmanagedClient.WriteAsync(payload)
+				.ConfigureAwait(false);
+
+			return SendResult.Sent;
+		}
+
+		/// <inheritdoc />
 		public override Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token)
 		{
 			return IncomingMessageQueue.DequeueAsync(token);
