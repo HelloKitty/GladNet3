@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FreecraftCore.Serializer" Version="3.0.23" />
+    <PackageReference Include="FreecraftCore.Serializer" Version="3.0.29" />
   </ItemGroup>
 
   <ItemGroup>

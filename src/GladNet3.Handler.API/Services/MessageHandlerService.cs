@@ -81,7 +81,7 @@ namespace GladNet
 			}
 
 			DefaultMessageHandler?.HandleMessage(context, message.Payload)?
-				.ConfigureAwait(true);
+				.ConfigureAwait(false);
 
 			return false;
 		}
