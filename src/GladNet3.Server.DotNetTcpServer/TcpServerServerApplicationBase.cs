@@ -5,6 +5,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
+using Common.Logging.Simple;
 using GladNet;
 
 namespace GladNet
@@ -28,6 +30,11 @@ namespace GladNet
 
 		private INetworkMessageDispatchingStrategy<TPayloadWriteType, TPayloadReadType> MessageHandlingStrategy { get; }
 
+		/// <summary>
+		/// Server application logger.
+		/// </summary>
+		public ILog Logger { get; }
+
 		private int _lifetimeConnectionCount = 0;
 
 		/// <summary>
@@ -40,13 +47,13 @@ namespace GladNet
 			private set => _lifetimeConnectionCount = value;
 		}
 
-		protected TcpServerServerApplicationBase(NetworkAddressInfo serverAddress)
-			: this(serverAddress, new InPlaceNetworkMessageDispatchingStrategy<TPayloadWriteType, TPayloadReadType>())
+		protected TcpServerServerApplicationBase(NetworkAddressInfo serverAddress, ILog logger)
+			: this(serverAddress, new InPlaceNetworkMessageDispatchingStrategy<TPayloadWriteType, TPayloadReadType>(), logger)
 		{
 
 		}
 
-		protected TcpServerServerApplicationBase(NetworkAddressInfo serverAddress, INetworkMessageDispatchingStrategy<TPayloadWriteType, TPayloadReadType> messageHandlingStrategy)
+		protected TcpServerServerApplicationBase(NetworkAddressInfo serverAddress, INetworkMessageDispatchingStrategy<TPayloadWriteType, TPayloadReadType> messageHandlingStrategy, ILog logger)
 		{
 			if(serverAddress == null) throw new ArgumentNullException(nameof(serverAddress));
 			if(messageHandlingStrategy == null) throw new ArgumentNullException(nameof(messageHandlingStrategy));
@@ -54,6 +61,7 @@ namespace GladNet
 			ServerAddress = serverAddress;
 			ManagedTcpServer = new Lazy<TcpListener>(CreateTcpListener, true);
 			MessageHandlingStrategy = messageHandlingStrategy;
+			Logger = logger;
 		}
 
 		/// <summary>
@@ -84,9 +92,9 @@ namespace GladNet
 				}
 				catch(Exception e)
 				{
-					//TODO: Log
-					//TODO: Remove this console log
-					Console.WriteLine($"[Error]: {e.Message}\n\nStack: {e.StackTrace}");
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"[Error]: {e.Message}\n\nStack: {e.StackTrace}");
+
 					continue;
 				}
 
@@ -125,9 +133,9 @@ namespace GladNet
 			//So that sessions invoking the disconnection can internally disconnect to
 			networkSession.OnSessionDisconnection += (source, args) => internalNetworkClient.Disconnect();
 
-			try
+			while(client.Connected && internalNetworkClient.isConnected)
 			{
-				while(client.Connected && internalNetworkClient.isConnected)
+				try
 				{
 					NetworkIncomingMessage<TPayloadReadType> message = await internalNetworkClient.ReadMessageAsync(CancellationToken.None)
 						.ConfigureAwait(false);
@@ -138,12 +146,16 @@ namespace GladNet
 					await HandleIncomingNetworkMessage(networkSession, message)
 						.ConfigureAwait(false);
 				}
+				catch(Exception e)
+				{
+					//TODO: Introduce an exception handler strategy so that inheriators can allow for rethrow or other semantics.
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"[Error]: {e.Message}\n\nStack: {e.StackTrace}");
+				}
 			}
-			catch(Exception e)
-			{
-				//TODO: Remove this console log
-				Console.WriteLine($"[Error]: {e.Message}\n\nStack: {e.StackTrace}");
-			}
+
+			if(Logger.IsInfoEnabled)
+				Logger.Info($"Client Id: {networkSession.Details.ConnectionId} disconnected.");
 
 			client.Dispose();
 
