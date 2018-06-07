@@ -12,8 +12,8 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType">The type of payload it should write.</typeparam>
 	/// <typeparam name="TPayloadReadType">The type of payload it should read.</typeparam>
-	public interface IManagedNetworkClient<TPayloadWriteType, TPayloadReadType> : IPeerPayloadSendService<TPayloadWriteType>, IConnectionService,
-		INetworkMessageProducer<TPayloadReadType>, IPayloadInterceptable
+	public interface IManagedNetworkClient<in TPayloadWriteType, TPayloadReadType> : IPeerPayloadSendService<TPayloadWriteType>, IConnectionService,
+		INetworkMessageProducer<TPayloadReadType>, IPayloadInterceptable, IBytesWrittable
 		where TPayloadWriteType : class
 		where TPayloadReadType : class
 	{

@@ -113,5 +113,19 @@ namespace GladNet
 
 		/// <inheritdoc />
 		public abstract Task<TResponseType> InterceptPayload<TResponseType>(CancellationToken cancellationToken);
+
+		/// <inheritdoc />
+		public Task WriteAsync(byte[] bytes, int offset, int count)
+		{
+			//TODO: This is a hack, but it was the quickest way to implement this feature. We need to bypass the highlevel networking sometimes.
+			try
+			{
+				return ((IBytesWrittable)UnmanagedClient).WriteAsync(bytes, offset, count);
+			}
+			catch(Exception e)
+			{
+				throw new InvalidOperationException($"Cannot write bytes to Type: {UnmanagedClient.GetType().Name}. Does not imlpement {nameof(IBytesWrittable)}. Exception: {e.Message} \n\n Stack: {e.StackTrace}", e);
+			}
+		}
 	}
 }

@@ -11,7 +11,7 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public interface IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> : IManagedNetworkClient<TPayloadWriteType, TPayloadReadType> 
+	public interface IManagedNetworkServerClient<in TPayloadWriteType, TPayloadReadType> : IManagedNetworkClient<TPayloadWriteType, TPayloadReadType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
