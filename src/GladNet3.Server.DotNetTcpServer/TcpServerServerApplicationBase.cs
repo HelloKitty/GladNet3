@@ -93,7 +93,7 @@ namespace GladNet
 				catch(Exception e)
 				{
 					if(Logger.IsErrorEnabled)
-						Logger.Error($"[Error]: {e.Message}\n\nStack: {e.StackTrace}");
+						Logger.Error($"Failed to accept connection [Error]: {e.Message}\n\nStack: {e.StackTrace}");
 
 					continue;
 				}
@@ -105,16 +105,26 @@ namespace GladNet
 				if(!IsClientAcceptable(client))
 				{
 					//TODO: Is this how we should handle?
-					client.Client.Shutdown(SocketShutdown.Both);
-					client.GetStream().Dispose();
-					client.Dispose();
+					ShutDownClient(client);
 					continue;
 				}
 
 				IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> internalNetworkClient;
 				ManagedClientSession<TPayloadWriteType, TPayloadReadType> networkSession;
 
-				CreateInternalIncomingSession(client, out internalNetworkClient, out networkSession);
+				try
+				{
+					CreateInternalIncomingSession(client, out internalNetworkClient, out networkSession);
+				}
+				catch(Exception e)
+				{
+					ShutDownClient(client);
+
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Failed to create incoming session [Error]: {e.Message}\n\nStack: {e.StackTrace}");
+					
+					continue;
+				}
 
 				//TODO: Refactor
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -126,6 +136,13 @@ namespace GladNet
 					.ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 			}
+		}
+
+		private static void ShutDownClient(TcpClient client)
+		{
+			client.Client.Shutdown(SocketShutdown.Both);
+			client.GetStream().Dispose();
+			client.Dispose();
 		}
 
 		private async Task ConnectionLoop(TcpClient client, IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> internalNetworkClient, ManagedClientSession<TPayloadWriteType, TPayloadReadType> networkSession)
