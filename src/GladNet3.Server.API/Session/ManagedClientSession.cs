@@ -73,6 +73,9 @@ namespace GladNet
 			OnSessionDisconnection?.Invoke(this, new DisconnectedSessionStatusChangeEventArgs(Details));
 			OnSessionDisconnection = null;
 			OnSessionDisconnected();
+
+			//Also disconnect the network client
+			InternalManagedNetworkClient.Disconnect();
 		}
 
 		/// <inheritdoc />

@@ -171,6 +171,8 @@ namespace GladNet
 				}
 			}
 
+			await internalNetworkClient.DisconnectAsync(0);
+
 			if(Logger.IsInfoEnabled)
 				Logger.Info($"Client Id: {networkSession.Details.ConnectionId} disconnected.");
 
