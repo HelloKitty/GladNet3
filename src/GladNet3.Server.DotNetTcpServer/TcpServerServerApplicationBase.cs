@@ -168,6 +168,8 @@ namespace GladNet
 					//TODO: Introduce an exception handler strategy so that inheriators can allow for rethrow or other semantics.
 					if(Logger.IsErrorEnabled)
 						Logger.Error($"[Error]: {e.Message}\n\nStack: {e.StackTrace}");
+
+					break;
 				}
 			}
 
