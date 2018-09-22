@@ -118,10 +118,10 @@ namespace GladNet
 				}
 				catch(Exception e)
 				{
-					ShutDownClient(client);
-
 					if(Logger.IsErrorEnabled)
 						Logger.Error($"Failed to create incoming session [Error]: {e.Message}\n\nStack: {e.StackTrace}");
+
+					ShutDownClient(client);
 					
 					continue;
 				}
@@ -140,9 +140,17 @@ namespace GladNet
 
 		private static void ShutDownClient(TcpClient client)
 		{
-			client.Client.Shutdown(SocketShutdown.Both);
-			client.GetStream().Dispose();
-			client.Dispose();
+			if(client.Connected)
+			{
+				client.Client.Shutdown(SocketShutdown.Both);
+				client.GetStream().Dispose(); //only do this if connected
+				client.Dispose();
+			}
+			else
+			{
+				client.Client.Shutdown(SocketShutdown.Both);
+				client.Dispose();
+			}
 		}
 
 		private async Task ConnectionLoop(TcpClient client, IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> internalNetworkClient, ManagedClientSession<TPayloadWriteType, TPayloadReadType> networkSession)
