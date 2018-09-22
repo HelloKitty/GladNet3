@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="Moq" Version="4.10.0" />
@@ -13,7 +14,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GladNet3.Client.API\GladNet3.Client.API.csproj" />
+    <ProjectReference Include="..\GladNet3.Client.DotNetTcpClient\GladNet3.Client.DotNetTcpClient.csproj" />
+    <ProjectReference Include="..\GladNet3.Handler.API\GladNet3.Handler.API.csproj" />
     <ProjectReference Include="..\GladNet3.Server.API\GladNet3.Server.API.csproj" />
+    <ProjectReference Include="..\GladNet3.Server.DotNetTcpServer\GladNet3.Server.DotNetTcpServer.csproj" />
   </ItemGroup>
 
 </Project>
