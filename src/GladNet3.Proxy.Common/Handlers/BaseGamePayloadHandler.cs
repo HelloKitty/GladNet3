@@ -8,9 +8,10 @@ using JetBrains.Annotations;
 
 namespace GladNet
 {
-	public abstract class BaseGamePayloadHandler<TSpecificPayloadType, TBasePayloadType> : IPeerPayloadSpecificMessageHandler<TSpecificPayloadType, TBasePayloadType, IProxiedMessageContext<TBasePayloadType, TBasePayloadType>>
+	public abstract class BaseGamePayloadHandler<TSpecificPayloadType, TBasePayloadType, TOutgoingPayloadType> : IPeerPayloadSpecificMessageHandler<TSpecificPayloadType, TOutgoingPayloadType, IProxiedMessageContext<TOutgoingPayloadType, TBasePayloadType>>
 		where TSpecificPayloadType : class, TBasePayloadType
 		where TBasePayloadType : class, IPacketPayload
+		where TOutgoingPayloadType : class, IPacketPayload
 	{
 		/// <summary>
 		/// The logger for the handler.
@@ -23,10 +24,10 @@ namespace GladNet
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public abstract Task OnHandleMessage(IProxiedMessageContext<TBasePayloadType, TBasePayloadType> context, TSpecificPayloadType payload);
+		public abstract Task OnHandleMessage(IProxiedMessageContext<TOutgoingPayloadType, TBasePayloadType> context, TSpecificPayloadType payload);
 
 		/// <inheritdoc />
-		public async Task HandleMessage(IProxiedMessageContext<TBasePayloadType, TBasePayloadType> context, TSpecificPayloadType payload)
+		public async Task HandleMessage(IProxiedMessageContext<TOutgoingPayloadType, TBasePayloadType> context, TSpecificPayloadType payload)
 		{
 			//TODO: We can't log the opcode, should GladNet force users to expose it?
 			//if(Logger.IsInfoEnabled)
@@ -34,7 +35,8 @@ namespace GladNet
 
 			try
 			{
-				await OnHandleMessage(context, payload);
+				await OnHandleMessage(context, payload)
+					.ConfigureAwait(false);
 			}
 			catch(Exception e)
 			{

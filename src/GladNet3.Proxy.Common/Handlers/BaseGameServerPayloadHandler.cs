@@ -10,9 +10,10 @@ namespace GladNet
 	/// Simplied type alias for game handlers that handle Server payloads sent from the server.
 	/// </summary>
 	[ServerPayloadHandler]
-	public abstract class BaseGameServerPayloadHandler<TSpecificPayloadType, TBasePayloadType> : BaseGamePayloadHandler<TSpecificPayloadType, TBasePayloadType> 
-		where TSpecificPayloadType : class, TBasePayloadType 
+	public abstract class BaseGameServerPayloadHandler<TSpecificPayloadType, TBasePayloadType, TOutgoingPayloadType> : BaseGamePayloadHandler<TSpecificPayloadType, TBasePayloadType, TOutgoingPayloadType>
+		where TSpecificPayloadType : class, TBasePayloadType
 		where TBasePayloadType : class, IPacketPayload
+		where TOutgoingPayloadType : class, IPacketPayload
 	{
 		/// <inheritdoc />
 		protected BaseGameServerPayloadHandler([NotNull] ILog logger) 
