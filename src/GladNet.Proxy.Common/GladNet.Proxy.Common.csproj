@@ -7,7 +7,13 @@
   <ItemGroup>
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="Moq" Version="4.10.0" />
     <PackageReference Include="Reinterpret.Net" Version="2.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GladNet3.Client.API\GladNet3.Client.API.csproj" />
+    <ProjectReference Include="..\GladNet3.Server.API\GladNet3.Server.API.csproj" />
   </ItemGroup>
 
 </Project>
