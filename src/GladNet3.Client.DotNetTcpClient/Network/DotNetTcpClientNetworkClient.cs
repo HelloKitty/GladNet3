@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -21,7 +22,7 @@ namespace GladNet
 		//Can't be readonly because clients may want to reconnect
 		private TcpClient InternalTcpClient { get; set; }
 
-		private NetworkStream Stream { get; set; }
+		private Stream ReadWriteStream { get; set; }
 
 		/// <summary>
 		/// Creates a new <see cref="DotNetTcpClientNetworkClient"/> with an intialized
@@ -50,10 +51,10 @@ namespace GladNet
 		/// want to use an externally created <see cref="TcpClient"/>.
 		/// </summary>
 		/// <param name="tcpClient">The <see cref="TcpClient"/> to use.</param>
-		public DotNetTcpClientNetworkClient(TcpClient tcpClient, NetworkStream stream)
+		public DotNetTcpClientNetworkClient(TcpClient tcpClient, Stream readWriteStream)
 		{
 			InternalTcpClient = tcpClient ?? throw new ArgumentNullException(nameof(tcpClient));
-			Stream = stream ?? throw new ArgumentNullException(nameof(stream));
+			ReadWriteStream = readWriteStream ?? throw new ArgumentNullException(nameof(readWriteStream));
 		}
 
 		//TODO: This no longer works properly due to the stream setting.
@@ -118,7 +119,7 @@ namespace GladNet
 			if(!InternalTcpClient.Connected)
 				throw new InvalidOperationException($"The internal {nameof(TcpClient)}: {nameof(InternalTcpClient)} is not connected to an endpoint. You must call {nameof(ConnectAsync)} before reading any bytes.");
 
-			NetworkStream stream = Stream;
+			Stream stream = ReadWriteStream;
 
 			//Sockets nor NetworkStreams allow us to cancel
 			//They will block even if you give them the token and then
