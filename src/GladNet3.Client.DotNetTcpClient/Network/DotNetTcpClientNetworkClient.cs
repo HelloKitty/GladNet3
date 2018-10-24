@@ -21,14 +21,16 @@ namespace GladNet
 		//Can't be readonly because clients may want to reconnect
 		private TcpClient InternalTcpClient { get; set; }
 
+		private NetworkStream Stream { get; set; }
+
 		/// <summary>
 		/// Creates a new <see cref="DotNetTcpClientNetworkClient"/> with an intialized
 		/// internal <see cref="InternalTcpClient"/>. If you want to supply your own
 		/// <see cref="TcpClient"/> then call the ctor overload.
 		/// </summary>
 		public DotNetTcpClientNetworkClient()
+			: this(new TcpClient())
 		{
-			InternalTcpClient = new TcpClient();
 		}
 
 		/// <summary>
@@ -38,12 +40,23 @@ namespace GladNet
 		/// </summary>
 		/// <param name="tcpClient">The <see cref="TcpClient"/> to use.</param>
 		public DotNetTcpClientNetworkClient(TcpClient tcpClient)
+			: this(tcpClient, tcpClient.GetStream())
 		{
-			if(tcpClient == null) throw new ArgumentNullException(nameof(tcpClient));
-
-			InternalTcpClient = tcpClient;
 		}
 
+		/// <summary>
+		/// Creates a new <see cref="DotNetTcpClientNetworkClient"/> with the provided
+		/// non-null <see cref="tcpClient"/>. This overload should be used if you for some reason
+		/// want to use an externally created <see cref="TcpClient"/>.
+		/// </summary>
+		/// <param name="tcpClient">The <see cref="TcpClient"/> to use.</param>
+		public DotNetTcpClientNetworkClient(TcpClient tcpClient, NetworkStream stream)
+		{
+			InternalTcpClient = tcpClient ?? throw new ArgumentNullException(nameof(tcpClient));
+			Stream = stream ?? throw new ArgumentNullException(nameof(stream));
+		}
+
+		//TODO: This no longer works properly due to the stream setting.
 		/// <inheritdoc />
 		public override async Task<bool> ConnectAsync(string address, int port)
 		{
@@ -70,6 +83,7 @@ namespace GladNet
 			return Task.CompletedTask;
 		}
 
+		//TODO: This no longer works properly due to the stream setting.
 		/// <inheritdoc />
 		public override Task DisconnectAsync(int delay)
 		{
@@ -104,7 +118,7 @@ namespace GladNet
 			if(!InternalTcpClient.Connected)
 				throw new InvalidOperationException($"The internal {nameof(TcpClient)}: {nameof(InternalTcpClient)} is not connected to an endpoint. You must call {nameof(ConnectAsync)} before reading any bytes.");
 
-			NetworkStream stream = InternalTcpClient.GetStream();
+			NetworkStream stream = Stream;
 
 			//Sockets nor NetworkStreams allow us to cancel
 			//They will block even if you give them the token and then
