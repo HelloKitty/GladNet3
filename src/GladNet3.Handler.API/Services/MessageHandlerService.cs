@@ -23,6 +23,13 @@ namespace GladNet
 		{
 
 		}
+
+		/// <inheritdoc />
+		public MessageHandlerService(IEnumerable<IPeerMessageHandler<TIncomingPayloadType, TOutgoingPayloadType>> managedHandlers, IPeerPayloadSpecificMessageHandler<TIncomingPayloadType, TOutgoingPayloadType> defaultMessageHandler)
+			: base(managedHandlers, defaultMessageHandler)
+		{
+
+		}
 	}
 
 	/// <summary>
