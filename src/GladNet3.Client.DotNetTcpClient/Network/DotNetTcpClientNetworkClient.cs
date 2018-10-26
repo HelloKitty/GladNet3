@@ -22,8 +22,6 @@ namespace GladNet
 		//Can't be readonly because clients may want to reconnect
 		private TcpClient InternalTcpClient { get; set; }
 
-		private Stream ReadWriteStream { get; set; }
-
 		/// <summary>
 		/// Creates a new <see cref="DotNetTcpClientNetworkClient"/> with an intialized
 		/// internal <see cref="InternalTcpClient"/>. If you want to supply your own
@@ -41,20 +39,8 @@ namespace GladNet
 		/// </summary>
 		/// <param name="tcpClient">The <see cref="TcpClient"/> to use.</param>
 		public DotNetTcpClientNetworkClient(TcpClient tcpClient)
-			: this(tcpClient, tcpClient.GetStream())
-		{
-		}
-
-		/// <summary>
-		/// Creates a new <see cref="DotNetTcpClientNetworkClient"/> with the provided
-		/// non-null <see cref="tcpClient"/>. This overload should be used if you for some reason
-		/// want to use an externally created <see cref="TcpClient"/>.
-		/// </summary>
-		/// <param name="tcpClient">The <see cref="TcpClient"/> to use.</param>
-		public DotNetTcpClientNetworkClient(TcpClient tcpClient, Stream readWriteStream)
 		{
 			InternalTcpClient = tcpClient ?? throw new ArgumentNullException(nameof(tcpClient));
-			ReadWriteStream = readWriteStream ?? throw new ArgumentNullException(nameof(readWriteStream));
 		}
 
 		//TODO: This no longer works properly due to the stream setting.
@@ -119,7 +105,7 @@ namespace GladNet
 			if(!InternalTcpClient.Connected)
 				throw new InvalidOperationException($"The internal {nameof(TcpClient)}: {nameof(InternalTcpClient)} is not connected to an endpoint. You must call {nameof(ConnectAsync)} before reading any bytes.");
 
-			Stream stream = ReadWriteStream;
+			Stream stream = InternalTcpClient.GetStream(); //TODO: Is it expensive to call GetStream? Should we cache it
 
 			//Sockets nor NetworkStreams allow us to cancel
 			//They will block even if you give them the token and then
