@@ -40,11 +40,30 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task<SendResult> SendMessage<TPayloadType>(TPayloadType payload, DeliveryMethod method)
 		{
-			//TODO: Handle delivery method
-			//TODO: What should we do when this is being called during a critical section? Won't we want to queue this up so serialization and encryption
-			//doesn't block?
-			await UnmanagedClient.WriteAsync(payload)
-				.ConfigureAwait(false);
+			if(this.isConnected)
+			{
+				try
+				{
+					//TODO: Handle delivery method
+					//TODO: What should we do when this is being called during a critical section? Won't we want to queue this up so serialization and encryption
+					//doesn't block?
+					await UnmanagedClient.WriteAsync(payload)
+						.ConfigureAwait(false);
+				}
+				catch(NetworkDisconnectedException e)
+				{
+					//The client/session/network that the caller
+					//was trying to send a message to is disconnected. This doesn't mean
+					//we want to throw though. Catching exceptions is EXPENSIVE but this should only happen on a rare occasion
+					//and the caller will see that the client is disconnected, and make decisions based on that
+					//and of course disconnection logic will likely be happening else where during this
+					return SendResult.Disconnected;
+				}
+
+				//We should let other exceptions be thrown though, as they aren't related to connectivity.
+			}
+			else
+				return SendResult.Disconnected;
 
 			return SendResult.Sent;
 		}
