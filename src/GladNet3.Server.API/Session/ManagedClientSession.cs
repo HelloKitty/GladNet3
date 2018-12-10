@@ -15,6 +15,11 @@ namespace GladNet
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
+		/// <summary>
+		/// Internal syncronization object.
+		/// </summary>
+		private readonly object syncObj = new object();
+
 		//This has to be internal because it needs to be access at the library level.
 		private IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> InternalManagedNetworkClient { get; }
 
@@ -55,27 +60,30 @@ namespace GladNet
 		}
 
 		/// <summary>
-		/// Invoked internally when the session disconnects.
-		/// </summary>
-		protected abstract void OnSessionDisconnected();
-
-		/// <summary>
 		/// Disconnects the session and invokes the
 		/// <see cref="OnSessionDisconnection"/> event.
 		/// </summary>
-		public void DisconnectClientSession()
+		public async Task DisconnectClientSession()
 		{
-			//This prevents us from calling disconnected multiple times.
-			if(HasDisconnectedBeenCalled)
-				return;
+			lock(syncObj)
+			{
+				//This prevents us from calling disconnected multiple times.
+				if(HasDisconnectedBeenCalled)
+					return;
 
-			HasDisconnectedBeenCalled = true;
-			OnSessionDisconnection?.Invoke(this, new DisconnectedSessionStatusChangeEventArgs(Details));
+				HasDisconnectedBeenCalled = true;
+			}
+
+			if(OnSessionDisconnection != null)
+				await OnSessionDisconnection.Invoke(this, new DisconnectedSessionStatusChangeEventArgs(Details))
+					.ConfigureAwait(false);
+
 			OnSessionDisconnection = null;
-			OnSessionDisconnected();
 
+			//TODO: Can this ever throw??
 			//Also disconnect the network client
-			InternalManagedNetworkClient.Disconnect();
+			await InternalManagedNetworkClient.DisconnectAsync(0)
+				.ConfigureAwait(false);
 		}
 
 		/// <inheritdoc />

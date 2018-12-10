@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace GladNet
 {
@@ -8,5 +9,5 @@ namespace GladNet
 	/// Delegate type for status changes.
 	/// </summary>
 	/// <param name="source"></param>
-	public delegate void StatusChangeEvent(IManagedClientSession source, SessionStatusChangeEventArgs args);
+	public delegate Task StatusChangeEvent(IManagedClientSession source, SessionStatusChangeEventArgs args);
 }

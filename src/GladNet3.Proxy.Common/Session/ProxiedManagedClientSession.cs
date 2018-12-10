@@ -38,7 +38,7 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		protected override void OnSessionDisconnected()
+		protected void OnSessionDisconnected()
 		{
 			//TODO: If the authserver disconnects us we should disconnect the proxied client too in the same way
 		}

@@ -209,7 +209,7 @@ namespace GladNet
 		private async Task ManualStartClientConnectionLoop(TcpClient client, IManagedNetworkClient<TPayloadReadType, TPayloadWriteType> internalNetworkClient, ManagedClientSession<TPayloadReadType, TPayloadWriteType> networkSession)
 		{
 			//So that sessions invoking the disconnection can internally disconnect to
-			networkSession.OnSessionDisconnection += (source, args) => internalNetworkClient.Disconnect();
+			networkSession.OnSessionDisconnection += async (source, args) => await internalNetworkClient.DisconnectAsync(0).ConfigureAwait(false);
 
 			//TODO: Better way to syncronize the strategies used?
 			var dispatchingStrategy = new InPlaceAsyncLockedNetworkMessageDispatchingStrategy<TPayloadReadType, TPayloadWriteType>();
