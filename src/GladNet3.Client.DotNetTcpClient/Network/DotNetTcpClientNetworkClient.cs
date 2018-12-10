@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GladNet;
 
 namespace GladNet
 {
@@ -19,6 +20,7 @@ namespace GladNet
 	public sealed class DotNetTcpClientNetworkClient : NetworkClientBase, IConnectable, IDisconnectable, IDisposable,
 		IBytesWrittable, IBytesReadable
 	{
+		//TODO: Expose the connectivity of this better, so that we don't have to call and pray.
 		//Can't be readonly because clients may want to reconnect
 		private TcpClient InternalTcpClient { get; set; }
 
@@ -93,7 +95,7 @@ namespace GladNet
 		public override Task WriteAsync(byte[] bytes, int offset, int count)
 		{
 			if(!InternalTcpClient.Connected)
-				throw new InvalidOperationException($"The internal {nameof(TcpClient)}: {nameof(InternalTcpClient)} is not connected to an endpoint. You must call {nameof(ConnectAsync)} before writing any bytes.");
+				throw new NetworkDisconnectedException($"The internal {nameof(TcpClient)}: {nameof(InternalTcpClient)} is not connected to an endpoint. You must call {nameof(ConnectAsync)} before writing any bytes.");
 
 			//We can just write the bytes to the stream if we're connected.
 			return InternalTcpClient.GetStream().WriteAsync(bytes, offset, count);
@@ -103,7 +105,7 @@ namespace GladNet
 		public override async Task<int> ReadAsync(byte[] buffer, int start, int count, CancellationToken token)
 		{
 			if(!InternalTcpClient.Connected)
-				throw new InvalidOperationException($"The internal {nameof(TcpClient)}: {nameof(InternalTcpClient)} is not connected to an endpoint. You must call {nameof(ConnectAsync)} before reading any bytes.");
+				throw new NetworkDisconnectedException($"The internal {nameof(TcpClient)}: {nameof(InternalTcpClient)} is not connected to an endpoint. You must call {nameof(ConnectAsync)} before reading any bytes.");
 
 			Stream stream = InternalTcpClient.GetStream(); //TODO: Is it expensive to call GetStream? Should we cache it
 
