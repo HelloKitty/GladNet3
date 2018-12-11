@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net46</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Andrew Blakely, HelloKitty</Authors>
     <Company />
     <Product>GladNet</Product>

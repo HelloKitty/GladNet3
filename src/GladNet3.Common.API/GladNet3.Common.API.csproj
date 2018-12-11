@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Andrew Blakely, HelloKitty</Authors>
     <Company />
     <Product>GladNet</Product>
@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nito.AsyncEx.Coordination" Version="1.0.2" />
+    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.0.0-pre-05" />
   </ItemGroup>
 
 </Project>
