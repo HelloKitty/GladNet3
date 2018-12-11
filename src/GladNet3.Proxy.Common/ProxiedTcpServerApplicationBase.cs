@@ -238,7 +238,8 @@ namespace GladNet
 			client.Dispose();
 
 			//TODO: Should we tell the client something when it ends?
-			networkSession.DisconnectClientSession();
+			await networkSession.DisconnectClientSession()
+				.ConfigureAwait(false);
 		}
 
 		protected abstract ContainerBuilder RegisterDefaultHandlers(ContainerBuilder builder);

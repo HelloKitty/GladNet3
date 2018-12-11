@@ -189,7 +189,8 @@ namespace GladNet
 			client.Dispose();
 
 			//TODO: Should we tell the client something when it ends?
-			networkSession.DisconnectClientSession();
+			await networkSession.DisconnectClientSession()
+				.ConfigureAwait(false);
 		}
 
 		private void CreateInternalIncomingSession(TcpClient client, out IManagedNetworkServerClient<TPayloadWriteType, TPayloadReadType> internalNetworkClient, out ManagedClientSession<TPayloadWriteType, TPayloadReadType> networkSession)
