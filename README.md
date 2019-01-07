@@ -21,11 +21,14 @@ Just as ASP.NET has provided a common framework for .NET web development GladNet
 - [ ] PhotonServer Standalone
 - [x] [FreecraftCore.Serializer](https://www.github.com/FreecraftCore) (Attribute-based custom binary protocol serializer)
 - [ ] JSON
-- [ ] Protobuf
+- [x] Protobuf
 - [ ] XML
 
 **Server**
-Not yet implemented
+
+- [x] Async
+- [x] .NET TCP Server
+- [x] Protobuf
 
 ## Builds
 
