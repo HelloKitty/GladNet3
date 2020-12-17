@@ -18,7 +18,7 @@ namespace GladNet
 		/// <param name="payload">The payload that is being sent.</param>
 		/// <param name="serializedPayloadData">The serialized payload data for the payload.</param>
 		/// <returns>A new packet header for the payload.</returns>
-		IPacketHeader Create<TPayloadType>(TPayloadType payload, byte[] serializedPayloadData)
+		IPacketHeader Create<TPayloadType>(TPayloadType payload, Span<byte> serializedPayloadData)
 			where TPayloadType : TPayloadConstraintType;
 	}
 }

@@ -26,23 +26,17 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public byte[] Serialize<TTypeToSerialize>(TTypeToSerialize data)
+		public int Serialize<TTypeToSerialize>(TTypeToSerialize data, Span<byte> buffer)
 		{
-			return Serializer.Serialize(data);
+			int offset = 0;
+			Serializer.Write(data, buffer, ref offset);
+			return offset;
 		}
 
 		/// <inheritdoc />
-		public TTypeToDeserializeTo Deserialize<TTypeToDeserializeTo>(byte[] buffer, int start, int count)
+		public TTypeToDeserializeTo Deserialize<TTypeToDeserializeTo>(Span<byte> buffer)
 		{
-			return Serializer.Deserialize<TTypeToDeserializeTo>(new FixedBufferWireReaderStrategy(buffer, start, count));
-		}
-
-		/// <inheritdoc />
-		public Task<TTypeToDeserializeTo> DeserializeAsync<TTypeToDeserializeTo>(IBytesReadable bytesReadable, CancellationToken token)
-		{
-			//We have to manually add peek buffering 
-			return Serializer.DeserializeAsync<TTypeToDeserializeTo>(new AsyncWireReaderBytesReadableAdapter(bytesReadable)
-					.PeekWithBufferingAsync());
+			throw new NotImplementedException();
 		}
 	}
 }

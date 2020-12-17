@@ -28,7 +28,9 @@ namespace GladNet
 		/// <summary>
 		/// Thread specific buffer used to deserialize the packet header bytes into.
 		/// </summary>
-		private byte[] PacketHeaderBuffer { get; }
+		private byte[] PacketHeaderReadBuffer { get; }
+
+		private byte[] PacketHeaderWriteBuffer { get; }
 
 		/// <summary>
 		/// </summary>
@@ -42,7 +44,8 @@ namespace GladNet
 			if(headerSize < 0) throw new ArgumentOutOfRangeException(nameof(headerSize));
 
 			//We need to support up to the maximum block
-			PacketHeaderBuffer = new byte[headerSize];
+			PacketHeaderReadBuffer = new byte[headerSize];
+			PacketHeaderWriteBuffer = new byte[headerSize];
 			DecoratedClient = decoratedClient;
 			Serializer = serializer;
 		}
@@ -86,7 +89,7 @@ namespace GladNet
 
 			//If we had access to the stream we could wrap it in a reader and use it
 			//without knowing the size. Since we don't have access we must manually read
-			int count = await DecoratedClient.ReadAsync(PacketHeaderBuffer, 0, PacketHeaderBuffer.Length, token)
+			int count = await DecoratedClient.ReadAsync(PacketHeaderReadBuffer, 0, PacketHeaderReadBuffer.Length, token)
 				.ConfigureAwait(false);//TODO: How long should the timeout be if any?
 
 			//This means the socket is disconnected
@@ -98,19 +101,19 @@ namespace GladNet
 				return null;
 
 			//This will deserialize
-			return Serializer.Deserialize<TPacketHeaderType>(PacketHeaderBuffer);
+			return Serializer.Deserialize<TPacketHeaderType>(PacketHeaderReadBuffer);
 		}
 
 		/// <inheritdoc />
 		public async Task<int> WriteHeaderAsync(IPacketHeader header)
 		{
 			//We only need to serialize and then write
-			byte[] bytes = Serializer.Serialize(header);
+			int count = Serializer.Serialize(header, PacketHeaderWriteBuffer);
 
-			await DecoratedClient.WriteAsync(bytes)
+			await DecoratedClient.WriteAsync(PacketHeaderWriteBuffer, 0, count)
 				.ConfigureAwait(false);
 
-			return bytes.Length;
+			return count;
 		}
 	}
 }

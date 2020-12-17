@@ -10,8 +10,8 @@ namespace GladNet
 {
 	public abstract class BaseGamePayloadHandler<TSpecificPayloadType, TBasePayloadType, TOutgoingPayloadType> : IPeerPayloadSpecificMessageHandler<TSpecificPayloadType, TOutgoingPayloadType, IProxiedMessageContext<TOutgoingPayloadType, TBasePayloadType>>
 		where TSpecificPayloadType : class, TBasePayloadType
-		where TBasePayloadType : class, IPacketPayload
-		where TOutgoingPayloadType : class, IPacketPayload
+		where TBasePayloadType : class
+		where TOutgoingPayloadType : class
 	{
 		/// <summary>
 		/// The logger for the handler.

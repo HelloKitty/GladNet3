@@ -20,7 +20,7 @@ namespace GladNet
 	/// <typeparam name="TReadPayloadBaseType"></typeparam>
 	/// <typeparam name="TPayloadConstraintType">The constraint requirement for </typeparam>
 	public sealed class NetworkClientHeaderlessPacketPayloadReaderWriterDecorator<TClientType, TReadPayloadBaseType, TWritePayloadBaseType, TPayloadConstraintType> : NetworkClientBase,
-		INetworkMessageClient<TReadPayloadBaseType, TWritePayloadBaseType>
+		INetworkMessageClient<TReadPayloadBaseType, TWritePayloadBaseType>, IDisposable
 		where TClientType : NetworkClientBase
 		where TReadPayloadBaseType : class, TPayloadConstraintType
 		where TWritePayloadBaseType : class, TPayloadConstraintType
@@ -36,9 +36,14 @@ namespace GladNet
 		private INetworkSerializationService Serializer { get; }
 
 		/// <summary>
-		/// Thread specific buffer used to deserialize the packet header bytes into.
+		/// Thread specific buffer used to deserialize the packet bytes into.
 		/// </summary>
 		private byte[] PacketPayloadReadBuffer { get; }
+
+		/// <summary>
+		/// Thread specific buffer used to serializer the packet bytes.
+		/// </summary>
+		private byte[] PacketPayloadWriteBuffer { get; }
 
 		/// <summary>
 		/// Async read syncronization object.
@@ -61,6 +66,7 @@ namespace GladNet
 
 			//One of the lobby packets is 14,000 bytes. We may even need bigger.
 			PacketPayloadReadBuffer = new byte[payloadBufferSize]; //TODO: Do we need a larger buffer for any packets?
+			PacketPayloadWriteBuffer = new byte[payloadBufferSize];
 		}
 
 		/// <inheritdoc />
@@ -99,13 +105,13 @@ namespace GladNet
 		/// <inheritdoc />
 		public async Task WriteAsync(TWritePayloadBaseType payload)
 		{
-			//Serializer the payload first so we can build the header
-			byte[] payloadData = Serializer.Serialize(payload);
-
 			using(await writeSynObj.LockAsync().ConfigureAwait(false))
 			{
+				//Serializer the payload first so we can build the header
+				int size = Serializer.Serialize(payload, new Span<byte>(PacketPayloadWriteBuffer));
+
 				//Write the outgoing message
-				await DecoratedClient.WriteAsync(payloadData)
+				await DecoratedClient.WriteAsync(PacketPayloadWriteBuffer, 0, size)
 					.ConfigureAwait(false);
 			}
 		}
@@ -129,8 +135,9 @@ namespace GladNet
 					return null;
 
 				//We need to read enough bytes to deserialize the payload
-				payload = await Serializer.DeserializeAsync<TReadPayloadBaseType>(this, token)
-					.ConfigureAwait(false);//TODO: Should we timeout?
+				throw new NotSupportedException($"TODO: Support non-length prefixed network messages again.");
+				//payload = await Serializer.Deserialize<TReadPayloadBaseType>(this, token)
+				//	.ConfigureAwait(false); //TODO: Should we timeout?
 
 				//Null payload means the socket disconnected
 				if(payload == null)

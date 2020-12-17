@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace GladNet
 {
+	/// <summary>
+	/// Contract for types that implement serialization support for the network.
+	/// </summary>
 	public interface INetworkSerializationService
 	{
 		//TODO: Should we provide a buffer to write into?
@@ -15,30 +18,18 @@ namespace GladNet
 		/// </summary>
 		/// <typeparam name="TTypeToSerialize">Type that is being serialized (can be inferred).</typeparam>
 		/// <param name="data">Instance/value to serialize.</param>
-		/// <returns>Byte array representation of the object.</returns>
-		byte[] Serialize<TTypeToSerialize>(TTypeToSerialize data);
+		/// <param name="buffer">Data buffer to write the provided object into.</param>
+		/// <returns>Indicates how many bytes were written.</returns>
+		int Serialize<TTypeToSerialize>(TTypeToSerialize data, Span<byte> buffer);
 
 		//We shouldn't expect the deserialize to provide always non-null values.
 		//That is a serialization implementation detail.
 		/// <summary>
-		/// Attempts to deserialize to <typeparamref name="TTypeToDeserializeTo"/> from the provided <see cref="byte[]"/>.
+		/// Attempts to deserialize to <typeparamref name="TTypeToDeserializeTo"/> from the provided buffer.
 		/// </summary>
 		/// <typeparam name="TTypeToDeserializeTo"></typeparam>
-		/// <param name="buffer">Byte repsentation of <typeparamref name="TTypeToDeserializeTo"/>.</param>
-		/// <param name="start"></param>
-		/// <param name="count"></param>
+		/// <param name="buffer">Binary buffer.</param>
 		/// <returns>An instance of <typeparamref name="TTypeToDeserializeTo"/> or null if failed.</returns>
-		TTypeToDeserializeTo Deserialize<TTypeToDeserializeTo>(byte[] buffer, int start, int count);
-
-		//That is a serialization implementation detail.
-		/// <summary>
-		/// Attempts to deserialize to <typeparamref name="TTypeToDeserializeTo"/> from the provided <see cref="IBytesReadable"/>.
-		/// </summary>
-		/// <typeparam name="TTypeToDeserializeTo"></typeparam>
-		/// <param name="bytesReadable">Byte readable object containing <typeparamref name="TTypeToDeserializeTo"/>.</param>
-		/// <param name="token">Cancel token.</param>
-		/// <returns>An instance of <typeparamref name="TTypeToDeserializeTo"/> or null if failed.</returns>
-		[Obsolete("Most serializers do not support async deserialization. This feature may be removed in future versions.")]
-		Task<TTypeToDeserializeTo> DeserializeAsync<TTypeToDeserializeTo>(IBytesReadable bytesReadable, CancellationToken token);
+		TTypeToDeserializeTo Deserialize<TTypeToDeserializeTo>(Span<byte> buffer);
 	}
 }
