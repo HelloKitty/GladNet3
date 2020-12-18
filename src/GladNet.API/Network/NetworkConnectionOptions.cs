@@ -36,5 +36,12 @@ namespace GladNet
 			//TODO: Don't use same header size
 			MaximumPacketHeaderSize = MinimumPacketHeaderSize;
 		}
+
+		public NetworkConnectionOptions(int minimumPacketHeaderSize, int maximumPacketHeaderSize, int maximumPayloadSize)
+		{
+			MinimumPacketHeaderSize = minimumPacketHeaderSize;
+			MaximumPacketHeaderSize = maximumPacketHeaderSize;
+			MaximumPayloadSize = maximumPayloadSize;
+		}
 	}
 }
