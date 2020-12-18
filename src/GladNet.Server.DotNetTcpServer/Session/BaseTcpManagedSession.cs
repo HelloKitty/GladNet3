@@ -78,7 +78,7 @@ namespace GladNet
 				{
 					ReadResult result = await Connection.Input.ReadAsync(token);
 
-					if (!IsReadResultValid(in result)) 
+					if (!IsReadResultValid(in result))
 						return;
 
 					ReadOnlySequence<byte> buffer = result.Buffer;
@@ -111,18 +111,28 @@ namespace GladNet
 					await OnNetworkMessageReceived(new NetworkIncomingMessage<TPayloadReadType>(header, message));
 				}
 			}
+			catch (ConnectionResetException e)
+			{
+				//ConnectionResetException is thrown by Pipeline Socket API when it disconnects
+				//and I don't yet know how to suppress it fully.
+				//Consider a cancel a graceful complete
+				await Connection.Input.CompleteAsync(e);
+				return;
+			}
+			catch (TaskCanceledException e)
+			{
+				//Consider a cancel a graceful complete
+				await Connection.Input.CompleteAsync(e);
+				return;
+			}
 			catch (Exception e)
 			{
-				try
-				{
-					await Connection.Input.CompleteAsync(e);
-				}
-				finally
-				{
-					await Connection.Input.CompleteAsync();
-				}
-				
+				await Connection.Input.CompleteAsync(e);
 				throw;
+			}
+			finally
+			{
+				await Connection.Input.CompleteAsync();
 			}
 		}
 
@@ -154,6 +164,7 @@ namespace GladNet
 			{
 				ArrayPool<byte>.Shared.Return(rentedBuffer);
 			}
+
 		}
 
 		private IPacketHeader ReadIncomingPacketHeader(PipeReader reader, in ReadResult result)
@@ -194,18 +205,44 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task StartWritingAsync(CancellationToken token = default)
 		{
-			while (!token.IsCancellationRequested)
+			try
 			{
-				TPayloadWriteType payload = await OutgoingMessageQueue.DequeueAsync(token);
+				while (!token.IsCancellationRequested)
+				{
+					TPayloadWriteType payload = await OutgoingMessageQueue.DequeueAsync(token);
 
-				WriteOutgoingMessage(payload);
+					WriteOutgoingMessage(payload);
 
-				//To understand the purpose of Flush when pipelines is using sockets see Marc's comments here: https://stackoverflow.com/questions/56481746/does-pipelines-sockets-unofficial-socketconnection-ever-flush-without-a-request
-				//Basically, "it makes sure that a consumer is awakened (if it isn't already)" and "if there is back-pressure, it delays the producer until the consumer has cleared some of the back-pressure"
-				FlushResult result = await Connection.Output.FlushAsync(token);
+					//To understand the purpose of Flush when pipelines is using sockets see Marc's comments here: https://stackoverflow.com/questions/56481746/does-pipelines-sockets-unofficial-socketconnection-ever-flush-without-a-request
+					//Basically, "it makes sure that a consumer is awakened (if it isn't already)" and "if there is back-pressure, it delays the producer until the consumer has cleared some of the back-pressure"
+					FlushResult result = await Connection.Output.FlushAsync(token);
 
-				if (!IsFlushResultValid(in result))
-					return;
+					if (!IsFlushResultValid(in result))
+						return;
+				}
+			}
+			catch (ConnectionResetException e)
+			{
+				//ConnectionResetException is thrown by Pipeline Socket API when it disconnects
+				//and I don't yet know how to suppress it fully.
+				//Consider a cancel a graceful complete
+				await Connection.Input.CompleteAsync(e);
+				return;
+			}
+			catch(TaskCanceledException e)
+			{
+				//Consider a cancel a graceful complete
+				await Connection.Output.CompleteAsync(e);
+				return;
+			}
+			catch(Exception e)
+			{
+				await Connection.Output.CompleteAsync(e);
+				throw;
+			}
+			finally
+			{
+				await Connection.Output.CompleteAsync();
 			}
 		}
 
