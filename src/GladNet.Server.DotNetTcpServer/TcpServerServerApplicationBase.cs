@@ -49,6 +49,12 @@ namespace GladNet
 		//TODO: We need a better API for exposing this.
 		protected ConcurrentDictionary<int, TManagedSessionType> Sessions { get; } = new ConcurrentDictionary<int, TManagedSessionType>();
 
+		/// <summary>
+		/// Event that is fired when a managed session is ended.
+		/// This could be caused by disconnection but is not required to be related to disconnection.
+		/// </summary>
+		public event EventHandler<ManagedSessionContextualEventArgs<TManagedSessionType>> OnManagedSessionEnded;
+
 		protected TcpServerServerApplicationBase(NetworkAddressInfo serverAddress, ILog logger)
 		{
 			ServerAddress = serverAddress ?? throw new ArgumentNullException(nameof(serverAddress));
