@@ -124,7 +124,7 @@ namespace GladNet
 			}
 		}
 
-		private void StartNetworkSessionTasks(CancellationToken token, ManagedSession clientSession)
+		private void StartNetworkSessionTasks(CancellationToken token, TManagedSessionType clientSession)
 		{
 			CancellationToken sessionCancelToken = new CancellationToken(false);
 			CancellationTokenSource combinedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token, sessionCancelToken);
@@ -138,6 +138,22 @@ namespace GladNet
 
 				if (Logger.IsDebugEnabled)
 					Logger.Debug($"Session: {clientSession.Details.ConnectionId} Stopped Network Read/Write.");
+
+				//Fire off to anyone interested in managed session ending. We should do this before we fully dispose it and remove it from the session collection.
+				OnManagedSessionEnded?.Invoke(this, new ManagedSessionContextualEventArgs<TManagedSessionType>(clientSession));
+				Sessions.TryRemove(clientSession.Details.ConnectionId, out _);
+
+				//Now that it's removed, we should also dispose it.
+				try
+				{
+					clientSession.Dispose();
+				}
+				catch (Exception e)
+				{
+					if (Logger.IsErrorEnabled)
+						Logger.Error($"Encountered error in Client: {clientSession.Details.ConnectionId} session disposal. Error: {e}");
+					throw;
+				}
 
 			}, token);
 		}
