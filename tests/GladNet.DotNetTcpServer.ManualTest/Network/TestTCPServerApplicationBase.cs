@@ -26,8 +26,10 @@ namespace GladNet
 			NetworkConnectionOptions options = new NetworkConnectionOptions(2, 2, 1024);
 			var serializer = new StringMessageSerializer();
 
-			return new TestStringManagedSession(options, context.Connection, context.Details, 
-				new StringMessagePacketHeaderFactory(), serializer, serializer, new StringPacketHeaderSerializer());
+			SessionMessageServiceContext<string, string> messageServices = 
+				new SessionMessageServiceContext<string, string>(new StringMessagePacketHeaderFactory(), serializer, serializer, new StringPacketHeaderSerializer());
+
+			return new TestStringManagedSession(options, context.Connection, context.Details, messageServices);
 		}
 	}
 }

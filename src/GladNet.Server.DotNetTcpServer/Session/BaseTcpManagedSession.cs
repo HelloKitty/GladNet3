@@ -22,6 +22,9 @@ namespace GladNet
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
+		/// <summary>
+		/// Represents the network configuration options for the session.
+		/// </summary>
 		protected NetworkConnectionOptions NetworkOptions { get; }
 
 		/// <summary>
@@ -30,43 +33,22 @@ namespace GladNet
 		protected SocketConnection Connection { get; }
 
 		/// <summary>
-		/// The factory for building packet headers.
+		/// Message serialization/building services.
 		/// </summary>
-		private IPacketHeaderFactory PacketHeaderFactory { get; }
-
-		/// <summary>
-		/// The incoming message deserializer.
-		/// </summary>
-		private IMessageDeserializer<TPayloadReadType> MessageDeserializer { get; }
-
-		/// <summary>
-		/// The incoming message deserializer.
-		/// </summary>
-		private IMessageSerializer<TPayloadWriteType> MessageSerializer { get; }
-
-		/// <summary>
-		/// The outgoing message header serializer.
-		/// </summary>
-		private IMessageSerializer<PacketHeaderSerializationContext<TPayloadWriteType>> HeaderSerializer { get; }
+		protected SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> MessageServices { get; }
 
 		/// <summary>
 		/// The outgoing message queue.
 		/// </summary>
 		private AsyncProducerConsumerQueue<TPayloadWriteType> OutgoingMessageQueue { get; } = new AsyncProducerConsumerQueue<TPayloadWriteType>();
 
-		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details, 
-			IPacketHeaderFactory packetHeaderFactory, 
-			IMessageDeserializer<TPayloadReadType> messageDeserializer, 
-			IMessageSerializer<TPayloadWriteType> messageSerializer, 
-			IMessageSerializer<PacketHeaderSerializationContext<TPayloadWriteType>> headerSerializer) 
+		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
+			SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details)
 		{
 			NetworkOptions = networkOptions ?? throw new ArgumentNullException(nameof(networkOptions));
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
-			PacketHeaderFactory = packetHeaderFactory ?? throw new ArgumentNullException(nameof(packetHeaderFactory));
-			MessageDeserializer = messageDeserializer ?? throw new ArgumentNullException(nameof(messageDeserializer));
-			MessageSerializer = messageSerializer ?? throw new ArgumentNullException(nameof(messageSerializer));
-			HeaderSerializer = headerSerializer ?? throw new ArgumentNullException(nameof(headerSerializer));
+			MessageServices = messageServices ?? throw new ArgumentNullException(nameof(messageServices));
 		}
 
 		/// <inheritdoc />
@@ -88,7 +70,7 @@ namespace GladNet
 					if (buffer.Length < NetworkOptions.MinimumPacketHeaderSize)
 						continue;
 
-					if (!PacketHeaderFactory.IsHeaderReadable(in buffer))
+					if (!MessageServices.PacketHeaderFactory.IsHeaderReadable(in buffer))
 						continue;
 
 					IPacketHeader header = ReadIncomingPacketHeader(Connection.Input, in result);
@@ -154,7 +136,7 @@ namespace GladNet
 				result.Buffer.Slice(0, payloadSize).CopyTo(buffer);
 
 				int offset = 0;
-				TPayloadReadType message = MessageDeserializer.Deserialize(buffer, ref offset);
+				TPayloadReadType message = MessageServices.MessageDeserializer.Deserialize(buffer, ref offset);
 
 				//Steps the reader N bytes forward (if we don't do this WE LEAK AND WORSE!!)
 				reader.AdvanceTo(result.Buffer.GetPosition(offset));
@@ -170,11 +152,11 @@ namespace GladNet
 		private IPacketHeader ReadIncomingPacketHeader(PipeReader reader, in ReadResult result)
 		{
 			//The implementation MUST be that this can be trusted to be the EXACT size of binary data that will be read.
-			int exactHeaderByteCount = PacketHeaderFactory.ComputeHeaderSize(result.Buffer);
+			int exactHeaderByteCount = MessageServices.PacketHeaderFactory.ComputeHeaderSize(result.Buffer);
 
 			IPacketHeader header;
 			using(var context = new PacketHeaderCreationContext(result.Buffer, exactHeaderByteCount))
-				header = PacketHeaderFactory.Create(context);
+				header = MessageServices.PacketHeaderFactory.Create(context);
 
 			//Steps the reader N bytes forward (if we don't do this WE LEAK AND WORSE!!)
 			reader.AdvanceTo(result.Buffer.GetPosition(exactHeaderByteCount));
@@ -269,7 +251,7 @@ namespace GladNet
 		private int SerializeOutgoingHeader(TPayloadWriteType payload, int payloadSize, in Span<byte> buffer)
 		{
 			int headerOffset = 0;
-			HeaderSerializer.Serialize(new PacketHeaderSerializationContext<TPayloadWriteType>(payload, payloadSize), buffer, ref headerOffset);
+			MessageServices.HeaderSerializer.Serialize(new PacketHeaderSerializationContext<TPayloadWriteType>(payload, payloadSize), buffer, ref headerOffset);
 			return headerOffset;
 		}
 
@@ -285,7 +267,7 @@ namespace GladNet
 			//Serializes the payload data to the span buffer and moves the pipe forward by the ref output offset
 			//meaning we indicate to the pipeline that we've written bytes
 			int offset = 0;
-			MessageSerializer.Serialize(payload, buffer, ref offset);
+			MessageServices.MessageSerializer.Serialize(payload, buffer, ref offset);
 			return offset;
 		}
 

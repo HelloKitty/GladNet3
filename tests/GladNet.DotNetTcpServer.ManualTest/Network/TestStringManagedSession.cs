@@ -8,14 +8,8 @@ namespace GladNet
 {
 	public sealed class TestStringManagedSession : BaseTcpManagedSession<string, string>
 	{
-		public TestStringManagedSession(NetworkConnectionOptions networkOptions, 
-			SocketConnection connection, 
-			SessionDetails details, 
-			IPacketHeaderFactory packetHeaderFactory, 
-			IMessageDeserializer<string> messageDeserializer, 
-			IMessageSerializer<string> messageSerializer, 
-			IMessageSerializer<PacketHeaderSerializationContext<string>> headerSerializer) 
-			: base(networkOptions, connection, details, packetHeaderFactory, messageDeserializer, messageSerializer, headerSerializer)
+		public TestStringManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details, SessionMessageServiceContext<string, string> messageServices) 
+			: base(networkOptions, connection, details, messageServices)
 		{
 
 		}
