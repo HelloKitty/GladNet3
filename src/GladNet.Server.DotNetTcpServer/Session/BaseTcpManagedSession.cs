@@ -12,13 +12,13 @@ using Pipelines.Sockets.Unofficial;
 namespace GladNet
 {
 	/// <summary>
-	/// Base TCP <see cref="SocketConnection"/>-based <see cref="ManagedSession{TPayloadWriteType,TPayloadReadType}"/>
+	/// Base TCP <see cref="SocketConnection"/>-based <see cref="ManagedSession"/>
 	/// implementation.
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
 	public abstract class BaseTcpManagedSession<TPayloadWriteType, TPayloadReadType> 
-		: ManagedSession<TPayloadWriteType, TPayloadReadType>, INetworkMessageReceivable<TPayloadReadType>
+		: ManagedSession, INetworkMessageReceivable<TPayloadReadType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{

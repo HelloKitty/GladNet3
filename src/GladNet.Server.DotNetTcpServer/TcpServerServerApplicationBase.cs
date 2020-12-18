@@ -17,15 +17,12 @@ namespace GladNet
 {
 	/// <summary>
 	/// Base application base for a high performance async TCP server application.
-	/// Builds, manages and maintains <see cref="ManagedSession{TPayloadWriteType,TPayloadReadType}"/>s internally
+	/// Builds, manages and maintains <see cref="ManagedSession"/>s internally
 	/// when clients connect.
 	/// </summary>
-	/// <typeparam name="TPayloadWriteType"></typeparam>
-	/// <typeparam name="TPayloadReadType"></typeparam>
-	public abstract class TcpServerServerApplicationBase<TPayloadWriteType, TPayloadReadType> 
-		: IServerApplicationListenable, IFactoryCreatable<ManagedSession<TPayloadWriteType, TPayloadReadType>, SessionCreationContext>
-		where TPayloadWriteType : class 
-		where TPayloadReadType : class
+	public abstract class TcpServerServerApplicationBase<TManagedSessionType>
+		: IServerApplicationListenable, IFactoryCreatable<TManagedSessionType, SessionCreationContext>
+		where TManagedSessionType : ManagedSession
 	{
 		/// <summary>
 		/// Network address information for the server.
@@ -50,7 +47,7 @@ namespace GladNet
 		}
 
 		//TODO: We need a better API for exposing this.
-		protected ConcurrentDictionary<int, ManagedSession<TPayloadWriteType, TPayloadReadType>> Sessions { get; } = new ConcurrentDictionary<int, ManagedSession<TPayloadWriteType, TPayloadReadType>>();
+		protected ConcurrentDictionary<int, TManagedSessionType> Sessions { get; } = new ConcurrentDictionary<int, TManagedSessionType>();
 
 		protected TcpServerServerApplicationBase(NetworkAddressInfo serverAddress, ILog logger)
 		{
@@ -108,7 +105,7 @@ namespace GladNet
 					if(Logger.IsInfoEnabled)
 						Logger.Info($"Attempting to create Session for Address: {clientAddress.Address} Id: {connectionId}");
 
-					ManagedSession<TPayloadWriteType, TPayloadReadType> clientSession = Create(new SessionCreationContext(connection, new SessionDetails(new NetworkAddressInfo(clientAddress.Address, ServerAddress.Port), connectionId)));
+					TManagedSessionType clientSession = Create(new SessionCreationContext(connection, new SessionDetails(new NetworkAddressInfo(clientAddress.Address, ServerAddress.Port), connectionId)));
 
 					clientSession.AttachDisposableResource(connection);
 					clientSession.AttachDisposableResource(socket);
@@ -121,60 +118,13 @@ namespace GladNet
 			}
 		}
 
-		private void StartNetworkSessionTasks(CancellationToken token, ManagedSession<TPayloadWriteType, TPayloadReadType> clientSession)
+		private void StartNetworkSessionTasks(CancellationToken token, ManagedSession clientSession)
 		{
 			CancellationToken sessionCancelToken = new CancellationToken(false);
 			CancellationTokenSource combinedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token, sessionCancelToken);
 
-			//It's important to use the root cancel token, and not the session token, for thread/task cancel because
-			//if the combined or session token is cancelled we need to dispose of the source and it's possible it will leak
-			//if we don't finish the task. But does Finally ALWAYS run? Even if a Task/Thread never continues? I don't know honestly.
-			//But this should be safe either way.
-			Task writeTask = Task.Run(async () =>
-			{
-				try
-				{
-					await clientSession.StartWritingAsync(combinedTokenSource.Token);
-				}
-				catch (Exception e)
-				{
-					if (Logger.IsErrorEnabled)
-						Logger.Error($"Session: {clientSession.Details.ConnectionId} encountered error in network writing thread. Error: {e}");
-				}
-				finally
-				{
-					//It's important that if we arrive at this point WITHOUT canceling somehow
-					//then we should cancel the combined source. Otherwise anything else depending on this
-					//token won't actually cancel and it likely SHOULD
-					if(!combinedTokenSource.IsCancellationRequested)
-						combinedTokenSource.Cancel();
-
-					combinedTokenSource.Dispose();
-				}
-			}, token);
-
-			Task readTask = Task.Run(async () =>
-			{
-				try
-				{
-					await clientSession.StartListeningAsync(combinedTokenSource.Token);
-				}
-				catch(Exception e)
-				{
-					if(Logger.IsErrorEnabled)
-						Logger.Error($"Session: {clientSession.Details.ConnectionId} encountered error in network reading thread. Error: {e}");
-				}
-				finally
-				{
-					//It's important that if we arrive at this point WITHOUT canceling somehow
-					//then we should cancel the combined source. Otherwise anything else depending on this
-					//token won't actually cancel and it likely SHOULD
-					if(!combinedTokenSource.IsCancellationRequested)
-						combinedTokenSource.Cancel();
-
-					combinedTokenSource.Dispose();
-				}
-			}, token);
+			Task writeTask = Task.Run(async () => await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartWritingAsync(combinedTokenSource.Token), combinedTokenSource, "Write"), token);
+			Task readTask = Task.Run(async () => await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartListeningAsync(combinedTokenSource.Token), combinedTokenSource, "Read"), token);
 
 			Task.Run(async () =>
 			{
@@ -186,6 +136,32 @@ namespace GladNet
 			}, token);
 		}
 
+		private async Task StartSessionNetworkThreadAsync(SessionDetails details, Task task, CancellationTokenSource combinedTokenSource, string taskName)
+		{
+			if (details == null) throw new ArgumentNullException(nameof(details));
+			if (task == null) throw new ArgumentNullException(nameof(task));
+
+			try
+			{
+				await task;
+			}
+			catch (Exception e)
+			{
+				if (Logger.IsErrorEnabled)
+					Logger.Error($"Session: {details.ConnectionId} encountered error in network {taskName} thread. Error: {e}");
+			}
+			finally
+			{
+				//It's important that if we arrive at this point WITHOUT canceling somehow
+				//then we should cancel the combined source. Otherwise anything else depending on this
+				//token won't actually cancel and it likely SHOULD
+				if (!combinedTokenSource.IsCancellationRequested)
+					combinedTokenSource.Cancel();
+
+				combinedTokenSource.Dispose();
+			}
+		}
+
 		//Should be overriden by the consumer of the library.
 		/// <summary>
 		/// Called internally when a session is being created.
@@ -193,6 +169,6 @@ namespace GladNet
 		/// </summary>
 		/// <param name="context">The context for creating the managed session.</param>
 		/// <returns>A non-null session.</returns>
-		public abstract ManagedSession<TPayloadWriteType, TPayloadReadType> Create(SessionCreationContext context);
+		public abstract TManagedSessionType Create(SessionCreationContext context);
 	}
 }

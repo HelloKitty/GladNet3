@@ -10,11 +10,7 @@ namespace GladNet
 	/// <summary>
 	/// Base type for managed sessions.
 	/// </summary>
-	/// <typeparam name="TPayloadWriteType"></typeparam>
-	/// <typeparam name="TPayloadReadType"></typeparam>
-	public abstract class ManagedSession<TPayloadWriteType, TPayloadReadType> : IManagedSession, IDisposable
-		where TPayloadWriteType : class 
-		where TPayloadReadType : class
+	public abstract class ManagedSession : IManagedSession, IDisposable
 	{
 		/// <summary>
 		/// Internal lock object.
@@ -22,7 +18,7 @@ namespace GladNet
 		protected readonly object SyncObj = new object();
 
 		/// <summary>
-		/// Represents all the disposable dependencies of a <see cref="ManagedSession{TPayloadWriteType,TPayloadReadType}"/>.
+		/// Represents all the disposable dependencies of a <see cref="ManagedSession"/>.
 		/// This will be disposed when the session is disposed.
 		/// </summary>
 		private List<IDisposable> InternalDisposables { get; } = new List<IDisposable>();
@@ -59,8 +55,8 @@ namespace GladNet
 		}
 
 		/// <summary>
-		/// Attaches a disposable <see cref="IDisposable"/> dependency/resource to the <see cref="ManagedSession{TPayloadWriteType,TPayloadReadType}"/>.
-		/// This will be disposed of alongside when <see cref="ManagedSession{TPayloadWriteType,TPayloadReadType}"/>'s <see cref="Dispose"/> is called.
+		/// Attaches a disposable <see cref="IDisposable"/> dependency/resource to the <see cref="ManagedSession"/>.
+		/// This will be disposed of alongside when <see cref="ManagedSession"/>'s <see cref="Dispose"/> is called.
 		/// </summary>
 		/// <param name="disposable"></param>
 		public void AttachDisposableResource(IDisposable disposable)

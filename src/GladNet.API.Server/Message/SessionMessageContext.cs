@@ -17,18 +17,24 @@ namespace GladNet
 		/// <summary>
 		/// The session associated with the message.
 		/// </summary>
-		public ManagedSession<TPayloadWriteType, TPayloadReadType> Session { get; }
+		public ManagedSession Session { get; }
 
 		/// <summary>
 		/// The network message.
 		/// </summary>
 		public NetworkIncomingMessage<TPayloadReadType> Message { get; }
 
+		/// <summary>
+		/// The network message send service.
+		/// </summary>
+		public IMessageSendService<TPayloadWriteType> SendService { get; }
+
 		/// <inheritdoc />
-		public SessionMessageContext(ManagedSession<TPayloadWriteType, TPayloadReadType> session, NetworkIncomingMessage<TPayloadReadType> message)
+		public SessionMessageContext(ManagedSession session, NetworkIncomingMessage<TPayloadReadType> message, IMessageSendService<TPayloadWriteType> sendService)
 		{
 			Session = session ?? throw new ArgumentNullException(nameof(session));
 			Message = message ?? throw new ArgumentNullException(nameof(message));
+			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
 		}
 	}
 }
