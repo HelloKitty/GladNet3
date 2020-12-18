@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\GladNet.Server.DotNetTcpServer\GladNet.Server.DotNetTcpServer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Network\Session\" />
+  </ItemGroup>
+
+</Project>
