@@ -76,32 +76,31 @@ namespace GladNet
 			{
 				if (isDisposed)
 					throw new ObjectDisposedException(nameof(PacketHeaderCreationContext));
-
-				//Idea here is to temporarily rent a buffer.
-				if (InternalHeaderByteBuffer == null)
-					InternalHeaderByteBuffer = HeaderCreationPool.Rent(HeaderBinarySize);
-				else
+				
+				if (InternalHeaderByteBuffer != null)
 				{
 					//Slice, don't assume array pool gives exact size. IT DOES NOT!
-					if (InternalHeaderByteBuffer.Length == HeaderBinarySize)
+					if(InternalHeaderByteBuffer.Length == HeaderBinarySize)
 						return new Span<byte>(InternalHeaderByteBuffer);
 					else
 						return new Span<byte>(InternalHeaderByteBuffer).Slice(0, HeaderBinarySize);
 				}
 
+				//Idea here is to temporarily rent a buffer.
+				InternalHeaderByteBuffer = HeaderCreationPool.Rent(HeaderBinarySize);
+
 				//TODO: This may needlessly copy a bunch of data into a buffer that we don't need, above we
 				//allocate a buffer of InternalBuffer.Length size. This could be thousands of read bytes
 				//but we may only want 
-				Span<byte> buffer = InternalHeaderByteBuffer;
+				Span<byte> buffer = new Span<byte>(InternalHeaderByteBuffer, 0, HeaderBinarySize);
 
 				//This may seem unsafe at first but the implementation will not try to copy more bytes than
 				//are available in the Span. Therefore Span CAN be much smaller than the available internal buffer
 				//without worrying.
 				//See: https://github.com/dotnet/corefxlab/blob/master/src/System.Buffers.Experimental/System/Buffers/BufferExtensions.cs#L29
-				InternalBuffer.CopyTo(buffer);
+				InternalBuffer.Slice(0, HeaderBinarySize).CopyTo(buffer);
 
-				//Slice, don't assume array pool gives exact size. IT DOES NOT!
-				return HeaderBinarySize == buffer.Length ? buffer : buffer.Slice(0, HeaderBinarySize);
+				return buffer;
 			}
 		}
 
