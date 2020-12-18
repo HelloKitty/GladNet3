@@ -220,7 +220,7 @@ namespace GladNet
 				//ConnectionResetException is thrown by Pipeline Socket API when it disconnects
 				//and I don't yet know how to suppress it fully.
 				//Consider a cancel a graceful complete
-				await Connection.Input.CompleteAsync(e);
+				await Connection.Output.CompleteAsync(e);
 				return;
 			}
 			catch(TaskCanceledException e)
