@@ -102,6 +102,12 @@ namespace GladNet
 						if (!IsReadResultValid(in result))
 							return;
 
+						//This is dumb and hacky, but we need to know if we shall need to read again
+						//This means we're still at the START of the buffer (haven't read anything)
+						//but have technically aware/inspected to the END position.
+						if (result.Buffer.Length < header.PayloadSize)
+							Connection.Input.AdvanceTo(result.Buffer.Start, result.Buffer.End);
+
 					} while (result.Buffer.Length < header.PayloadSize); //We need at least PAYLOAD SIZE bytes otherwise we cannot read the payload.
 
 					//TODO: Valid incoming packet lengths to avoid a stack overflow.
@@ -180,7 +186,9 @@ namespace GladNet
 			//TODO: Does this mean it's DONE??
 			if (result.IsCanceled || result.IsCompleted)
 			{
-				Connection.Input.AdvanceTo(result.Buffer.Start, result.Buffer.End);
+				//This means we CONSUMED to end of buffer and INSPECTED to end of buffer
+				//We're DONE with all read buffer data.
+				Connection.Input.AdvanceTo(result.Buffer.End);
 				return false;
 			}
 
