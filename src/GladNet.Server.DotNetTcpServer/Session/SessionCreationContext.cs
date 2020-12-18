@@ -15,7 +15,7 @@ namespace GladNet
 		/// <summary>
 		/// The details of the session.
 		/// </summary>
-		private SessionDetails Details { get; }
+		public SessionDetails Details { get; }
 
 		public SessionCreationContext(SocketConnection connection, SessionDetails details)
 		{
