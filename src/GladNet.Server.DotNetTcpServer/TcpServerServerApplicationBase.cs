@@ -134,7 +134,16 @@ namespace GladNet
 
 			Task.Run(async () =>
 			{
-				await Task.WhenAll(readTask, writeTask);
+				try
+				{
+					await Task.WhenAll(readTask, writeTask);
+				}
+				catch (Exception e)
+				{
+					//Suppress this exception, we have critical deconstruction code to run.
+					if (Logger.IsErrorEnabled)
+						Logger.Error($"Session: {clientSession.Details.ConnectionId} encountered critical failure in awaiting network task. Error: {e}");
+				}
 
 				if (Logger.IsDebugEnabled)
 					Logger.Debug($"Session: {clientSession.Details.ConnectionId} Stopped Network Read/Write.");
