@@ -140,18 +140,12 @@ namespace GladNet
 		{
 			//I opted to do this instead of stack alloc because of HUGE dangers in stack alloc and this if pretty efficient
 			//buffer usage anyway.
-			var rentedBuffer = ArrayPool<byte>.Shared.Rent(payloadSize);
-			Span<byte> buffer = rentedBuffer;
+			byte[] rentedBuffer = ArrayPool<byte>.Shared.Rent(payloadSize);
+			Span<byte> buffer = new Span<byte>(rentedBuffer, 0, payloadSize);
 
 			try
 			{
-				//ArrayPool doesn't always provide the correct size.
-				//Therefore we pre-slice before copying from linked-list buffer
-				//to avoid potentially thousands of bytes of extra copies.
-				if(buffer.Length != payloadSize)
-					buffer = buffer.Slice(0, payloadSize);
-
-				result.Buffer.CopyTo(buffer);
+				result.Buffer.Slice(0, payloadSize).CopyTo(buffer);
 
 				int offset = 0;
 				TPayloadReadType message = MessageDeserializer.Deserialize(buffer, ref offset);
