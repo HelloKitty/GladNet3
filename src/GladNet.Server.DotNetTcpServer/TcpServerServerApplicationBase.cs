@@ -106,7 +106,7 @@ namespace GladNet
 					SocketConnection connection = SocketConnection.Create(socket, PipeOptions.Default, PipeOptions.Default, SocketConnectionOptions.ZeroLengthReads);
 
 					if(Logger.IsInfoEnabled)
-						Logger.Info($"Attempting to creation Session for Address: {clientAddress.Address} Id: {connectionId}");
+						Logger.Info($"Attempting to create Session for Address: {clientAddress.Address} Id: {connectionId}");
 
 					ManagedSession<TPayloadWriteType, TPayloadReadType> clientSession = Create(new SessionCreationContext(connection, new SessionDetails(new NetworkAddressInfo(clientAddress.Address, ServerAddress.Port), connectionId)));
 
@@ -121,7 +121,7 @@ namespace GladNet
 			}
 		}
 
-		private static void StartNetworkSessionTasks(CancellationToken token, ManagedSession<TPayloadWriteType, TPayloadReadType> clientSession)
+		private void StartNetworkSessionTasks(CancellationToken token, ManagedSession<TPayloadWriteType, TPayloadReadType> clientSession)
 		{
 			CancellationToken sessionCancelToken = new CancellationToken(false);
 			CancellationTokenSource combinedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token, sessionCancelToken);
@@ -130,28 +130,59 @@ namespace GladNet
 			//if the combined or session token is cancelled we need to dispose of the source and it's possible it will leak
 			//if we don't finish the task. But does Finally ALWAYS run? Even if a Task/Thread never continues? I don't know honestly.
 			//But this should be safe either way.
-			Task.Run(async () =>
+			Task writeTask = Task.Run(async () =>
 			{
 				try
 				{
 					await clientSession.StartWritingAsync(combinedTokenSource.Token);
 				}
+				catch (Exception e)
+				{
+					if (Logger.IsErrorEnabled)
+						Logger.Error($"Session: {clientSession.Details.ConnectionId} encountered error in network writing thread. Error: {e}");
+				}
 				finally
 				{
+					//It's important that if we arrive at this point WITHOUT canceling somehow
+					//then we should cancel the combined source. Otherwise anything else depending on this
+					//token won't actually cancel and it likely SHOULD
+					if(!combinedTokenSource.IsCancellationRequested)
+						combinedTokenSource.Cancel();
+
+					combinedTokenSource.Dispose();
+				}
+			}, token);
+
+			Task readTask = Task.Run(async () =>
+			{
+				try
+				{
+					await clientSession.StartListeningAsync(combinedTokenSource.Token);
+				}
+				catch(Exception e)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Session: {clientSession.Details.ConnectionId} encountered error in network reading thread. Error: {e}");
+				}
+				finally
+				{
+					//It's important that if we arrive at this point WITHOUT canceling somehow
+					//then we should cancel the combined source. Otherwise anything else depending on this
+					//token won't actually cancel and it likely SHOULD
+					if(!combinedTokenSource.IsCancellationRequested)
+						combinedTokenSource.Cancel();
+
 					combinedTokenSource.Dispose();
 				}
 			}, token);
 
 			Task.Run(async () =>
 			{
-				try
-				{
-					await clientSession.StartListeningAsync(combinedTokenSource.Token);
-				}
-				finally
-				{
-					combinedTokenSource.Dispose();
-				}
+				await Task.WhenAll(readTask, writeTask);
+
+				if (Logger.IsDebugEnabled)
+					Logger.Debug($"Session: {clientSession.Details.ConnectionId} Stopped Network Read/Write.");
+
 			}, token);
 		}
 
