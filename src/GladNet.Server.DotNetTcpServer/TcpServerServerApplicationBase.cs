@@ -74,6 +74,9 @@ namespace GladNet
 		{
 			SocketConnection.AssertDependencies();
 
+			if (Logger.IsInfoEnabled)
+				Logger.Info($"Server begin listening.");
+
 			using (Socket listenSocket = new Socket(SocketType.Stream, ProtocolType.Tcp))
 			{
 				listenSocket.Bind(new IPEndPoint(ServerAddress.AddressEndpoint, ServerAddress.Port));
@@ -84,6 +87,9 @@ namespace GladNet
 
 				if(token.IsCancellationRequested)
 					return;
+
+				if(Logger.IsInfoEnabled)
+					Logger.Info($"Server bound to Port: {ServerAddress.Port} on Address: {ServerAddress.AddressEndpoint.ToString()}");
 
 				while(!token.IsCancellationRequested)
 				{
@@ -99,7 +105,9 @@ namespace GladNet
 					int connectionId = Interlocked.Increment(ref _lifetimeConnectionCount);
 					SocketConnection connection = SocketConnection.Create(socket, PipeOptions.Default, PipeOptions.Default, SocketConnectionOptions.ZeroLengthReads);
 
-					//		//connection, new SessionDetails(new NetworkAddressInfo(clientAddress.Address, ServerAddress.Port), connectionId)
+					if(Logger.IsInfoEnabled)
+						Logger.Info($"Attempting to creation Session for Address: {clientAddress.Address} Id: {connectionId}");
+
 					ManagedSession<TPayloadWriteType, TPayloadReadType> clientSession = Create(new SessionCreationContext(connection, new SessionDetails(new NetworkAddressInfo(clientAddress.Address, ServerAddress.Port), connectionId)));
 
 					clientSession.AttachDisposableResource(connection);
