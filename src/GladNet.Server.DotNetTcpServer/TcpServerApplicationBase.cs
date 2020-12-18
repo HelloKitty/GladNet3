@@ -20,7 +20,7 @@ namespace GladNet
 	/// Builds, manages and maintains <see cref="ManagedSession"/>s internally
 	/// when clients connect.
 	/// </summary>
-	public abstract class TcpServerServerApplicationBase<TManagedSessionType>
+	public abstract class TcpServerApplicationBase<TManagedSessionType>
 		: IServerApplicationListenable, IFactoryCreatable<TManagedSessionType, SessionCreationContext>
 		where TManagedSessionType : ManagedSession
 	{
@@ -55,7 +55,7 @@ namespace GladNet
 		/// </summary>
 		public event EventHandler<ManagedSessionContextualEventArgs<TManagedSessionType>> OnManagedSessionEnded;
 
-		protected TcpServerServerApplicationBase(NetworkAddressInfo serverAddress, ILog logger)
+		protected TcpServerApplicationBase(NetworkAddressInfo serverAddress, ILog logger)
 		{
 			ServerAddress = serverAddress ?? throw new ArgumentNullException(nameof(serverAddress));
 			Logger = logger;

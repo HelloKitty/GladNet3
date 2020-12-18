@@ -6,7 +6,7 @@ using Common.Logging;
 
 namespace GladNet
 {
-	public sealed class TestTCPServerApplicationBase : TcpServerServerApplicationBase<TestStringManagedSession>
+	public sealed class TestTCPServerApplicationBase : TcpServerApplicationBase<TestStringManagedSession>
 	{
 		public TestTCPServerApplicationBase(NetworkAddressInfo serverAddress, ILog logger) 
 			: base(serverAddress, logger)
