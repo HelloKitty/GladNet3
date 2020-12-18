@@ -21,11 +21,24 @@ namespace GladNet
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		}
 
-		public Task DisconnectAsync()
+		public async Task DisconnectAsync()
 		{
+			//This may look RIDICULOUS but this seem to be the only way for a server
+			//to successfully disconnect a client without raising exceptions on the read/write thread
+			TaskCompletionSource<object> source = new TaskCompletionSource<object>();
+			Connection.Socket.BeginDisconnect(false, ar =>
+			{
+				Connection.Socket.EndDisconnect(ar);
+				source.SetResult(null);
+			}, null);
+
 			//TODO: We don't have a mechanism to flush??
-			Connection.Dispose();
-			return Task.CompletedTask;
+			Connection.TrySetProtocolShutdown(PipeShutdownKind.ProtocolExitServer);
+			Connection.Input.CancelPendingRead();
+			Connection.Output.CancelPendingFlush();
+
+			await source.Task;
+			return;
 		}
 
 		//TODO: This is kind of stupid to even implement. This should NEVER be called on serverside!
