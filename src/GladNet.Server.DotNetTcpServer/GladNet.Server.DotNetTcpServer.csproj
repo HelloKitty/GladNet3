@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Andrew Blakely, HelloKitty</Authors>
+    <Company />
+    <Product>GladNet</Product>
+    <Description>GladNet (Glader's Library for Advanced Development of Network Emulation Technologies) server implementation of the .NET TCP Server (TcpListener) for server emulation.</Description>
+    <Copyright>Andrew Blakely</Copyright>
+    <PackageLicenseUrl>https://github.com/HelloKitty/GladNet3/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/HelloKitty/GladNet3</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HelloKitty/GladNet3</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>GladNet Emulation Emulator WoW PSO Network Unity3D Network Networking Netlib</PackageTags>
+    <PackageId>GladNet.Server.DotNetTcpServer</PackageId>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Common.Logging" Version="3.4.1" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.1.0" />
+    <PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.0" />
+    <PackageReference Include="System.IO.Pipelines" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GladNet.API.Server\GladNet.API.Server.csproj" />
+  </ItemGroup>
+
+</Project>
