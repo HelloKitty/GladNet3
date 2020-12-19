@@ -129,13 +129,28 @@ namespace GladNet
 			CancellationToken sessionCancelToken = new CancellationToken(false);
 			CancellationTokenSource combinedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token, sessionCancelToken);
 
-			Task writeTask = Task.Run(async () => await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartWritingAsync(combinedTokenSource.Token), combinedTokenSource, "Write"), token);
-			Task readTask = Task.Run(async () => await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartListeningAsync(combinedTokenSource.Token), combinedTokenSource, "Read"), token);
+			//To avoid sharing the cancel token source and dealing with race conditions involved in it being disposed we create a seperate
+			//one for each task.
+			CancellationToken readCancelToken = new CancellationToken(false);
+			CancellationTokenSource readCancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(combinedTokenSource.Token, readCancelToken);
+
+			CancellationToken writeCancelToken = new CancellationToken(false);
+			CancellationTokenSource writeCancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(combinedTokenSource.Token, writeCancelToken);
+
+			Task writeTask = Task.Run(async () => await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartWritingAsync(writeCancelTokenSource.Token), writeCancelTokenSource, "Write"), token);
+			Task readTask = Task.Run(async () => await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartListeningAsync(readCancelTokenSource.Token), readCancelTokenSource, "Read"), token);
 
 			Task.Run(async () =>
 			{
 				try
 				{
+					await Task.WhenAny(readTask, writeTask);
+
+					//If ANY read or write task finishes then the network should stop reading
+					//by canceling the session cancel token we should cancel any remaining network task
+					combinedTokenSource.Cancel();
+
+					//Now we should wait until both tasks have finished completely, after canceling
 					await Task.WhenAll(readTask, writeTask);
 				}
 				catch (Exception e)
@@ -143,6 +158,18 @@ namespace GladNet
 					//Suppress this exception, we have critical deconstruction code to run.
 					if (Logger.IsErrorEnabled)
 						Logger.Error($"Session: {clientSession.Details.ConnectionId} encountered critical failure in awaiting network task. Error: {e}");
+				}
+				finally
+				{
+					if (!combinedTokenSource.IsCancellationRequested)
+						combinedTokenSource.Cancel();
+
+					combinedTokenSource.Dispose();
+
+					//Also all read/write tasks should be cancelled and disposed of by this point.
+					//BUT we cannot know if they're cancelled, so dispose them here instead
+					writeCancelTokenSource.Dispose();
+					readCancelTokenSource.Dispose();
 				}
 
 				if (Logger.IsDebugEnabled)
