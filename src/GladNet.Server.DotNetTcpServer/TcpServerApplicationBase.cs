@@ -64,6 +64,14 @@ namespace GladNet
 			{
 				listenSocket.Bind(new IPEndPoint(ServerAddress.AddressEndpoint, ServerAddress.Port));
 
+				if (!listenSocket.IsBound)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Socket failed to bind to Port: {ServerAddress.Port} on Address: {ServerAddress.AddressEndpoint.ToString()}");
+
+					return;
+				}
+
 				//TODO: This is the maximum unacceptaed in-queue connection attempts. I don't know if this should be configurable
 				//See: https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.socket.listen?view=netframework-4.7.2
 				listenSocket.Listen(1000);
