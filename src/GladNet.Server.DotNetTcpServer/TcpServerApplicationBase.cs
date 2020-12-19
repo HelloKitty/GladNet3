@@ -98,29 +98,79 @@ namespace GladNet
 				{
 					Socket socket = await listenSocket.AcceptAsync();
 
-					if (!IsClientAcceptable(socket))
+					//Try required because we're calling into user code.
+					try
 					{
-						socket.Close();
+						if(!IsClientAcceptable(socket))
+						{
+							socket.Shutdown(SocketShutdown.Both);
+							socket.Dispose();
+							continue;
+						}
+					}
+					catch (Exception e)
+					{
+						if (Logger.IsInfoEnabled)
+							Logger.Error($"Socket failed to creation. Exception in accept check. Reason: {e}");
+
+						socket.Shutdown(SocketShutdown.Both);
+						socket.Dispose();
 						continue;
 					}
 
-					IPEndPoint clientAddress = ((IPEndPoint) socket.RemoteEndPoint);
-					int connectionId = Interlocked.Increment(ref _lifetimeConnectionCount);
-					SocketConnection connection = SocketConnection.Create(socket, PipeOptions.Default, PipeOptions.Default, SocketConnectionOptions.ZeroLengthReads);
+					try
+					{
+						await AcceptNewSessionsAsync(socket, token);
+					}
+					catch (Exception e)
+					{
+						if (Logger.IsErrorEnabled)
+							Logger.Error($"Socket failed to create session. Reason: {e}");
 
-					if(Logger.IsInfoEnabled)
-						Logger.Info($"Attempting to create Session for Address: {clientAddress.Address} Id: {connectionId}");
+						if (socket.Connected)
+							socket.Shutdown(SocketShutdown.Both);
 
-					TManagedSessionType clientSession = Create(new SessionCreationContext(connection, new SessionDetails(new NetworkAddressInfo(clientAddress.Address, ServerAddress.Port), connectionId)));
-
-					clientSession.AttachDisposableResource(connection);
-					clientSession.AttachDisposableResource(socket);
-
-					StartNetworkSessionTasks(token, clientSession);
-
-					if (!Sessions.TryAdd(connectionId, clientSession))
-						throw new InvalidOperationException($"Failed to add Session: {clientSession} to {Sessions} container with Id: {connectionId}");
+						socket.Dispose();
+						continue;
+					}
 				}
+			}
+		}
+
+		private async Task AcceptNewSessionsAsync(Socket socket, CancellationToken token)
+		{
+			SocketConnection connection = default;
+			TManagedSessionType clientSession = default;
+			int connectionId = 0;
+			try
+			{
+				IPEndPoint clientAddress = ((IPEndPoint)socket.RemoteEndPoint);
+				connectionId = Interlocked.Increment(ref _lifetimeConnectionCount);
+				connection = SocketConnection.Create(socket, PipeOptions.Default, PipeOptions.Default, SocketConnectionOptions.ZeroLengthReads);
+
+				if(Logger.IsInfoEnabled)
+					Logger.Info($"Attempting to create Session for Address: {clientAddress.Address} Id: {connectionId}");
+
+				clientSession = Create(new SessionCreationContext(connection, new SessionDetails(new NetworkAddressInfo(clientAddress.Address, ServerAddress.Port), connectionId)));
+
+				clientSession.AttachDisposableResource(connection);
+				clientSession.AttachDisposableResource(socket);
+
+				StartNetworkSessionTasks(token, clientSession);
+
+				if(!Sessions.TryAdd(connectionId, clientSession))
+					throw new InvalidOperationException($"Failed to add Session: {clientSession} to {Sessions} container with Id: {connectionId}");
+			}
+			catch (Exception e)
+			{
+				if (Logger.IsErrorEnabled)
+					Logger.Error($"Failed to creation Session: {connectionId}. Reason: {e}");
+
+				//Encounter a critical issue and could not create the session
+				//but we also don't want to leak.
+				clientSession?.Dispose();
+				connection?.Dispose();
+				throw;
 			}
 		}
 
