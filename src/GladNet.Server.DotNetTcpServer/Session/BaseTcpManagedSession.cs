@@ -68,10 +68,20 @@ namespace GladNet
 					//So we have a valid result, let's check if we have enough data.
 					//If we don't have enough to read a packet header then we need to wait until we have enough bytes.
 					if (buffer.Length < NetworkOptions.MinimumPacketHeaderSize)
+					{
+						//If buffer isn't large enough we need to tell Pipeline we didn't consume anything
+						//but we DID inspect/examine all the way to the end of the buffer.
+						Connection.Input.AdvanceTo(result.Buffer.Start, result.Buffer.End);
 						continue;
+					}
 
 					if (!MessageServices.PacketHeaderFactory.IsHeaderReadable(in buffer))
+					{
+						//If buffer isn't large enough we need to tell Pipeline we didn't consume anything
+						//but we DID inspect/examine all the way to the end of the buffer.
+						Connection.Input.AdvanceTo(result.Buffer.Start, result.Buffer.End);
 						continue;
+					}
 
 					IPacketHeader header = ReadIncomingPacketHeader(Connection.Input, in result);
 
