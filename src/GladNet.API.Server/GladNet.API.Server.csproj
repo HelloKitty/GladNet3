@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Common.Logging" Version="3.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GladNet.API\GladNet.API.csproj" />
   </ItemGroup>
 
