@@ -74,45 +74,84 @@ namespace GladNet
 				if(Logger.IsInfoEnabled)
 					Logger.Info($"Server bound to Port: {ServerAddress.Port} on Address: {ServerAddress.AddressEndpoint.ToString()}");
 
-				while(!token.IsCancellationRequested)
+				try
 				{
-					Socket socket = await listenSocket.AcceptAsync();
+					await SocketAcceptLoopAsync(token, listenSocket);
+				}
+				catch (Exception e)
+				{
+					if (Logger.IsErrorEnabled)
+						Logger.Error($"Server encountered unhandled exception in socket accept loop. Error: {e}");
 
-					//Try required because we're calling into user code.
-					try
+					throw;
+				}
+			}
+		}
+
+		private async Task SocketAcceptLoopAsync(CancellationToken token, Socket listenSocket)
+		{
+			if (listenSocket == null) throw new ArgumentNullException(nameof(listenSocket));
+
+			while (!token.IsCancellationRequested)
+			{
+				//For some reason the REMOTE connection/socket closing before this
+				//completes can cause a throw
+				//Example: System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+				//Therefore we must wrap this in a try
+				Socket socket;
+				try
+				{
+					socket = await listenSocket.AcceptAsync();
+				}
+				catch(SocketException e)
+				{
+					SocketError error = (SocketError) e.ErrorCode;
+					switch (error)
 					{
-						if(!IsClientAcceptable(socket))
-						{
-							socket.Shutdown(SocketShutdown.Both);
-							socket.Dispose();
-							continue;
-						}
+						case SocketError.ConnectionReset:
+						case SocketError.ConnectionAborted:
+							if(Logger.IsInfoEnabled)
+								Logger.Info($"Socket disconnected before accept. This is expected and can occur if the remote client disconnects before fully accepted.");
+							continue; //continue the loop on this expected exception.
+						default:
+							throw;
 					}
-					catch (Exception e)
-					{
-						if (Logger.IsInfoEnabled)
-							Logger.Error($"Socket failed to creation. Exception in accept check. Reason: {e}");
+				}
 
+				//Try required because we're calling into user code.
+				try
+				{
+					if (!IsClientAcceptable(socket))
+					{
 						socket.Shutdown(SocketShutdown.Both);
 						socket.Dispose();
 						continue;
 					}
+				}
+				catch (Exception e)
+				{
+					if (Logger.IsInfoEnabled)
+						Logger.Error($"Socket failed to creation. Exception in accept check. Reason: {e}");
 
-					try
-					{
-						await AcceptNewSessionsAsync(socket, token);
-					}
-					catch (Exception e)
-					{
-						if (Logger.IsErrorEnabled)
-							Logger.Error($"Socket failed to create session. Reason: {e}");
+					socket.Shutdown(SocketShutdown.Both);
+					socket.Dispose();
+					continue;
+				}
 
-						if (socket.Connected)
-							socket.Shutdown(SocketShutdown.Both);
+				try
+				{
+					await AcceptNewSessionsAsync(socket, token);
+				}
+				catch (Exception e)
+				{
+					if (Logger.IsErrorEnabled)
+						Logger.Error($"Socket failed to create session. Reason: {e}");
 
-						socket.Dispose();
-						continue;
-					}
+					if (socket.Connected)
+						socket.Shutdown(SocketShutdown.Both);
+
+					socket.Dispose();
+					continue;
 				}
 			}
 		}
