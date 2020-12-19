@@ -13,8 +13,16 @@ namespace GladNet
 
 		public string Deserialize(Span<byte> buffer, ref int offset)
 		{
+			if (offset != 0)
+			{
+				if(offset > buffer.Length)
+					throw new InvalidOperationException($"Offset: {offset} outside of buffer Size: {buffer.Length}");
+
+				buffer = buffer.Slice(offset);
+			}
+
 			string value = Encoding.ASCII.GetString(buffer);
-			offset += Encoding.ASCII.GetByteCount(value);
+			offset += buffer.Length * 1;
 			return value;
 		}
 	}

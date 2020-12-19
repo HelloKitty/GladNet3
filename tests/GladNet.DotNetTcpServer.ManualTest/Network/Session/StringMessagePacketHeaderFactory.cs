@@ -10,7 +10,7 @@ namespace GladNet
 	{
 		public IPacketHeader Create(PacketHeaderCreationContext context)
 		{
-			short size = Unsafe.As<byte, short>(ref context.GetSpan()[0]);
+			ushort size = Unsafe.As<byte, ushort>(ref context.GetSpan()[0]);
 
 			return new HeaderlessPacketHeader(size);
 		}
