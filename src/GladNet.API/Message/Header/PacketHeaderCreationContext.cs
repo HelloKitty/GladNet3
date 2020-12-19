@@ -112,9 +112,13 @@ namespace GladNet
 		{
 			lock (SyncObj)
 			{
+				if (isDisposed)
+					return;
+
 				if(InternalHeaderByteBuffer != null)
 					HeaderCreationPool.Return(InternalHeaderByteBuffer);
 
+				InternalHeaderByteBuffer = null;
 				isDisposed = true;
 			}
 		}
