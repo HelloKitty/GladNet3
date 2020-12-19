@@ -105,10 +105,12 @@ namespace GladNet
 				}
 				catch(SocketException e)
 				{
+					socket?.Dispose();
+
 					SocketError error = (SocketError) e.ErrorCode;
 					switch (error)
 					{
-						case SocketError.ConnectionReset:
+						case SocketError.ConnectionReset: // 10054
 						case SocketError.ConnectionAborted:
 							if(Logger.IsInfoEnabled)
 								Logger.Info($"Socket disconnected before accept. This is expected and can occur if the remote client disconnects before fully accepted.");
