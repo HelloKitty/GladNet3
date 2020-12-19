@@ -106,7 +106,7 @@ namespace GladNet
 				//completes can cause a throw
 				//Example: System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
 				//Therefore we must wrap this in a try
-				Socket socket;
+				Socket socket = null;
 				try
 				{
 					socket = await listenSocket.AcceptAsync();
