@@ -175,22 +175,31 @@ namespace GladNet
 				if (Logger.IsDebugEnabled)
 					Logger.Debug($"Session: {clientSession.Details.ConnectionId} Stopped Network Read/Write.");
 
-				//Fire off to anyone interested in managed session ending. We should do this before we fully dispose it and remove it from the session collection.
-				OnManagedSessionEnded?.Invoke(this, new ManagedSessionContextualEventArgs<TManagedSessionType>(clientSession));
-				Sessions.TryRemove(clientSession.Details.ConnectionId, out _);
-
-				//Now that it's removed, we should also dispose it.
 				try
 				{
-					clientSession.Dispose();
+					//Fire off to anyone interested in managed session ending. We should do this before we fully dispose it and remove it from the session collection.
+					OnManagedSessionEnded?.Invoke(this, new ManagedSessionContextualEventArgs<TManagedSessionType>(clientSession));
 				}
 				catch (Exception e)
 				{
 					if (Logger.IsErrorEnabled)
-						Logger.Error($"Encountered error in Client: {clientSession.Details.ConnectionId} session disposal. Error: {e}");
-					throw;
+						Logger.Error($"Failed Session: {clientSession.Details.ConnectionId} ended event. Reason: {e}");
 				}
+				finally
+				{
+					Sessions.TryRemove(clientSession.Details.ConnectionId, out _);
 
+					try
+					{
+						clientSession.Dispose();
+					}
+					catch(Exception e)
+					{
+						if(Logger.IsErrorEnabled)
+							Logger.Error($"Encountered error in Client: {clientSession.Details.ConnectionId} session disposal. Error: {e}");
+						throw;
+					}
+				}
 			}, token);
 		}
 
