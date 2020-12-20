@@ -22,18 +22,20 @@ namespace GladNet
 		/// </summary>
 		protected INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> NetworkMessageInterface { get; }
 
+		//These aren't currently used directly in the session themselves but we expose them incase implementer
+		//wants them.
 		/// <summary>
 		/// Message serialization/building services.
 		/// </summary>
-		protected SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> MessageServices { get; }
+		protected SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> MessageBuilders { get; }
 
 		protected ManagedSession(IConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions,
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> networkMessageProducer, 
-			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
+			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageBuilders) 
 			: base(connectionService, details, networkOptions)
 		{
 			NetworkMessageInterface = networkMessageProducer ?? throw new ArgumentNullException(nameof(networkMessageProducer));
-			MessageServices = messageServices ?? throw new ArgumentNullException(nameof(messageServices));
+			MessageBuilders = messageBuilders ?? throw new ArgumentNullException(nameof(messageBuilders));
 		}
 
 		public override async Task StartListeningAsync(CancellationToken token = default)
