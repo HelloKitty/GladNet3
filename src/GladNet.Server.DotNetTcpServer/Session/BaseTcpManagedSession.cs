@@ -28,11 +28,6 @@ namespace GladNet
 		protected SocketConnection Connection { get; }
 
 		/// <summary>
-		/// Message serialization/building services.
-		/// </summary>
-		protected SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> MessageServices { get; }
-
-		/// <summary>
 		/// The outgoing message queue.
 		/// </summary>
 		protected AsyncProducerConsumerQueue<TPayloadWriteType> OutgoingMessageQueue { get; } = new AsyncProducerConsumerQueue<TPayloadWriteType>();
@@ -40,10 +35,10 @@ namespace GladNet
 		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
 			SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions,
-				new SocketConnectionNetworkMessageProducer<TPayloadWriteType, TPayloadReadType>(networkOptions, connection, messageServices))
+				new SocketConnectionNetworkMessageProducer<TPayloadWriteType, TPayloadReadType>(networkOptions, connection, messageServices),
+				messageServices)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
-			MessageServices = messageServices ?? throw new ArgumentNullException(nameof(messageServices));
 		}
 
 		/// <inheritdoc />
