@@ -20,7 +20,7 @@ namespace GladNet
 	/// Builds, manages and maintains <see cref="ManagedSession"/>s internally
 	/// when clients connect.
 	/// </summary>
-	public abstract class TcpServerApplicationBase<TManagedSessionType> : GladNetServerApplication<TManagedSessionType, SessionCreationContext>
+	public abstract class TcpGladNetServerApplication<TManagedSessionType> : GladNetServerApplication<TManagedSessionType, SessionCreationContext>
 		where TManagedSessionType : ManagedSession
 	{
 		private int _lifetimeConnectionCount = 0;
@@ -35,7 +35,7 @@ namespace GladNet
 			private set => _lifetimeConnectionCount = value;
 		}
 
-		protected TcpServerApplicationBase(NetworkAddressInfo serverAddress, ILog logger)
+		protected TcpGladNetServerApplication(NetworkAddressInfo serverAddress, ILog logger)
 			: base(serverAddress, logger)
 		{
 

@@ -6,7 +6,7 @@ using Common.Logging;
 
 namespace GladNet
 {
-	public sealed class TCPEchoGladNetServerApplication : TcpServerApplicationBase<TCPEchoManagedSession>
+	public sealed class TCPEchoGladNetServerApplication : TcpGladNetServerApplication<TCPEchoManagedSession>
 	{
 		public TCPEchoGladNetServerApplication(NetworkAddressInfo serverAddress, ILog logger) 
 			: base(serverAddress, logger)
