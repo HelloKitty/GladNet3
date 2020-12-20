@@ -25,11 +25,11 @@ namespace GladNet
 		/// <summary>
 		/// Message serialization/building services.
 		/// </summary>
-		protected SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> MessageServices { get; }
+		protected SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> MessageServices { get; }
 
 		protected ManagedSession(IConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions,
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> networkMessageProducer, 
-			SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
+			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
 			: base(connectionService, details, networkOptions)
 		{
 			NetworkMessageInterface = networkMessageProducer ?? throw new ArgumentNullException(nameof(networkMessageProducer));

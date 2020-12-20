@@ -5,12 +5,12 @@ using System.Text;
 namespace GladNet
 {
 	/// <summary>
-	/// Encapsulates Requires session message services.
+	/// Encapsulates Requires session message building services.
 	/// Mostly for serialization/building purposes.
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public sealed class SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> 
+	public sealed class SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> 
 		where TPayloadReadType : class 
 		where TPayloadWriteType : class
 	{
@@ -34,7 +34,7 @@ namespace GladNet
 		/// </summary>
 		public IMessageSerializer<PacketHeaderSerializationContext<TPayloadWriteType>> HeaderSerializer { get; }
 
-		public SessionMessageServiceContext(IPacketHeaderFactory packetHeaderFactory, 
+		public SessionMessageBuildingServiceContext(IPacketHeaderFactory packetHeaderFactory, 
 			IMessageDeserializer<TPayloadReadType> messageDeserializer, 
 			IMessageSerializer<TPayloadWriteType> messageSerializer, 
 			IMessageSerializer<PacketHeaderSerializationContext<TPayloadWriteType>> headerSerializer)

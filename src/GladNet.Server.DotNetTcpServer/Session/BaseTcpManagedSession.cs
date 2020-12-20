@@ -33,7 +33,7 @@ namespace GladNet
 		protected AsyncProducerConsumerQueue<TPayloadWriteType> OutgoingMessageQueue { get; } = new AsyncProducerConsumerQueue<TPayloadWriteType>();
 
 		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
-			SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
+			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions,
 				new SocketConnectionNetworkMessageProducer<TPayloadWriteType, TPayloadReadType>(networkOptions, connection, messageServices),
 				messageServices)

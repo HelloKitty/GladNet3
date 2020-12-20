@@ -27,7 +27,7 @@ namespace GladNet
 		/// <summary>
 		/// The messages service container.
 		/// </summary>
-		private SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> MessageServices { get; }
+		private SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> MessageServices { get; }
 
 		/// <summary>
 		/// The details of the session.
@@ -38,7 +38,7 @@ namespace GladNet
 
 		public SocketConnectionNetworkMessageProducer(NetworkConnectionOptions networkOptions, 
 			SocketConnection connection, 
-			SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> messageServices)
+			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageServices)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 			MessageServices = messageServices ?? throw new ArgumentNullException(nameof(messageServices));
