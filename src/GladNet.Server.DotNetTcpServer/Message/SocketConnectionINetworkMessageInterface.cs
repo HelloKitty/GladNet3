@@ -15,7 +15,7 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public sealed class SocketConnectionNetworkMessageProducer<TPayloadWriteType, TPayloadReadType> : INetworkMessageInterface<TPayloadReadType, TPayloadWriteType>
+	public sealed class SocketConnectionINetworkMessageInterface<TPayloadWriteType, TPayloadReadType> : INetworkMessageInterface<TPayloadReadType, TPayloadWriteType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
@@ -36,7 +36,7 @@ namespace GladNet
 
 		private AsyncLock PayloadWriteLock { get; } = new AsyncLock();
 
-		public SocketConnectionNetworkMessageProducer(NetworkConnectionOptions networkOptions, 
+		public SocketConnectionINetworkMessageInterface(NetworkConnectionOptions networkOptions, 
 			SocketConnection connection, 
 			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageServices)
 		{

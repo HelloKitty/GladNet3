@@ -16,10 +16,11 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public override async Task OnNetworkMessageReceived(NetworkIncomingMessage<string> message, CancellationToken token = default)
+		public override async Task OnNetworkMessageReceivedAsync(NetworkIncomingMessage<string> message, CancellationToken token = default)
 		{
 			Console.WriteLine($"Message Content: {message.Payload}");
 
+			//echos back the message to the client.
 			await NetworkMessageInterface.SendMessageAsync(message.Payload, token);
 
 			if (message.Payload.ToLower() == "quit")

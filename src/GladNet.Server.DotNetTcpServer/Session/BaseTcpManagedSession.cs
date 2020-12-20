@@ -35,7 +35,7 @@ namespace GladNet
 		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
 			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions,
-				new SocketConnectionNetworkMessageProducer<TPayloadWriteType, TPayloadReadType>(networkOptions, connection, messageServices),
+				new SocketConnectionINetworkMessageInterface<TPayloadWriteType, TPayloadReadType>(networkOptions, connection, messageServices),
 				messageServices)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
