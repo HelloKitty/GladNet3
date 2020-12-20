@@ -6,7 +6,7 @@ using Common.Logging;
 
 namespace GladNet
 {
-	public sealed class TCPEchoGladNetServerApplication : TcpServerApplicationBase<TestStringManagedSession>
+	public sealed class TCPEchoGladNetServerApplication : TcpServerApplicationBase<TCPEchoManagedSession>
 	{
 		public TCPEchoGladNetServerApplication(NetworkAddressInfo serverAddress, ILog logger) 
 			: base(serverAddress, logger)
@@ -19,7 +19,7 @@ namespace GladNet
 			return true;
 		}
 
-		public override TestStringManagedSession Create(SessionCreationContext context)
+		public override TCPEchoManagedSession Create(SessionCreationContext context)
 		{
 			if (context == null) throw new ArgumentNullException(nameof(context));
 
@@ -29,7 +29,7 @@ namespace GladNet
 			SessionMessageBuildingServiceContext<string, string> messageServices = 
 				new SessionMessageBuildingServiceContext<string, string>(new StringMessagePacketHeaderFactory(), serializer, serializer, new StringPacketHeaderSerializer());
 
-			return new TestStringManagedSession(options, context.Connection, context.Details, messageServices);
+			return new TCPEchoManagedSession(options, context.Connection, context.Details, messageServices);
 		}
 	}
 }

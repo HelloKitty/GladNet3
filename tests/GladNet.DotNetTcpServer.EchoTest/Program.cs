@@ -16,7 +16,7 @@ namespace GladNet
 			ILog logger = new ConsoleLogger(LogLevel.All, true);
 			logger.Info($"Starting server.");
 
-			await new TestTCPServerApplicationBase(new NetworkAddressInfo(Address, 6969), logger)
+			await new TCPEchoGladNetServerApplication(new NetworkAddressInfo(Address, 6969), logger)
 				.BeginListeningAsync();
 		}
 	}
