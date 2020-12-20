@@ -13,7 +13,7 @@ namespace GladNet
 	/// <summary>
 	/// Contract for strategies for dispatching network messages.
 	/// </summary>
-	public interface INetworkMessageDispatchingStrategy<TPayloadWriteType, TPayloadReadType> 
+	public interface INetworkMessageDispatchingStrategy<TPayloadWriteType, TPayloadReadType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
