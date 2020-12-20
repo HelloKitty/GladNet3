@@ -50,13 +50,13 @@ namespace GladNet
 					return;
 
 				//A throw will stop the session.
-				await OnNetworkMessageReceived(message, token);
+				await OnNetworkMessageReceivedAsync(message, token);
 			}
 		}
 
 		//Warning to implementer, if you THROW from this you WILL stop the network connection completely.
 		//GladNet does not sustain exceptions in unexpected cases, choosing to shutdown the session instead.
 		/// <inheritdoc />
-		public abstract Task OnNetworkMessageReceived(NetworkIncomingMessage<TPayloadReadType> message, CancellationToken token = default(CancellationToken));
+		public abstract Task OnNetworkMessageReceivedAsync(NetworkIncomingMessage<TPayloadReadType> message, CancellationToken token = default(CancellationToken));
 	}
 }

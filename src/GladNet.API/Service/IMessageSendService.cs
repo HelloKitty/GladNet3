@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using GladNet;
 
@@ -19,8 +20,9 @@ namespace GladNet
 		/// </summary>
 		/// <typeparam name="TMessageType">The type of message.</typeparam>
 		/// <param name="message">The message to send.</param>
+		/// <param name="token">The cancel token for the operation.</param>
 		/// <returns>Indicates the result of the send message operation.</returns>
-		Task<SendResult> SendMessage<TMessageType>(TMessageType message)
+		Task<SendResult> SendMessageAsync<TMessageType>(TMessageType message, CancellationToken token = default)
 			where TMessageType : class, TMessageBaseType;
 	}
 }

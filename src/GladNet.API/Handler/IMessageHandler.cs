@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GladNet
@@ -22,6 +23,7 @@ namespace GladNet
 		/// </summary>
 		/// <param name="context">The message context.</param>
 		/// <param name="message">The payload to handle.</param>
-		Task HandleMessage(TMessageContext context, TMessageType message);
+		/// <param name="token">The cancel token for the handle operation.</param>
+		Task HandleMessageAsync(TMessageContext context, TMessageType message, CancellationToken token = default);
 	}
 }

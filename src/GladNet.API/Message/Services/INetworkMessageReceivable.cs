@@ -20,6 +20,6 @@ namespace GladNet
 		/// <param name="message">The network message recieved.</param>
 		/// <param name="token">Cancel token that can be used to indicate if a session is cancelled.</param>
 		/// <returns></returns>
-		Task OnNetworkMessageReceived(NetworkIncomingMessage<TPayloadType> message, CancellationToken token = default(CancellationToken));
+		Task OnNetworkMessageReceivedAsync(NetworkIncomingMessage<TPayloadType> message, CancellationToken token = default(CancellationToken));
 	}
 }
