@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace GladNet
 {
+	/// <summary>
+	/// Contract for a network connectable type.
+	/// </summary>
 	public interface IConnectable
 	{
 		/// <summary>

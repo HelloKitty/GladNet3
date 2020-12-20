@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace GladNet
 {
+	/// <summary>
+	/// Contract for a disconnectable type.
+	/// </summary>
 	public interface IDisconnectable
 	{
 		/// <summary>
