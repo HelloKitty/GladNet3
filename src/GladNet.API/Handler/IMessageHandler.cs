@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 namespace GladNet
 {
 	/// <summary>
-	/// Contract for handlers that handle a specific derived type payload <typeparamref name="TMessageType"/>
-	/// that derives from <see cref="TBaseMessageType"/>.
+	/// Contract for handlers that handle a message of type <typeparamref name="TMessageType"/>
 	/// </summary>
 	/// <typeparam name="TMessageType">The type of message to be handled.</typeparam>
 	/// <typeparam name="TMessageContext">The context associated with the message.</typeparam>
-	/// <typeparam name="TBaseMessageType">The base message type.</typeparam>
-	public interface IMessageHandler<in TMessageType, TBaseMessageType, in TMessageContext>
-		where TMessageType : class, TBaseMessageType
+	public interface IMessageHandler<in TMessageType, in TMessageContext>
+		where TMessageType : class
 	{
 		/// <summary>
 		/// Handles the message with <see cref="context"/> provided and correctly typed
