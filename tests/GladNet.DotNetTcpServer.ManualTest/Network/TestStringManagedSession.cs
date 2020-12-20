@@ -17,7 +17,9 @@ namespace GladNet
 		/// <inheritdoc />
 		public override async Task OnNetworkMessageReceived(NetworkIncomingMessage<string> message)
 		{
-			//Console.WriteLine($"Message Content: {message.Payload}");
+			Console.WriteLine($"Message Content: {message.Payload}");
+
+			await OutgoingMessageQueue.EnqueueAsync(message.Payload);
 
 			if (message.Payload.ToLower() == "quit")
 				await ConnectionService.DisconnectAsync();
