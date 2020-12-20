@@ -14,7 +14,8 @@ namespace GladNet
 	/// <typeparam name="TMessageType">The type of message to be handled.</typeparam>
 	/// <typeparam name="TMessageContext">The context associated with the message.</typeparam>
 	/// <typeparam name="TBaseMessageType">The base message type.</typeparam>
-	public interface ISpecificMessageHandler<in TMessageType, in TBaseMessageType, in TMessageContext> : IMessageHandler<TBaseMessageType, TMessageContext>
+	public interface ISpecificMessageHandler<in TMessageType, TBaseMessageType, in TMessageContext> 
+		: IMessageHandler<TBaseMessageType, TMessageContext>
 		where TMessageType : class, TBaseMessageType 
 		where TBaseMessageType : class
 	{

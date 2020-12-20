@@ -14,7 +14,7 @@ namespace GladNet
 	/// <typeparam name="TBaseMessageType">The base message type.</typeparam>
 	/// <typeparam name="TMessageContext">The type of the message context.</typeparam>
 	public abstract class BaseSpecificMessageHandler<TMessageType, TBaseMessageType, TMessageContext> 
-		: ISpecificMessageHandler<TMessageType, TBaseMessageType, TMessageContext> 
+		: ISpecificMessageHandler<TMessageType, TBaseMessageType, TMessageContext>
 		where TMessageType : class, TBaseMessageType 
 		where TBaseMessageType : class
 	{
@@ -39,5 +39,27 @@ namespace GladNet
 		/// <param name="message">The payload to handle.</param>
 		/// <param name="token">The cancel token for the handle operation.</param>
 		public abstract Task HandleMessageAsync(TMessageContext context, TMessageType message, CancellationToken token = default);
+
+		/// <inheritdoc />
+		public void BindTo(ITypeBinder<IMessageHandler<TBaseMessageType, TMessageContext>, TBaseMessageType> bindTarget)
+		{
+			if (bindTarget == null) throw new ArgumentNullException(nameof(bindTarget));
+
+			bindTarget.Bind<TMessageType>(this);
+
+			//Allow implementers to bind this to other types too
+			ExtraBindings(bindTarget);
+		}
+
+		/// <summary>
+		/// Cam be overriden to bind this <see cref="IMessageHandler{TMessageType,TMessageContext}"/> to multiple message types.
+		/// </summary>
+		/// <param name="bindTarget">The binding target to bind this handler to.</param>
+		protected virtual void ExtraBindings(ITypeBinder<IMessageHandler<TBaseMessageType, TMessageContext>, TBaseMessageType> bindTarget)
+		{
+			if (bindTarget == null) throw new ArgumentNullException(nameof(bindTarget));
+
+			//Example: bindTarget.Bind<Derp>(this);
+		}
 	}
 }
