@@ -41,7 +41,7 @@ namespace GladNet
 					return;
 
 				//A throw will stop the session.
-				await OnNetworkMessageReceived(message);
+				await OnNetworkMessageReceived(message, token);
 			}
 		}
 
