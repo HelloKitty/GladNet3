@@ -79,6 +79,10 @@ namespace GladNet
 
 					IPacketHeader header = ReadIncomingPacketHeader(Connection.Input, in result);
 
+					//TODO: Add logging
+					if (!IsHeaderValid(header))
+						return;
+
 					while (!token.IsCancellationRequested)
 					{
 						//Now with the header we know how much data we must now read for the payload.

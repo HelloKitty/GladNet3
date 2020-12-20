@@ -72,5 +72,22 @@ namespace GladNet
 			lock(SyncObj)
 				InternalDisposables.Add(disposable);
 		}
+
+		//TODO: Create a validation API, an OOP based one.
+		/// <summary>
+		/// Indicates to caller if a provided <see cref="header"/> instance
+		/// is valid. Can be overriden to add additional logic.
+		/// </summary>
+		/// <param name="header">The header to validate.</param>
+		/// <returns>True if the header is valid.</returns>
+		protected virtual bool IsHeaderValid(IPacketHeader header)
+		{
+			if (header == null) throw new ArgumentNullException(nameof(header));
+
+			if (header.PacketSize > NetworkOptions.MaximumPacketSize)
+				return false;
+
+			return true;
+		}
 	}
 }
