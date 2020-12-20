@@ -15,13 +15,15 @@ namespace GladNet
 	public interface IMessageSendService<in TMessageBaseType>
 		where TMessageBaseType : class
 	{
+		//Implementer of this method should assume multi callers may call this method at one time
+		//Therefore threadsafety must be implemented an assured by the implementer of this method.
 		/// <summary>
-		/// Sends the provided <see cref="message"/>
+		/// Sends a <typeparamref name="TMessageBaseType"/> asyncronously.
+		/// The task will complete when the network message is sent or when the token is cancelled.
 		/// </summary>
-		/// <typeparam name="TMessageType">The type of message.</typeparam>
 		/// <param name="message">The message to send.</param>
-		/// <param name="token">The cancel token for the operation.</param>
-		/// <returns>Indicates the result of the send message operation.</returns>
+		/// <param name="token">The cancel token for the send operation.</param>
+		/// <returns>Returns an awaitable when the send operation is completed.</returns>
 		Task<SendResult> SendMessageAsync<TMessageType>(TMessageType message, CancellationToken token = default)
 			where TMessageType : class, TMessageBaseType;
 	}

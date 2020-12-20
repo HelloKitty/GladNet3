@@ -21,7 +21,7 @@ namespace GladNet
 			Console.WriteLine($"Message Content: {message.Payload}");
 
 			//echos back the message to the client.
-			await NetworkMessageInterface.SendMessageAsync(message.Payload, token);
+			await MessageService.MessageInterface.SendMessageAsync(message.Payload, token);
 
 			if (message.Payload.ToLower() == "quit")
 				await ConnectionService.DisconnectAsync();

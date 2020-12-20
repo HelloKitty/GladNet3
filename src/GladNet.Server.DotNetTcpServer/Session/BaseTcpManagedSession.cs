@@ -27,18 +27,18 @@ namespace GladNet
 		/// </summary>
 		protected SocketConnection Connection { get; }
 
-		/// <summary>
-		/// The outgoing message queue.
-		/// </summary>
-		protected AsyncProducerConsumerQueue<TPayloadWriteType> OutgoingMessageQueue { get; } = new AsyncProducerConsumerQueue<TPayloadWriteType>();
-
 		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
-			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
-			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions,
-				new SocketConnectionINetworkMessageInterface<TPayloadWriteType, TPayloadReadType>(networkOptions, connection, messageServices),
-				messageServices)
+			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices) 
+			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices,
+				BuildMessageInterfaceContext(networkOptions, connection, messageServices))
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
+		}
+
+		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
+		{
+			var messageInterface = new SocketConnectionINetworkMessageInterface<TPayloadReadType, TPayloadWriteType>(networkOptions, connection, messageServices);
+			return new SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType>(new AsyncExProducerConsumerQueueAsyncMessageQueue<TPayloadWriteType>(), messageInterface);
 		}
 
 		/// <inheritdoc />
@@ -82,8 +82,8 @@ namespace GladNet
 				while (!token.IsCancellationRequested)
 				{
 					//Dequeue from the outgoing message queue and send through the send service.
-					TPayloadWriteType payload = await OutgoingMessageQueue.DequeueAsync(token);
-					SendResult result = await NetworkMessageInterface.SendMessageAsync(payload, token);
+					TPayloadWriteType payload = await MessageService.OutgoingMessageQueue.DequeueAsync(token);
+					SendResult result = await MessageService.MessageInterface.SendMessageAsync(payload, token);
 
 					//TODO: Add logging!
 					if (result != SendResult.Sent && result != SendResult.Enqueued)

@@ -10,7 +10,7 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public sealed class SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> 
+	public sealed class SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> 
 		where TPayloadReadType : class 
 		where TPayloadWriteType : class
 	{

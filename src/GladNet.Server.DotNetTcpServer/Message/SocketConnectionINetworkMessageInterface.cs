@@ -15,7 +15,7 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public sealed class SocketConnectionINetworkMessageInterface<TPayloadWriteType, TPayloadReadType> : INetworkMessageInterface<TPayloadReadType, TPayloadWriteType>
+	public sealed class SocketConnectionINetworkMessageInterface<TPayloadReadType, TPayloadWriteType> : INetworkMessageInterface<TPayloadReadType, TPayloadWriteType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
@@ -27,7 +27,7 @@ namespace GladNet
 		/// <summary>
 		/// The messages service container.
 		/// </summary>
-		private SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> MessageServices { get; }
+		private SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> MessageServices { get; }
 
 		/// <summary>
 		/// The details of the session.
@@ -38,7 +38,7 @@ namespace GladNet
 
 		public SocketConnectionINetworkMessageInterface(NetworkConnectionOptions networkOptions, 
 			SocketConnection connection, 
-			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageServices)
+			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 			MessageServices = messageServices ?? throw new ArgumentNullException(nameof(messageServices));
@@ -180,7 +180,8 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task<SendResult> SendMessageAsync(TPayloadWriteType payload, CancellationToken token = default(CancellationToken))
+		public async Task<SendResult> SendMessageAsync<TMessageType>(TMessageType message, CancellationToken token = default)
+			where TMessageType : class, TPayloadWriteType
 		{
 			if(!Connection.Socket.Connected)
 				return SendResult.Disconnected;
@@ -190,7 +191,7 @@ namespace GladNet
 			{
 				try
 				{
-					WriteOutgoingMessage(payload);
+					WriteOutgoingMessage(message);
 
 					//To understand the purpose of Flush when pipelines is using sockets see Marc's comments here: https://stackoverflow.com/questions/56481746/does-pipelines-sockets-unofficial-socketconnection-ever-flush-without-a-request
 					//Basically, "it makes sure that a consumer is awakened (if it isn't already)" and "if there is back-pressure, it delays the producer until the consumer has cleared some of the back-pressure"
