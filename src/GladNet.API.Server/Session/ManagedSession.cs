@@ -34,7 +34,7 @@ namespace GladNet
 		/// </summary>
 		protected NetworkConnectionOptions NetworkOptions { get; }
 
-		protected ManagedSession(IConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions)
+		internal ManagedSession(IConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions)
 		{
 			ConnectionService = connectionService ?? throw new ArgumentNullException(nameof(connectionService));
 			Details = details ?? throw new ArgumentNullException(nameof(details));
