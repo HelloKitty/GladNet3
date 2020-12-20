@@ -18,7 +18,7 @@ namespace GladNet
 		public SessionDetails Details { get; }
 
 		/// <inheritdoc />
-		public IConnectionService ConnectionService { get; }
+		public INetworkConnectionService ConnectionService { get; }
 
 		/// <inheritdoc />
 		public IMessageSendService<TPayloadWriteType> MessageService { get; }
@@ -26,7 +26,7 @@ namespace GladNet
 		/// <inheritdoc />
 		public SessionMessageContext(SessionDetails details, 
 			IMessageSendService<TPayloadWriteType> messageService, 
-			IConnectionService connectionService)
+			INetworkConnectionService connectionService)
 		{
 			MessageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
 			ConnectionService = connectionService ?? throw new ArgumentNullException(nameof(connectionService));

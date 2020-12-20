@@ -14,7 +14,7 @@ namespace GladNet
 		/// <summary>
 		/// Service that can be used for disconnecting the session.
 		/// </summary>
-		IConnectionService ConnectionService { get; }
+		INetworkConnectionService ConnectionService { get; }
 
 		/// <summary>
 		/// The details of the session.

@@ -10,7 +10,7 @@ namespace GladNet
 	/// <summary>
 	/// Contract for a disconnectable type.
 	/// </summary>
-	public interface IDisconnectable
+	public interface INetworkDisconnectable
 	{
 		/// <summary>
 		/// Disconnects asyncronously to send or recieve remaining data.

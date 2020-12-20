@@ -24,7 +24,7 @@ namespace GladNet
 		private List<IDisposable> InternalDisposables { get; } = new List<IDisposable>();
 
 		/// <inheritdoc />
-		public IConnectionService ConnectionService { get; }
+		public INetworkConnectionService ConnectionService { get; }
 
 		/// <inheritdoc />
 		public SessionDetails Details { get; }
@@ -34,7 +34,7 @@ namespace GladNet
 		/// </summary>
 		protected NetworkConnectionOptions NetworkOptions { get; }
 
-		internal ManagedSession(IConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions)
+		internal ManagedSession(INetworkConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions)
 		{
 			ConnectionService = connectionService ?? throw new ArgumentNullException(nameof(connectionService));
 			Details = details ?? throw new ArgumentNullException(nameof(details));

@@ -8,9 +8,9 @@ using Pipelines.Sockets.Unofficial;
 namespace GladNet
 {
 	/// <summary>
-	/// Implementation of <see cref="IConnectionService"/> based around <see cref="SocketConnection"/>
+	/// Implementation of <see cref="INetworkConnectionService"/> based around <see cref="SocketConnection"/>
 	/// </summary>
-	public sealed class SocketConnectionConnectionServiceAdapter : IConnectionService
+	public sealed class SocketConnectionConnectionServiceAdapter : INetworkConnectionService
 	{
 		private SocketConnection Connection { get; }
 

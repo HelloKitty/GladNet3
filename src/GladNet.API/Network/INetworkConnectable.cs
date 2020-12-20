@@ -10,7 +10,7 @@ namespace GladNet
 	/// <summary>
 	/// Contract for a network connectable type.
 	/// </summary>
-	public interface IConnectable
+	public interface INetworkConnectable
 	{
 		/// <summary>
 		/// Connects to the provided <see cref="ip"/> with on the given <see cref="port"/>.

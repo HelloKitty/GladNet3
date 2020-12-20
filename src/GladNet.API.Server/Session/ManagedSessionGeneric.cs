@@ -29,7 +29,7 @@ namespace GladNet
 		/// </summary>
 		protected SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> MessageBuilders { get; }
 
-		protected ManagedSession(IConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions,
+		protected ManagedSession(INetworkConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions,
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> networkMessageProducer, 
 			SessionMessageBuildingServiceContext<TPayloadWriteType, TPayloadReadType> messageBuilders) 
 			: base(connectionService, details, networkOptions)

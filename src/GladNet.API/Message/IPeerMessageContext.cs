@@ -22,7 +22,7 @@ namespace GladNet
 		/// The connection service that provides ways to disconnect and connect
 		/// the client associated with this message connect.
 		/// </summary>
-		IConnectionService ConnectionService { get; }
+		INetworkConnectionService ConnectionService { get; }
 
 		/// <summary>
 		/// The sending service that allows clients to send messages.
