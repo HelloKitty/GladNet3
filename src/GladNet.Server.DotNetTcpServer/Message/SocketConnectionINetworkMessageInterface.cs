@@ -49,7 +49,19 @@ namespace GladNet
 		{
 			while (!token.IsCancellationRequested)
 			{
-				ReadResult result = await ConnectionReadAsync(token);
+				ReadResult result;
+
+				//The reason we wrap this in a try/catch is because the Pipelines may abort ungracefully
+				//inbetween our state checks. Therefore only calling ReadAsyc can truly indicate the state of a connection
+				//and if it has been aborted then we should pretend as if we read nothing.
+				try
+				{
+					result = await Connection.Input.ReadAsync(token);
+				}
+				catch(ConnectionAbortedException abortException)
+				{
+					return null;
+				}
 
 				if (!IsReadResultValid(in result))
 					return null;
@@ -80,8 +92,18 @@ namespace GladNet
 
 				while(!token.IsCancellationRequested)
 				{
-					//Now with the header we know how much data we must now read for the payload.
-					result = await ConnectionReadAsync(token);
+					//The reason we wrap this in a try/catch is because the Pipelines may abort ungracefully
+					//inbetween our state checks. Therefore only calling ReadAsyc can truly indicate the state of a connection
+					//and if it has been aborted then we should pretend as if we read nothing.
+					try
+					{
+						//Now with the header we know how much data we must now read for the payload.
+						result = await Connection.Input.ReadAsync(token);
+					}
+					catch(ConnectionAbortedException abortException)
+					{
+						return null;
+					}
 
 					//This call will also use the cancel token so we don't need to check it in the nested-loop.
 					if (!IsReadResultValid(in result))
@@ -121,22 +143,6 @@ namespace GladNet
 			}
 
 			return null;
-		}
-
-		private async Task<ReadResult> ConnectionReadAsync(CancellationToken token)
-		{
-			//The reason we wrap this in a try/catch is because the Pipelines may abort ungracefully
-			//inbetween our state checks. Therefore only calling ReadAsyc can truly indicate the state of a connection
-			//and if it has been aborted then we should pretend as if we read nothing.
-			try
-			{
-				return await Connection.Input.ReadAsync(token);
-			}
-			catch (ConnectionAbortedException abortException)
-			{
-				//TODO: Add logging!
-				return new ReadResult(ReadOnlySequence<byte>.Empty, false, true);
-			}
 		}
 
 		private TPayloadReadType ReadIncomingPacketPayload(in ReadResult result, int payloadSize)
