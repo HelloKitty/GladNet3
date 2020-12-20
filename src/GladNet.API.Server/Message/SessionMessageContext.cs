@@ -9,32 +9,28 @@ namespace GladNet
 	/// The context for a network message.
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
-	/// <typeparam name="TPayloadReadType"></typeparam>
-	public sealed class SessionMessageContext<TPayloadWriteType, TPayloadReadType> 
+	public sealed class SessionMessageContext<TPayloadWriteType> : IPeerSessionMessageContext<TPayloadWriteType>
 		where TPayloadWriteType : class 
-		where TPayloadReadType : class
 	{
 		/// <summary>
 		/// The session associated with the message.
 		/// </summary>
-		public ManagedSession Session { get; }
-
-		/// <summary>
-		/// The network message.
-		/// </summary>
-		public NetworkIncomingMessage<TPayloadReadType> Message { get; }
-
-		/// <summary>
-		/// The network message send service.
-		/// </summary>
-		public IMessageSendService<TPayloadWriteType> SendService { get; }
+		public SessionDetails Details { get; }
 
 		/// <inheritdoc />
-		public SessionMessageContext(ManagedSession session, NetworkIncomingMessage<TPayloadReadType> message, IMessageSendService<TPayloadWriteType> sendService)
+		public IConnectionService ConnectionService { get; }
+
+		/// <inheritdoc />
+		public IMessageSendService<TPayloadWriteType> MessageService { get; }
+
+		/// <inheritdoc />
+		public SessionMessageContext(SessionDetails details, 
+			IMessageSendService<TPayloadWriteType> messageService, 
+			IConnectionService connectionService)
 		{
-			Session = session ?? throw new ArgumentNullException(nameof(session));
-			Message = message ?? throw new ArgumentNullException(nameof(message));
-			SendService = sendService ?? throw new ArgumentNullException(nameof(sendService));
+			MessageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
+			ConnectionService = connectionService ?? throw new ArgumentNullException(nameof(connectionService));
+			Details = details ?? throw new ArgumentNullException(nameof(details));
 		}
 	}
 }

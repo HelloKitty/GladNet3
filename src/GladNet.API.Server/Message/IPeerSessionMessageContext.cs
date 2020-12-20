@@ -7,9 +7,9 @@ namespace GladNet
 	/// <summary>
 	/// Contract for session/server peer connections message contexts.
 	/// </summary>
-	/// <typeparam name="TPayloadType">Outgoing payload type.</typeparam>
-	public interface IPeerSessionMessageContext<in TPayloadType> : IPeerMessageContext<TPayloadType> 
-		where TPayloadType : class
+	/// <typeparam name="TPayloadWriteType">Outgoing payload type.</typeparam>
+	public interface IPeerSessionMessageContext<in TPayloadWriteType> : IPeerMessageContext<TPayloadWriteType> 
+		where TPayloadWriteType : class
 	{
 		/// <summary>
 		/// The deatils of the session.

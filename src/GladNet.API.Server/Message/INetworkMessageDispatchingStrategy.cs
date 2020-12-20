@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GladNet
@@ -23,7 +24,9 @@ namespace GladNet
 		/// messages even while other session's messages are being handled.
 		/// </summary>
 		/// <param name="context">The context for the incoming message.</param>
+		/// <param name="message">The incoming message.</param>
+		/// <param name="token">The cancel token for the operation.</param>
 		/// <returns>A task that completes when the session should begin reading more messages.</returns>
-		Task DispatchNetworkMessage(SessionMessageContext<TPayloadWriteType, TPayloadReadType> context);
+		Task DispatchNetworkMessageAsync(SessionMessageContext<TPayloadWriteType> context, NetworkIncomingMessage<TPayloadReadType> message, CancellationToken token = default);
 	}
 }

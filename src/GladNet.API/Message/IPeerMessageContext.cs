@@ -10,8 +10,8 @@ namespace GladNet
 	/// <summary>
 	/// Contract for the context of a common GladNet message.
 	/// </summary>
-	public interface IPeerMessageContext<in TPayloadBaseType>
-		where TPayloadBaseType : class
+	public interface IPeerMessageContext<in TPayloadWriteType>
+		where TPayloadWriteType : class
 	{
 		//Below you'll see a bunch of interfaces that the client
 		//actually implements. However we don't have to generic to hell
@@ -27,6 +27,6 @@ namespace GladNet
 		/// <summary>
 		/// The sending service that allows clients to send messages.
 		/// </summary>
-		IMessageSendService<TPayloadBaseType> MessageService { get; }
+		IMessageSendService<TPayloadWriteType> MessageService { get; }
 	}
 }
