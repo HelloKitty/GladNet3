@@ -7,9 +7,9 @@ using Pipelines.Sockets.Unofficial;
 
 namespace GladNet
 {
-	public sealed class TestStringManagedSession : BaseTcpManagedSession<string, string>
+	public sealed class TCPEchoManagedSession : BaseTcpManagedSession<string, string>
 	{
-		public TestStringManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details, SessionMessageBuildingServiceContext<string, string> messageServices) 
+		public TCPEchoManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details, SessionMessageBuildingServiceContext<string, string> messageServices) 
 			: base(networkOptions, connection, details, messageServices)
 		{
 
