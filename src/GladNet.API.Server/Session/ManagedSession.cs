@@ -29,10 +29,16 @@ namespace GladNet
 		/// <inheritdoc />
 		public SessionDetails Details { get; }
 
-		protected ManagedSession(IConnectionService connectionService, SessionDetails details)
+		/// <summary>
+		/// Represents the network configuration options for the session.
+		/// </summary>
+		protected NetworkConnectionOptions NetworkOptions { get; }
+
+		protected ManagedSession(IConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions)
 		{
 			ConnectionService = connectionService ?? throw new ArgumentNullException(nameof(connectionService));
 			Details = details ?? throw new ArgumentNullException(nameof(details));
+			NetworkOptions = networkOptions ?? throw new ArgumentNullException(nameof(networkOptions));
 		}
 
 		/// <summary>

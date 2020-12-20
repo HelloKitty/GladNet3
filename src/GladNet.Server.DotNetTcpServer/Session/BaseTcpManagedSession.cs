@@ -23,11 +23,6 @@ namespace GladNet
 		where TPayloadReadType : class
 	{
 		/// <summary>
-		/// Represents the network configuration options for the session.
-		/// </summary>
-		protected NetworkConnectionOptions NetworkOptions { get; }
-
-		/// <summary>
 		/// The socket connection.
 		/// </summary>
 		protected SocketConnection Connection { get; }
@@ -44,9 +39,8 @@ namespace GladNet
 
 		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
 			SessionMessageServiceContext<TPayloadWriteType, TPayloadReadType> messageServices) 
-			: base(new SocketConnectionConnectionServiceAdapter(connection), details)
+			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions)
 		{
-			NetworkOptions = networkOptions ?? throw new ArgumentNullException(nameof(networkOptions));
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 			MessageServices = messageServices ?? throw new ArgumentNullException(nameof(messageServices));
 		}
@@ -125,6 +119,7 @@ namespace GladNet
 						Connection.Input.AdvanceTo(result.Buffer.GetPosition(header.PayloadSize));
 					}
 					
+					//A throw will stop the session.
 					await OnNetworkMessageReceived(new NetworkIncomingMessage<TPayloadReadType>(header, message));
 				}
 			}
@@ -303,6 +298,8 @@ namespace GladNet
 			return offset;
 		}
 
+		//Warning to implementer, if you THROW from this you WILL stop the network connection completely.
+		//GladNet does not sustain exceptions in unexpected cases, choosing to shutdown the session instead.
 		/// <inheritdoc />
 		public abstract Task OnNetworkMessageReceived(NetworkIncomingMessage<TPayloadReadType> message);
 	}
