@@ -182,12 +182,12 @@ namespace GladNet
 		/// <inheritdoc />
 		public async Task<SendResult> SendMessageAsync(TPayloadWriteType payload, CancellationToken token = default(CancellationToken))
 		{
+			if(!Connection.Socket.Connected)
+				return SendResult.Disconnected;
+
 			//THIS IS CRITICAL, IT'S NOT SAFE TO SEND MULTIPLE THREADS AT ONCE!!
 			using (await PayloadWriteLock.LockAsync(token))
 			{
-				if (!Connection.Socket.Connected)
-					return SendResult.Disconnected;
-
 				try
 				{
 					WriteOutgoingMessage(payload);

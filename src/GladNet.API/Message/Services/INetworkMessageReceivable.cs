@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GladNet
@@ -13,11 +14,12 @@ namespace GladNet
 		where TPayloadType : class
 	{
 		/// <summary>
-		/// Called when a network message is recieved.
-		/// Can also be called to simulate the recieveing a network message.
+		/// Called when a network message is received.
+		/// Can also be called to simulate the receiving a network message.
 		/// </summary>
 		/// <param name="message">The network message recieved.</param>
+		/// <param name="token">Cancel token that can be used to indicate if a session is cancelled.</param>
 		/// <returns></returns>
-		Task OnNetworkMessageReceived(NetworkIncomingMessage<TPayloadType> message);
+		Task OnNetworkMessageReceived(NetworkIncomingMessage<TPayloadType> message, CancellationToken token = default(CancellationToken));
 	}
 }
