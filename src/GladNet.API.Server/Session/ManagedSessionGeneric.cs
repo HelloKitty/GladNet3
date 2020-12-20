@@ -20,7 +20,7 @@ namespace GladNet
 		/// <summary>
 		/// The service that provides an interface for communication for reading and writing payloads.
 		/// </summary>
-		private INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> NetworkMessageInterface { get; }
+		protected INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> NetworkMessageInterface { get; }
 
 		protected ManagedSession(IConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions,
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> networkMessageProducer) 

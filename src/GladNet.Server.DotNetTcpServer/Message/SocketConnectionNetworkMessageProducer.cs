@@ -5,6 +5,7 @@ using System.IO.Pipelines;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 using Pipelines.Sockets.Unofficial;
 
 namespace GladNet
@@ -14,7 +15,7 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public sealed class SocketConnectionNetworkMessageProducer<TPayloadWriteType, TPayloadReadType> : INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> 
+	public sealed class SocketConnectionNetworkMessageProducer<TPayloadWriteType, TPayloadReadType> : INetworkMessageInterface<TPayloadReadType, TPayloadWriteType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
@@ -31,7 +32,9 @@ namespace GladNet
 		/// <summary>
 		/// The details of the session.
 		/// </summary>
-		NetworkConnectionOptions NetworkOptions { get; }
+		private NetworkConnectionOptions NetworkOptions { get; }
+
+		private AsyncLock PayloadWriteLock { get; } = new AsyncLock();
 
 		public SocketConnectionNetworkMessageProducer(NetworkConnectionOptions networkOptions, 
 			SocketConnection connection, 
@@ -172,6 +175,86 @@ namespace GladNet
 				Connection.Input.AdvanceTo(result.Buffer.End);
 				return false;
 			}
+
+			return true;
+		}
+
+		/// <inheritdoc />
+		public async Task<SendResult> SendMessageAsync(TPayloadWriteType payload, CancellationToken token = default(CancellationToken))
+		{
+			//THIS IS CRITICAL, IT'S NOT SAFE TO SEND MULTIPLE THREADS AT ONCE!!
+			using (await PayloadWriteLock.LockAsync(token))
+			{
+				if (!Connection.Socket.Connected)
+					return SendResult.Disconnected;
+
+				try
+				{
+					WriteOutgoingMessage(payload);
+
+					//To understand the purpose of Flush when pipelines is using sockets see Marc's comments here: https://stackoverflow.com/questions/56481746/does-pipelines-sockets-unofficial-socketconnection-ever-flush-without-a-request
+					//Basically, "it makes sure that a consumer is awakened (if it isn't already)" and "if there is back-pressure, it delays the producer until the consumer has cleared some of the back-pressure"
+					FlushResult result = await Connection.Output.FlushAsync(token);
+
+					if(!IsFlushResultValid(in result))
+						return SendResult.Error;
+				}
+				catch (Exception e)
+				{
+					//TODO: Logging!
+					return SendResult.Error;
+				}
+
+				return SendResult.Sent;
+			}
+		}
+
+		private void WriteOutgoingMessage(TPayloadWriteType payload)
+		{
+			if(payload == null) throw new ArgumentNullException(nameof(payload));
+
+			//TODO: We should find a way to predict the size of a payload type.
+			Span<byte> buffer = Connection.Output.GetSpan(NetworkOptions.MaximumPacketSize);
+
+			//It seems backwards, but we don't know what header to build until the payload is serialized.
+			int payloadSize = SerializeOutgoingPacketPayload(buffer.Slice(NetworkOptions.MinimumPacketHeaderSize), payload);
+			int headerSize = SerializeOutgoingHeader(payload, payloadSize, buffer.Slice(0, NetworkOptions.MaximumPacketHeaderSize));
+
+			//TODO: We must eventually support VARIABLE LENGTH packet headers. This is complicated, WoW does this for large packets sent by the server.
+			if(headerSize != NetworkOptions.MinimumPacketHeaderSize)
+				throw new NotSupportedException($"TODO: Variable length packet header sizes are not yet supported.");
+
+			Connection.Output.Advance(payloadSize + headerSize);
+		}
+
+		private int SerializeOutgoingHeader(TPayloadWriteType payload, int payloadSize, in Span<byte> buffer)
+		{
+			int headerOffset = 0;
+			MessageServices.HeaderSerializer.Serialize(new PacketHeaderSerializationContext<TPayloadWriteType>(payload, payloadSize), buffer, ref headerOffset);
+			return headerOffset;
+		}
+
+		/// <summary>
+		/// Writes the outgoing packet payload.
+		/// Returns the number of bytes the payload was sent as.
+		/// </summary>
+		/// <param name="buffer">The buffer to write the packet payload to.</param>
+		/// <param name="payload">The payload instance.</param>
+		/// <returns>The number of bytes the payload was sent as.</returns>
+		private int SerializeOutgoingPacketPayload(in Span<byte> buffer, TPayloadWriteType payload)
+		{
+			//Serializes the payload data to the span buffer and moves the pipe forward by the ref output offset
+			//meaning we indicate to the pipeline that we've written bytes
+			int offset = 0;
+			MessageServices.MessageSerializer.Serialize(payload, buffer, ref offset);
+			return offset;
+		}
+
+		private bool IsFlushResultValid(in FlushResult result)
+		{
+			//TODO: Does this mean it's DONE??
+			if(result.IsCanceled || result.IsCompleted)
+				return false;
 
 			return true;
 		}
