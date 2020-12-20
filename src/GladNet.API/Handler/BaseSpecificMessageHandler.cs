@@ -18,16 +18,13 @@ namespace GladNet
 		where TMessageType : class, TBaseMessageType 
 		where TBaseMessageType : class
 	{
-		static BaseSpecificMessageHandler()
-		{
-			if (typeof(TMessageType) == typeof(TBaseMessageType))
-				throw new InvalidOperationException($"Cannot have a {nameof(BaseSpecificMessageHandler<TMessageType, TBaseMessageType, TMessageContext>)} with identical {nameof(TMessageType)} and {nameof(TBaseMessageType)}.");
-		}
-
 		//This is explicitly implemented because if someone has a reference to this type directly we'd rather they see the specific API.
 		/// <inheritdoc />
 		Task IMessageHandler<TBaseMessageType, TMessageContext>.HandleMessageAsync(TMessageContext context, TBaseMessageType message, CancellationToken token = default)
 		{
+			//Because this method is implemented expliclity we don't need to ASSERT that this isn't
+			//MessageType == BaseMessageType and infinite recurring. Meaning equivalent type parameters
+			//are valid and safe now. Default handler works this way!
 			return HandleMessageAsync(context, (TMessageType)message, token);
 		}
 
