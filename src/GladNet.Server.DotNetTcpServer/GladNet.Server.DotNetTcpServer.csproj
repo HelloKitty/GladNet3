@@ -25,8 +25,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Users\Glader\Documents\Github\GladNet3\src\GladNet.Server.DotNetTcpServer\GladNet.Server.DotNetTcpServer.xml</DocumentationFile>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>5</WarningLevel>
+    <DocumentationFile>C:\Users\Glader\Documents\Github\GladNet3\src\GladNet.Server.DotNetTcpServer\bin\GladNet.Server.DotNetTcpServer.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

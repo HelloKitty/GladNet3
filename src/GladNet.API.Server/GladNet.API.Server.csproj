@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Users\Glader\Documents\Github\GladNet3\src\GladNet.API.Server\GladNet.API.Server.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\Glader\Documents\Github\GladNet3\src\GladNet.API.Server\bin\GladNet.API.Server.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
