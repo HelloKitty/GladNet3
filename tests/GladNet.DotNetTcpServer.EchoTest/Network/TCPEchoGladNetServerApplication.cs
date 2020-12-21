@@ -29,7 +29,14 @@ namespace GladNet
 			SessionMessageBuildingServiceContext<string, string> messageServices = 
 				new SessionMessageBuildingServiceContext<string, string>(new StringMessagePacketHeaderFactory(), serializer, serializer, new StringPacketHeaderSerializer());
 
-			return new TCPEchoManagedSession(options, context.Connection, context.Details, messageServices);
+			//Build the message disaptching strategy, for how and where and in what way messages will be handled
+			var handlerService = new DefaultMessageHandlerService<string, SessionMessageContext<string>>();
+			var dispatcher = new InPlaceNetworkMessageDispatchingStrategy<string, string>(handlerService);
+
+			//Bind one of the default handlers
+			handlerService.Bind<string>(new DefaultStringMessageHandler());
+
+			return new TCPEchoManagedSession(options, context.Connection, context.Details, messageServices, dispatcher);
 		}
 	}
 }
