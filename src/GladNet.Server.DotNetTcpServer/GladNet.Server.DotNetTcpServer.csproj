@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -13,10 +13,20 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>GladNet Emulation Emulator WoW PSO Network Unity3D Network Networking Netlib</PackageTags>
     <PackageId>GladNet.Server.DotNetTcpServer</PackageId>
+    <Version>4.0.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
   </PropertyGroup>
 
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\Glader\Documents\Github\GladNet3\src\GladNet.Server.DotNetTcpServer\GladNet.Server.DotNetTcpServer.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
