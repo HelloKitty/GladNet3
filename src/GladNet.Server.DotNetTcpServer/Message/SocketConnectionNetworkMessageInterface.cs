@@ -15,7 +15,7 @@ namespace GladNet
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public sealed class SocketConnectionNetworkMessageInterface<TPayloadReadType, TPayloadWriteType> : INetworkMessageInterface<TPayloadReadType, TPayloadWriteType>
+	public class SocketConnectionNetworkMessageInterface<TPayloadReadType, TPayloadWriteType> : INetworkMessageInterface<TPayloadReadType, TPayloadWriteType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
 	{
@@ -27,12 +27,12 @@ namespace GladNet
 		/// <summary>
 		/// The messages service container.
 		/// </summary>
-		private SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> MessageServices { get; }
+		protected SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> MessageServices { get; }
 
 		/// <summary>
 		/// The details of the session.
 		/// </summary>
-		private NetworkConnectionOptions NetworkOptions { get; }
+		protected NetworkConnectionOptions NetworkOptions { get; }
 
 		private AsyncLock PayloadWriteLock { get; } = new AsyncLock();
 
@@ -45,6 +45,7 @@ namespace GladNet
 			NetworkOptions = networkOptions ?? throw new ArgumentNullException(nameof(networkOptions));
 		}
 
+		/// <inheritdoc />
 		public async Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token = default(CancellationToken))
 		{
 			while (!token.IsCancellationRequested)
@@ -89,7 +90,6 @@ namespace GladNet
 				IPacketHeader header = ReadIncomingPacketHeader(Connection.Input, in result);
 
 				//TODO: Add header validation.
-
 				while(!token.IsCancellationRequested)
 				{
 					//The reason we wrap this in a try/catch is because the Pipelines may abort ungracefully
@@ -112,7 +112,7 @@ namespace GladNet
 					//This is dumb and hacky, but we need to know if we shall need to read again
 					//This means we're still at the START of the buffer (haven't read anything)
 					//but have technically aware/inspected to the END position.
-					if(result.Buffer.Length < header.PayloadSize)
+					if (!IsPayloadReadable(result, header))
 						Connection.Input.AdvanceTo(result.Buffer.Start, result.Buffer.End);
 					else
 						break;
@@ -123,7 +123,7 @@ namespace GladNet
 					//TODO: Valid incoming packet lengths to avoid a stack overflow.
 					//This point we have a VALID read result that is NOT less than header.PayloadSize
 					//therefore it should be safe now to read the incoming packet.
-					TPayloadReadType payload = ReadIncomingPacketPayload(in result, header.PayloadSize);
+					TPayloadReadType payload = ReadIncomingPacketPayload(in result, header);
 
 					return new NetworkIncomingMessage<TPayloadReadType>(header, payload);
 				}
@@ -145,17 +145,38 @@ namespace GladNet
 			return null;
 		}
 
-		private TPayloadReadType ReadIncomingPacketPayload(in ReadResult result, int payloadSize)
+		/// <summary>
+		/// Indicates if a payload is readable from the <see cref="ReadResult"/> result.
+		/// Default is to indicate it's readable if there is enough bytes available to read the payload.
+		/// Some protocols required BLOCK/CHUNKs so this is virtual and implementers can specify how much is required.
+		/// </summary>
+		/// <param name="result"></param>
+		/// <param name="header"></param>
+		/// <returns></returns>
+		protected virtual bool IsPayloadReadable(ReadResult result, IPacketHeader header)
+		{
+			return result.Buffer.Length >= header.PayloadSize;
+		}
+
+		/// <summary>
+		/// Reads an incoming packet payload the <see cref="ReadResult"/> result.
+		/// Default just reads it from the buffer but special handling for some users may be required.
+		/// Therefore it is virtual, and the reading buffer logic can be overriden.
+		/// </summary>
+		/// <param name="result">The incoming read buffer.</param>
+		/// <param name="header">The header that matches the payload type.</param>
+		/// <returns></returns>
+		protected virtual TPayloadReadType ReadIncomingPacketPayload(in ReadResult result, IPacketHeader header)
 		{
 			//I opted to do this instead of stack alloc because of HUGE dangers in stack alloc and this is pretty efficient
 			//buffer usage anyway.
-			byte[] rentedBuffer = ArrayPool<byte>.Shared.Rent(payloadSize);
-			Span<byte> buffer = new Span<byte>(rentedBuffer, 0, payloadSize);
+			byte[] rentedBuffer = ArrayPool<byte>.Shared.Rent(header.PayloadSize);
+			Span<byte> buffer = new Span<byte>(rentedBuffer, 0, header.PayloadSize);
 
 			try
 			{
 				//This copy is BAD but it really avoids a lot of API headaches
-				result.Buffer.Slice(0, payloadSize).CopyTo(buffer);
+				result.Buffer.Slice(0, header.PayloadSize).CopyTo(buffer);
 
 				int offset = 0;
 				return MessageServices.MessageDeserializer.Deserialize(buffer, ref offset);
@@ -173,18 +194,28 @@ namespace GladNet
 			{
 				//The implementation MUST be that this can be trusted to be the EXACT size of binary data that will be read.
 				exactHeaderByteCount = MessageServices.PacketHeaderFactory.ComputeHeaderSize(result.Buffer);
-
-				IPacketHeader header;
-				using(var context = new PacketHeaderCreationContext(result.Buffer, exactHeaderByteCount))
-					header = MessageServices.PacketHeaderFactory.Create(context);
-
-				return header;
+				return DeserializePacketHeader(result.Buffer, exactHeaderByteCount);
 			}
 			finally
 			{
 				//Advance to only the exact header bytes read, consumed and examined. Do not use buffer lengths ever!
 				reader.AdvanceTo(result.Buffer.GetPosition(exactHeaderByteCount));
 			}
+		}
+
+		/// <summary>
+		/// Method should deserialize a <see cref="IPacketHeader"/> object based on the input buffer.
+		/// </summary>
+		/// <param name="buffer">The data buffer containing the header.</param>
+		/// <param name="exactHeaderByteCount"></param>
+		/// <returns></returns>
+		protected virtual IPacketHeader DeserializePacketHeader(ReadOnlySequence<byte> buffer, int exactHeaderByteCount)
+		{
+			IPacketHeader header;
+			using (var context = new PacketHeaderCreationContext(buffer, exactHeaderByteCount))
+				header = MessageServices.PacketHeaderFactory.Create(context);
+
+			return header;
 		}
 
 		private bool IsReadResultValid(in ReadResult result)
