@@ -202,8 +202,7 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task<SendResult> SendMessageAsync<TMessageType>(TMessageType message, CancellationToken token = default)
-			where TMessageType : class, TPayloadWriteType
+		public async Task<SendResult> SendMessageAsync(TPayloadWriteType message, CancellationToken token = default)
 		{
 			if(!Connection.Socket.Connected)
 				return SendResult.Disconnected;

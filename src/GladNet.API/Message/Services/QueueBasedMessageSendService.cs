@@ -27,8 +27,7 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task<SendResult> SendMessageAsync<TMessageType>(TMessageType message, CancellationToken token = default) 
-			where TMessageType : class, TMessageBaseType
+		public async Task<SendResult> SendMessageAsync(TMessageBaseType message, CancellationToken token = default)
 		{
 			bool enqueued = await MessageQueue.EnqueueAsync(message, token);
 

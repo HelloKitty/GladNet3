@@ -24,7 +24,6 @@ namespace GladNet
 		/// <param name="message">The message to send.</param>
 		/// <param name="token">The cancel token for the send operation.</param>
 		/// <returns>Returns an awaitable when the send operation is completed.</returns>
-		Task<SendResult> SendMessageAsync<TMessageType>(TMessageType message, CancellationToken token = default)
-			where TMessageType : class, TMessageBaseType;
+		Task<SendResult> SendMessageAsync(TMessageBaseType message, CancellationToken token = default);
 	}
 }
