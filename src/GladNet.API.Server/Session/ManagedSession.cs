@@ -10,7 +10,7 @@ namespace GladNet
 	/// <summary>
 	/// Base type for managed sessions.
 	/// </summary>
-	public abstract class ManagedSession : IManagedSession, IDisposable
+	public abstract class ManagedSession : IManagedSession, IDisposable, IDisposableAttachable
 	{
 		/// <summary>
 		/// Internal lock object.
@@ -53,6 +53,7 @@ namespace GladNet
 		/// <returns>Awaitable that completes when writing is finished.</returns>
 		public abstract Task StartWritingAsync(CancellationToken token = default);
 
+		/// <inheritdoc />
 		public void Dispose()
 		{
 			lock(SyncObj)
@@ -65,7 +66,7 @@ namespace GladNet
 		/// This will be disposed of alongside when <see cref="ManagedSession"/>'s <see cref="Dispose"/> is called.
 		/// </summary>
 		/// <param name="disposable"></param>
-		public void AttachDisposableResource(IDisposable disposable)
+		public void AttachDisposable(IDisposable disposable)
 		{
 			if (disposable == null) throw new ArgumentNullException(nameof(disposable));
 

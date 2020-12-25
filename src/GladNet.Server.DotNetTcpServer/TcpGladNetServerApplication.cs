@@ -182,8 +182,8 @@ namespace GladNet
 
 				clientSession = Create(new SessionCreationContext(connection, new SessionDetails(new NetworkAddressInfo(clientAddress.Address, ServerAddress.Port), connectionId)));
 
-				clientSession.AttachDisposableResource(connection);
-				clientSession.AttachDisposableResource(socket);
+				clientSession.AttachDisposable(connection);
+				clientSession.AttachDisposable(socket);
 
 				StartNetworkSessionTasks(token, clientSession);
 
