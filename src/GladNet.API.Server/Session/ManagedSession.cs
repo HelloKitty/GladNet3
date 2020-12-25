@@ -10,7 +10,7 @@ namespace GladNet
 	/// <summary>
 	/// Base type for managed sessions.
 	/// </summary>
-	public abstract class ManagedSession : IManagedSession, IDisposable, IDisposableAttachable
+	public abstract class ManagedSession : IManagedSession, ISingleDisposable, IDisposableAttachable
 	{
 		/// <summary>
 		/// Internal lock object.
@@ -34,6 +34,9 @@ namespace GladNet
 		/// </summary>
 		protected NetworkConnectionOptions NetworkOptions { get; }
 
+		/// <inheritdoc />
+		public bool isDisposed { get; private set; }
+
 		internal ManagedSession(INetworkConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions)
 		{
 			ConnectionService = connectionService ?? throw new ArgumentNullException(nameof(connectionService));
@@ -53,12 +56,43 @@ namespace GladNet
 		/// <returns>Awaitable that completes when writing is finished.</returns>
 		public abstract Task StartWritingAsync(CancellationToken token = default);
 
+		//See: https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
 		/// <inheritdoc />
 		public void Dispose()
 		{
-			lock(SyncObj)
-				foreach (var disposable in InternalDisposables)
-					disposable.Dispose();
+			lock (SyncObj)
+			{
+				if (isDisposed)
+					return;
+
+				try
+				{
+					foreach (var disposable in InternalDisposables)
+						disposable.Dispose();
+				}
+				finally
+				{
+					isDisposed = true;
+
+					// Suppress finalization.
+					GC.SuppressFinalize(this);
+
+					// Dispose of unmanaged resources.
+					Dispose(true);
+				}
+			}
+		}
+
+		//See: https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
+		/// <summary>
+		/// Implements can additionally dispose of resources.
+		/// This is called via <see cref="Dispose"/> or the runtime finalizer.
+		/// Implementers should always call the base.
+		/// </summary>
+		/// <param name="disposing">indicates whether the method call comes from a Dispose method (its value is true) or from a finalizer (its value is false).</param>
+		protected virtual void Dispose(bool disposing)
+		{
+
 		}
 
 		/// <summary>
