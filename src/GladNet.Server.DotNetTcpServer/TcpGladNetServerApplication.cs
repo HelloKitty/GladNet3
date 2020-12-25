@@ -157,15 +157,26 @@ namespace GladNet
 					if (Logger.IsErrorEnabled)
 						Logger.Error($"Socket failed to create session. Reason: {e}");
 
-					if (socket.Connected)
-						socket.Shutdown(SocketShutdown.Both);
-
-					socket.Dispose();
-					continue;
+					//We wrap this in a trp because socket maybe fails to shutdown, but we MUST dispose.
+					try
+					{
+						if(socket.Connected)
+							socket.Shutdown(SocketShutdown.Both);
+					}
+					finally
+					{
+						socket.Dispose();
+					}
 				}
 			}
 		}
 
+		/// <summary>
+		/// Preforms the socket and session managed and creation logic for creating a new managed network session.
+		/// </summary>
+		/// <param name="socket">Socket to make a session for.</param>
+		/// <param name="token">Cancel token.</param>
+		/// <returns>Awaitable that indicates when the session has connected.</returns>
 		private async Task AcceptNewSessionsAsync(Socket socket, CancellationToken token)
 		{
 			SocketConnection connection = default;
