@@ -22,6 +22,7 @@ namespace GladNet
 		public static Task<SendResult> SendMessageAsync<TMessageType>(this IMessageSendService<TMessageType> service, CancellationToken token = default) 
 			where TMessageType : class, new()
 		{
+			//TODO: We could do some polling with TMessageType at some point probably.
 			return service.SendMessageAsync(new TMessageType(), token);
 		}
 	}

@@ -13,7 +13,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>GladNet Emulation Emulator WoW PSO Network Unity3D Network Networking Netlib GladNet4</PackageTags>
     <LangVersion>8.0</LangVersion>
-    <Version>4.0.3</Version>
+    <PackageId>GladNet.API</PackageId>
+    <Version>4.0.4</Version>
   </PropertyGroup>
 
   <PropertyGroup>
