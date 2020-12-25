@@ -35,9 +35,24 @@ namespace GladNet
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		}
 
+		//This overload lets implementer specify a messageInterface.
+		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
+			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices,
+			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface)
+			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices,
+				BuildMessageInterfaceContext(networkOptions, connection, messageServices, messageInterface))
+		{
+			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
+		}
+
 		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
 		{
-			var messageInterface = new SocketConnectionNetworkMessageInterface<TPayloadReadType, TPayloadWriteType>(networkOptions, connection, messageServices);
+			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface = new SocketConnectionNetworkMessageInterface<TPayloadReadType, TPayloadWriteType>(networkOptions, connection, messageServices);
+			return BuildMessageInterfaceContext(networkOptions, connection, messageServices, messageInterface);
+		}
+
+		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices, INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface)
+		{
 			return new SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType>(new AsyncExProducerConsumerQueueAsyncMessageQueue<TPayloadWriteType>(), messageInterface);
 		}
 

@@ -44,7 +44,7 @@ namespace GladNet
 		/// <summary>
 		/// Indicates if the provided <see cref="Socket"/> is acceptable.
 		/// Return true if the client should be handled. This will likely lead to
-		/// a call to <see cref="Create"/>. Returning false
+		/// a call to <see cref="Create()"/>. Returning false
 		/// will mean this connection should be disconnected and rejected and no
 		/// client representation will be created for it.
 		/// </summary>
