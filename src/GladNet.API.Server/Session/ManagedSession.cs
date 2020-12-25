@@ -86,7 +86,7 @@ namespace GladNet
 		//See: https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
 		/// <summary>
 		/// Implements can additionally dispose of resources.
-		/// This is called via <see cref="Dispose"/> or the runtime finalizer.
+		/// This is called via <see cref="Dispose()"/> or the runtime finalizer.
 		/// Implementers should always call the base.
 		/// </summary>
 		/// <param name="disposing">indicates whether the method call comes from a Dispose method (its value is true) or from a finalizer (its value is false).</param>
@@ -97,15 +97,20 @@ namespace GladNet
 
 		/// <summary>
 		/// Attaches a disposable <see cref="IDisposable"/> dependency/resource to the <see cref="ManagedSession"/>.
-		/// This will be disposed of alongside when <see cref="ManagedSession"/>'s <see cref="Dispose"/> is called.
+		/// This will be disposed of alongside when <see cref="ManagedSession"/>'s <see cref="Dispose()"/> is called.
 		/// </summary>
 		/// <param name="disposable"></param>
 		public void AttachDisposable(IDisposable disposable)
 		{
 			if (disposable == null) throw new ArgumentNullException(nameof(disposable));
 
-			lock(SyncObj)
+			lock (SyncObj)
+			{
+				if (isDisposed)
+					throw new ObjectDisposedException($"Cannot attach {disposable.GetType().Name} as an attached disposable if the session is already disposed.");
+
 				InternalDisposables.Add(disposable);
+			}
 		}
 
 		//TODO: Create a validation API, an OOP based one.
