@@ -11,9 +11,9 @@
     <PackageProjectUrl>https://github.com/HelloKitty/GladNet3</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HelloKitty/GladNet3</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>GladNet Emulation Emulator WoW PSO Network Unity3D Network Networking Netlib</PackageTags>
+    <PackageTags>GladNet Emulation Emulator WoW PSO Network Unity3D Network Networking Netlib GladNet4</PackageTags>
     <PackageId>GladNet.Server.DotNetTcpServer</PackageId>
-    <Version>4.0.0</Version>
+    <Version>4.0.2</Version>
   </PropertyGroup>
 
   <PropertyGroup>
