@@ -37,4 +37,10 @@
     <ProjectReference Include="..\GladNet.API\GladNet.API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>GladNet.Server.DotNetTcpServer</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
 </Project>

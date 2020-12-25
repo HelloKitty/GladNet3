@@ -150,7 +150,10 @@ namespace GladNet
 
 				try
 				{
-					await AcceptNewSessionsAsync(socket, token);
+					TManagedSessionType session = await AcceptNewSessionsAsync(socket, token);
+
+					//Once everything is setup for the session we should let the session know it's initialized.
+					session.OnSessionInitialized();
 				}
 				catch (Exception e)
 				{
@@ -177,7 +180,7 @@ namespace GladNet
 		/// <param name="socket">Socket to make a session for.</param>
 		/// <param name="token">Cancel token.</param>
 		/// <returns>Awaitable that indicates when the session has connected.</returns>
-		private async Task AcceptNewSessionsAsync(Socket socket, CancellationToken token)
+		private async Task<TManagedSessionType> AcceptNewSessionsAsync(Socket socket, CancellationToken token)
 		{
 			SocketConnection connection = default;
 			TManagedSessionType clientSession = default;
@@ -200,6 +203,8 @@ namespace GladNet
 
 				if(!Sessions.TryAdd(connectionId, clientSession))
 					throw new InvalidOperationException($"Failed to add Session: {clientSession} to {Sessions} container with Id: {connectionId}");
+
+				return clientSession;
 			}
 			catch (Exception e)
 			{

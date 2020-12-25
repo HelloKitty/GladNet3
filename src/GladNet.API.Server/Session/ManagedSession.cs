@@ -112,5 +112,16 @@ namespace GladNet
 				InternalDisposables.Add(disposable);
 			}
 		}
+
+		/// <summary>
+		/// Called internally by GladNet when the session is considered
+		/// initialized. It's safer to do things here than in the constructor.
+		/// (Ex. Sending a network message to the client).
+		/// WARNING: If this method throws then the session may be closed.
+		/// </summary>
+		protected internal virtual void OnSessionInitialized()
+		{
+
+		}
 	}
 }
