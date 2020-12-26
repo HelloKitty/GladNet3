@@ -295,7 +295,22 @@ namespace GladNet
 			if(headerSize != NetworkOptions.MinimumPacketHeaderSize)
 				throw new NotSupportedException($"TODO: Variable length packet header sizes are not yet supported.");
 
-			Connection.Output.Advance(payloadSize + headerSize);
+			int length = OnBeforePacketBufferSend(buffer, payloadSize + headerSize);
+
+			Connection.Output.Advance(length);
+		}
+
+		/// <summary>
+		/// Allows implementers to override length handling for an outgoing buffer.
+		/// Additionally allows them to mutate the contents of the buffer right before it is sent.
+		/// Especially helpful for dealing with block-based networking.
+		/// </summary>
+		/// <param name="buffer">The outgoing buffer.</param>
+		/// <param name="length">The true outgoing length.</param>
+		/// <returns>The length of the buffer to write.</returns>
+		protected virtual int OnBeforePacketBufferSend(in Span<byte> buffer, int length)
+		{
+			return length;
 		}
 
 		private int SerializeOutgoingHeader(TPayloadWriteType payload, int payloadSize, in Span<byte> buffer)
