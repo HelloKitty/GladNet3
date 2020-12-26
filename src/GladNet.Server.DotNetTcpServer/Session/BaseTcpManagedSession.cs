@@ -40,7 +40,16 @@ namespace GladNet
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices,
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface)
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices,
-				BuildMessageInterfaceContext(networkOptions, connection, messageServices, messageInterface))
+				BuildMessageInterfaceContext(messageInterface))
+		{
+			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
+		}
+
+		//This overload lets implementer specify a message interface context.
+		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
+			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices,
+			SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> messageInterfaces)
+			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices, messageInterfaces)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		}
@@ -48,10 +57,10 @@ namespace GladNet
 		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
 		{
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface = new SocketConnectionNetworkMessageInterface<TPayloadReadType, TPayloadWriteType>(networkOptions, connection, messageServices);
-			return BuildMessageInterfaceContext(networkOptions, connection, messageServices, messageInterface);
+			return BuildMessageInterfaceContext(messageInterface);
 		}
 
-		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices, INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface)
+		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface)
 		{
 			return new SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType>(new AsyncExProducerConsumerQueueAsyncMessageQueue<TPayloadWriteType>(), messageInterface);
 		}
