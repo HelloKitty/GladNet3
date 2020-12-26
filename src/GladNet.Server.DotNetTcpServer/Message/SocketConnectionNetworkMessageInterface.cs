@@ -2,6 +2,8 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO.Pipelines;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -138,11 +140,27 @@ namespace GladNet
 					//that as the basis for the bytes read. Serialization can be WRONG and conflict with
 					//the packet header's defined size. Therefore, we should trust packet header over serialization
 					//logic ALWAYS and this advance should be in a finally block for sure.
-					Connection.Input.AdvanceTo(result.Buffer.GetPosition(header.PayloadSize));
+					Connection.Input.AdvanceTo(result.Buffer.GetPosition(ComputeIncomingPayloadBytesRead(header)));
 				}
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Computes how many bytes will have been read for the payload given the <see cref="IPacketHeader"/>.
+		/// Simple implementation is Payload Size. However some implementations use blocks so some additional discarded
+		/// block buffer data may be required.
+		/// Implementers can override this can adjust the calculation.
+		/// </summary>
+		/// <param name="header">The packet header instance.</param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected virtual int ComputeIncomingPayloadBytesRead(IPacketHeader header)
+		{
+			if (header == null) throw new ArgumentNullException(nameof(header));
+
+			return header.PayloadSize;
 		}
 
 		/// <summary>
