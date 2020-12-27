@@ -91,6 +91,18 @@ namespace GladNet
 
 				IPacketHeader header = ReadIncomingPacketHeader(Connection.Input, in result);
 
+				//TODO: This is the best way to check for 0 length payload?? Seems hacky.
+				//There is a special case when a packet is equal to the head size
+				//meaning for example in the case of a 4 byte header then the packet is 4 bytes.
+				//in this case we SHOULD not read anything. All the data exists already for the packet.
+				if (header.PacketSize <= (header.PayloadSize + NetworkOptions.MinimumPacketHeaderSize))
+				{
+					//The header is the entire packet, so empty buffer!
+					TPayloadReadType payload = ReadIncomingPacketPayload(ReadOnlySequence<byte>.Empty, header);
+
+					return new NetworkIncomingMessage<TPayloadReadType>(header, payload);
+				}
+
 				//TODO: Add header validation.
 				while(!token.IsCancellationRequested)
 				{
@@ -125,7 +137,7 @@ namespace GladNet
 					//TODO: Valid incoming packet lengths to avoid a stack overflow.
 					//This point we have a VALID read result that is NOT less than header.PayloadSize
 					//therefore it should be safe now to read the incoming packet.
-					TPayloadReadType payload = ReadIncomingPacketPayload(in result, header);
+					TPayloadReadType payload = ReadIncomingPacketPayload(result.Buffer, header);
 
 					return new NetworkIncomingMessage<TPayloadReadType>(header, payload);
 				}
@@ -184,8 +196,15 @@ namespace GladNet
 		/// <param name="result">The incoming read buffer.</param>
 		/// <param name="header">The header that matches the payload type.</param>
 		/// <returns></returns>
-		protected virtual TPayloadReadType ReadIncomingPacketPayload(in ReadResult result, IPacketHeader header)
+		protected virtual TPayloadReadType ReadIncomingPacketPayload(in ReadOnlySequence<byte> result, IPacketHeader header)
 		{
+			//Special case for zero-sized payload buffer
+			if (result.IsEmpty)
+			{
+				int offset = 0;
+				return MessageServices.MessageDeserializer.Deserialize(Span<byte>.Empty, ref offset);
+			}
+
 			//I opted to do this instead of stack alloc because of HUGE dangers in stack alloc and this is pretty efficient
 			//buffer usage anyway.
 			byte[] rentedBuffer = ArrayPool<byte>.Shared.Rent(header.PayloadSize);
@@ -194,7 +213,7 @@ namespace GladNet
 			try
 			{
 				//This copy is BAD but it really avoids a lot of API headaches
-				result.Buffer.Slice(0, header.PayloadSize).CopyTo(buffer);
+				result.Slice(0, header.PayloadSize).CopyTo(buffer);
 
 				int offset = 0;
 				return MessageServices.MessageDeserializer.Deserialize(buffer, ref offset);
