@@ -89,13 +89,13 @@ namespace GladNet
 					continue;
 				}
 
-				IPacketHeader header = ReadIncomingPacketHeader(Connection.Input, in result);
+				IPacketHeader header = ReadIncomingPacketHeader(Connection.Input, in result, out int headerBytesRead);
 
 				//TODO: This is the best way to check for 0 length payload?? Seems hacky.
 				//There is a special case when a packet is equal to the head size
 				//meaning for example in the case of a 4 byte header then the packet is 4 bytes.
 				//in this case we SHOULD not read anything. All the data exists already for the packet.
-				if (header.PacketSize <= (header.PayloadSize + NetworkOptions.MinimumPacketHeaderSize))
+				if (header.PacketSize == headerBytesRead)
 				{
 					//The header is the entire packet, so empty buffer!
 					TPayloadReadType payload = ReadIncomingPacketPayload(ReadOnlySequence<byte>.Empty, header);
@@ -224,13 +224,13 @@ namespace GladNet
 			}
 		}
 
-		private IPacketHeader ReadIncomingPacketHeader(PipeReader reader, in ReadResult result)
+		private IPacketHeader ReadIncomingPacketHeader(PipeReader reader, in ReadResult result, out int bytesRead)
 		{
 			int exactHeaderByteCount = 0;
 			try
 			{
 				//The implementation MUST be that this can be trusted to be the EXACT size of binary data that will be read.
-				exactHeaderByteCount = MessageServices.PacketHeaderFactory.ComputeHeaderSize(result.Buffer);
+				bytesRead = exactHeaderByteCount = MessageServices.PacketHeaderFactory.ComputeHeaderSize(result.Buffer);
 				return DeserializePacketHeader(result.Buffer, exactHeaderByteCount);
 			}
 			finally
