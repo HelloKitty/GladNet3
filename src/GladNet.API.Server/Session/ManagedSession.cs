@@ -67,8 +67,24 @@ namespace GladNet
 
 				try
 				{
-					foreach (var disposable in InternalDisposables)
-						disposable.Dispose();
+					//Foreach but make sure to guard against exceptions
+					//caused by disposal because we need to dispose of ALL resources first or else we
+					//may leak.
+					Exception optionalException = null;
+					foreach(var disposable in InternalDisposables)
+						try
+						{
+							disposable.Dispose();
+						}
+						catch(Exception e)
+						{
+							optionalException = e;
+						}
+
+					//We throw so we don't silently supress the error.
+					//We could have multiple exceptions from this operation!! We only get the last though.
+					if(optionalException != null)
+						throw new InvalidOperationException($"Failed to dispose of all resources gracefully. Error: {optionalException}", optionalException);
 				}
 				finally
 				{
