@@ -27,9 +27,10 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.0.0" />
+    <PackageReference Include="Glader.Essentials.MessageHandler" Version="2.2.48" />
+    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.0" />
     <PackageReference Include="System.Memory" Version="4.5.4" />
-    <PackageReference Include="Glader.Essentials.Common" Version="2.1.39" />
+    <PackageReference Include="Glader.Essentials.Common" Version="2.2.48" />
   </ItemGroup>
 
 </Project>
