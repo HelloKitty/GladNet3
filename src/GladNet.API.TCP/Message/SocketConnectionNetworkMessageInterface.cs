@@ -48,7 +48,7 @@ namespace GladNet
 		}
 
 		/// <inheritdoc />
-		public async Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token = default(CancellationToken))
+		public async Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token = default)
 		{
 			while (!token.IsCancellationRequested)
 			{
