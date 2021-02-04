@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\GladNet.API.TCP\GladNet.API.TCP.csproj" />
     <ProjectReference Include="..\..\src\GladNet.Server.DotNetTcpServer\GladNet.Server.DotNetTcpServer.csproj" />
   </ItemGroup>
 

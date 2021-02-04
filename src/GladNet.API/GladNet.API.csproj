@@ -33,4 +33,10 @@
     <PackageReference Include="Glader.Essentials.Common" Version="2.2.62" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>GladNet.Server.DotNetTcpServer</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
 </Project>

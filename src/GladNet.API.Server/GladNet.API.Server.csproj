@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="Session\" />
   </ItemGroup>
 
   <ItemGroup>
