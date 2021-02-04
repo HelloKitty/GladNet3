@@ -17,6 +17,9 @@ namespace GladNet
 		where TPayloadReadType : class 
 		where TPayloadWriteType : class
 	{
+		/// <summary>
+		/// The message sending interface.
+		/// </summary>
 		protected SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> MessageService { get; }
 
 		//These aren't currently used directly in the session themselves but we expose them incase implementer

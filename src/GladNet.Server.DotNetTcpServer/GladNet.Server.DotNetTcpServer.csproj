@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GladNet.API.Server\GladNet.API.Server.csproj" />
+    <ProjectReference Include="..\GladNet.API.TCP\GladNet.API.TCP.csproj" />
   </ItemGroup>
 
 </Project>

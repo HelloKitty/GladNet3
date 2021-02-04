@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.API.Client", "src\G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.API.TCP", "src\GladNet.API.TCP\GladNet.API.TCP.csproj", "{E9F23B76-BCCE-41A3-A4AB-CB6FB36C6B5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Client.DotNetTcpClient", "src\GladNet.Client.DotNetTcpClient\GladNet.Client.DotNetTcpClient.csproj", "{BA324EF9-0A69-42CC-B771-3A4200BEC3CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{E9F23B76-BCCE-41A3-A4AB-CB6FB36C6B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9F23B76-BCCE-41A3-A4AB-CB6FB36C6B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9F23B76-BCCE-41A3-A4AB-CB6FB36C6B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA324EF9-0A69-42CC-B771-3A4200BEC3CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA324EF9-0A69-42CC-B771-3A4200BEC3CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA324EF9-0A69-42CC-B771-3A4200BEC3CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA324EF9-0A69-42CC-B771-3A4200BEC3CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{E6C56850-6930-4863-88AA-7FAC7592E70B} = {EE396D2F-98B0-46DC-851E-8A52A4C46E6B}
 		{28DB2EDC-FA18-4F55-8AD9-3B5DE543F519} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{E9F23B76-BCCE-41A3-A4AB-CB6FB36C6B5F} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
+		{BA324EF9-0A69-42CC-B771-3A4200BEC3CE} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
