@@ -12,8 +12,12 @@ namespace GladNet
 	/// </summary>
 	public sealed class SocketConnectionConnectionServiceAdapter : INetworkConnectionService
 	{
+		/// <summary>
+		/// Internal socket connection.
+		/// </summary>
 		private SocketConnection Connection { get; }
 
+		/// <inheritdoc />
 		public bool isConnected => Connection.Socket.Connected;
 
 		public SocketConnectionConnectionServiceAdapter(SocketConnection connection)
@@ -21,6 +25,7 @@ namespace GladNet
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		}
 
+		/// <inheritdoc />
 		public async Task DisconnectAsync()
 		{
 			//This may look RIDICULOUS but this seem to be the only way for a server

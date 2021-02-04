@@ -35,6 +35,7 @@ namespace GladNet
 			private set => _lifetimeConnectionCount = value;
 		}
 
+		/// <inheritdoc />
 		protected TcpGladNetServerApplication(NetworkAddressInfo serverAddress, ILog logger)
 			: base(serverAddress, logger)
 		{

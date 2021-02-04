@@ -9,6 +9,11 @@ using Glader.Essentials;
 
 namespace GladNet
 {
+	/// <summary>
+	/// Base type for GladNet server application bases.
+	/// </summary>
+	/// <typeparam name="TManagedSessionType"></typeparam>
+	/// <typeparam name="TSessionCreationContextType"></typeparam>
 	public abstract class GladNetServerApplication<TManagedSessionType, TSessionCreationContextType>
 		: IServerApplicationListenable, IFactoryCreatable<TManagedSessionType, TSessionCreationContextType>
 		where TManagedSessionType : ManagedSession
@@ -24,6 +29,9 @@ namespace GladNet
 		public ILog Logger { get; }
 
 		//TODO: We need a better API for exposing this.
+		/// <summary>
+		/// Collection that maps connection id to the managed session types.
+		/// </summary>
 		protected ConcurrentDictionary<int, TManagedSessionType> Sessions { get; } = new ConcurrentDictionary<int, TManagedSessionType>();
 
 		/// <summary>
@@ -32,6 +40,11 @@ namespace GladNet
 		/// </summary>
 		public event EventHandler<ManagedSessionContextualEventArgs<TManagedSessionType>> OnManagedSessionEnded;
 
+		/// <summary>
+		/// Creates a new server application with the specified address.
+		/// </summary>
+		/// <param name="serverAddress">Address for listening.</param>
+		/// <param name="logger">The logger.</param>
 		protected GladNetServerApplication(NetworkAddressInfo serverAddress, ILog logger)
 		{
 			ServerAddress = serverAddress ?? throw new ArgumentNullException(nameof(serverAddress));
@@ -50,6 +63,11 @@ namespace GladNet
 		/// <returns>A non-null session.</returns>
 		public abstract TManagedSessionType Create(TSessionCreationContextType context);
 
+		/// <summary>
+		/// Starts the read/write network tasks.
+		/// </summary>
+		/// <param name="token">The network cancel tokens.</param>
+		/// <param name="clientSession">The session.</param>
 		protected void StartNetworkSessionTasks(CancellationToken token, TManagedSessionType clientSession)
 		{
 			CancellationToken sessionCancelToken = new CancellationToken(false);

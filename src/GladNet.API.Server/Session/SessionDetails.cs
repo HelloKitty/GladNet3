@@ -19,7 +19,6 @@ namespace GladNet
 		/// </summary>
 		public int ConnectionId { get; }
 
-		/// <inheritdoc />
 		public SessionDetails(NetworkAddressInfo address, int connectionId)
 		{
 			if(connectionId < 0) throw new ArgumentOutOfRangeException(nameof(connectionId));

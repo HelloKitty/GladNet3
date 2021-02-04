@@ -70,6 +70,11 @@ namespace GladNet
 				throw new InvalidOperationException($"Specified header length: {headerBinarySize} exceed buffer length: {internalBuffer.Length}");
 		}
 
+		/// <summary>
+		/// Gets the <see cref="Span{T}"/> that represents the header.
+		/// </summary>
+		/// <returns></returns>
+		/// <exception cref="ObjectDisposedException"></exception>
 		public Span<byte> GetSpan()
 		{
 			lock (SyncObj)

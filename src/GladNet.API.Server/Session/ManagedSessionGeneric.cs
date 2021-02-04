@@ -26,6 +26,7 @@ namespace GladNet
 		/// </summary>
 		protected SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> MessageBuilders { get; }
 
+		/// <inheritdoc />
 		protected ManagedSession(INetworkConnectionService connectionService, SessionDetails details, NetworkConnectionOptions networkOptions,
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageBuilders, 
 			SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> messageService) 
@@ -35,6 +36,7 @@ namespace GladNet
 			MessageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
 		}
 
+		/// <inheritdoc />
 		public override async Task StartListeningAsync(CancellationToken token = default)
 		{
 			while(!token.IsCancellationRequested)
