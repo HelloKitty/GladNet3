@@ -3,6 +3,7 @@ using System.IO.Pipelines;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
@@ -15,14 +16,30 @@ namespace GladNet.DotNetTcpClient.EchoTest
 	{
 		static async Task Main(string[] args)
 		{
-			Console.ReadKey();
-			var socket = new TCPSocketConnectionFactory()
+			SocketConnection socket = new TCPSocketConnectionFactory()
 				.Create();
 
-			await socket.Socket.ConnectAsync(IPAddress.Parse("127.0.0.1"), 6969);
+			SocketConnectionConnectionServiceAdapter connectionService = new SocketConnectionConnectionServiceAdapter(socket);
 
-			if (!socket.Socket.Connected)
-				throw new InvalidOperationException($"Failed to connect.");
+			//await socket.Socket.ConnectAsync(IPAddress.Parse("127.0.0.1"), 6969);
+			//await Task.Delay(1);
+			//await socket.Socket.ConnectAsync("127.0.0.1", 6969);
+			await connectionService.ConnectAsync("192.168.1.12", 6969);
+
+			/*await Task.Factory.FromAsync(
+					socket.Socket.BeginConnect,
+					socket.Socket.EndConnect,
+					"127.0.0.1",
+					6969,
+					null)
+				.ConfigureAwait(true);*/
+
+			//if(!await connectionService.ConnectAsync("127.0.0.1", 6969))
+			//	throw new InvalidOperationException($"Failed to connect.");
+
+			//await Connect(socket);
+			//if(!socket.Socket.Connected)
+			//	throw new InvalidOperationException($"Failed to connect.");
 
 			NetworkConnectionOptions options = new NetworkConnectionOptions(2, 2, 1024);
 			var serializer = new StringMessageSerializer();
@@ -60,6 +77,12 @@ namespace GladNet.DotNetTcpClient.EchoTest
 			});
 
 			await starter.StartAsync(session, CancellationToken.None);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static async Task Connect(SocketConnection socket)
+		{
+			await socket.Socket.ConnectAsync(IPAddress.Parse("127.0.0.1"), 6969);
 		}
 	}
 }
