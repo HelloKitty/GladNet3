@@ -81,8 +81,33 @@ namespace GladNet
 			CancellationToken writeCancelToken = new CancellationToken(false);
 			CancellationTokenSource writeCancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(combinedTokenSource.Token, writeCancelToken);
 
-			Task writeTask = Task.Run(async () => await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartWritingAsync(writeCancelTokenSource.Token), writeCancelTokenSource, "Write"), token);
-			Task readTask = Task.Run(async () => await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartListeningAsync(readCancelTokenSource.Token), readCancelTokenSource, "Read"), token);
+			Task writeTask = Task.Run(async () =>
+			{
+				try
+				{
+					await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartWritingAsync(writeCancelTokenSource.Token), writeCancelTokenSource, "Write");
+				}
+				catch (Exception e)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Session: {clientSession.Details.ConnectionId} Write thread encountered critical failure. Error: {e}");
+					throw;
+				}
+			}, token);
+
+			Task readTask = Task.Run(async () =>
+			{
+				try
+				{
+					await StartSessionNetworkThreadAsync(clientSession.Details, clientSession.StartListeningAsync(readCancelTokenSource.Token), readCancelTokenSource, "Read");
+				}
+				catch (Exception e)
+				{
+					if(Logger.IsErrorEnabled)
+						Logger.Error($"Session: {clientSession.Details.ConnectionId} Read thread encountered critical failure. Error: {e}");
+					throw;
+				}
+			}, token);
 
 			Task.Run(async () =>
 			{
