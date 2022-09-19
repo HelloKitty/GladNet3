@@ -55,6 +55,17 @@ namespace GladNet
 				}
 				finally
 				{
+					if(Logger.IsDebugEnabled)
+						Logger.Debug($"Session Stopping. Read State Error: {readTask.IsFaulted} Write State Error: {writeTask.IsFaulted} Read Completed: {readTask.IsCompleted} Write Completed: {writeTask.IsCompleted} Read Cancelled: {readTask.IsCanceled} Write Cancelled: {writeTask.IsCanceled}");
+
+					if (readTask.IsFaulted)
+						if(Logger.IsDebugEnabled)
+							Logger.Debug($"Read Fault: {readTask.Exception}");
+
+					if(writeTask.IsFaulted)
+						if(Logger.IsDebugEnabled)
+							Logger.Debug($"Write Fault: {readTask.Exception}");
+
 					if(!combinedTokenSource.IsCancellationRequested)
 						combinedTokenSource.Cancel();
 
