@@ -11,7 +11,11 @@ namespace GladNet
 	{
 		public sealed override int MaxBufferSize => int.MaxValue;
 
-		private ArrayPool<byte> SharedPipePool { get; } = ArrayPool<byte>.Create();
+		// See: https://github.com/dotnet/corert/blob/c6af4cfc8b625851b91823d9be746c4f7abdc667/src/System.Private.CoreLib/shared/System/Buffers/ConfigurableArrayPool.cs#L13
+		/// <summary>The default maximum number of arrays per bucket that are available for rent.</summary>
+		private const int DefaultMaxNumberOfArraysPerBucket = 50;
+
+		private ArrayPool<byte> SharedPipePool { get; } = ArrayPool<byte>.Create(int.MaxValue, DefaultMaxNumberOfArraysPerBucket);
 
 		public sealed override IMemoryOwner<byte> Rent(int minimumBufferSize = -1)
 		{
