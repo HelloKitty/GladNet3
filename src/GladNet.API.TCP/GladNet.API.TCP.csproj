@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -14,7 +14,7 @@
     <PackageTags>GladNet Emulation Emulator WoW PSO Network Unity3D Network Networking Netlib GladNet4</PackageTags>
     <LangVersion>8.0</LangVersion>
     <PackageId>GladNet.API.TCP</PackageId>
-    <Version>4.2.13</Version>
+    <Version>4.2.14</Version>
   </PropertyGroup>
 
   <PropertyGroup>
