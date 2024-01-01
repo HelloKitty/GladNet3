@@ -17,7 +17,7 @@ namespace GladNet
 		/// </summary>
 		/// <param name="ip">The ip.</param>
 		/// <param name="port">The port.</param>
-		/// <returns>True if connection was successful.</returns>
+		/// <returns>True if connection was successful (WARNING: May not return until connect disconnects).</returns>
 		Task<bool> ConnectAsync(string ip, int port);
 	}
 }
