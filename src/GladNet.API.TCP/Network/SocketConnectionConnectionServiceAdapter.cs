@@ -17,12 +17,11 @@ namespace GladNet
 		/// </summary>
 		private SocketConnection Connection { get; }
 
-		/// <inheritdoc />
-		public bool isConnected => Connection.Socket.Connected && ConnectedInternal;
-
 		// This is because Connection.Socket.Connected may still be true even after Connection.Socket.ConnectAsync
 		// down below finishes awaiting.
-		private bool ConnectedInternal { get; set; } = false;
+		/// <inheritdoc />
+		public bool isConnected => Connection.Socket.Connected 
+		                           && Connection.ShutdownKind == PipeShutdownKind.None;
 
 		public SocketConnectionConnectionServiceAdapter(SocketConnection connection)
 		{
@@ -57,10 +56,7 @@ namespace GladNet
 			if (Connection.Socket.Connected)
 				return false;
 
-			ConnectedInternal = true;
 			await Connection.Socket.ConnectAsync(ip, port);
-			ConnectedInternal = false;
-
 			return Connection.Socket.Connected;
 		}
 	}
