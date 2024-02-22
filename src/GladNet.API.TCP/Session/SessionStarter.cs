@@ -33,14 +33,14 @@ namespace GladNet
 
 			// WARNING: Technically undefined behavior but LongRunning will force a new thread with default task schedule
 			// This helps mitigate the issue where network reading stalls
-			Task writeTask = Task.Factory.StartNew(async () =>
+			Task<Task> writeTask = Task.Factory.StartNew(async () =>
 			{
 				await StartSessionNetworkThreadAsync(session.Details, session.StartWritingAsync(writeCancelTokenSource.Token), writeCancelTokenSource, "Write");
 			}, token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
 			// WARNING: Technically undefined behavior but LongRunning will force a new thread with default task schedule
 			// This helps mitigate the issue where network reading stalls
-			Task readTask = Task.Factory.StartNew(async () =>
+			Task<Task> readTask = Task.Factory.StartNew(async () =>
 			{
 				await StartSessionNetworkThreadAsync(session.Details, session.StartListeningAsync(readCancelTokenSource.Token), readCancelTokenSource, "Read");
 			}, token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
@@ -49,14 +49,15 @@ namespace GladNet
 			{
 				try
 				{
-					await Task.WhenAny(readTask, writeTask);
+					// StartNew returns a Task<Task> and the inner-task 
+					await Task.WhenAny(await readTask, await writeTask);
 
 					//If ANY read or write task finishes then the network should stop reading
 					//by canceling the session cancel token we should cancel any remaining network task
 					combinedTokenSource.Cancel();
 
 					//Now we should wait until both tasks have finished completely, after canceling
-					await Task.WhenAll(readTask, writeTask);
+					await Task.WhenAll(await readTask, await writeTask);
 				}
 				catch(Exception e)
 				{
