@@ -69,7 +69,7 @@ namespace GladNet
 				}
 				catch(OperationCanceledException e)
 				{
-					writeThreadTask.SetCanceled();
+					readThreadTask.SetCanceled();
 					throw;
 				}
 				catch (Exception e)
