@@ -59,7 +59,7 @@ namespace GladNet
 
 		//See: https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
 		/// <inheritdoc />
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			lock (SyncObj)
 			{
