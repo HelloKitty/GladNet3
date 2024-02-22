@@ -31,8 +31,19 @@ namespace GladNet
 			CancellationToken writeCancelToken = new CancellationToken(false);
 			CancellationTokenSource writeCancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(combinedTokenSource.Token, writeCancelToken);
 
-			Task writeTask = Task.Run(async () => await StartSessionNetworkThreadAsync(session.Details, session.StartWritingAsync(writeCancelTokenSource.Token), writeCancelTokenSource, "Write"), token);
-			Task readTask = Task.Run(async () => await StartSessionNetworkThreadAsync(session.Details, session.StartListeningAsync(readCancelTokenSource.Token), readCancelTokenSource, "Read"), token);
+			// WARNING: Technically undefined behavior but LongRunning will force a new thread with default task schedule
+			// This helps mitigate the issue where network reading stalls
+			Task writeTask = Task.Factory.StartNew(async () =>
+			{
+				await StartSessionNetworkThreadAsync(session.Details, session.StartWritingAsync(writeCancelTokenSource.Token), writeCancelTokenSource, "Write");
+			}, token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+			// WARNING: Technically undefined behavior but LongRunning will force a new thread with default task schedule
+			// This helps mitigate the issue where network reading stalls
+			Task readTask = Task.Factory.StartNew(async () =>
+			{
+				await StartSessionNetworkThreadAsync(session.Details, session.StartListeningAsync(readCancelTokenSource.Token), readCancelTokenSource, "Read");
+			}, token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
 			await Task.Run(async () =>
 			{
