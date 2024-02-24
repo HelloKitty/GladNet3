@@ -10,14 +10,14 @@ namespace GladNet
 		/// <summary>
 		/// The underlying connection object for the session.
 		/// </summary>
-		public ClientWebSocket Connection { get; }
+		public WebSocket Connection { get; }
 
 		/// <summary>
 		/// The details of the session.
 		/// </summary>
 		public SessionDetails Details { get; }
 
-		public SessionCreationContext(ClientWebSocket connection, SessionDetails details)
+		public SessionCreationContext(WebSocket connection, SessionDetails details)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 			Details = details ?? throw new ArgumentNullException(nameof(details));

@@ -11,12 +11,12 @@ using Nito.AsyncEx;
 namespace GladNet
 {
 	/// <summary>
-	/// Base WebSocket <see cref="ClientWebSocket"/>-based <see cref="ManagedSession"/>
+	/// Base WebSocket <see cref="WebSocket"/>-based <see cref="ManagedSession"/>
 	/// implementation.
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public abstract class BaseClientWebSocketManagedSession<TPayloadReadType, TPayloadWriteType> 
+	public abstract class BaseWebSocketManagedSession<TPayloadReadType, TPayloadWriteType> 
 		: ManagedSession<TPayloadReadType, TPayloadWriteType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
@@ -24,9 +24,9 @@ namespace GladNet
 		/// <summary>
 		/// The socket connection.
 		/// </summary>
-		protected ClientWebSocket Connection { get; }
+		protected WebSocket Connection { get; }
 
-		protected BaseClientWebSocketManagedSession(NetworkConnectionOptions networkOptions, ClientWebSocket connection, SessionDetails details,
+		protected BaseWebSocketManagedSession(NetworkConnectionOptions networkOptions, WebSocket connection, SessionDetails details,
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices) 
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices,
 				BuildMessageInterfaceContext(networkOptions, connection, messageServices))
@@ -35,7 +35,7 @@ namespace GladNet
 		}
 
 		//This overload lets implementer specify a messageInterface.
-		protected BaseClientWebSocketManagedSession(NetworkConnectionOptions networkOptions, ClientWebSocket connection, SessionDetails details,
+		protected BaseWebSocketManagedSession(NetworkConnectionOptions networkOptions, WebSocket connection, SessionDetails details,
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices,
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface)
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices,
@@ -45,7 +45,7 @@ namespace GladNet
 		}
 
 		//This overload lets implementer specify a message interface context.
-		protected BaseClientWebSocketManagedSession(NetworkConnectionOptions networkOptions, ClientWebSocket connection, SessionDetails details,
+		protected BaseWebSocketManagedSession(NetworkConnectionOptions networkOptions, WebSocket connection, SessionDetails details,
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices,
 			SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> messageInterfaces)
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices, messageInterfaces)
@@ -53,7 +53,7 @@ namespace GladNet
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		}
 
-		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(NetworkConnectionOptions networkOptions, ClientWebSocket connection, SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
+		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(NetworkConnectionOptions networkOptions, WebSocket connection, SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
 		{
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface = new SocketConnectionNetworkMessageInterface<TPayloadReadType, TPayloadWriteType>(networkOptions, connection, messageServices);
 			return BuildMessageInterfaceContext(messageInterface);

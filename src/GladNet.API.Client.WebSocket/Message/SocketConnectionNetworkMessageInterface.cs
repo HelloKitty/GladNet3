@@ -12,7 +12,7 @@ using Nito.AsyncEx;
 namespace GladNet
 {
 	/// <summary>
-	/// WebSocket <see cref="ClientWebSocket"/> Pipelines-based implementation of <see cref="INetworkMessageInterface{TPayloadReadType,TPayloadWriteType}"/>
+	/// WebSocket <see cref="WebSocket"/> Pipelines-based implementation of <see cref="INetworkMessageInterface{TPayloadReadType,TPayloadWriteType}"/>
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
@@ -23,7 +23,7 @@ namespace GladNet
 		/// <summary>
 		/// The pipelines socket connection.
 		/// </summary>
-		private ClientWebSocket Connection { get; }
+		private WebSocket Connection { get; }
 
 		/// <summary>
 		/// The messages service container.
@@ -38,7 +38,7 @@ namespace GladNet
 		private AsyncLock PayloadWriteLock { get; } = new AsyncLock();
 
 		public SocketConnectionNetworkMessageInterface(NetworkConnectionOptions networkOptions,
-			ClientWebSocket connection, 
+			WebSocket connection, 
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));

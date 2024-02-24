@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 namespace GladNet
 {
 	/// <summary>
-	/// Implementation of <see cref="INetworkConnectionService"/> based around <see cref="ClientWebSocket"/>
+	/// Implementation of <see cref="INetworkConnectionService"/> based around <see cref="WebSocket"/>
 	/// </summary>
 	public sealed class SocketConnectionConnectionServiceAdapter : INetworkConnectionService
 	{
 		/// <summary>
 		/// Internal socket connection.
 		/// </summary>
-		private ClientWebSocket Connection { get; }
+		private WebSocket Connection { get; }
 
 		/// <inheritdoc />
 		public bool isConnected => (Connection.State == WebSocketState.Open || Connection.State == WebSocketState.Connecting)
 		                           && !Connection.CloseStatus.HasValue;
 
-		public SocketConnectionConnectionServiceAdapter(ClientWebSocket connection)
+		public SocketConnectionConnectionServiceAdapter(WebSocket connection)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		}
@@ -41,9 +41,13 @@ namespace GladNet
 			if (isConnected)
 				return false;
 
-			// TODO: need cancel token support
-			await Connection.ConnectAsync(new Uri(ip), CancellationToken.None);
-			return Connection.State == WebSocketState.Open;
+			if (Connection is ClientWebSocket cws)
+			{
+				await cws.ConnectAsync(new Uri(ip), CancellationToken.None);
+				return Connection.State == WebSocketState.Open;
+			}
+			else
+				throw new NotSupportedException($"It is not supported to call {nameof(ConnectAsync)} on a non-client websocket.");
 		}
 	}
 }
