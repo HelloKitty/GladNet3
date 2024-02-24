@@ -76,12 +76,12 @@ namespace GladNet
 			}
 			catch (TaskCanceledException e)
 			{
-				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, token);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, $"{nameof(TaskCanceledException)}", token);
 				return;
 			}
 			catch (Exception e)
 			{
-				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, token);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, $"Error: {e}", token);
 				throw;
 			}
 			finally
@@ -109,12 +109,12 @@ namespace GladNet
 			catch(TaskCanceledException e)
 			{
 				//Consider a cancel a graceful complete
-				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, token);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, $"{nameof(TaskCanceledException)}", token);
 				return;
 			}
 			catch(Exception e)
 			{
-				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, token);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, $"Error: {e}", token);
 				throw;
 			}
 			finally
