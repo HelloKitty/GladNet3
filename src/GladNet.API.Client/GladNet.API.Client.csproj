@@ -16,6 +16,11 @@
     <Version>4.4.26</Version>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
   </ItemGroup>
