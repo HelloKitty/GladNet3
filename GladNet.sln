@@ -15,15 +15,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EE396D2F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.DotNetTcpServer.EchoTest", "tests\GladNet.DotNetTcpServer.EchoTest\GladNet.DotNetTcpServer.EchoTest.csproj", "{E6C56850-6930-4863-88AA-7FAC7592E70B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.API.Client", "src\GladNet.API.Client\GladNet.API.Client.csproj", "{28DB2EDC-FA18-4F55-8AD9-3B5DE543F519}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.API.Client", "src\GladNet.API.Client\GladNet.API.Client.csproj", "{28DB2EDC-FA18-4F55-8AD9-3B5DE543F519}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.API.TCP", "src\GladNet.API.TCP\GladNet.API.TCP.csproj", "{E9F23B76-BCCE-41A3-A4AB-CB6FB36C6B5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.API.TCP", "src\GladNet.API.TCP\GladNet.API.TCP.csproj", "{E9F23B76-BCCE-41A3-A4AB-CB6FB36C6B5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.Client.DotNetTcpClient", "src\GladNet.Client.DotNetTcpClient\GladNet.Client.DotNetTcpClient.csproj", "{BA324EF9-0A69-42CC-B771-3A4200BEC3CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.Client.DotNetTcpClient", "src\GladNet.Client.DotNetTcpClient\GladNet.Client.DotNetTcpClient.csproj", "{BA324EF9-0A69-42CC-B771-3A4200BEC3CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.DotNetTcpClient.EchoTest", "tests\GladNet.DotNetTcpClient.EchoTest\GladNet.DotNetTcpClient.EchoTest.csproj", "{F349568E-02A0-4B46-9AD6-B78C2DBF5240}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.DotNetTcpClient.EchoTest", "tests\GladNet.DotNetTcpClient.EchoTest\GladNet.DotNetTcpClient.EchoTest.csproj", "{F349568E-02A0-4B46-9AD6-B78C2DBF5240}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladNet.API.AutoFac", "src\GladNet.API.AutoFac\GladNet.API.AutoFac.csproj", "{269BD7A7-3E02-4FE5-AC58-79475DB97E7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.API.AutoFac", "src\GladNet.API.AutoFac\GladNet.API.AutoFac.csproj", "{269BD7A7-3E02-4FE5-AC58-79475DB97E7D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GladNet.API.Client.WebSocket", "src\GladNet.API.Client.WebSocket\GladNet.API.Client.WebSocket.csproj", "{2C27029D-C628-459E-885A-1A317B2EC395}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{269BD7A7-3E02-4FE5-AC58-79475DB97E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{269BD7A7-3E02-4FE5-AC58-79475DB97E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{269BD7A7-3E02-4FE5-AC58-79475DB97E7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C27029D-C628-459E-885A-1A317B2EC395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C27029D-C628-459E-885A-1A317B2EC395}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C27029D-C628-459E-885A-1A317B2EC395}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C27029D-C628-459E-885A-1A317B2EC395}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{BA324EF9-0A69-42CC-B771-3A4200BEC3CE} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{F349568E-02A0-4B46-9AD6-B78C2DBF5240} = {EE396D2F-98B0-46DC-851E-8A52A4C46E6B}
 		{269BD7A7-3E02-4FE5-AC58-79475DB97E7D} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
+		{2C27029D-C628-459E-885A-1A317B2EC395} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}

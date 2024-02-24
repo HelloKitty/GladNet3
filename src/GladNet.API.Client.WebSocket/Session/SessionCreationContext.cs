@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using System.Text;
-using Pipelines.Sockets.Unofficial;
 
 namespace GladNet
 {
@@ -10,14 +10,14 @@ namespace GladNet
 		/// <summary>
 		/// The underlying connection object for the session.
 		/// </summary>
-		public SocketConnection Connection { get; }
+		public ClientWebSocket Connection { get; }
 
 		/// <summary>
 		/// The details of the session.
 		/// </summary>
 		public SessionDetails Details { get; }
 
-		public SessionCreationContext(SocketConnection connection, SessionDetails details)
+		public SessionCreationContext(ClientWebSocket connection, SessionDetails details)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 			Details = details ?? throw new ArgumentNullException(nameof(details));
