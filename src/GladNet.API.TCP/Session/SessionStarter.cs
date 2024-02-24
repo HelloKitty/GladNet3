@@ -13,8 +13,6 @@ namespace GladNet
 	{
 		private ILog Logger { get; }
 
-		private List<Thread> RunningThreads { get; } = new List<Thread>();
-
 		public SessionStarter(ILog logger)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -33,68 +31,8 @@ namespace GladNet
 			CancellationToken writeCancelToken = new CancellationToken(false);
 			CancellationTokenSource writeCancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(combinedTokenSource.Token, writeCancelToken);
 
-			TaskCompletionSource<object> writeThreadTask = new TaskCompletionSource<object>();
-			var writeTask = writeThreadTask.Task;
-			var writeThread = new Thread(async () =>
-			{
-				try
-				{
-					await StartSessionNetworkThreadAsync(session.Details, session.StartWritingAsync(writeCancelTokenSource.Token), writeCancelTokenSource, "Write");
-				}
-				catch (OperationCanceledException e)
-				{
-					writeThreadTask.SetCanceled();
-					throw;
-				}
-				catch (Exception e)
-				{
-					writeThreadTask.SetException(e);
-					throw;
-				}
-				finally
-				{
-
-				}
-
-				writeThreadTask.SetResult(null);
-			});
-
-			TaskCompletionSource<object> readThreadTask = new TaskCompletionSource<object>();
-			var readTask = readThreadTask.Task;
-			var readThread = new Thread(async () =>
-			{
-				try
-				{
-					await StartSessionNetworkThreadAsync(session.Details, session.StartListeningAsync(readCancelTokenSource.Token), readCancelTokenSource, "Read");
-				}
-				catch(OperationCanceledException e)
-				{
-					readThreadTask.SetCanceled();
-					throw;
-				}
-				catch (Exception e)
-				{
-					readThreadTask.SetException(e);
-					throw;
-				}
-				finally
-				{
-
-				}
-
-				readThreadTask.SetResult(null);
-			});
-
-			try
-			{
-				readThread.Start();
-				writeThread.Start();
-			}
-			finally
-			{
-				RunningThreads.Add(readThread);
-				RunningThreads.Add(writeThread);
-			}
+			Task writeTask = Task.Run(async () => await StartSessionNetworkThreadAsync(session.Details, session.StartWritingAsync(writeCancelTokenSource.Token), writeCancelTokenSource, "Write"), token);
+			Task readTask = Task.Run(async () => await StartSessionNetworkThreadAsync(session.Details, session.StartListeningAsync(readCancelTokenSource.Token), readCancelTokenSource, "Read"), token);
 
 			await Task.Run(async () =>
 			{
@@ -165,8 +103,6 @@ namespace GladNet
 					}
 				}
 			}, token);
-
-			RunningThreads.Clear();
 		}
 
 		public void Start(TSessionType session, CancellationToken token = default)
