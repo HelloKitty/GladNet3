@@ -23,6 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GladNet.API.Client\GladNet.API.Client.csproj" />
     <ProjectReference Include="..\GladNet.API.TCP\GladNet.API.TCP.csproj" />
   </ItemGroup>
 
