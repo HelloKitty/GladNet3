@@ -2,22 +2,22 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO.Pipelines;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Glader.Essentials;
 using Nito.AsyncEx;
-using Pipelines.Sockets.Unofficial;
 
 namespace GladNet
 {
 	/// <summary>
-	/// Base TCP <see cref="SocketConnection"/>-based <see cref="ManagedSession"/>
+	/// Base WebSocket <see cref="ClientWebSocket"/>-based <see cref="ManagedSession"/>
 	/// implementation.
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
-	public abstract class BaseTcpManagedSession<TPayloadReadType, TPayloadWriteType> 
+	public abstract class BaseClientWebSocketManagedSession<TPayloadReadType, TPayloadWriteType> 
 		: ManagedSession<TPayloadReadType, TPayloadWriteType>
 		where TPayloadWriteType : class 
 		where TPayloadReadType : class
@@ -25,9 +25,9 @@ namespace GladNet
 		/// <summary>
 		/// The socket connection.
 		/// </summary>
-		protected SocketConnection Connection { get; }
+		protected ClientWebSocket Connection { get; }
 
-		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
+		protected BaseClientWebSocketManagedSession(NetworkConnectionOptions networkOptions, ClientWebSocket connection, SessionDetails details,
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices) 
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices,
 				BuildMessageInterfaceContext(networkOptions, connection, messageServices))
@@ -36,7 +36,7 @@ namespace GladNet
 		}
 
 		//This overload lets implementer specify a messageInterface.
-		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
+		protected BaseClientWebSocketManagedSession(NetworkConnectionOptions networkOptions, ClientWebSocket connection, SessionDetails details,
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices,
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface)
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices,
@@ -46,7 +46,7 @@ namespace GladNet
 		}
 
 		//This overload lets implementer specify a message interface context.
-		protected BaseTcpManagedSession(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionDetails details,
+		protected BaseClientWebSocketManagedSession(NetworkConnectionOptions networkOptions, ClientWebSocket connection, SessionDetails details,
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices,
 			SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> messageInterfaces)
 			: base(new SocketConnectionConnectionServiceAdapter(connection), details, networkOptions, messageServices, messageInterfaces)
@@ -54,7 +54,7 @@ namespace GladNet
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		}
 
-		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(NetworkConnectionOptions networkOptions, SocketConnection connection, SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
+		private static SessionMessageInterfaceServiceContext<TPayloadReadType, TPayloadWriteType> BuildMessageInterfaceContext(NetworkConnectionOptions networkOptions, ClientWebSocket connection, SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
 		{
 			INetworkMessageInterface<TPayloadReadType, TPayloadWriteType> messageInterface = new SocketConnectionNetworkMessageInterface<TPayloadReadType, TPayloadWriteType>(networkOptions, connection, messageServices);
 			return BuildMessageInterfaceContext(messageInterface);
@@ -72,29 +72,21 @@ namespace GladNet
 			try
 			{
 				await base.StartListeningAsync(token);
-			}
-			catch (ConnectionResetException e)
-			{
-				//ConnectionResetException is thrown by Pipeline Socket API when it disconnects
-				//and I don't yet know how to suppress it fully.
-				//Consider a cancel a graceful complete
-				await Connection.Input.CompleteAsync(e);
-				return;
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, token);
 			}
 			catch (TaskCanceledException e)
 			{
-				//Consider a cancel a graceful complete
-				await Connection.Input.CompleteAsync(e);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, token);
 				return;
 			}
 			catch (Exception e)
 			{
-				await Connection.Input.CompleteAsync(e);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, token);
 				throw;
 			}
 			finally
 			{
-				await Connection.Input.CompleteAsync();
+				Connection.Dispose();
 			}
 		}
 
@@ -114,28 +106,20 @@ namespace GladNet
 						return;
 				}
 			}
-			catch (ConnectionResetException e)
-			{
-				//ConnectionResetException is thrown by Pipeline Socket API when it disconnects
-				//and I don't yet know how to suppress it fully.
-				//Consider a cancel a graceful complete
-				await Connection.Output.CompleteAsync(e);
-				return;
-			}
 			catch(TaskCanceledException e)
 			{
 				//Consider a cancel a graceful complete
-				await Connection.Output.CompleteAsync(e);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, token);
 				return;
 			}
 			catch(Exception e)
 			{
-				await Connection.Output.CompleteAsync(e);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, String.Empty, token);
 				throw;
 			}
 			finally
 			{
-				await Connection.Output.CompleteAsync();
+				Connection.Dispose();
 			}
 		}
 	}

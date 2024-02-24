@@ -3,17 +3,17 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.IO.Pipelines;
 using System.Linq.Expressions;
+using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Nito.AsyncEx;
-using Pipelines.Sockets.Unofficial;
 
 namespace GladNet
 {
 	/// <summary>
-	/// TCP <see cref="SocketConnection"/> Pipelines-based implementation of <see cref="INetworkMessageInterface{TPayloadReadType,TPayloadWriteType}"/>
+	/// WebSocket <see cref="ClientWebSocket"/> Pipelines-based implementation of <see cref="INetworkMessageInterface{TPayloadReadType,TPayloadWriteType}"/>
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
@@ -24,7 +24,7 @@ namespace GladNet
 		/// <summary>
 		/// The pipelines socket connection.
 		/// </summary>
-		private SocketConnection Connection { get; }
+		private ClientWebSocket Connection { get; }
 
 		/// <summary>
 		/// The messages service container.
@@ -38,8 +38,8 @@ namespace GladNet
 
 		private AsyncLock PayloadWriteLock { get; } = new AsyncLock();
 
-		public SocketConnectionNetworkMessageInterface(NetworkConnectionOptions networkOptions, 
-			SocketConnection connection, 
+		public SocketConnectionNetworkMessageInterface(NetworkConnectionOptions networkOptions,
+			ClientWebSocket connection, 
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
@@ -50,46 +50,24 @@ namespace GladNet
 		/// <inheritdoc />
 		public async Task<NetworkIncomingMessage<TPayloadReadType>> ReadMessageAsync(CancellationToken token = default)
 		{
-			while (!token.IsCancellationRequested)
-			{
-				ReadResult result;
+			if (NetworkOptions.MaximumPacketHeaderSize != NetworkOptions.MinimumPacketHeaderSize)
+				throw new NotSupportedException($"TODO: Support variable size packet header sizes for websockets.");
 
-				//The reason we wrap this in a try/catch is because the Pipelines may abort ungracefully
-				//inbetween our state checks. Therefore only calling ReadAsyc can truly indicate the state of a connection
-				//and if it has been aborted then we should pretend as if we read nothing.
+			while (!token.IsCancellationRequested 
+			       && Connection.State == WebSocketState.Open)
+			{
+				var headerBuffer = ArrayPool<byte>.Shared.Rent(NetworkOptions.MinimumPacketHeaderSize);
+				IPacketHeader header;
+				int headerBytesRead;
 				try
 				{
-					result = await Connection.Input.ReadAsync(token);
+					await ReadUntilBufferFullAsync(headerBuffer, NetworkOptions.MinimumPacketHeaderSize, token);
+					header = ReadIncomingPacketHeader(new ReadOnlySequence<byte>(headerBuffer, 0, NetworkOptions.MinimumPacketHeaderSize), out headerBytesRead);
 				}
-				catch(ConnectionAbortedException abortException)
+				finally
 				{
-					return null;
+					ArrayPool<byte>.Shared.Return(headerBuffer);
 				}
-
-				if (!IsReadResultValid(in result))
-					return null;
-
-				ReadOnlySequence<byte> buffer = result.Buffer;
-
-				//So we have a valid result, let's check if we have enough data.
-				//If we don't have enough to read a packet header then we need to wait until we have enough bytes.
-				if(buffer.Length < NetworkOptions.MinimumPacketHeaderSize)
-				{
-					//If buffer isn't large enough we need to tell Pipeline we didn't consume anything
-					//but we DID inspect/examine all the way to the end of the buffer.
-					Connection.Input.AdvanceTo(result.Buffer.Start, result.Buffer.End);
-					continue;
-				}
-
-				if(!MessageServices.PacketHeaderFactory.IsHeaderReadable(in buffer))
-				{
-					//If buffer isn't large enough we need to tell Pipeline we didn't consume anything
-					//but we DID inspect/examine all the way to the end of the buffer.
-					Connection.Input.AdvanceTo(result.Buffer.Start, result.Buffer.End);
-					continue;
-				}
-
-				IPacketHeader header = ReadIncomingPacketHeader(Connection.Input, in result, out int headerBytesRead);
 
 				//TODO: This is the best way to check for 0 length payload?? Seems hacky.
 				//There is a special case when a packet is equal to the head size
@@ -103,89 +81,49 @@ namespace GladNet
 					return new NetworkIncomingMessage<TPayloadReadType>(header, payload);
 				}
 
-				//TODO: Add header validation.
-				while(!token.IsCancellationRequested)
-				{
-					//The reason we wrap this in a try/catch is because the Pipelines may abort ungracefully
-					//inbetween our state checks. Therefore only calling ReadAsyc can truly indicate the state of a connection
-					//and if it has been aborted then we should pretend as if we read nothing.
-					try
-					{
-						//Now with the header we know how much data we must now read for the payload.
-						result = await Connection.Input.ReadAsync(token);
-					}
-					catch(ConnectionAbortedException abortException)
-					{
-						return null;
-					}
+				// Sanity check
+				if (header.PayloadSize >= NetworkOptions.MaximumPayloadSize)
+					throw new InvalidOperationException($"Encountered Payload with Size: {header.PayloadSize} greater than Max: {NetworkOptions.MaximumPayloadSize}");
 
-					//This call will also use the cancel token so we don't need to check it in the nested-loop.
-					if (!IsReadResultValid(in result))
-						return null;
-
-					//This is dumb and hacky, but we need to know if we shall need to read again
-					//This means we're still at the START of the buffer (haven't read anything)
-					//but have technically aware/inspected to the END position.
-					if (!IsPayloadReadable(result, header))
-						Connection.Input.AdvanceTo(result.Buffer.Start, result.Buffer.End);
-					else
-						break;
-				}
-
+				var payloadBuffer = ArrayPool<byte>.Shared.Rent(header.PayloadSize);
 				try
 				{
+					await ReadUntilBufferFullAsync(payloadBuffer, header.PayloadSize, token);
+
 					//TODO: Valid incoming packet lengths to avoid a stack overflow.
 					//This point we have a VALID read result that is NOT less than header.PayloadSize
 					//therefore it should be safe now to read the incoming packet.
-					TPayloadReadType payload = ReadIncomingPacketPayload(result.Buffer, header);
+					TPayloadReadType payload = ReadIncomingPacketPayload(new ReadOnlySequence<byte>(payloadBuffer, 0, header.PayloadSize), header);
 
 					return new NetworkIncomingMessage<TPayloadReadType>(header, payload);
 				}
-				catch(Exception)
-				{
-					//TODO: We should log WHY but basically we should no longer continue the network listener.
-					return null;
-				}
 				finally
 				{
-					//So serialization should output an offset read. However, we should not use
-					//that as the basis for the bytes read. Serialization can be WRONG and conflict with
-					//the packet header's defined size. Therefore, we should trust packet header over serialization
-					//logic ALWAYS and this advance should be in a finally block for sure.
-					Connection.Input.AdvanceTo(result.Buffer.GetPosition(ComputeIncomingPayloadBytesRead(header)));
+					ArrayPool<byte>.Shared.Return(payloadBuffer);
 				}
 			}
 
 			return null;
 		}
 
-		/// <summary>
-		/// Computes how many bytes will have been read for the payload given the <see cref="IPacketHeader"/>.
-		/// Simple implementation is Payload Size. However some implementations use blocks so some additional discarded
-		/// block buffer data may be required.
-		/// Implementers can override this can adjust the calculation.
-		/// </summary>
-		/// <param name="header">The packet header instance.</param>
-		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected virtual int ComputeIncomingPayloadBytesRead(IPacketHeader header)
+		private async Task ReadUntilBufferFullAsync(byte[] buffer, int bufferSize, CancellationToken token)
 		{
-			if (header == null) throw new ArgumentNullException(nameof(header));
+			ArraySegment<byte> bufferSegment = new ArraySegment<byte>(buffer, 0, buffer.Length);
 
-			return header.PayloadSize;
-		}
+			do
+			{
+				WebSocketReceiveResult result
+					= await Connection.ReceiveAsync(bufferSegment, token);
 
-		/// <summary>
-		/// Indicates if a payload is readable from the <see cref="ReadResult"/> result.
-		/// Default is to indicate it's readable if there is enough bytes available to read the payload.
-		/// Some protocols required BLOCK/CHUNKs so this is virtual and implementers can specify how much is required.
-		/// </summary>
-		/// <param name="result"></param>
-		/// <param name="header"></param>
-		/// <returns></returns>
-		protected virtual bool IsPayloadReadable(ReadResult result, IPacketHeader header)
-		{
-			return result.Buffer.Length >= header.PayloadSize;
+				// Read the buffer, don't rely on it being EndOfMessage. We might have the payload as apart of the same message
+				if ((bufferSegment.Offset + result.Count)
+				    == bufferSize)
+					break;
+
+				// Move the segment forward
+				bufferSegment = new ArraySegment<byte>(buffer, bufferSegment.Offset + result.Count, bufferSegment.Count - result.Count);
+			} while (!token.IsCancellationRequested
+			         && Connection.State == WebSocketState.Open);
 		}
 
 		/// <summary>
@@ -224,20 +162,11 @@ namespace GladNet
 			}
 		}
 
-		private IPacketHeader ReadIncomingPacketHeader(PipeReader reader, in ReadResult result, out int bytesRead)
+		private IPacketHeader ReadIncomingPacketHeader(ReadOnlySequence<byte> buffer, out int bytesRead)
 		{
-			int exactHeaderByteCount = 0;
-			try
-			{
-				//The implementation MUST be that this can be trusted to be the EXACT size of binary data that will be read.
-				bytesRead = exactHeaderByteCount = MessageServices.PacketHeaderFactory.ComputeHeaderSize(result.Buffer);
-				return DeserializePacketHeader(result.Buffer, exactHeaderByteCount);
-			}
-			finally
-			{
-				//Advance to only the exact header bytes read, consumed and examined. Do not use buffer lengths ever!
-				reader.AdvanceTo(result.Buffer.GetPosition(exactHeaderByteCount));
-			}
+			//The implementation MUST be that this can be trusted to be the EXACT size of binary data that will be read.
+			bytesRead = MessageServices.PacketHeaderFactory.ComputeHeaderSize(buffer);
+			return DeserializePacketHeader(buffer, bytesRead);
 		}
 
 		/// <summary>
@@ -255,24 +184,10 @@ namespace GladNet
 			return header;
 		}
 
-		private bool IsReadResultValid(in ReadResult result)
-		{
-			//TODO: Does this mean it's DONE??
-			if(result.IsCanceled || result.IsCompleted)
-			{
-				//This means we CONSUMED to end of buffer and INSPECTED to end of buffer
-				//We're DONE with all read buffer data.
-				Connection.Input.AdvanceTo(result.Buffer.End);
-				return false;
-			}
-
-			return true;
-		}
-
 		/// <inheritdoc />
 		public async Task<SendResult> SendMessageAsync(TPayloadWriteType message, CancellationToken token = default)
 		{
-			if(!Connection.Socket.Connected)
+			if (Connection.State == WebSocketState.Open)
 				return SendResult.Disconnected;
 
 			//THIS IS CRITICAL, IT'S NOT SAFE TO SEND MULTIPLE THREADS AT ONCE!!
@@ -280,14 +195,7 @@ namespace GladNet
 			{
 				try
 				{
-					WriteOutgoingMessage(message);
-
-					//To understand the purpose of Flush when pipelines is using sockets see Marc's comments here: https://stackoverflow.com/questions/56481746/does-pipelines-sockets-unofficial-socketconnection-ever-flush-without-a-request
-					//Basically, "it makes sure that a consumer is awakened (if it isn't already)" and "if there is back-pressure, it delays the producer until the consumer has cleared some of the back-pressure"
-					FlushResult result = await Connection.Output.FlushAsync(token);
-
-					if(!IsFlushResultValid(in result))
-						return SendResult.Error;
+					await WriteOutgoingMessageAsync(message, token);
 				}
 				catch (Exception e)
 				{
@@ -299,37 +207,34 @@ namespace GladNet
 			}
 		}
 
-		private void WriteOutgoingMessage(TPayloadWriteType payload)
+		private async Task WriteOutgoingMessageAsync(TPayloadWriteType payload, CancellationToken token = default)
 		{
 			if(payload == null) throw new ArgumentNullException(nameof(payload));
 
 			//TODO: We should find a way to predict the size of a payload type.
-			Span<byte> buffer = Connection.Output.GetSpan(NetworkOptions.MaximumPacketSize);
-
-			//It seems backwards, but we don't know what header to build until the payload is serialized.
-			int payloadSize = SerializeOutgoingPacketPayload(buffer.Slice(NetworkOptions.MinimumPacketHeaderSize), payload);
-			int headerSize = SerializeOutgoingHeader(payload, payloadSize, buffer.Slice(0, NetworkOptions.MaximumPacketHeaderSize));
-
-			//TODO: We must eventually support VARIABLE LENGTH packet headers. This is complicated, WoW does this for large packets sent by the server.
-			if(headerSize != NetworkOptions.MinimumPacketHeaderSize)
-				throw new NotSupportedException($"TODO: Variable length packet header sizes are not yet supported.");
-
-			int length = OnBeforePacketBufferSend(buffer, payloadSize + headerSize);
-
-			Connection.Output.Advance(length);
+			var buffer = ArrayPool<byte>.Shared.Rent(NetworkOptions.MaximumPacketSize);
+			try
+			{
+				WritePacketToBuffer(payload, buffer, out var headerSize, out var payloadSize);
+				await Connection.SendAsync(new ArraySegment<byte>(buffer, 0, headerSize + payloadSize), WebSocketMessageType.Binary, true, token);
+			}
+			finally
+			{
+				ArrayPool<byte>.Shared.Return(buffer);
+			}
 		}
 
-		/// <summary>
-		/// Allows implementers to override length handling for an outgoing buffer.
-		/// Additionally allows them to mutate the contents of the buffer right before it is sent.
-		/// Especially helpful for dealing with block-based networking.
-		/// </summary>
-		/// <param name="buffer">The outgoing buffer.</param>
-		/// <param name="length">The true outgoing length.</param>
-		/// <returns>The length of the buffer to write.</returns>
-		protected virtual int OnBeforePacketBufferSend(in Span<byte> buffer, int length)
+		void WritePacketToBuffer(TPayloadWriteType payload, byte[] buffer, out int headerSize, out int payloadSize)
 		{
-			return length;
+			var bufferSpan = new Span<byte>(buffer);
+
+			//It seems backwards, but we don't know what header to build until the payload is serialized.
+			payloadSize = SerializeOutgoingPacketPayload(bufferSpan.Slice(NetworkOptions.MinimumPacketHeaderSize), payload);
+			headerSize = SerializeOutgoingHeader(payload, payloadSize, bufferSpan.Slice(0, NetworkOptions.MaximumPacketHeaderSize));
+
+			//TODO: We must eventually support VARIABLE LENGTH packet headers. This is complicated, WoW does this for large packets sent by the server.
+			if (headerSize != NetworkOptions.MinimumPacketHeaderSize)
+				throw new NotSupportedException($"TODO: Variable length packet header sizes are not yet supported.");
 		}
 
 		private int SerializeOutgoingHeader(TPayloadWriteType payload, int payloadSize, in Span<byte> buffer)
@@ -353,15 +258,6 @@ namespace GladNet
 			int offset = 0;
 			MessageServices.MessageSerializer.Serialize(payload, buffer, ref offset);
 			return offset;
-		}
-
-		private bool IsFlushResultValid(in FlushResult result)
-		{
-			//TODO: Does this mean it's DONE??
-			if(result.IsCanceled || result.IsCompleted)
-				return false;
-
-			return true;
 		}
 	}
 }
