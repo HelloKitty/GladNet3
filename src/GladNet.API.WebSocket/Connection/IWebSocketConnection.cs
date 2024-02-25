@@ -22,5 +22,11 @@ namespace GladNet
 		/// Returns the current state of the WebSocket connection.
 		/// </summary>
 		WebSocketState State { get; }
+
+		/// <summary>
+		/// Indicates the reason why the remote endpoint initiated the close handshake.
+		/// If the close handshake has not been initiated yet, WebSocketCloseStatus.None is returned.
+		/// </summary>
+		WebSocketCloseStatus? CloseStatus { get; }
 	}
 }
