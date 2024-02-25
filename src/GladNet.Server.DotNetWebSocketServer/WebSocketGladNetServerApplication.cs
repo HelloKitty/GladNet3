@@ -131,7 +131,7 @@ namespace GladNet
 					if (Logger.IsInfoEnabled)
 						Logger.Error($"Socket failed to creation. Exception in accept check. Reason: {e}");
 
-					await socket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, $"Socket accept Error: {e}", token);
+					await socket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, $"Socket accept Error: {e.GetType().Name}", token);
 					socket.Dispose();
 					continue;
 				}
@@ -152,7 +152,7 @@ namespace GladNet
 					try
 					{
 						if (socket.State == WebSocketState.Open)
-							await socket.CloseAsync(WebSocketCloseStatus.InternalServerError, $"Session Creation Error: {e}", token);
+							await socket.CloseAsync(WebSocketCloseStatus.InternalServerError, $"Session Creation Error: {e.GetType().Name}", token);
 					}
 					finally
 					{

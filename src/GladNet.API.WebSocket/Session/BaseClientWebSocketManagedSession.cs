@@ -80,7 +80,7 @@ namespace GladNet
 			}
 			catch (Exception e)
 			{
-				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, $"Error: {e}", token);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, $"Error: {e.GetType().Name}", token);
 				throw;
 			}
 			finally
@@ -113,7 +113,7 @@ namespace GladNet
 			}
 			catch(Exception e)
 			{
-				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, $"Error: {e}", token);
+				await Connection.CloseAsync(WebSocketCloseStatus.NormalClosure, $"Error: {e.GetType().Name}", token);
 				throw;
 			}
 			finally
