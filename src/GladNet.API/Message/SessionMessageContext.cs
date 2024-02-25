@@ -9,7 +9,7 @@ namespace GladNet
 	/// The context for a network message.
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
-	public sealed class SessionMessageContext<TPayloadWriteType> : IPeerSessionMessageContext<TPayloadWriteType>
+	public class SessionMessageContext<TPayloadWriteType> : IPeerSessionMessageContext<TPayloadWriteType>
 		where TPayloadWriteType : class 
 	{
 		/// <summary>
