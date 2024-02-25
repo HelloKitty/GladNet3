@@ -28,5 +28,15 @@ namespace GladNet
 		/// If the close handshake has not been initiated yet, WebSocketCloseStatus.None is returned.
 		/// </summary>
 		WebSocketCloseStatus? CloseStatus { get; }
+
+		/// <summary>
+		/// Connects to a WebSocket server as an asynchronous operation.
+		/// WARNING: This only works for clients.
+		/// </summary>
+		/// <param name="uri">The URI of the WebSocket server to connect to.</param>
+		/// <param name="cancellationToken">A cancellation token used to propagate notification that the operation should be canceled.</param>
+		/// <returns>The task object representing the asynchronous operation.</returns>
+		/// <exception cref="NotSupportedException">Thrown if the socket isn't for clients.</exception>
+		Task ConnectAsync(Uri uri, CancellationToken cancellationToken = default);
 	}
 }
