@@ -17,5 +17,10 @@ namespace GladNet
 		/// <param name="cancellationToken">The token that can be used to propagate notification that operations should be canceled.</param>
 		/// <returns>The task object representing the asynchronous operation.</returns>
 		Task CloseAsync(WebSocketCloseStatus closeStatus, string statusDescription, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Returns the current state of the WebSocket connection.
+		/// </summary>
+		WebSocketState State { get; }
 	}
 }
