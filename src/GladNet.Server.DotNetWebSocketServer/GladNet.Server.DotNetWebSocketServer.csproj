@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GladNet.API.Server\GladNet.API.Server.csproj" />
+    <ProjectReference Include="..\GladNet.API.WebSocket.DotNetWebSocket\GladNet.API.WebSocket.DotNetWebSocket.csproj" />
     <ProjectReference Include="..\GladNet.API.WebSocket\GladNet.API.WebSocket.csproj" />
   </ItemGroup>
 
