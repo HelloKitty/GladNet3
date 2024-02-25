@@ -48,5 +48,14 @@ namespace GladNet
 		/// <param name="token">Cancel token.</param>
 		/// <returns>Awaitable</returns>
 		Task ReceiveAsync(byte[] buffer, int count, CancellationToken token = default);
+
+		/// <summary>
+		/// Sends data on ClientWebSocket as an asynchronous operation.
+		/// </summary>
+		/// <param name="buffer">The buffer containing the message to be sent.</param>
+		/// <param name="endMessage">true to indicate this is the final asynchronous send; otherwise, false.</param>
+		/// <param name="token">A cancellation token used to propagate notification that this operation should be canceled.</param>
+		/// <returns>The task object representing the asynchronous operation.</returns>
+		Task SendAsync(ArraySegment<byte> buffer, bool endMessage, CancellationToken token = default);
 	}
 }
