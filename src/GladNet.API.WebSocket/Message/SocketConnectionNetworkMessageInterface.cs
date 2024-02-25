@@ -107,17 +107,20 @@ namespace GladNet
 
 		private async Task ReadUntilBufferFullAsync(byte[] buffer, int bufferSize, CancellationToken token)
 		{
-			ArraySegment<byte> bufferSegment = new ArraySegment<byte>(buffer, 0, buffer.Length);
+			ArraySegment<byte> bufferSegment = new ArraySegment<byte>(buffer, 0, bufferSize);
 
 			do
 			{
 				WebSocketReceiveResult result
 					= await Connection.ReceiveAsync(bufferSegment, token);
 
+				var totalBytesRead = bufferSegment.Offset + result.Count;
 				// Read the buffer, don't rely on it being EndOfMessage. We might have the payload as apart of the same message
-				if ((bufferSegment.Offset + result.Count)
+				if (totalBytesRead
 				    == bufferSize)
 					break;
+				else if (totalBytesRead > bufferSize)
+					throw new InvalidOperationException($"Somehow read more bytes than expected for header.");
 
 				// Move the segment forward
 				bufferSegment = new ArraySegment<byte>(buffer, bufferSegment.Offset + result.Count, bufferSegment.Count - result.Count);
