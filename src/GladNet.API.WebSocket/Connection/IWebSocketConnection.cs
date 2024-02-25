@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GladNet
 {
-	public interface IWebSocketConnection
+	public interface IWebSocketConnection : IDisposable
 	{
 		/// <summary>
 		/// Closes the WebSocket connection as an asynchronous operation using the close handshake defined in the WebSocket protocol specification section 7.
@@ -38,5 +38,10 @@ namespace GladNet
 		/// <returns>The task object representing the asynchronous operation.</returns>
 		/// <exception cref="NotSupportedException">Thrown if the socket isn't for clients.</exception>
 		Task ConnectAsync(Uri uri, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Releases the unmanaged resources used by the ClientWebSocket instance.
+		/// </summary>
+		void Dispose();
 	}
 }
