@@ -24,7 +24,8 @@ namespace GladNet.DotNetTcpClient.EchoTest
 			//await socket.Socket.ConnectAsync(IPAddress.Parse("127.0.0.1"), 6969);
 			//await Task.Delay(1);
 			//await socket.Socket.ConnectAsync("127.0.0.1", 6969);
-			await connectionService.ConnectAsync("192.168.1.12", 6969);
+			if (!await connectionService.ConnectAsync("127.0.0.1", 6969))
+				throw new InvalidOperationException($"Failed to connect.");
 
 			/*await Task.Factory.FromAsync(
 					socket.Socket.BeginConnect,

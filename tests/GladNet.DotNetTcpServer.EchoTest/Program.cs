@@ -9,7 +9,7 @@ namespace GladNet
 {
 	class Program
 	{
-		public static IPAddress Address { get; } = IPAddress.Parse("192.168.1.12");
+		public static IPAddress Address { get; } = IPAddress.Parse("127.0.0.1");
 
 		static async Task Main(string[] args)
 		{
