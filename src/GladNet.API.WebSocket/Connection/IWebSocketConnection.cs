@@ -40,8 +40,13 @@ namespace GladNet
 		Task ConnectAsync(Uri uri, CancellationToken cancellationToken = default);
 
 		/// <summary>
-		/// Releases the unmanaged resources used by the ClientWebSocket instance.
+		/// Reads the <see cref="count"/> many bytes into the provider <see cref="buffer"/> starting at index 0.
+		/// Doesn't match the .NET API, is abit simplier.
 		/// </summary>
-		void Dispose();
+		/// <param name="buffer">The buffer.</param>
+		/// <param name="count">The amount of bytes to read.</param>
+		/// <param name="token">Cancel token.</param>
+		/// <returns>Awaitable</returns>
+		Task ReceiveAsync(byte[] buffer, int count, CancellationToken token = default);
 	}
 }
