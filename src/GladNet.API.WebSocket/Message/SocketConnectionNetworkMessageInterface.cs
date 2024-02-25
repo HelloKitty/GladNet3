@@ -12,7 +12,7 @@ using Nito.AsyncEx;
 namespace GladNet
 {
 	/// <summary>
-	/// WebSocket <see cref="WebSocket"/> Pipelines-based implementation of <see cref="INetworkMessageInterface{TPayloadReadType,TPayloadWriteType}"/>
+	/// WebSocket <see cref="IWebSocketConnection"/> Pipelines-based implementation of <see cref="INetworkMessageInterface{TPayloadReadType,TPayloadWriteType}"/>
 	/// </summary>
 	/// <typeparam name="TPayloadWriteType"></typeparam>
 	/// <typeparam name="TPayloadReadType"></typeparam>
@@ -23,7 +23,7 @@ namespace GladNet
 		/// <summary>
 		/// The pipelines socket connection.
 		/// </summary>
-		private WebSocket Connection { get; }
+		private IWebSocketConnection Connection { get; }
 
 		/// <summary>
 		/// The messages service container.
@@ -38,7 +38,7 @@ namespace GladNet
 		private AsyncLock PayloadWriteLock { get; } = new AsyncLock();
 
 		public SocketConnectionNetworkMessageInterface(NetworkConnectionOptions networkOptions,
-			WebSocket connection, 
+			IWebSocketConnection connection, 
 			SessionMessageBuildingServiceContext<TPayloadReadType, TPayloadWriteType> messageServices)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
@@ -107,25 +107,7 @@ namespace GladNet
 
 		private async Task ReadUntilBufferFullAsync(byte[] buffer, int bufferSize, CancellationToken token)
 		{
-			ArraySegment<byte> bufferSegment = new ArraySegment<byte>(buffer, 0, bufferSize);
-
-			do
-			{
-				WebSocketReceiveResult result
-					= await Connection.ReceiveAsync(bufferSegment, token);
-
-				var totalBytesRead = bufferSegment.Offset + result.Count;
-				// Read the buffer, don't rely on it being EndOfMessage. We might have the payload as apart of the same message
-				if (totalBytesRead
-				    == bufferSize)
-					break;
-				else if (totalBytesRead > bufferSize)
-					throw new InvalidOperationException($"Somehow read more bytes than expected for header.");
-
-				// Move the segment forward
-				bufferSegment = new ArraySegment<byte>(buffer, bufferSegment.Offset + result.Count, bufferSegment.Count - result.Count);
-			} while (!token.IsCancellationRequested
-			         && Connection.State == WebSocketState.Open);
+			await Connection.ReceiveAsync(buffer, bufferSize, token);
 		}
 
 		/// <summary>
@@ -218,7 +200,7 @@ namespace GladNet
 			try
 			{
 				WritePacketToBuffer(payload, buffer, out var headerSize, out var payloadSize);
-				await Connection.SendAsync(new ArraySegment<byte>(buffer, 0, headerSize + payloadSize), WebSocketMessageType.Binary, true, token);
+				await Connection.SendAsync(new ArraySegment<byte>(buffer, 0, headerSize + payloadSize), true, token);
 			}
 			finally
 			{

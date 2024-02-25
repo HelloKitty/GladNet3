@@ -16,13 +16,13 @@ namespace GladNet
 		/// <summary>
 		/// Internal socket connection.
 		/// </summary>
-		private WebSocket Connection { get; }
+		private IWebSocketConnection Connection { get; }
 
 		/// <inheritdoc />
 		public bool isConnected => (Connection.State == WebSocketState.Open || Connection.State == WebSocketState.Connecting)
 		                           && !Connection.CloseStatus.HasValue;
 
-		public SocketConnectionConnectionServiceAdapter(WebSocket connection)
+		public SocketConnectionConnectionServiceAdapter(IWebSocketConnection connection)
 		{
 			Connection = connection ?? throw new ArgumentNullException(nameof(connection));
 		}
@@ -41,13 +41,8 @@ namespace GladNet
 			if (isConnected)
 				return false;
 
-			if (Connection is ClientWebSocket cws)
-			{
-				await cws.ConnectAsync(new Uri(ip), CancellationToken.None);
-				return Connection.State == WebSocketState.Open;
-			}
-			else
-				throw new NotSupportedException($"It is not supported to call {nameof(ConnectAsync)} on a non-client websocket.");
+			await Connection.ConnectAsync(new Uri(ip), CancellationToken.None);
+			return Connection.State == WebSocketState.Open;
 		}
 	}
 }
