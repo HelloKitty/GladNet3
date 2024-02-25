@@ -51,7 +51,7 @@ namespace GladNet
 		/// </summary>
 		/// <param name="connection">The <see cref="Socket"/> to check the acceptance for.</param>
 		/// <returns></returns>
-		protected abstract bool IsClientAcceptable(WebSocket connection);
+		protected abstract bool IsClientAcceptable(HttpListenerContext context, WebSocket connection);
 
 		/// <inheritdoc />
 		public override async Task BeginListeningAsync(CancellationToken token = default)
@@ -119,7 +119,7 @@ namespace GladNet
 				//Try required because we're calling into user code.
 				try
 				{
-					if (!IsClientAcceptable(socket))
+					if (!IsClientAcceptable(context, socket))
 					{
 						await socket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, $"Client unacceptable.", token);
 						socket.Dispose();
