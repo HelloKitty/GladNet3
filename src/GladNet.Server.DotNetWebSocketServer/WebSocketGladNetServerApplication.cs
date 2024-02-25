@@ -49,9 +49,10 @@ namespace GladNet
 		/// will mean this connection should be disconnected and rejected and no
 		/// client representation will be created for it.
 		/// </summary>
+		/// <param name="context"></param>
 		/// <param name="connection">The <see cref="Socket"/> to check the acceptance for.</param>
 		/// <returns></returns>
-		protected abstract bool IsClientAcceptable(HttpListenerContext context, WebSocket connection);
+		protected abstract bool IsClientAcceptable(HttpListenerContext context, IWebSocketConnection connection);
 
 		/// <inheritdoc />
 		public override async Task BeginListeningAsync(CancellationToken token = default)
@@ -95,7 +96,7 @@ namespace GladNet
 
 			while (!token.IsCancellationRequested)
 			{
-				System.Net.WebSockets.WebSocket socket = null;
+				IWebSocketConnection socket = null;
 				HttpListenerContext context = null;
 				try
 				{
@@ -106,7 +107,7 @@ namespace GladNet
 						continue;
 
 					HttpListenerWebSocketContext webSocketContext = await context.AcceptWebSocketAsync(null);
-					socket = webSocketContext.WebSocket;
+					socket = new DotNetWebSocketConnection(webSocketContext.WebSocket);
 				}
 				catch (Exception e)
 				{
@@ -168,7 +169,7 @@ namespace GladNet
 		/// <param name="socket">Socket to make a session for.</param>
 		/// <param name="token">Cancel token.</param>
 		/// <returns>Awaitable that indicates when the session has connected.</returns>
-		private Task<TManagedSessionType> AcceptNewSessionsAsync(HttpListenerContext context, WebSocket socket, CancellationToken token)
+		private Task<TManagedSessionType> AcceptNewSessionsAsync(HttpListenerContext context, IWebSocketConnection socket, CancellationToken token)
 		{
 			TManagedSessionType clientSession = default;
 			int connectionId = 0;
