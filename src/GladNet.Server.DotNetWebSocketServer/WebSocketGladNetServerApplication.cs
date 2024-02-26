@@ -62,8 +62,7 @@ namespace GladNet
 
 			using (HttpListener listenSocket = new HttpListener())
 			{
-				listenSocket.Prefixes.Add($"http://{ServerAddress.AddressEndpoint.MapToIPv4().ToString()}:{ServerAddress.Port}/");
-				listenSocket.Prefixes.Add($"https://{ServerAddress.AddressEndpoint.MapToIPv4().ToString()}:{ServerAddress.Port}/");
+				RegisterListenerEndpoints(ServerAddress, listenSocket.Prefixes);
 				listenSocket.Start();
 
 				if (!listenSocket.IsListening)
@@ -89,6 +88,16 @@ namespace GladNet
 					throw;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Implementers can derive this to override the default handling for registering endpoints.
+		/// </summary>
+		/// <param name="endpointCollection">Endpoints.</param>
+		/// <param name="info">The network address info.</param>
+		protected virtual void RegisterListenerEndpoints(NetworkAddressInfo info, HttpListenerPrefixCollection endpointCollection)
+		{
+			endpointCollection.Add($"https://{info.AddressEndpoint.MapToIPv4().ToString()}:{info.Port}/");
 		}
 
 		private async Task SocketAcceptLoopAsync(HttpListener listenSocket, CancellationToken token)
