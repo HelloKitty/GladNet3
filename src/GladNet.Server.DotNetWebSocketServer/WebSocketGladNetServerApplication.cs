@@ -63,6 +63,7 @@ namespace GladNet
 			using (HttpListener listenSocket = new HttpListener())
 			{
 				listenSocket.Prefixes.Add($"http://{ServerAddress.AddressEndpoint.MapToIPv4().ToString()}:{ServerAddress.Port}/");
+				listenSocket.Prefixes.Add($"https://{ServerAddress.AddressEndpoint.MapToIPv4().ToString()}:{ServerAddress.Port}/");
 				listenSocket.Start();
 
 				if (!listenSocket.IsListening)
